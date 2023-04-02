@@ -12,8 +12,6 @@ paths:
   /v1/generate:
     post:
       operationId: generate
-      tags:
-      - generate
       requestBody:
         content:
           application/json:
@@ -50,8 +48,6 @@ paths:
   /v1/search:
     post:
       operationId: search
-      tags:
-      - search
       requestBody:
         content:
           application/json:
@@ -87,9 +83,9 @@ paths:
           description: ''
   /v1/submit-completion-actuals:
     post:
-      operationId: submitCompletionActuals
+      operationId: submit
       tags:
-      - submit-completion-actuals
+      - completion-actuals
       requestBody:
         content:
           application/json:
@@ -121,9 +117,9 @@ paths:
           description: ''
   /v1/upload-document:
     post:
-      operationId: uploadDocument
+      operationId: upload
       tags:
-      - upload-document
+      - document
       requestBody:
         content:
           multipart/form-data:
@@ -197,8 +193,7 @@ components:
         finish_reason:
           $ref: '#/components/schemas/FinishReasonEnum'
         logprobs:
-          allOf:
-          - $ref: '#/components/schemas/NormalizedLogProbs'
+          $ref: '#/components/schemas/NormalizedLogProbs'
           nullable: true
         model_version_id:
           type: string
@@ -206,7 +201,7 @@ components:
       - finish_reason
       - id
       - model_version_id
-      - text
+      - text  
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -242,11 +237,10 @@ components:
           items:
             $ref: '#/components/schemas/GenerateRequestRequest'
         options:
-          allOf:
-          - $ref: '#/components/schemas/GenerateOptionsRequest'
+          $ref: '#/components/schemas/GenerateOptionsRequest'
           nullable: true
       required:
-      - requests
+      - requests      
     GenerateRequestRequest:
       type: object
       properties:
@@ -356,8 +350,7 @@ components:
           type: string
           minLength: 1
         options:
-          allOf:
-          - $ref: '#/components/schemas/SearchRequestOptionsRequest'
+          $ref: '#/components/schemas/SearchRequestOptionsRequest'
           nullable: true
       required:
       - query
@@ -368,8 +361,7 @@ components:
           type: integer
           nullable: true
         weights:
-          allOf:
-          - $ref: '#/components/schemas/SearchWeightsRequest'
+          $ref: '#/components/schemas/SearchWeightsRequest'
           nullable: true
     SearchResponse:
       type: object
@@ -508,4 +500,6 @@ components:
       description: API key based authentication
 servers:
 - url: https://predict.vellum.ai
+  x-server-name: Predict
 - url: https://documents.vellum.ai
+  x-server-name: Documents
