@@ -1,0 +1,511 @@
+openapi: 3.0.3
+info:
+  title: Vellum Client API
+  version: 1.0.0 (v1)
+  description: Documentation of API endpoints of Vellum
+  contact:
+    name: devops@vellum.ai
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+paths:
+  /v1/generate:
+    post:
+      operationId: generate
+      tags:
+      - generate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateRequestBodyRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+  /v1/search:
+    post:
+      operationId: search
+      tags:
+      - search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequestBodyRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchErrorResponse'
+          description: ''
+  /v1/submit-completion-actuals:
+    post:
+      operationId: submitCompletionActuals
+      tags:
+      - submit-completion-actuals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitCompletionActualsRequestRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitCompletionActualsErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitCompletionActualsErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitCompletionActualsErrorResponse'
+          description: ''
+  /v1/upload-document:
+    post:
+      operationId: uploadDocument
+      tags:
+      - upload-document
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadDocumentRequestBodyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadDocumentRequestBodyRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadDocumentResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadDocumentErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadDocumentErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadDocumentErrorResponse'
+          description: ''
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        label:
+          type: string
+          description: A human-readable label for the document. Defaults to the originally
+            uploaded file's file name.
+          maxLength: 150
+        external_id:
+          type: string
+          nullable: true
+          description: The unique id of this document as it exists in the user's system.
+            If not provided, will be set to the document's id.
+          maxLength: 250
+      required:
+      - id
+      - label
+    EnrichedNormalizedCompletion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        external_id:
+          type: string
+          nullable: true
+        text:
+          type: string
+        finish_reason:
+          $ref: '#/components/schemas/FinishReasonEnum'
+        logprobs:
+          allOf:
+          - $ref: '#/components/schemas/NormalizedLogProbs'
+          nullable: true
+        model_version_id:
+          type: string
+      required:
+      - finish_reason
+      - id
+      - model_version_id
+      - text
+    FinishReasonEnum:
+      enum:
+      - LENGTH
+      - STOP
+      - UNKNOWN
+      type: string
+    GenerateErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    GenerateOptionsRequest:
+      type: object
+      properties:
+        logprobs:
+          $ref: '#/components/schemas/LogprobsEnum'
+    GenerateRequestBodyRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+        deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateRequestRequest'
+        options:
+          allOf:
+          - $ref: '#/components/schemas/GenerateOptionsRequest'
+          nullable: true
+      required:
+      - requests
+    GenerateRequestRequest:
+      type: object
+      properties:
+        input_values:
+          type: object
+          additionalProperties: {}
+        external_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+      required:
+      - input_values
+    GenerateResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateResult'
+      required:
+      - results
+    GenerateResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GenerateResultData'
+        error:
+          $ref: '#/components/schemas/GenerateResultError'
+    GenerateResultData:
+      type: object
+      properties:
+        completions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrichedNormalizedCompletion'
+      required:
+      - completions
+    GenerateResultError:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    LogprobsEnum:
+      enum:
+      - ALL
+      - NONE
+      type: string
+    NormalizedLogProbs:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/NormalizedTokenLogProbs'
+        likelihood:
+          type: number
+          format: double
+      required:
+      - likelihood
+      - tokens
+    NormalizedTokenLogProbs:
+      type: object
+      properties:
+        token:
+          type: string
+        logprob:
+          type: number
+          format: double
+          nullable: true
+        top_logprobs:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
+        text_offset:
+          type: integer
+      required:
+      - logprob
+      - text_offset
+      - token
+      - top_logprobs
+    SearchErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    SearchRequestBodyRequest:
+      type: object
+      properties:
+        index_id:
+          type: string
+          format: uuid
+          nullable: true
+        index_name:
+          type: string
+          nullable: true
+          minLength: 1
+        query:
+          type: string
+          minLength: 1
+        options:
+          allOf:
+          - $ref: '#/components/schemas/SearchRequestOptionsRequest'
+          nullable: true
+      required:
+      - query
+    SearchRequestOptionsRequest:
+      type: object
+      properties:
+        limit:
+          type: integer
+          nullable: true
+        weights:
+          allOf:
+          - $ref: '#/components/schemas/SearchWeightsRequest'
+          nullable: true
+    SearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+      required:
+      - results
+    SearchResult:
+      type: object
+      properties:
+        document:
+          $ref: '#/components/schemas/Document'
+        text:
+          type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        score:
+          type: number
+          format: double
+      required:
+      - document
+      - keywords
+      - score
+      - text
+    SearchWeightsRequest:
+      type: object
+      properties:
+        semantic_similarity:
+          type: number
+          format: double
+        keywords:
+          type: number
+          format: double
+      required:
+      - keywords
+      - semantic_similarity
+    SubmitCompletionActualRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+        text:
+          type: string
+          nullable: true
+        quality:
+          type: number
+          format: double
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+          nullable: true
+    SubmitCompletionActualsErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    SubmitCompletionActualsRequestRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+        deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+        actuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmitCompletionActualRequest'
+      required:
+      - actuals
+    UploadDocumentErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    UploadDocumentRequestBodyRequest:
+      type: object
+      properties:
+        add_to_index_names:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+        label:
+          type: string
+          minLength: 1
+        contents:
+          type: string
+          format: binary
+        keywords:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+      required:
+      - contents
+      - label
+    UploadDocumentResponse:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+      required:
+      - document_id
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X_API_KEY
+      description: API key based authentication
+servers:
+- url: https://predict.vellum.ai
+- url: https://documents.vellum.ai
