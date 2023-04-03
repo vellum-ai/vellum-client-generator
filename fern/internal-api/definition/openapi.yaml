@@ -3751,10 +3751,7 @@ components:
           minimum: 0
           nullable: true
         status:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/EvaluationMetricResultStatus'
-          - $ref: '#/components/schemas/NullEnum'
+          $ref: '#/components/schemas/SandboxSnapshotStatus'
     SandboxSnapshotCompletionParams:
       type: object
       properties:
@@ -4088,10 +4085,7 @@ components:
         text:
           type: string
         status:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/EvaluationMetricResultStatus'
-          - $ref: '#/components/schemas/NullEnum'
+          $ref: '#/components/schemas/SandboxSnapshotStatus'
         error:
           type: string
           nullable: true
@@ -4107,10 +4101,7 @@ components:
         text:
           type: string
         status:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/EvaluationMetricResultStatus'
-          - $ref: '#/components/schemas/NullEnum'
+          $ref: '#/components/schemas/SandboxSnapshotStatus'
         error:
           type: string
           nullable: true
@@ -4745,3 +4736,4 @@ components:
       description: Token-based authentication with required prefix "Token"
 servers:
 - url: https://api.vellum.ai
+  x-server-name: Production
