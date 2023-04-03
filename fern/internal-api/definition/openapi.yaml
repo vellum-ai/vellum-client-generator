@@ -217,7 +217,7 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
     delete:
-      operationId: deployments_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -236,6 +236,7 @@ paths:
   /deployments/{id}/history:
     get:
       operationId: listDeploymentHistory
+      x-request-name: ListDeploymentHistoryRequest
       description: List history records for a deployment
       parameters:
       - in: path
@@ -308,6 +309,7 @@ paths:
   /document-indexes:
     get:
       operationId: document_indexes_list
+      x-request-name: ListDocumentIndexesRequest
       parameters:
       - name: limit
         required: false
@@ -460,6 +462,7 @@ paths:
   /document-to-document-indexes:
     get:
       operationId: document_to_document_indexes_list
+      x-request-name: ListDocumentToDocumentIndexesRequest
       parameters:
       - in: query
         name: document_id
@@ -525,6 +528,7 @@ paths:
   /documents:
     get:
       operationId: documents_list
+      x-request-name: ListDocumentsRequest
       parameters:
       - in: query
         name: document_index_id
@@ -781,6 +785,7 @@ paths:
   /model-versions:
     get:
       operationId: model_versions_list
+      x-request-name: ListModelVersionsRequest
       parameters:
       - name: limit
         required: false
@@ -981,6 +986,7 @@ paths:
   /provider-credentials:
     get:
       operationId: provider_credentials_list
+      x-request-name: ListProviderCredentialsRequest
       parameters:
       - name: limit
         required: false
@@ -1160,6 +1166,7 @@ paths:
   /sandbox-snapshots:
     get:
       operationId: sandbox_snapshots_list
+      x-request-name: ListSandboxSnapshotsRequest
       parameters:
       - name: limit
         required: false
@@ -1244,6 +1251,7 @@ paths:
   /sandbox-tags:
     get:
       operationId: sandbox_tags_list
+      x-request-name: ListSandboxTagsRequest
       parameters:
       - name: limit
         required: false
@@ -1394,6 +1402,7 @@ paths:
   /sandboxes:
     get:
       operationId: sandboxes_list
+      x-request-name: ListSandboxesRequest
       parameters:
       - name: limit
         required: false
@@ -1619,6 +1628,7 @@ paths:
   /test-suites:
     get:
       operationId: test_suites_list
+      x-request-name: ListTestSuitesRequest
       parameters:
       - name: limit
         required: false
@@ -1787,6 +1797,7 @@ paths:
   /users:
     get:
       operationId: users_list
+      x-request-name: ListUsersRequest
       parameters:
       - name: limit
         required: false
@@ -1903,6 +1914,7 @@ paths:
   /workspace-api-keys:
     get:
       operationId: workspace_api_keys_list
+      x-request-name: ListWorkspaceAPIKeysRequest
       parameters:
       - name: limit
         required: false
@@ -1965,6 +1977,7 @@ paths:
   /workspaces:
     get:
       operationId: workspaces_list
+      x-request-name: ListWorkspacesRequest
       parameters:
       - name: limit
         required: false
@@ -3718,10 +3731,12 @@ components:
           minimum: 0
           nullable: true
         status:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/EvaluationMetricResultStatus'
-          - $ref: '#/components/schemas/NullEnum'
+          $ref: '#/components/schemas/SandboxSnapshotStatus'
+    SandboxSnapshotStatus: 
+      oneOf:
+      - $ref: '#/components/schemas/EvaluationMetricResultStatus'
+      - $ref: '#/components/schemas/NullEnum'
+      nullable: true
     SandboxSnapshotCompletionMetricResultRequest:
       type: object
       properties:
