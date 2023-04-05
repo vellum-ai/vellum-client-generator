@@ -7,8 +7,6 @@ paths:
   /ad-hoc/generate:
     post:
       operationId: adHocGenerate
-      tags:
-      - ad-hoc
       requestBody:
         content:
           application/json:
@@ -191,7 +189,7 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
     patch:
-      operationId: deployments_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -235,7 +233,7 @@ paths:
           description: No response body
   /deployments/{id}/history:
     get:
-      operationId: listDeploymentHistory
+      operationId: listHistory
       x-request-name: ListDeploymentHistoryRequest
       description: List history records for a deployment
       parameters:
@@ -277,7 +275,7 @@ paths:
           description: ''
   /deployments/{id}/history/{history_id}/revert:
     post:
-      operationId: revertDeploymentToHistoryItem
+      operationId: revertToHistoryItem
       description: Revert a deployment to a previous history item
       parameters:
       - in: path
@@ -308,7 +306,7 @@ paths:
           description: ''
   /document-indexes:
     get:
-      operationId: document_indexes_list
+      operationId: list
       x-request-name: ListDocumentIndexesRequest
       parameters:
       - name: limit
@@ -332,10 +330,7 @@ paths:
       - in: query
         name: status
         schema:
-          type: string
-          enum:
-          - ACTIVE
-          - ARCHIVED
+          $ref: '#/components/schemas/SandboxStatus'
         description: The current status of the document index
       tags:
       - document-indexes
@@ -349,7 +344,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedDocumentIndexReadList'
           description: ''
     post:
-      operationId: document_indexes_create
+      operationId: create
       tags:
       - document-indexes
       requestBody:
@@ -369,7 +364,7 @@ paths:
           description: ''
   /document-indexes/{id}:
     get:
-      operationId: document_indexes_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -390,7 +385,7 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
     put:
-      operationId: document_indexes_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -417,7 +412,7 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
     patch:
-      operationId: document_indexes_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -443,7 +438,7 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
     delete:
-      operationId: document_indexes_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -461,7 +456,7 @@ paths:
           description: No response body
   /document-to-document-indexes:
     get:
-      operationId: document_to_document_indexes_list
+      operationId: list
       x-request-name: ListDocumentToDocumentIndexesRequest
       parameters:
       - in: query
@@ -505,7 +500,7 @@ paths:
           description: ''
   /document-to-document-indexes/{id}:
     get:
-      operationId: document_to_document_indexes_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -527,7 +522,7 @@ paths:
           description: ''
   /documents:
     get:
-      operationId: documents_list
+      operationId: list
       x-request-name: ListDocumentsRequest
       parameters:
       - in: query
@@ -556,9 +551,7 @@ paths:
       - in: query
         name: status
         schema:
-          type: string
-          enum:
-          - ACTIVE
+          $ref: '#/components/schemas/DocumentStatus'
         description: The current status of the document
       tags:
       - documents
@@ -572,7 +565,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedSlimDocumentList'
           description: ''
     post:
-      operationId: documents_create
+      operationId: create
       tags:
       - documents
       requestBody:
@@ -595,7 +588,7 @@ paths:
           description: ''
   /documents/{id}:
     get:
-      operationId: documents_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -616,7 +609,7 @@ paths:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
     put:
-      operationId: documents_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -646,7 +639,7 @@ paths:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
     patch:
-      operationId: documents_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -675,7 +668,7 @@ paths:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
     delete:
-      operationId: documents_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -693,9 +686,7 @@ paths:
           description: No response body
   /evaluate-metric:
     post:
-      operationId: EvaluationMetric
-      tags:
-      - evaluate-metric
+      operationId: evaluationMetric
       requestBody:
         content:
           application/json:
@@ -726,8 +717,6 @@ paths:
   /generate:
     post:
       operationId: generate
-      tags:
-      - generate
       requestBody:
         content:
           application/json:
@@ -764,7 +753,7 @@ paths:
           description: ''
   /metabase/signed-url:
     post:
-      operationId: metabase_signed_url_create
+      operationId: createSignedUrl
       tags:
       - metabase
       requestBody:
@@ -784,7 +773,7 @@ paths:
           description: ''
   /model-versions:
     get:
-      operationId: model_versions_list
+      operationId: list
       x-request-name: ListModelVersionsRequest
       parameters:
       - name: limit
@@ -817,7 +806,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedModelVersionReadList'
           description: ''
     post:
-      operationId: model_versions_create
+      operationId: create
       tags:
       - model-versions
       requestBody:
@@ -837,7 +826,7 @@ paths:
           description: ''
   /model-versions/{id}:
     get:
-      operationId: model_versions_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -859,7 +848,7 @@ paths:
           description: ''
   /organizations/{id}:
     get:
-      operationId: organizations_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -880,7 +869,7 @@ paths:
                 $ref: '#/components/schemas/OrganizationRead'
           description: ''
     put:
-      operationId: organizations_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -907,7 +896,7 @@ paths:
                 $ref: '#/components/schemas/OrganizationRead'
           description: ''
     patch:
-      operationId: organizations_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -934,7 +923,7 @@ paths:
           description: ''
   /private:
     get:
-      operationId: private_retrieve
+      operationId: retrieve
       tags:
       - private
       security:
@@ -949,7 +938,7 @@ paths:
           description: ''
   /private-post:
     post:
-      operationId: private_post_create
+      operationId: create
       tags:
       - private-post
       requestBody:
@@ -970,7 +959,7 @@ paths:
           description: ''
   /private-scoped:
     get:
-      operationId: private_scoped_retrieve
+      operationId: retrieve
       tags:
       - private-scoped
       security:
@@ -985,7 +974,7 @@ paths:
           description: ''
   /provider-credentials:
     get:
-      operationId: provider_credentials_list
+      operationId: list
       x-request-name: ListProviderCredentialsRequest
       parameters:
       - name: limit
@@ -1003,11 +992,7 @@ paths:
       - in: query
         name: provider
         schema:
-          type: string
-          enum:
-          - ANTHROPIC
-          - COHERE
-          - OPENAI
+          $ref: '#/components/schemas/ProviderEnum'
       tags:
       - provider-credentials
       security:
@@ -1020,7 +1005,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedProviderCredentialReadList'
           description: ''
     post:
-      operationId: provider_credentials_create
+      operationId: create
       tags:
       - provider-credentials
       requestBody:
@@ -1040,7 +1025,7 @@ paths:
           description: ''
   /provider-credentials/{id}:
     put:
-      operationId: provider_credentials_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -1067,7 +1052,7 @@ paths:
                 $ref: '#/components/schemas/ProviderCredentialRead'
           description: ''
     patch:
-      operationId: provider_credentials_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -1093,7 +1078,7 @@ paths:
                 $ref: '#/components/schemas/ProviderCredentialRead'
           description: ''
     delete:
-      operationId: provider_credentials_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -1111,7 +1096,7 @@ paths:
           description: No response body
   /public:
     get:
-      operationId: public_retrieve
+      operationId: retrieve
       tags:
       - public
       security:
@@ -1127,7 +1112,7 @@ paths:
           description: ''
   /sandbox-snapshot-to-sandbox-tags:
     post:
-      operationId: sandbox_snapshot_to_sandbox_tags_create
+      operationId: create
       tags:
       - sandbox-snapshot-to-sandbox-tags
       requestBody:
@@ -1147,7 +1132,7 @@ paths:
           description: ''
   /sandbox-snapshot-to-sandbox-tags/{id}:
     delete:
-      operationId: sandbox_snapshot_to_sandbox_tags_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -1165,7 +1150,7 @@ paths:
           description: No response body
   /sandbox-snapshots:
     get:
-      operationId: sandbox_snapshots_list
+      operationId: list
       x-request-name: ListSandboxSnapshotsRequest
       parameters:
       - name: limit
@@ -1208,7 +1193,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedSandboxSnapshotList'
           description: ''
     post:
-      operationId: sandbox_snapshots_create
+      operationId: create
       tags:
       - sandbox-snapshots
       requestBody:
@@ -1228,7 +1213,7 @@ paths:
           description: ''
   /sandbox-snapshots/{id}:
     get:
-      operationId: sandbox_snapshots_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -1250,7 +1235,7 @@ paths:
           description: ''
   /sandbox-tags:
     get:
-      operationId: sandbox_tags_list
+      operationId: list
       x-request-name: ListSandboxTagsRequest
       parameters:
       - name: limit
@@ -1289,7 +1274,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedSandboxTagReadList'
           description: ''
     post:
-      operationId: sandbox_tags_create
+      operationId: create
       tags:
       - sandbox-tags
       requestBody:
@@ -1309,7 +1294,7 @@ paths:
           description: ''
   /sandbox-tags/{id}:
     get:
-      operationId: sandbox_tags_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -1330,7 +1315,7 @@ paths:
                 $ref: '#/components/schemas/SandboxTagRead'
           description: ''
     put:
-      operationId: sandbox_tags_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -1357,7 +1342,7 @@ paths:
                 $ref: '#/components/schemas/SandboxTagRead'
           description: ''
     patch:
-      operationId: sandbox_tags_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -1383,7 +1368,7 @@ paths:
                 $ref: '#/components/schemas/SandboxTagRead'
           description: ''
     delete:
-      operationId: sandbox_tags_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -1401,7 +1386,7 @@ paths:
           description: No response body
   /sandboxes:
     get:
-      operationId: sandboxes_list
+      operationId: list
       x-request-name: ListSandboxesRequest
       parameters:
       - name: limit
@@ -1425,10 +1410,7 @@ paths:
       - in: query
         name: status
         schema:
-          type: string
-          enum:
-          - ACTIVE
-          - ARCHIVED
+          $ref: '#/components/schemas/SandboxStatus'
       tags:
       - sandboxes
       security:
@@ -1441,7 +1423,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedSandboxReadList'
           description: ''
     post:
-      operationId: sandboxes_create
+      operationId: create
       tags:
       - sandboxes
       requestBody:
@@ -1461,7 +1443,7 @@ paths:
           description: ''
   /sandboxes/{id}:
     get:
-      operationId: sandboxes_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -1482,7 +1464,7 @@ paths:
                 $ref: '#/components/schemas/SandboxRead'
           description: ''
     put:
-      operationId: sandboxes_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -1509,7 +1491,7 @@ paths:
                 $ref: '#/components/schemas/SandboxRead'
           description: ''
     patch:
-      operationId: sandboxes_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -1535,7 +1517,7 @@ paths:
                 $ref: '#/components/schemas/SandboxRead'
           description: ''
     delete:
-      operationId: sandboxes_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -1554,8 +1536,6 @@ paths:
   /search:
     post:
       operationId: search
-      tags:
-      - search
       requestBody:
         content:
           application/json:
@@ -1593,8 +1573,6 @@ paths:
   /submit-completion-actuals:
     post:
       operationId: submitCompletionActuals
-      tags:
-      - submit-completion-actuals
       requestBody:
         content:
           application/json:
@@ -1627,7 +1605,7 @@ paths:
           description: ''
   /test-suites:
     get:
-      operationId: test_suites_list
+      operationId: list
       x-request-name: ListTestSuitesRequest
       parameters:
       - name: limit
@@ -1660,7 +1638,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedTestSuiteReadList'
           description: ''
     post:
-      operationId: test_suites_create
+      operationId: create
       tags:
       - test-suites
       requestBody:
@@ -1680,7 +1658,7 @@ paths:
           description: ''
   /test-suites/{id}:
     get:
-      operationId: test_suites_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -1701,7 +1679,7 @@ paths:
                 $ref: '#/components/schemas/TestSuiteRead'
           description: ''
     put:
-      operationId: test_suites_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -1728,7 +1706,7 @@ paths:
                 $ref: '#/components/schemas/TestSuiteRead'
           description: ''
     patch:
-      operationId: test_suites_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -1756,8 +1734,6 @@ paths:
   /upload-document:
     post:
       operationId: uploadDocument
-      tags:
-      - upload-document
       requestBody:
         content:
           multipart/form-data:
@@ -1796,7 +1772,7 @@ paths:
           description: ''
   /users:
     get:
-      operationId: users_list
+      operationId: list
       x-request-name: ListUsersRequest
       parameters:
       - name: limit
@@ -1824,7 +1800,7 @@ paths:
           description: ''
   /users/{username}:
     get:
-      operationId: users_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: username
@@ -1845,7 +1821,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
     put:
-      operationId: users_update
+      operationId: update
       parameters:
       - in: path
         name: username
@@ -1872,7 +1848,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
     patch:
-      operationId: users_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: username
@@ -1899,7 +1875,7 @@ paths:
           description: ''
   /users/me:
     get:
-      operationId: users_me_retrieve
+      operationId: retrieveMe
       tags:
       - users
       security:
@@ -1913,7 +1889,7 @@ paths:
           description: ''
   /workspace-api-keys:
     get:
-      operationId: workspace_api_keys_list
+      operationId: list
       x-request-name: ListWorkspaceAPIKeysRequest
       parameters:
       - name: limit
@@ -1940,7 +1916,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedWorkspaceAPIKeyList'
           description: ''
     post:
-      operationId: workspace_api_keys_create
+      operationId: create
       tags:
       - workspace-api-keys
       requestBody:
@@ -1960,7 +1936,7 @@ paths:
           description: ''
   /workspace-api-keys/{prefix}:
     delete:
-      operationId: workspace_api_keys_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: prefix
@@ -1976,7 +1952,7 @@ paths:
           description: No response body
   /workspaces:
     get:
-      operationId: workspaces_list
+      operationId: list
       x-request-name: ListWorkspacesRequest
       parameters:
       - name: limit
@@ -2019,7 +1995,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedWorkspaceReadList'
           description: ''
     post:
-      operationId: workspaces_create
+      operationId: create
       tags:
       - workspaces
       requestBody:
@@ -2039,7 +2015,7 @@ paths:
           description: ''
   /workspaces/{id}:
     get:
-      operationId: workspaces_retrieve
+      operationId: retrieve
       parameters:
       - in: path
         name: id
@@ -2060,7 +2036,7 @@ paths:
                 $ref: '#/components/schemas/WorkspaceRead'
           description: ''
     put:
-      operationId: workspaces_update
+      operationId: update
       parameters:
       - in: path
         name: id
@@ -2087,7 +2063,7 @@ paths:
                 $ref: '#/components/schemas/WorkspaceRead'
           description: ''
     patch:
-      operationId: workspaces_partial_update
+      operationId: partialUpdate
       parameters:
       - in: path
         name: id
@@ -2113,7 +2089,7 @@ paths:
                 $ref: '#/components/schemas/WorkspaceRead'
           description: ''
     delete:
-      operationId: workspaces_destroy
+      operationId: destroy
       parameters:
       - in: path
         name: id
@@ -2314,8 +2290,7 @@ components:
         model_version:
           $ref: '#/components/schemas/CompletionModelVersion'
         latest_actual:
-          allOf:
-          - $ref: '#/components/schemas/CompletionCompletionActual'
+          $ref: '#/components/schemas/CompletionCompletionActual'
           nullable: true
           readOnly: true
       required:
@@ -2342,8 +2317,7 @@ components:
             workspace
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of model this deployment serves
         model_version_id:
           type: string
@@ -2386,8 +2360,7 @@ components:
             workspace
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of model this deployment serves
         active_model_version_ids:
           type: array
@@ -2429,8 +2402,7 @@ components:
             workspace
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of model this deployment serves
         active_model_version_ids:
           type: array
@@ -2463,8 +2435,7 @@ components:
           type: string
           format: uuid
         status:
-          allOf:
-          - $ref: '#/components/schemas/DeploymentStatus'
+          $ref: '#/components/schemas/DeploymentStatus'
           description: The current status of the deployment
       required:
       - label
@@ -2530,8 +2501,7 @@ components:
           format: uuid
           readOnly: true
         indexing_state:
-          allOf:
-          - $ref: '#/components/schemas/IndexingStateEnum'
+          $ref: '#/components/schemas/IndexingStateEnum'
           description: The indexing state of the document for the document index
       required:
       - document_index_id
@@ -2556,8 +2526,7 @@ components:
           description: A name that uniquely identifies this index within its workspace
           maxLength: 150
         status:
-          allOf:
-          - $ref: '#/components/schemas/SandboxStatus'
+          $ref: '#/components/schemas/SandboxStatus'
           description: The current status of the document index
       required:
       - created
@@ -2578,8 +2547,7 @@ components:
           description: A name that uniquely identifies this index within its workspace
           maxLength: 150
         status:
-          allOf:
-          - $ref: '#/components/schemas/SandboxStatus'
+          $ref: '#/components/schemas/SandboxStatus'
           description: The current status of the document index
       required:
       - label
@@ -2606,12 +2574,10 @@ components:
             uploaded file's file name.
           maxLength: 150
         processing_state:
-          allOf:
-          - $ref: '#/components/schemas/ProcessingStateEnum'
+          $ref: '#/components/schemas/ProcessingStateEnum'
           description: The current processing state of the document
         status:
-          allOf:
-          - $ref: '#/components/schemas/DocumentStatus'
+          $ref: '#/components/schemas/DocumentStatus'
           description: The current status of the document
         original_file_url:
           type: string
@@ -2645,8 +2611,7 @@ components:
           type: string
           format: uuid
         indexing_state:
-          allOf:
-          - $ref: '#/components/schemas/IndexingStateEnum'
+          $ref: '#/components/schemas/IndexingStateEnum'
           description: The indexing state of the document for the document index
       required:
       - document_id
@@ -2662,8 +2627,7 @@ components:
             uploaded file's file name.
           maxLength: 150
         status:
-          allOf:
-          - $ref: '#/components/schemas/DocumentStatus'
+          $ref: '#/components/schemas/DocumentStatus'
           description: The current status of the document
       required:
       - label
@@ -2681,8 +2645,7 @@ components:
         finish_reason:
           $ref: '#/components/schemas/FinishReasonEnum'
         logprobs:
-          allOf:
-          - $ref: '#/components/schemas/NormalizedLogProbs'
+          $ref: '#/components/schemas/NormalizedLogProbs'
           nullable: true
         model_version_id:
           type: string
@@ -2783,8 +2746,7 @@ components:
           items:
             $ref: '#/components/schemas/GenerateRequestRequest'
         options:
-          allOf:
-          - $ref: '#/components/schemas/GenerateOptionsRequest'
+          $ref: '#/components/schemas/GenerateOptionsRequest'
           nullable: true
       required:
       - requests
@@ -2895,8 +2857,7 @@ components:
         base_model:
           type: string
         sandbox_snapshot:
-          allOf:
-          - $ref: '#/components/schemas/ModelVersionSandboxSnapshot'
+          $ref: '#/components/schemas/ModelVersionSandboxSnapshot'
           nullable: true
       required:
       - base_model
@@ -2907,8 +2868,7 @@ components:
           type: string
           minLength: 1
         sandbox_snapshot:
-          allOf:
-          - $ref: '#/components/schemas/ModelVersionSandboxSnapshotRequest'
+          $ref: '#/components/schemas/ModelVersionSandboxSnapshotRequest'
           nullable: true
       required:
       - base_model
@@ -3041,12 +3001,10 @@ components:
           type: string
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of task this model is used for.
         provider:
-          allOf:
-          - $ref: '#/components/schemas/ProviderEnum'
+          $ref: '#/components/schemas/ProviderEnum'
           description: Which LLM provider this model version is associated with.
         external_id:
           type: string
@@ -3097,8 +3055,7 @@ components:
           minLength: 1
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of task this model is used for.
         external_id:
           type: string
@@ -3107,8 +3064,7 @@ components:
             provider's system.
           maxLength: 250
         provider:
-          allOf:
-          - $ref: '#/components/schemas/ProviderEnum'
+          $ref: '#/components/schemas/ProviderEnum'
           description: Which LLM provider this model version is associated with.
         build_config:
           $ref: '#/components/schemas/ModelVersionBuildConfigRequest'
@@ -3492,8 +3448,7 @@ components:
           type: string
           format: uuid
         status:
-          allOf:
-          - $ref: '#/components/schemas/DeploymentStatus'
+          $ref: '#/components/schemas/DeploymentStatus'
           description: The current status of the deployment
     PatchedDocumentIndexWriteRequest:
       type: object
@@ -3509,8 +3464,7 @@ components:
           description: A name that uniquely identifies this index within its workspace
           maxLength: 150
         status:
-          allOf:
-          - $ref: '#/components/schemas/SandboxStatus'
+          $ref: '#/components/schemas/SandboxStatus'
           description: The current status of the document index
     PatchedDocumentUpdateRequest:
       type: object
@@ -3522,8 +3476,7 @@ components:
             uploaded file's file name.
           maxLength: 150
         status:
-          allOf:
-          - $ref: '#/components/schemas/DocumentStatus'
+          $ref: '#/components/schemas/DocumentStatus'
           description: The current status of the document
     PatchedOrganizationWriteRequest:
       type: object
@@ -3677,8 +3630,7 @@ components:
           format: date-time
           readOnly: true
         created_by:
-          allOf:
-          - $ref: '#/components/schemas/SandboxCreatedBy'
+          $ref: '#/components/schemas/SandboxCreatedBy'
           nullable: true
       required:
       - created
@@ -3698,8 +3650,7 @@ components:
           format: date-time
           readOnly: true
         created_by:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotCreatedBy'
+          $ref: '#/components/schemas/SandboxSnapshotCreatedBy'
           readOnly: true
           nullable: true
         sandbox:
@@ -3946,8 +3897,7 @@ components:
         is_visible:
           type: boolean
         display_size:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotPromptDisplaySize'
+          $ref: '#/components/schemas/SandboxSnapshotPromptDisplaySize'
           nullable: true
       required:
       - default_params
@@ -3990,8 +3940,7 @@ components:
         is_visible:
           type: boolean
         display_size:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotPromptDisplaySizeRequest'
+          $ref: '#/components/schemas/SandboxSnapshotPromptDisplaySizeRequest'
           nullable: true
       required:
       - default_params
@@ -4024,8 +3973,7 @@ components:
             items:
               $ref: '#/components/schemas/SandboxSnapshotResult'
         metric_config:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotMetricConfig'
+          $ref: '#/components/schemas/SandboxSnapshotMetricConfig'
           nullable: true
         metric_input_params:
           type: array
@@ -4065,8 +4013,7 @@ components:
             items:
               $ref: '#/components/schemas/SandboxSnapshotResultRequest'
         metric_config:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotMetricConfigRequest'
+          $ref: '#/components/schemas/SandboxSnapshotMetricConfigRequest'
           nullable: true
         metric_input_params:
           type: array
@@ -4090,8 +4037,7 @@ components:
           type: string
           nullable: true
         metric_result:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotCompletionMetricResult'
+          $ref: '#/components/schemas/SandboxSnapshotCompletionMetricResult'
           nullable: true
       required:
       - text
@@ -4107,8 +4053,7 @@ components:
           nullable: true
           minLength: 1
         metric_result:
-          allOf:
-          - $ref: '#/components/schemas/SandboxSnapshotCompletionMetricResultRequest'
+          $ref: '#/components/schemas/SandboxSnapshotCompletionMetricResultRequest'
           nullable: true
       required:
       - text
@@ -4279,8 +4224,7 @@ components:
           type: string
           minLength: 1
         options:
-          allOf:
-          - $ref: '#/components/schemas/SearchRequestOptionsRequest'
+          $ref: '#/components/schemas/SearchRequestOptionsRequest'
           nullable: true
       required:
       - query
@@ -4291,8 +4235,7 @@ components:
           type: integer
           nullable: true
         weights:
-          allOf:
-          - $ref: '#/components/schemas/SearchWeightsRequest'
+          $ref: '#/components/schemas/SearchWeightsRequest'
           nullable: true
     SearchResponse:
       type: object
@@ -4356,12 +4299,10 @@ components:
             uploaded file's file name.
           maxLength: 150
         processing_state:
-          allOf:
-          - $ref: '#/components/schemas/ProcessingStateEnum'
+          $ref: '#/components/schemas/ProcessingStateEnum'
           description: The current processing state of the document
         status:
-          allOf:
-          - $ref: '#/components/schemas/DocumentStatus'
+          $ref: '#/components/schemas/DocumentStatus'
           description: The current status of the document
         document_to_document_indexes:
           type: array
@@ -4433,8 +4374,7 @@ components:
             workspace
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of model this test suite is meant to evaluate
         metric_config:
           $ref: '#/components/schemas/TestSuiteMetricConfigRequest'
@@ -4509,8 +4449,7 @@ components:
             workspace
           maxLength: 150
         model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
+          $ref: '#/components/schemas/ModelTypeEnum'
           description: The type of model this test suite is meant to evaluate
         metric_config:
           $ref: '#/components/schemas/TestSuiteMetricConfig'
