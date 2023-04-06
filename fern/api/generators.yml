@@ -10,11 +10,21 @@ groups:
         github:
           repository: fern-vellum/vellum-node
           
-      - name: fernapi/fern-postman
-        version: 0.0.40
+      - name: fernapi/fern-python-sdk
+        version: 0.1.4
         output:
-          location: postman
-          api-key: ${FERN_POSTMAN_API_KEY}
-          workspace-id: ${FERN_POSTMAN_WORKSPACE_ID}
+          location: pypi
+          package-name: vellumdev
+          token: emptystring
         github:
-          repository: fern-vellum/vellum-postman
+          repository: fern-vellum/vellum-python
+
+      - name: fernapi/fern-java-sdk
+        version: 0.1.0-3-g7542aed
+        output:
+          location: maven
+          coordinate: io.github.fern-api:vellum
+          username: ${FERN_MAVEN_USERNAME}
+          password: ${FERN_MAVEN_TOKEN}
+        github:
+          repository: fern-vellum/vellum-java 
