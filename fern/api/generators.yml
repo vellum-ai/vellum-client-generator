@@ -15,7 +15,7 @@ groups:
         output:
           location: pypi
           package-name: vellumdev
-          token: emptystring
+          token: ${PYPI_TOKEN}
         github:
           repository: fern-vellum/vellum-python
 
