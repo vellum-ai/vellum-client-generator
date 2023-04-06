@@ -46,8 +46,6 @@ paths:
         Generate a completion using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
-      tags:
-      - generate
       requestBody:
         content:
           application/json:
@@ -83,7 +81,7 @@ paths:
           description: ''
   /v1/model-versions/{id}:
     get:
-      operationId: model_versions_retrieve
+      operationId: retrieveModelVersions
       description: |2
 
         <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
@@ -97,8 +95,6 @@ paths:
           format: uuid
         description: A UUID string identifying this model version.
         required: true
-      tags:
-      - model-versions
       security:
       - apiKeyAuth: []
       responses:
@@ -117,8 +113,6 @@ paths:
         Perform a search against a document index.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
-      tags:
-      - search
       requestBody:
         content:
           application/json:
@@ -154,15 +148,13 @@ paths:
           description: ''
   /v1/submit-completion-actuals:
     post:
-      operationId: submit_completion_actuals
+      operationId: submitCompletionActuals
       description: |-
         <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Used to submit feedback regarding the quality of previously generated completions.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
-      tags:
-      - submit-completion-actuals
       requestBody:
         content:
           application/json:
@@ -194,15 +186,13 @@ paths:
           description: ''
   /v1/upload-document:
     post:
-      operationId: upload_document
+      operationId: uploadDocument
       description: |-
         <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Upload a document to be indexed and used for search.
 
         **Note:** Uses a base url of `https://documents.vellum.ai`.
-      tags:
-      - upload-document
       requestBody:
         content:
           multipart/form-data:
@@ -827,7 +817,10 @@ components:
 servers:
 - url: https://api.vellum.ai
   description: Default Server
+  x-server-name: Production
 - url: https://predict.vellum.ai
   description: Inference Endpoints
+  x-server-name: Predict
 - url: https://documents.vellum.ai
   description: Documents Upload Endpoint
+  x-server-name: Documents
