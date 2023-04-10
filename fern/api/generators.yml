@@ -2,29 +2,18 @@ groups:
   publish:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.2.2
+        version: 0.5.7
         output:
           location: npm
           package-name: '@fern-api/vellum'
           token: ${FERN_NPM_TOKEN}
         github:
           repository: fern-vellum/vellum-node
-          
-      - name: fernapi/fern-python-sdk
-        version: 0.1.4
-        output:
-          location: pypi
-          package-name: vellumdev
-          token: ${PYPI_TOKEN}
-        github:
-          repository: fern-vellum/vellum-python
-
-      - name: fernapi/fern-java-sdk
-        version: 0.1.0-3-g7542aed
-        output:
-          location: maven
-          coordinate: io.github.fern-api:vellum
-          username: ${FERN_MAVEN_USERNAME}
-          password: ${FERN_MAVEN_TOKEN}
-        github:
-          repository: fern-vellum/vellum-java 
+      # - name: fernapi/fern-python-sdk
+      #   version: 0.1.4
+      #   output:
+      #     location: pypi
+      #     package-name: vellumdev
+      #     token: ${PYPI_TOKEN}
+      #   github:
+      #     repository: fern-vellum/vellum-python

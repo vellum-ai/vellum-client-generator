@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports: 
+  commons: commons.yml
+
+service:
+  auth: true
+  base-path: /v1/upload-document
+  url: Document
+  endpoints:
+    upload:
+      path: ""
+      method: POST
+      request: 
+        name: UploadDocumentRequest
+        body: 
+          properties: 
+            add_to_index_names: optional<list<string>>
+            external_id: optional<string>
+            label: string
+            contents: string
+            keywords: optional<list<string>>
+      response: UploadDocumentResponse
+      errors: 
+        - commons.BadRequestError
+        - commons.NotFoundError
+        - commons.InternalServerError
+
+types:
+  UploadDocumentResponse:
+    properties:
+      document_id: uuid

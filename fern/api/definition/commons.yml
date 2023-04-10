@@ -1,0 +1,19 @@
+types: 
+  ErrorResponse: 
+    properties: 
+      detail: 
+        type: string
+        docs: Details about why the request failed.
+
+errors: 
+  BadRequestError: 
+    status-code: 400
+    type: ErrorResponse
+  
+  NotFoundError: 
+    status-code: 400
+    type: ErrorResponse
+  
+  InternalServerError: 
+    status-code: 400
+    type: ErrorResponse

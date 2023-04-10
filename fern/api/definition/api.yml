@@ -1,0 +1,15 @@
+name: api
+display-name: Vellum Client API
+auth: apiKey
+auth-schemes:
+  apiKey:
+    header: X-API-KEY
+    name: apiKey
+default-environment: Production
+environments: 
+  Production: 
+    urls: 
+      Predict: https://predict.vellum.ai
+      Document: https://documents.vellum.ai
+error-discrimination: 
+  strategy: status-code
