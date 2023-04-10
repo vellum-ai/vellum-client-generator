@@ -7,6 +7,8 @@ groups:
           location: npm
           package-name: '@fern-api/vellum'
           token: ${FERN_NPM_TOKEN}
+        config: 
+          namespaceExport: Vellum
         github:
           repository: fern-vellum/vellum-node
       # - name: fernapi/fern-python-sdk
