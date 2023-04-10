@@ -18,7 +18,7 @@ service:
             add_to_index_names: optional<list<string>>
             external_id: optional<string>
             label: string
-            contents: string
+            contents: file
             keywords: optional<list<string>>
       response: UploadDocumentResponse
       errors: 
