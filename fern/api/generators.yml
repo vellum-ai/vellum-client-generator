@@ -11,11 +11,11 @@ groups:
           namespaceExport: Vellum
         github:
           repository: fern-vellum/vellum-node
-      # - name: fernapi/fern-python-sdk
-      #   version: 0.1.4
-      #   output:
-      #     location: pypi
-      #     package-name: vellumdev
-      #     token: ${PYPI_TOKEN}
-      #   github:
-      #     repository: fern-vellum/vellum-python
+      - name: fernapi/fern-python-sdk
+        version: 0.2.1-1-g8642d14e
+        output:
+          location: pypi
+          package-name: vellumdev
+          token: ${PYPI_TOKEN}
+        github:
+          repository: fern-vellum/vellum-python
