@@ -19,3 +19,5 @@ groups:
           token: ${PYPI_TOKEN}
         github:
           repository: fern-vellum/vellum-python
+        config: 
+          client_class_name: Vellum
