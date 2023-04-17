@@ -2,7 +2,7 @@ groups:
   publish:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.5.14
+        version: 0.5.15-rc0
         output:
           location: npm
           package-name: '@fern-api/vellum'
