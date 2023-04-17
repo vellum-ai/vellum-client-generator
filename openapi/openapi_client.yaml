@@ -37,6 +37,52 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 paths:
+  /v1/documents:
+    get:
+      operationId: documents_list
+      description: |2
+
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to list documents. Optionally filter on supported fields.
+      parameters:
+      - in: query
+        name: document_index_id
+        schema:
+          type: string
+          format: uuid
+        description: Filter down to only those documents that are included in the
+          specified index. You may provide either the Vellum-generated ID or the unique
+          name of the index specified upon initial creation.
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - documents
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSlimDocumentList'
+          description: ''
   /v1/generate:
     post:
       operationId: generate
@@ -262,6 +308,28 @@ components:
       required:
       - id
       - label
+    DocumentDocumentToDocumentIndex:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Vellum-generated ID that uniquely identifies this link.
+        document_index_id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Vellum-generated ID that uniquely identifies the index this
+            document is included in.
+        indexing_state:
+          allOf:
+          - $ref: '#/components/schemas/IndexingStateEnum'
+          description: An enum value representing where this document is along its
+            indexing lifecycle for this index.
+      required:
+      - document_index_id
+      - id
     EnrichedNormalizedCompletion:
       type: object
       properties:
@@ -405,6 +473,14 @@ components:
           description: The error message returned by the LLM provider.
       required:
       - message
+    IndexingStateEnum:
+      enum:
+      - AWAITING_PROCESSING
+      - QUEUED
+      - INDEXING
+      - INDEXED
+      - FAILED
+      type: string
     LogprobsEnum:
       enum:
       - ALL
@@ -436,11 +512,8 @@ components:
         temperature:
           type: number
           format: double
-          maximum: 5
-          minimum: 0
         max_tokens:
           type: integer
-          minimum: 1
         stop:
           type: array
           items:
@@ -449,24 +522,21 @@ components:
         top_p:
           type: number
           format: double
-          maximum: 1
-          minimum: 0
         top_k:
           type: number
           format: double
-          maximum: 500
-          minimum: 0
-          default: 0.0
         frequency_penalty:
           type: number
           format: double
-          maximum: 2
-          minimum: 0
         presence_penalty:
           type: number
           format: double
-          maximum: 2
-          minimum: 0
+        logit_bias:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
       required:
       - frequency_penalty
       - max_tokens
@@ -589,6 +659,33 @@ components:
       - text_offset
       - token
       - top_logprobs
+    PaginatedSlimDocumentList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlimDocument'
+    ProcessingStateEnum:
+      enum:
+      - QUEUED
+      - PROCESSING
+      - PROCESSED
+      - FAILED
+      type: string
     ProviderEnum:
       enum:
       - OPENAI
@@ -603,6 +700,16 @@ components:
           description: Details about why the request failed.
       required:
       - detail
+    SearchFiltersRequest:
+      type: object
+      properties:
+        external_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: The document external IDs to filter by
     SearchRequestBodyRequest:
       type: object
       properties:
@@ -646,6 +753,11 @@ components:
           - $ref: '#/components/schemas/SearchResultMergingRequest'
           nullable: true
           description: The configuration for merging results.
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/SearchFiltersRequest'
+          nullable: true
+          description: The filters to apply to the search.
     SearchResponse:
       type: object
       properties:
@@ -704,6 +816,56 @@ components:
       required:
       - keywords
       - semantic_similarity
+    SlimDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Vellum-generated ID that uniquely identifies this document.
+        external_id:
+          type: string
+          nullable: true
+          description: The external ID that was originally provided when uploading
+            the document.
+          maxLength: 250
+        last_uploaded_at:
+          type: string
+          format: date-time
+          description: A timestamp representing when this document was most recently
+            uploaded.
+        label:
+          type: string
+          description: Human-friendly name for this document.
+          maxLength: 150
+        processing_state:
+          allOf:
+          - $ref: '#/components/schemas/ProcessingStateEnum'
+          description: The current processing state of the document
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: The document's current status.
+        keywords:
+          type: array
+          items:
+            type: string
+          description: A list of keywords associated with this document. Originally
+            provided when uploading the document.
+        document_to_document_indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDocumentToDocumentIndex'
+      required:
+      - document_to_document_indexes
+      - id
+      - label
+      - last_uploaded_at
+    StatusEnum:
+      enum:
+      - ACTIVE
+      type: string
     SubmitCompletionActualRequest:
       type: object
       properties:
