@@ -9,6 +9,7 @@ default-environment: Production
 environments: 
   Production: 
     urls: 
+      Default: https://api.vellum.ai
       Predict: https://predict.vellum.ai
       Document: https://documents.vellum.ai
 error-discrimination: 

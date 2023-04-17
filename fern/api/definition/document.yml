@@ -35,6 +35,7 @@ service:
         border-radius:4px">Stable</strong>
         Used to list documents. Optionally filter on supported fields.
       request:
+        name: ListDocumentsRequest
         query-parameters:
           document_index_id:
             docs: >-
