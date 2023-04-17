@@ -12,7 +12,7 @@ groups:
         github:
           repository: fern-vellum/vellum-node
       - name: fernapi/fern-python-sdk
-        version: 0.2.1-1-g8642d14e
+        version: 0.3.1-rc0
         output:
           location: pypi
           package-name: vellumdev
