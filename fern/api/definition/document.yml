@@ -6,9 +6,9 @@ imports:
 service:
   auth: true
   base-path: /v1
-  url: Document
   endpoints:
     upload:
+      url: Document
       path: /upload-document
       method: POST
       request: 
@@ -26,8 +26,8 @@ service:
         - commons.NotFoundError
         - commons.InternalServerError
     
-    # This needs to be at URL Default
     list:
+      url: Default
       path: /documents
       method: GET
       docs: >
