@@ -2,12 +2,8 @@
 
 Tagging a release on this repository will update the:
 
-- [Node.js SDK repo](https://github.com/fern-vellum/vellum-node)
-- [Python SDK repo](https://github.com/fern-vellum/vellum-python)
-- [Java SDK repo](https://github.com/fern-vellum/vellum-java)
-- [OpenAPI spec repo](https://github.com/fern-vellum/vellum-openapi)
-- [Postman collection repo](https://github.com/fern-vellum/vellum-postman)
-- _More SDKs to come..._
+- [Node.js SDK repo](https://github.com/vocify/vellum-client-node)
+- [Python SDK repo](https://github.com/vocify/vellum-client-python)
 
 ## What is in this repository?
 
