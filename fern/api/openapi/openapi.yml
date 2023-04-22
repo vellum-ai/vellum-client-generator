@@ -29,8 +29,8 @@ info:
     ### Official API Clients:
     Vellum maintains official API clients for Python and Node/Typescript. We recommend using these clients to interact
     with all stable endpoints. You can find them here:
-    - [Python](https://github.com/vocify/vellum-client-python)
-    - [Node/Typescript](https://github.com/vocify/vellum-client-node)
+    - [Python](https://github.com/vellum-ai/vellum-client-python)
+    - [Node/Typescript](https://github.com/vellum-ai/vellum-client-node)
   contact:
     name: devops@vellum.ai
   license:
@@ -300,6 +300,19 @@ paths:
           x-name: Documents
 components:
   schemas:
+    BlockTypeEnum:
+      enum:
+      - CHAT_MESSAGE
+      - CHAT_HISTORY
+      - TEXT
+      - VARIABLE
+      type: string
+    ChatRoleEnum:
+      enum:
+      - SYSTEM
+      - ASSISTANT
+      - USER
+      type: string
     Document:
       type: object
       properties:
@@ -560,9 +573,6 @@ components:
     ModelVersionExecConfigRead:
       type: object
       properties:
-        prompt_template:
-          type: string
-          description: The template used to generate prompts for this model version.
         parameters:
           allOf:
           - $ref: '#/components/schemas/ModelVersionExecConfigParameters'
@@ -573,6 +583,11 @@ components:
           items:
             type: string
           description: Names of the template variables specified in the prompt template.
+        prompt_template:
+          type: string
+          description: The template used to generate prompts for this model version.
+        prompt_block_data:
+          $ref: '#/components/schemas/PromptTemplateBlockData'
       required:
       - input_variables
       - parameters
@@ -615,6 +630,8 @@ components:
           allOf:
           - $ref: '#/components/schemas/ModelVersionExecConfigRead'
           description: Configuration used to execute this model version.
+        status:
+          $ref: '#/components/schemas/ModelVersionReadStatusEnum'
       required:
       - build_config
       - created
@@ -624,6 +641,13 @@ components:
       - label
       - model_type
       - provider
+    ModelVersionReadStatusEnum:
+      enum:
+      - CREATING
+      - READY
+      - CREATION_FAILED
+      - DISABLED
+      type: string
     ModelVersionSandboxSnapshot:
       type: object
       properties:
@@ -699,11 +723,50 @@ components:
       - PROCESSED
       - FAILED
       type: string
+    PromptTemplateBlock:
+      type: object
+      properties:
+        block_type:
+          $ref: '#/components/schemas/BlockTypeEnum'
+        properties:
+          $ref: '#/components/schemas/PromptTemplateBlockProperties'
+      required:
+      - block_type
+      - properties
+    PromptTemplateBlockData:
+      type: object
+      properties:
+        version:
+          type: integer
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlock'
+      required:
+      - blocks
+      - version
+    PromptTemplateBlockProperties:
+      type: object
+      properties:
+        chat_role:
+          $ref: '#/components/schemas/ChatRoleEnum'
+        text:
+          type: string
+        variable_name:
+          type: string
+        blocks:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
     ProviderEnum:
       enum:
-      - OPENAI
-      - COHERE
       - ANTHROPIC
+      - COHERE
+      - GOOGLE
+      - HOSTED
+      - OPENAI
+      - PYQ
       type: string
     SearchErrorResponse:
       type: object
@@ -858,7 +921,7 @@ components:
           description: The current processing state of the document
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/SlimDocumentStatusEnum'
           description: The document's current status.
         keywords:
           type: array
@@ -875,7 +938,7 @@ components:
       - id
       - label
       - last_uploaded_at
-    StatusEnum:
+    SlimDocumentStatusEnum:
       enum:
       - ACTIVE
       type: string

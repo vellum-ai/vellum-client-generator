@@ -29,13 +29,9 @@ jobs:
       - name: Download Fern
         run: npm install -g fern-api
 
-      - name: Release SDKs, OpenAPI, Postman
+      - name: Release SDKs
         env:
-          FERN_NPM_TOKEN: ${{ secrets.FERN_NPM_TOKEN }}
-          FERN_POSTMAN_API_KEY: ${{ secrets.FERN_POSTMAN_API_KEY }}
-          FERN_POSTMAN_WORKSPACE_ID: ${{ secrets.FERN_POSTMAN_WORKSPACE_ID }}
+          FERN_NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-          FERN_MAVEN_USERNAME: ${{ secrets.FERN_MAVEN_USERNAME }}
-          FERN_MAVEN_TOKEN: ${{ secrets.FERN_MAVEN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: fern generate --group publish --version ${{ github.ref_name }} --log-level debug
