@@ -2,8 +2,8 @@
 
 Tagging a release on this repository will update the following clients:
 
-- [Node.js SDK repo](https://github.com/vocify/vellum-client-node)
-- [Python SDK repo](https://github.com/vocify/vellum-client-python)
+- [Node.js SDK repo](https://github.com/vellum-ai/vellum-client-node)
+- [Python SDK repo](https://github.com/vellum-ai/vellum-client-python)
 
 ## What is in this repository?
 

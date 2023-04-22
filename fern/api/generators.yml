@@ -10,7 +10,7 @@ groups:
         config: 
           namespaceExport: Vellum
         github:
-          repository: vocify/vellum-client-node
+          repository: vellum-ai/vellum-client-node
       - name: fernapi/fern-python-sdk
         version: 0.3.1-rc0
         output:
@@ -18,6 +18,6 @@ groups:
           package-name: vellum-client
           token: ${PYPI_TOKEN}
         github:
-          repository: vocify/vellum-client-python
+          repository: vellum-ai/vellum-client-python
         config: 
           client_class_name: Vellum
