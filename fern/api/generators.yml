@@ -5,19 +5,19 @@ groups:
         version: 0.5.15-rc1
         output:
           location: npm
-          package-name: '@fern-api/vellum'
+          package-name: 'vellum-client'
           token: ${FERN_NPM_TOKEN}
         config: 
           namespaceExport: Vellum
         github:
-          repository: fern-vellum/vellum-node
+          repository: vocify/vellum-client-node
       - name: fernapi/fern-python-sdk
         version: 0.3.1-rc0
         output:
           location: pypi
-          package-name: vellumdev
+          package-name: vellum-client
           token: ${PYPI_TOKEN}
         github:
-          repository: fern-vellum/vellum-python
+          repository: vocify/vellum-client-python
         config: 
           client_class_name: Vellum
