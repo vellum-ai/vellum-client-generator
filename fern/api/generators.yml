@@ -6,7 +6,7 @@ groups:
         output:
           location: npm
           package-name: 'vellum-client'
-          token: ${FERN_NPM_TOKEN}
+          token: ${NPM_TOKEN}
         config: 
           namespaceExport: Vellum
         github:
