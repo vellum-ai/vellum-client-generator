@@ -99,7 +99,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GenerateRequestBodyRequest'
+              $ref: '#/components/schemas/GenerateBodyRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -220,7 +220,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubmitCompletionActualsRequestRequest'
+              $ref: '#/components/schemas/SubmitCompletionActualsRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -263,10 +263,10 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UploadDocumentRequestBodyRequest'
+              $ref: '#/components/schemas/UploadDocumentBodyRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UploadDocumentRequestBodyRequest'
+              $ref: '#/components/schemas/UploadDocumentBodyRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -396,22 +396,7 @@ components:
       - STOP
       - UNKNOWN
       type: string
-    GenerateErrorResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Details about why the request failed.
-      required:
-      - detail
-    GenerateOptionsRequest:
-      type: object
-      properties:
-        logprobs:
-          allOf:
-          - $ref: '#/components/schemas/LogprobsEnum'
-          description: Which logprobs to include, if any. Defaults to NONE.
-    GenerateRequestBodyRequest:
+    GenerateBodyRequest:
       type: object
       properties:
         deployment_id:
@@ -427,7 +412,7 @@ components:
         requests:
           type: array
           items:
-            $ref: '#/components/schemas/GenerateRequestRequest'
+            $ref: '#/components/schemas/GenerateRequest'
           description: The generation requests to make. Supplying multiple will perform
             a bulk request to the LLM provided when possible.
         options:
@@ -438,7 +423,22 @@ components:
             included in the response.
       required:
       - requests
-    GenerateRequestRequest:
+    GenerateErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    GenerateOptionsRequest:
+      type: object
+      properties:
+        logprobs:
+          allOf:
+          - $ref: '#/components/schemas/LogprobsEnum'
+          description: Which logprobs to include, if any. Defaults to NONE.
+    GenerateRequest:
       type: object
       properties:
         input_values:
@@ -983,7 +983,7 @@ components:
           type: string
       required:
       - detail
-    SubmitCompletionActualsRequestRequest:
+    SubmitCompletionActualsRequest:
       type: object
       properties:
         deployment_id:
@@ -1003,14 +1003,7 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
-    UploadDocumentErrorResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    UploadDocumentRequestBodyRequest:
+    UploadDocumentBodyRequest:
       type: object
       properties:
         add_to_index_names:
@@ -1047,6 +1040,13 @@ components:
       required:
       - contents
       - label
+    UploadDocumentErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
     UploadDocumentResponse:
       type: object
       properties:
