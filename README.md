@@ -38,3 +38,16 @@ fern generate --group publish --version <version>
 ```
 
 The publish command currently runs in a GitHub workflow (see [ci.yml](.github/workflows/ci.yml#L32))
+
+## Publishing new client versions
+Here are the steps required to publish a new version of our API clients.
+1. cd into the `django` directory from within the [main vellum repo](https://github.com/vellum-ai/vellum)
+2. Run `make generate-swagger-api-client`
+3. Open the generated `schema_api_client_v1.yaml` file
+4. Copy the contents of the file and paste it into the definition within this repo: [fern/api/openai/openapi.yaml](./fern/api/openai/openapi.yaml)
+5. Check the diff and selectively add everything except for deletions to `server`. These were manually added.
+    Note: We should automate the step of adding `server` related info back as part of `make generate-swagger-api-client`.
+6. Run `fern check` to make sure all is good.
+7. Optionally run `fern generate` to see the newly generated clients locally.
+8. Commit and push the changes to the `main` branch.
+9. Create a new Release within Github. This will trigger a github action that will publish the new clients to their respective repos.
