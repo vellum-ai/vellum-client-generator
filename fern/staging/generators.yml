@@ -12,7 +12,7 @@ groups:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
         github:
-          repository: vellum-ai/staging-vellum-client-node
+          repository: vellum-ai/vellum-client-node-staging
       - name: fernapi/fern-python-sdk
         version: 0.3.3
         # TODO(vellum): configure publish to private coordinate
@@ -21,7 +21,7 @@ groups:
         #   package-name: vellum-ai
         #   token: ${PYPI_TOKEN}
         github:
-          repository: vellum-ai/staging-vellum-client-python
+          repository: vellum-ai/vellum-client-python-staging
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
