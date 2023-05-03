@@ -2,7 +2,7 @@ groups:
   publish:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.5.17
+        version: 0.5.18
         # TODO(vellum): configure publish to private coordinate
         # output:
         #   location: npm
