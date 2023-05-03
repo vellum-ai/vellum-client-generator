@@ -307,17 +307,7 @@ components:
       - TEXT
       - VARIABLE
       type: string
-    ChatMessageRequest:
-      type: object
-      properties:
-        text:
-          type: string
-        role:
-          $ref: '#/components/schemas/ChatMessageRole'
-      required:
-      - role
-      - text
-    ChatMessageRole:
+    ChatRoleEnum:
       enum:
       - SYSTEM
       - ASSISTANT
@@ -385,7 +375,6 @@ components:
         finish_reason:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
-          nullable: true
           description: The reason the generation finished.
         logprobs:
           allOf:
@@ -457,12 +446,6 @@ components:
           additionalProperties: {}
           description: Key/value pairs for each template variable defined in the deployment's
             prompt.
-        chat_history:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessageRequest'
-          description: Optionally provide a list of chat messages that'll be used
-            in place of the special {$chat_history} variable, if included in the prompt.
         external_ids:
           type: array
           items:
@@ -688,7 +671,6 @@ components:
         likelihood:
           type: number
           format: double
-          nullable: true
       required:
       - likelihood
       - tokens
@@ -767,7 +749,7 @@ components:
       type: object
       properties:
         chat_role:
-          $ref: '#/components/schemas/ChatMessageRole'
+          $ref: '#/components/schemas/ChatRoleEnum'
         text:
           type: string
         variable_name:
