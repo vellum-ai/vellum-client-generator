@@ -40,7 +40,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
       - name: fernapi/fern-python-sdk
-        version: 0.3.3
+        version: 0.3.5
         output:
           location: pypi
           package-name: vellum-ai
