@@ -188,7 +188,7 @@ paths:
             examples:
               Example1:
                 value:
-                  id: 50c55d1d-4c37-4c83-afc1-9d895f286320
+                  id: 3ee58bf2-1e5c-415e-8b6c-02ca8b77f29d
                   label: Scenario 1
                   inputs:
                   - key: var_1
@@ -204,7 +204,7 @@ paths:
                   variables, var_1 and var_2.
               Example2:
                 value:
-                  id: 6ca1901e-eed8-49e2-be9f-2e326290adf3
+                  id: 50c55d1d-4c37-4c83-afc1-9d895f286320
                   label: Scenario 2
                   inputs:
                   - key: $chat_history
@@ -856,9 +856,7 @@ components:
       properties:
         chat_role:
           $ref: '#/components/schemas/ChatMessageRole'
-        text:
-          type: string
-        variable_name:
+        template:
           type: string
         blocks:
           type: array
@@ -940,14 +938,15 @@ components:
           items:
             $ref: '#/components/schemas/SandboxInput'
           description: The inputs for the scenario
-        metric_input_params:
-          $ref: '#/components/schemas/SandboxMetricInputParams'
         id:
           type: string
           description: The id of the scenario
+        metric_input_params:
+          $ref: '#/components/schemas/SandboxMetricInputParams'
       required:
       - id
       - inputs
+      - metric_input_params
     SearchErrorResponse:
       type: object
       properties:
@@ -1252,13 +1251,13 @@ components:
           items:
             $ref: '#/components/schemas/SandboxInputRequest'
           description: The inputs for the scenario
-        metric_input_params:
-          $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
-        id:
+        scenario_id:
           type: string
           minLength: 1
           description: The id of the scenario to update. If none is provided, an id
             will be generated and a new scenario will be appended.
+        metric_input_params:
+          $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
   securitySchemes:
