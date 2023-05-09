@@ -45,7 +45,6 @@ paths:
         <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Used to list documents. Optionally filter on supported fields.
-      x-request-name: ListDocumentsRequest
       parameters:
       - in: query
         name: document_index_id
@@ -157,6 +156,78 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ModelVersionRead'
+          description: ''
+  /v1/sandboxes/{id}/scenarios:
+    post:
+      operationId: upsert_sandbox_scenario
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
+
+        If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
+        is found, a new scenario will be appended to the end.
+
+        Note that a full replacement of the scenario is performed, so any fields not provided will be removed
+        or overwritten with default values.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this sandbox.
+        required: true
+      tags:
+      - sandboxes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertSandboxScenarioRequestRequest'
+            examples:
+              Example1:
+                value:
+                  id: 50c55d1d-4c37-4c83-afc1-9d895f286320
+                  label: Scenario 1
+                  inputs:
+                  - key: var_1
+                    value: Hello, world!
+                    type: TEXT
+                  - key: var_2
+                    value: Why hello, there!
+                    type: TEXT
+                  metric_input_params:
+                    params: {}
+                summary: Basic Example
+                description: This example shows how to specify a scenario with two
+                  variables, var_1 and var_2.
+              Example2:
+                value:
+                  id: 6ca1901e-eed8-49e2-be9f-2e326290adf3
+                  label: Scenario 2
+                  inputs:
+                  - key: $chat_history
+                    type: CHAT_HISTORY
+                    chat_history:
+                    - role: USER
+                      text: What's your favorite color?
+                    - role: ASSISTANT
+                      text: AI's don't have a favorite color.... Yet.
+                  metric_input_params:
+                    params: {}
+                summary: Chat History Example
+                description: This example shows how to specify a chat history for
+                  the special $chat_history variable.
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxScenario'
           description: ''
   /v1/search:
     post:
@@ -304,9 +375,18 @@ components:
       enum:
       - CHAT_MESSAGE
       - CHAT_HISTORY
-      - TEXT
-      - VARIABLE
+      - JINJA
       type: string
+    ChatMessage:
+      type: object
+      properties:
+        text:
+          type: string
+        role:
+          $ref: '#/components/schemas/ChatMessageRole'
+      required:
+      - role
+      - text
     ChatMessageRequest:
       type: object
       properties:
@@ -334,13 +414,13 @@ components:
         label:
           type: string
           description: The human-readable name for the document.
-          maxLength: 150
+          maxLength: 1000
         external_id:
           type: string
           nullable: true
           description: The unique ID of the document as represented in an external
             system and specified when it was originally uploaded.
-          maxLength: 250
+          maxLength: 1000
       required:
       - id
       - label
@@ -605,10 +685,12 @@ components:
           description: The template used to generate prompts for this model version.
         prompt_block_data:
           $ref: '#/components/schemas/PromptTemplateBlockData'
+        prompt_syntax_version:
+          type: integer
       required:
       - input_variables
       - parameters
-      - prompt_template
+      - prompt_syntax_version
     ModelVersionRead:
       type: object
       properties:
@@ -675,6 +757,9 @@ components:
           type: integer
           minimum: 0
           description: The index of the prompt in the sandbox snapshot.
+        prompt_id:
+          type: string
+          description: The id of the prompt in the sandbox snapshot.
       required:
       - id
       - prompt_index
@@ -744,12 +829,15 @@ components:
     PromptTemplateBlock:
       type: object
       properties:
+        id:
+          type: string
         block_type:
           $ref: '#/components/schemas/BlockTypeEnum'
         properties:
           $ref: '#/components/schemas/PromptTemplateBlockProperties'
       required:
       - block_type
+      - id
       - properties
     PromptTemplateBlockData:
       type: object
@@ -786,6 +874,80 @@ components:
       - OPENAI
       - PYQ
       type: string
+    SandboxInput:
+      type: object
+      properties:
+        key:
+          type: string
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          nullable: true
+          default: TEXT
+        value:
+          type: string
+        chat_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+      required:
+      - key
+    SandboxInputRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          nullable: true
+          default: TEXT
+        value:
+          type: string
+        chat_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+      required:
+      - key
+    SandboxMetricInputParams:
+      type: object
+      properties:
+        params:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - params
+    SandboxMetricInputParamsRequest:
+      type: object
+      properties:
+        params:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - params
+    SandboxScenario:
+      type: object
+      properties:
+        label:
+          type: string
+          default: Untitled Scenario
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SandboxInput'
+          description: The inputs for the scenario
+        metric_input_params:
+          $ref: '#/components/schemas/SandboxMetricInputParams'
+        id:
+          type: string
+          description: The id of the scenario
+      required:
+      - id
+      - inputs
     SearchErrorResponse:
       type: object
       properties:
@@ -923,7 +1085,7 @@ components:
           nullable: true
           description: The external ID that was originally provided when uploading
             the document.
-          maxLength: 250
+          maxLength: 1000
         last_uploaded_at:
           type: string
           format: date-time
@@ -932,7 +1094,7 @@ components:
         label:
           type: string
           description: Human-friendly name for this document.
-          maxLength: 150
+          maxLength: 1000
         processing_state:
           allOf:
           - $ref: '#/components/schemas/ProcessingStateEnum'
@@ -1021,6 +1183,11 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    TypeEnum:
+      enum:
+      - TEXT
+      - CHAT_HISTORY
+      type: string
     UploadDocumentBodyRequest:
       type: object
       properties:
@@ -1074,6 +1241,26 @@ components:
           description: The ID of the newly created document.
       required:
       - document_id
+    UpsertSandboxScenarioRequestRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          default: Untitled Scenario
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SandboxInputRequest'
+          description: The inputs for the scenario
+        metric_input_params:
+          $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
+        id:
+          type: string
+          minLength: 1
+          description: The id of the scenario to update. If none is provided, an id
+            will be generated and a new scenario will be appended.
+      required:
+      - inputs
   securitySchemes:
     apiKeyAuth:
       type: apiKey
