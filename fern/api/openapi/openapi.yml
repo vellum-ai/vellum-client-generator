@@ -319,6 +319,44 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+  /v1/test-suites/{id}/test-cases:
+    post:
+      operationId: upsert_test_suite_test_case
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new test case for a test suite, keying off of the optionally provided test case id.
+
+        If an id is provided and has a match, the test case will be updated. If no id is provided or no match
+        is found, a new test case will be appended to the end.
+
+        Note that a full replacement of the test case is performed, so any fields not provided will be removed
+        or overwritten with default values.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite.
+        required: true
+      tags:
+      - test-suites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestSuiteTestCaseRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteTestCase'
+          description: ''
   /v1/upload-document:
     post:
       operationId: documents_upload
@@ -481,6 +519,21 @@ components:
       - id
       - model_version_id
       - text
+    EvaluationParams:
+      type: object
+      properties:
+        target:
+          type: string
+          description: The target value to compare the LLM output against. Typically
+            what you expect or desire the LLM output to be.
+    EvaluationParamsRequest:
+      type: object
+      properties:
+        target:
+          type: string
+          minLength: 1
+          description: The target value to compare the LLM output against. Typically
+            what you expect or desire the LLM output to be.
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -819,6 +872,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimDocument'
+    ProcessingFailureReasonEnum:
+      enum:
+      - EXCEEDED_CHARACTER_LIMIT
+      type: string
     ProcessingStateEnum:
       enum:
       - QUEUED
@@ -872,7 +929,41 @@ components:
       - OPENAI
       - PYQ
       type: string
-    SandboxInput:
+    SandboxMetricInputParams:
+      type: object
+      properties:
+        params:
+          allOf:
+          - $ref: '#/components/schemas/EvaluationParams'
+          nullable: true
+    SandboxMetricInputParamsRequest:
+      type: object
+      properties:
+        params:
+          allOf:
+          - $ref: '#/components/schemas/EvaluationParamsRequest'
+          nullable: true
+    SandboxScenario:
+      type: object
+      properties:
+        label:
+          type: string
+          default: Untitled Scenario
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioInput'
+          description: The inputs for the scenario
+        id:
+          type: string
+          description: The id of the scenario
+        metric_input_params:
+          $ref: '#/components/schemas/SandboxMetricInputParams'
+      required:
+      - id
+      - inputs
+      - metric_input_params
+    ScenarioInput:
       type: object
       properties:
         key:
@@ -890,7 +981,7 @@ components:
             $ref: '#/components/schemas/ChatMessage'
       required:
       - key
-    SandboxInputRequest:
+    ScenarioInputRequest:
       type: object
       properties:
         key:
@@ -909,44 +1000,6 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - key
-    SandboxMetricInputParams:
-      type: object
-      properties:
-        params:
-          type: object
-          additionalProperties: {}
-          nullable: true
-      required:
-      - params
-    SandboxMetricInputParamsRequest:
-      type: object
-      properties:
-        params:
-          type: object
-          additionalProperties: {}
-          nullable: true
-      required:
-      - params
-    SandboxScenario:
-      type: object
-      properties:
-        label:
-          type: string
-          default: Untitled Scenario
-        inputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SandboxInput'
-          description: The inputs for the scenario
-        id:
-          type: string
-          description: The id of the scenario
-        metric_input_params:
-          $ref: '#/components/schemas/SandboxMetricInputParams'
-      required:
-      - id
-      - inputs
-      - metric_input_params
     SearchErrorResponse:
       type: object
       properties:
@@ -1097,7 +1150,14 @@ components:
         processing_state:
           allOf:
           - $ref: '#/components/schemas/ProcessingStateEnum'
-          description: The current processing state of the document
+          description: An enum value representing where this document is along its
+            processing lifecycle. Note that this is different than its indexing lifecycle.
+        processing_failure_reason:
+          allOf:
+          - $ref: '#/components/schemas/ProcessingFailureReasonEnum'
+          nullable: true
+          description: An enum value representing why the document could not be processed.
+            Is null unless processing_state is FAILED.
         status:
           allOf:
           - $ref: '#/components/schemas/SlimDocumentStatusEnum'
@@ -1182,6 +1242,55 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    TestSuiteTestCase:
+      type: object
+      properties:
+        test_case_id:
+          type: string
+          description: The id of the test case to update. If none is provided, an
+            id will be generated and a new test case will be appended.
+        label:
+          type: string
+          nullable: true
+          description: A human-friendly label for the test case.
+        input_values:
+          type: object
+          additionalProperties: {}
+          description: Key/value pairs for each input variable that the Test Suite
+            expects.
+        evaluation_params:
+          allOf:
+          - $ref: '#/components/schemas/EvaluationParams'
+          description: Parameters to use when evaluating the test case, specific to
+            the test suite's evaluation metric.
+      required:
+      - evaluation_params
+      - input_values
+    TestSuiteTestCaseRequest:
+      type: object
+      properties:
+        test_case_id:
+          type: string
+          minLength: 1
+          description: The id of the test case to update. If none is provided, an
+            id will be generated and a new test case will be appended.
+        label:
+          type: string
+          nullable: true
+          description: A human-friendly label for the test case.
+        input_values:
+          type: object
+          additionalProperties: {}
+          description: Key/value pairs for each input variable that the Test Suite
+            expects.
+        evaluation_params:
+          allOf:
+          - $ref: '#/components/schemas/EvaluationParamsRequest'
+          description: Parameters to use when evaluating the test case, specific to
+            the test suite's evaluation metric.
+      required:
+      - evaluation_params
+      - input_values
     TypeEnum:
       enum:
       - TEXT
@@ -1249,7 +1358,7 @@ components:
         inputs:
           type: array
           items:
-            $ref: '#/components/schemas/SandboxInputRequest'
+            $ref: '#/components/schemas/ScenarioInputRequest'
           description: The inputs for the scenario
         scenario_id:
           type: string
