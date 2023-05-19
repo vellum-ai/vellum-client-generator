@@ -37,6 +37,32 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 paths:
+  /v1/deployments/{id}:
+    get:
+      operationId: deployments_retrieve
+      description: |2
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Used to retrieve a deployment given its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Deployment's ID or its unique name
+        required: true
+      tags:
+      - deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentRead'
+          description: ''
   /v1/documents:
     get:
       operationId: documents_list
@@ -133,6 +159,12 @@ paths:
   /v1/generate-stream:
     post:
       operationId: generate_stream
+      description: |-
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Generate a stream of completions using a previously defined deployment.
+
+        **Note:** Uses a base url of `https://predict.vellum.ai`.
       tags:
       - generate-stream
       requestBody:
@@ -480,6 +512,61 @@ components:
       - ASSISTANT
       - USER
       type: string
+    DeploymentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        label:
+          type: string
+          description: A human-readable label for the deployment
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this deployment within its
+            workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DeploymentReadStatusEnum'
+          description: The current status of the deployment
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: The environment this deployment is used in
+        model_type:
+          allOf:
+          - $ref: '#/components/schemas/ModelTypeEnum'
+          description: The type of model this deployment serves
+        active_model_version_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          readOnly: true
+        last_deployed_on:
+          type: string
+          format: date-time
+      required:
+      - active_model_version_ids
+      - created
+      - id
+      - label
+      - last_deployed_on
+      - model_type
+      - name
+    DeploymentReadStatusEnum:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      type: string
     Document:
       type: object
       properties:
@@ -558,6 +645,12 @@ components:
       - id
       - model_version_id
       - text
+    EnvironmentEnum:
+      enum:
+      - DEVELOPMENT
+      - STAGING
+      - PRODUCTION
+      type: string
     EvaluationParams:
       type: object
       properties:
