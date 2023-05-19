@@ -130,6 +130,45 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+  /v1/generate-stream:
+    post:
+      operationId: generate_stream
+      tags:
+      - generate-stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateBodyRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateStreamResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+      x-fern-streaming: true
   /v1/model-versions/{id}:
     get:
       operationId: model_versions_retrieve
@@ -649,6 +688,34 @@ components:
           description: The error message returned by the LLM provider.
       required:
       - message
+    GenerateStreamResponse:
+      type: object
+      properties:
+        delta:
+          $ref: '#/components/schemas/GenerateStreamResult'
+      required:
+      - delta
+    GenerateStreamResult:
+      type: object
+      properties:
+        request_index:
+          type: integer
+        data:
+          $ref: '#/components/schemas/GenerateStreamResultData'
+        error:
+          $ref: '#/components/schemas/GenerateResultError'
+      required:
+      - request_index
+    GenerateStreamResultData:
+      type: object
+      properties:
+        completion_index:
+          type: integer
+        completion:
+          $ref: '#/components/schemas/EnrichedNormalizedCompletion'
+      required:
+      - completion
+      - completion_index
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
