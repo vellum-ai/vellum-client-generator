@@ -139,7 +139,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GenerateBodyRequest'
+              $ref: '#/components/schemas/GenerateStreamBodyRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -688,6 +688,33 @@ components:
           description: The error message returned by the LLM provider.
       required:
       - message
+    GenerateStreamBodyRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the deployment. Must provide either this or deployment_name.
+        deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the deployment. Must provide either this or deployment_id.
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenerateRequest'
+          description: The generation requests to make. Supplying multiple will perform
+            a bulk request to the LLM provided when possible.
+        options:
+          allOf:
+          - $ref: '#/components/schemas/GenerateOptionsRequest'
+          nullable: true
+          description: Additional configuration that can be used to control what's
+            included in the response.
+      required:
+      - requests
     GenerateStreamResponse:
       type: object
       properties:
@@ -882,7 +909,6 @@ components:
           description: The id of the prompt in the sandbox snapshot.
       required:
       - id
-      - prompt_index
     NormalizedLogProbs:
       type: object
       properties:
@@ -980,6 +1006,9 @@ components:
       properties:
         chat_role:
           $ref: '#/components/schemas/ChatMessageRole'
+        chat_message_unterminated:
+          type: boolean
+          default: false
         template:
           type: string
         blocks:
