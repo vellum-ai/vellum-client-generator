@@ -228,6 +228,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/ModelVersionRead'
           description: ''
+  /v1/model-versions/{id}/compile-prompt:
+    post:
+      operationId: model_version_compile_prompt
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Compiles the prompt backing the model version using the provided input values.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this model version.
+        required: true
+      tags:
+      - model-versions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelVersionCompilePromptRequestRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelVersionCompilePromptResponse'
+          description: ''
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
@@ -869,6 +901,39 @@ components:
             this model version, if applicable.
       required:
       - base_model
+    ModelVersionCompilePromptRequestRequest:
+      type: object
+      properties:
+        input_values:
+          type: object
+          additionalProperties: {}
+          description: Key/value pairs for each variable found within the model version's
+            prompt template.
+      required:
+      - input_values
+    ModelVersionCompilePromptResponse:
+      type: object
+      properties:
+        prompt:
+          allOf:
+          - $ref: '#/components/schemas/ModelVersionCompiledPrompt'
+          description: Information about the compiled prompt.
+      required:
+      - prompt
+    ModelVersionCompiledPrompt:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The fully compiled prompt in normalized ChatML syntax after
+            all variable substitutions and templating functions are applied.
+        num_tokens:
+          type: integer
+          minimum: 0
+          description: The approximate number of tokens used by the compiled prompt.
+      required:
+      - num_tokens
+      - text
     ModelVersionExecConfigParameters:
       type: object
       properties:
@@ -1001,8 +1066,12 @@ components:
         prompt_id:
           type: string
           description: The id of the prompt in the sandbox snapshot.
+        sandbox_id:
+          type: string
+          readOnly: true
       required:
       - id
+      - sandbox_id
     NormalizedLogProbs:
       type: object
       properties:
