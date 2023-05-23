@@ -918,8 +918,9 @@ components:
         input_variables:
           type: array
           items:
-            type: string
-          description: Names of the template variables specified in the prompt template.
+            $ref: '#/components/schemas/PromptTemplateInputVariable'
+          description: Names of the input variables specified in the prompt template.
+          readOnly: true
         prompt_template:
           type: string
           description: The template used to generate prompts for this model version.
@@ -1109,6 +1110,14 @@ components:
           items:
             type: object
             additionalProperties: {}
+    PromptTemplateInputVariable:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The name of the input variable.
+      required:
+      - key
     ProviderEnum:
       enum:
       - ANTHROPIC
