@@ -260,6 +260,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/ModelVersionCompilePromptResponse'
           description: ''
+  /v1/registered-prompts/register:
+    post:
+      operationId: register_prompt
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
+        partners, not directly by Vellum users.
+
+        Under the hood, this endpoint creates a new sandbox, a new model version, and a new deployment.
+      tags:
+      - registered-prompts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPromptRequestRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPromptResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPromptErrorResponse'
+          description: ''
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
@@ -985,7 +1018,6 @@ components:
           items:
             $ref: '#/components/schemas/PromptTemplateInputVariable'
           description: Names of the input variables specified in the prompt template.
-          readOnly: true
         prompt_template:
           type: string
           description: The template used to generate prompts for this model version.
@@ -1164,6 +1196,18 @@ components:
       required:
       - blocks
       - version
+    PromptTemplateBlockDataRequest:
+      type: object
+      properties:
+        version:
+          type: integer
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlockRequest'
+      required:
+      - blocks
+      - version
     PromptTemplateBlockProperties:
       type: object
       properties:
@@ -1179,11 +1223,49 @@ components:
           items:
             type: object
             additionalProperties: {}
+    PromptTemplateBlockPropertiesRequest:
+      type: object
+      properties:
+        chat_role:
+          $ref: '#/components/schemas/ChatMessageRole'
+        chat_message_unterminated:
+          type: boolean
+          default: false
+        template:
+          type: string
+        blocks:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+    PromptTemplateBlockRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        block_type:
+          $ref: '#/components/schemas/BlockTypeEnum'
+        properties:
+          $ref: '#/components/schemas/PromptTemplateBlockPropertiesRequest'
+      required:
+      - block_type
+      - id
+      - properties
     PromptTemplateInputVariable:
       type: object
       properties:
         key:
           type: string
+          description: The name of the input variable.
+      required:
+      - key
+    PromptTemplateInputVariableRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
           description: The name of the input variable.
       required:
       - key
@@ -1196,6 +1278,195 @@ components:
       - OPENAI
       - PYQ
       type: string
+    RegisterPromptErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    RegisterPromptModelParametersRequest:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: double
+        max_tokens:
+          type: integer
+        stop:
+          type: array
+          items:
+            type: string
+          nullable: true
+        top_p:
+          type: number
+          format: double
+        top_k:
+          type: number
+          format: double
+        frequency_penalty:
+          type: number
+          format: double
+        presence_penalty:
+          type: number
+          format: double
+        logit_bias:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
+      required:
+      - frequency_penalty
+      - max_tokens
+      - presence_penalty
+      - stop
+      - temperature
+      - top_p
+    RegisterPromptPrompt:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the generated prompt.
+        label:
+          type: string
+          description: A human-friendly label for the generated prompt.
+      required:
+      - id
+      - label
+    RegisterPromptPromptInfoRequest:
+      type: object
+      properties:
+        prompt_syntax_version:
+          type: integer
+          default: 2
+        prompt_block_data:
+          $ref: '#/components/schemas/PromptTemplateBlockDataRequest'
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateInputVariableRequest'
+          description: Names of the input variables specified in the prompt template.
+    RegisterPromptRequestRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-friendly label for corresponding entities created in
+            Vellum.
+        name:
+          type: string
+          minLength: 1
+          description: A uniquely-identifying name for corresponding entities created
+            in Vellum.
+        prompt:
+          allOf:
+          - $ref: '#/components/schemas/RegisterPromptPromptInfoRequest'
+          description: Information about how to execute the prompt template.
+        provider:
+          allOf:
+          - $ref: '#/components/schemas/ProviderEnum'
+          description: The initial LLM provider to use for this prompt
+        model:
+          type: string
+          minLength: 1
+          description: The initial model to use for this prompt
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/RegisterPromptModelParametersRequest'
+          description: The initial model parameters to use for  this prompt
+        meta:
+          type: object
+          additionalProperties: {}
+          description: Optionally include additional metadata to store along with
+            the prompt.
+      required:
+      - label
+      - model
+      - name
+      - parameters
+      - prompt
+      - provider
+    RegisterPromptResponse:
+      type: object
+      properties:
+        prompt:
+          allOf:
+          - $ref: '#/components/schemas/RegisterPromptPrompt'
+          description: Information about the generated prompt
+        sandbox_snapshot:
+          allOf:
+          - $ref: '#/components/schemas/RegisteredPromptSandboxSnapshot'
+          description: Information about the generated sandbox snapshot
+        sandbox:
+          allOf:
+          - $ref: '#/components/schemas/RegisteredPromptSandbox'
+          description: Information about the generated sandbox
+        model_version:
+          allOf:
+          - $ref: '#/components/schemas/RegisteredPromptModelVersion'
+          description: Information about the generated model version
+        deployment:
+          allOf:
+          - $ref: '#/components/schemas/RegisteredPromptDeployment'
+          description: Information about the generated deployment
+      required:
+      - deployment
+      - model_version
+      - prompt
+      - sandbox
+      - sandbox_snapshot
+    RegisteredPromptDeployment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the generated deployment.
+        name:
+          type: string
+          description: A uniquely-identifying name for generated deployment.
+        label:
+          type: string
+          description: A human-friendly label for the generated deployment.
+      required:
+      - id
+      - label
+      - name
+    RegisteredPromptModelVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the generated model version.
+        label:
+          type: string
+          description: A human-friendly label for the generated model version.
+      required:
+      - id
+      - label
+    RegisteredPromptSandbox:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the generated sandbox.
+        label:
+          type: string
+          description: A human-friendly label for the generated sandbox.
+      required:
+      - id
+      - label
+    RegisteredPromptSandboxSnapshot:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the generated sandbox snapshot.
+      required:
+      - id
     SandboxMetricInputParams:
       type: object
       properties:
