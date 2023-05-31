@@ -1,0 +1,9 @@
+navigation:
+  - section: Introduction
+    contents:
+      - page: Getting started
+        path: ./intro.md
+  - api: API Reference
+colors:
+  accentPrimary: "#a3d3ff"
+logo: ./logo.png

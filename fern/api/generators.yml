@@ -50,3 +50,8 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+
+  docs:
+    docs:
+      domain: vellum
+    generators: []
