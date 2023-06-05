@@ -53,5 +53,7 @@ groups:
 
   docs:
     docs:
-      domain: vellum
+      domain: vellum.docs.buildwithfern.com
+      custom-domains: 
+        - docs.vellum.ai 
     generators: []
