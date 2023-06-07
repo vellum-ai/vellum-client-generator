@@ -4,6 +4,8 @@ navigation:
       - page: Getting started
         path: ./intro.md
   - api: API Reference
+title: Vellum
 colors:
   accentPrimary: "#a3d3ff"
 logo: ./logo.png
+favicon: ./favicon.ico
