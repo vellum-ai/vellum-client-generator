@@ -4,7 +4,7 @@ navigation:
       - page: Getting started
         path: ./intro.md
   - api: API Reference
-title: Vellum
+title: Vellum | API Docs
 colors:
   accentPrimary: "#a3d3ff"
 logo: ./logo.svg
