@@ -29,12 +29,17 @@ jobs:
       - name: Download Fern
         run: npm install -g fern-api
 
-      - name: Release SDKs
+      - name: Release Staging SDKs
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: fern generate --group staging --log-level debug
+      
+      - name: Generate Staging Docs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: fern generate --group staging-docs --log-level debug
 
   fern-generate-production:
     needs: fern-check
@@ -56,3 +61,8 @@ jobs:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: fern generate --group production --version ${{ github.ref_name }} --log-level debug
+      
+      - name: Generate Production Docs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: fern generate --group production-docs --log-level debug

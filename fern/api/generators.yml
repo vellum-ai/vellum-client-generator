@@ -25,6 +25,10 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+  staging-docs:
+    docs:
+      domain: vellum-staging.docs.buildwithfern.com
+    generators: []
 
   production:
     generators:
@@ -50,8 +54,7 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-
-  docs:
+  production-docs:
     docs:
       domain: vellum.docs.buildwithfern.com
       custom-domains:
