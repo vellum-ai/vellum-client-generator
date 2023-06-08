@@ -7,5 +7,5 @@ navigation:
 title: Vellum
 colors:
   accentPrimary: "#a3d3ff"
-logo: ./logo.png
+logo: ./logo.svg
 favicon: ./favicon.ico
