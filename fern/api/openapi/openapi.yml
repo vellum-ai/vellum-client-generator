@@ -63,6 +63,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
+  /v1/document-indexes:
+    post:
+      operationId: document_indexes_create
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Creates a new document index.
+      tags:
+      - document-indexes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentIndexCreateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
   /v1/documents:
     get:
       operationId: documents_list
@@ -675,6 +699,72 @@ components:
       required:
       - document_index_id
       - id
+    DocumentIndexCreateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index.
+          maxLength: 150
+        name:
+          type: string
+          minLength: 1
+          description: A name that uniquely identifies this index within its workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexStatus'
+          description: The current status of the document index
+        indexing_config:
+          type: object
+          additionalProperties: {}
+          description: Configuration representing how documents should be indexed.
+        copy_documents_from_index_id:
+          type: string
+          format: uuid
+      required:
+      - indexing_config
+      - label
+      - name
+    DocumentIndexRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        label:
+          type: string
+          description: A human-readable label for the document index.
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this index within its workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexStatus'
+          description: The current status of the document index
+        indexing_config:
+          type: object
+          additionalProperties: {}
+          description: Configuration representing how documents should be indexed.
+      required:
+      - created
+      - id
+      - indexing_config
+      - label
+      - name
+    DocumentIndexStatus:
+      enum:
+      - ACTIVE
+      - ARCHIVED
+      type: string
     EnrichedNormalizedCompletion:
       type: object
       properties:
