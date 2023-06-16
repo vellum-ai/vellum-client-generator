@@ -950,6 +950,11 @@ components:
           description: Optionally include a unique identifier for each generation,
             as represented outside of Vellum. Note that this should generally be a
             list of length one.
+        overrides:
+          type: object
+          additionalProperties: {}
+          description: Optionally include parameters that are forwarded to the API call made to
+            the deployment's model
       required:
       - input_values
     GenerateResponse:
