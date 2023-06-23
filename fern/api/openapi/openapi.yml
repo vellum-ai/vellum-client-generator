@@ -63,6 +63,86 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
+  /v1/document-indexes:
+    post:
+      operationId: document_indexes_create
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Creates a new document index.
+      tags:
+      - document-indexes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentIndexCreateRequest'
+            examples:
+              Example1:
+                value:
+                  label: My Document Index
+                  name: my-document-index
+                  indexing_config:
+                    chunking:
+                      chunker_name: sentence-chunker
+                      chunker_config:
+                        character_limit: 1000
+                        min_overlap_ratio: 0.5
+                    vectorizer:
+                      model_name: hkunlp/instructor-xl
+                      config:
+                        instruction_domain: ''
+                        instruction_document_text_type: plain_text
+                        instruction_query_text_type: plain_text
+                  copy_documents_from_index_id: null
+                summary: Index Using Instructor Model
+                description: This example shows how to create a document index that
+                  vectorizes documents using an instructor model.
+              Example2:
+                value:
+                  label: My Document Index
+                  name: my-document-index
+                  indexing_config:
+                    chunking:
+                      chunker_name: sentence-chunker
+                      chunker_config:
+                        character_limit: 1000
+                        min_overlap_ratio: 0.5
+                    vectorizer:
+                      model_name: sentence-transformers/multi-qa-mpnet-base-dot-v1
+                      config: {}
+                  copy_documents_from_index_id: null
+                summary: Index Using Transformer Model
+                description: This example shows how to create a document index that
+                  vectorizes documents using a transformer model.
+              Example3:
+                value:
+                  label: My Document Index
+                  name: my-document-index
+                  indexing_config:
+                    chunking:
+                      chunker_name: sentence-chunker
+                      chunker_config:
+                        character_limit: 1000
+                        min_overlap_ratio: 0.5
+                    vectorizer:
+                      model_name: text-embedding-ada-002
+                      config:
+                        add_openai_api_key: true
+                  copy_documents_from_index_id: null
+                summary: Index Using OpenAI Model
+                description: This example shows how to create a document index that
+                  vectorizes documents using one of OpenAI's embedding models.
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
   /v1/documents:
     get:
       operationId: documents_list
@@ -675,6 +755,74 @@ components:
       required:
       - document_index_id
       - id
+    DocumentIndexCreateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index
+          maxLength: 150
+        name:
+          type: string
+          minLength: 1
+          description: A name that uniquely identifies this index within its workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexStatus'
+          description: The current status of the document index
+        indexing_config:
+          type: object
+          additionalProperties: {}
+          description: Configuration representing how documents should be indexed
+        copy_documents_from_index_id:
+          type: string
+          format: uuid
+          description: Optionally specify the id of a document index from which you'd
+            like to copy and re-index its documents into this newly created index
+      required:
+      - indexing_config
+      - label
+      - name
+    DocumentIndexRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        label:
+          type: string
+          description: A human-readable label for the document index
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this index within its workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexStatus'
+          description: The current status of the document index
+        indexing_config:
+          type: object
+          additionalProperties: {}
+          description: Configuration representing how documents should be indexed
+      required:
+      - created
+      - id
+      - indexing_config
+      - label
+      - name
+    DocumentIndexStatus:
+      enum:
+      - ACTIVE
+      - ARCHIVED
+      type: string
     EnrichedNormalizedCompletion:
       type: object
       properties:
