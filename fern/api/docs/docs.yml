@@ -2,7 +2,7 @@ navigation:
   - section: Introduction
     contents:
       - page: Getting started
-        path: ./intro.md
+        path: ./intro.mdx
   - api: API Reference
 title: Vellum | API Docs
 colors:
