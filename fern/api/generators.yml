@@ -54,10 +54,6 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-  dev-docs:
-    docs:
-      domain: vellum.docs.dev.buildwithfern.com
-    generators: []
   production-docs:
     docs:
       domain: vellum.docs.buildwithfern.com
