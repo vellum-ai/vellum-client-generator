@@ -445,6 +445,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/SandboxScenario'
           description: ''
+  /v1/sandboxes/{id}/scenarios/{scenario_id}:
+    delete:
+      operationId: delete_sandbox_scenario
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this sandbox.
+        required: true
+      - in: path
+        name: scenario_id
+        schema:
+          type: string
+        description: An id identifying the scenario that you'd like to delete
+        required: true
+      tags:
+      - sandboxes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
   /v1/search:
     post:
       operationId: search
@@ -573,6 +601,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteTestCase'
           description: ''
+  /v1/test-suites/{id}/test-cases/{test_case_id}:
+    delete:
+      operationId: delete_test_suite_test_case
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing test case for a test suite, keying off of the test case id.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite.
+        required: true
+      - in: path
+        name: test_case_id
+        schema:
+          type: string
+        description: An id identifying the test case that you'd like to delete
+        required: true
+      tags:
+      - test-suites
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
   /v1/upload-document:
     post:
       operationId: documents_upload
@@ -876,7 +932,6 @@ components:
       properties:
         target:
           type: string
-          minLength: 1
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
     FinishReasonEnum:
@@ -1248,6 +1303,7 @@ components:
           description: The id of the prompt in the sandbox snapshot.
         sandbox_id:
           type: string
+          nullable: true
           readOnly: true
       required:
       - id
@@ -1497,6 +1553,9 @@ components:
           items:
             $ref: '#/components/schemas/PromptTemplateInputVariableRequest'
           description: Names of the input variables specified in the prompt template.
+      required:
+      - input_variables
+      - prompt_block_data
     RegisterPromptRequestRequest:
       type: object
       properties:
