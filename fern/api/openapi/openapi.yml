@@ -281,6 +281,9 @@ paths:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
       x-fern-streaming: true
+      servers:
+        - url: https://predict.vellum.ai
+          x-name: Predict
   /v1/model-versions/{id}:
     get:
       operationId: model_versions_retrieve
