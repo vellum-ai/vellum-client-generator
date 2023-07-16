@@ -728,7 +728,7 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
-    ContentTypeEnum:
+    ContentType:
       enum:
       - STRING
       - JSON
@@ -991,7 +991,7 @@ components:
           type: string
           description: The ID of the model version used to generate this completion.
         type:
-          $ref: '#/components/schemas/ContentTypeEnum'
+          $ref: '#/components/schemas/ContentType'
       required:
       - finish_reason
       - id
@@ -1556,7 +1556,7 @@ components:
           nullable: true
         template_type:
           allOf:
-          - $ref: '#/components/schemas/ContentTypeEnum'
+          - $ref: '#/components/schemas/ContentType'
           nullable: true
         function_name:
           type: string
@@ -1588,7 +1588,7 @@ components:
           nullable: true
         template_type:
           allOf:
-          - $ref: '#/components/schemas/ContentTypeEnum'
+          - $ref: '#/components/schemas/ContentType'
           nullable: true
         function_name:
           type: string
