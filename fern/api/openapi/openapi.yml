@@ -112,9 +112,9 @@ paths:
                       model_name: sentence-transformers/multi-qa-mpnet-base-dot-v1
                       config: {}
                   copy_documents_from_index_id: null
-                summary: Index Using Transformer Model
+                summary: Index Using a Sentence Transformers Model
                 description: This example shows how to create a document index that
-                  vectorizes documents using a transformer model.
+                  vectorizes documents using a Sentence Transformers model.
               Example3:
                 value:
                   label: My Document Index
@@ -520,9 +520,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchErrorResponse'
           description: ''
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
@@ -604,6 +601,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteTestCase'
           description: ''
+      servers:
+        - url: https://predict.vellum.ai
+          x-name: Predict
   /v1/test-suites/{id}/test-cases/{test_case_id}:
     delete:
       operationId: delete_test_suite_test_case
@@ -679,9 +679,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/UploadDocumentErrorResponse'
           description: ''
-      servers:
-        - url: https://documents.vellum.ai
-          x-name: Documents
 components:
   schemas:
     BlockTypeEnum:
@@ -689,7 +686,13 @@ components:
       - CHAT_MESSAGE
       - CHAT_HISTORY
       - JINJA
+      - FUNCTION_DEFINITION
       type: string
+      description: |-
+        * `CHAT_MESSAGE` - CHAT_MESSAGE
+        * `CHAT_HISTORY` - CHAT_HISTORY
+        * `JINJA` - JINJA
+        * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     ChatMessage:
       type: object
       properties:
@@ -715,7 +718,21 @@ components:
       - SYSTEM
       - ASSISTANT
       - USER
+      - FUNCTION
       type: string
+      description: |-
+        * `SYSTEM` - System
+        * `ASSISTANT` - Assistant
+        * `USER` - User
+        * `FUNCTION` - Function
+    ContentTypeEnum:
+      enum:
+      - STRING
+      - JSON
+      type: string
+      description: |-
+        * `STRING` - STRING
+        * `JSON` - JSON
     DeploymentRead:
       type: object
       properties:
@@ -739,15 +756,29 @@ components:
         status:
           allOf:
           - $ref: '#/components/schemas/DeploymentReadStatusEnum'
-          description: The current status of the deployment
+          description: |-
+            The current status of the deployment
+
+            * `ACTIVE` - Active
+            * `INACTIVE` - Inactive
+            * `ARCHIVED` - Archived
         environment:
           allOf:
           - $ref: '#/components/schemas/EnvironmentEnum'
-          description: The environment this deployment is used in
+          description: |-
+            The environment this deployment is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
         model_type:
           allOf:
           - $ref: '#/components/schemas/ModelTypeEnum'
-          description: The type of model this deployment serves
+          description: |-
+            The type of model this deployment serves
+
+            * `GENERATE` - Generate
+            * `CLASSIFY` - Classify
         active_model_version_ids:
           type: array
           items:
@@ -771,6 +802,10 @@ components:
       - INACTIVE
       - ARCHIVED
       type: string
+      description: |-
+        * `ACTIVE` - Active
+        * `INACTIVE` - Inactive
+        * `ARCHIVED` - Archived
     Document:
       type: object
       properties:
@@ -809,8 +844,14 @@ components:
         indexing_state:
           allOf:
           - $ref: '#/components/schemas/IndexingStateEnum'
-          description: An enum value representing where this document is along its
-            indexing lifecycle for this index.
+          description: |-
+            An enum value representing where this document is along its indexing lifecycle for this index.
+
+            * `AWAITING_PROCESSING` - Awaiting Processing
+            * `QUEUED` - Queued
+            * `INDEXING` - Indexing
+            * `INDEXED` - Indexed
+            * `FAILED` - Failed
       required:
       - document_index_id
       - id
@@ -830,7 +871,20 @@ components:
         status:
           allOf:
           - $ref: '#/components/schemas/DocumentIndexStatus'
-          description: The current status of the document index
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
         indexing_config:
           type: object
           additionalProperties: {}
@@ -866,7 +920,20 @@ components:
         status:
           allOf:
           - $ref: '#/components/schemas/DocumentIndexStatus'
-          description: The current status of the document index
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
         indexing_config:
           type: object
           additionalProperties: {}
@@ -882,6 +949,9 @@ components:
       - ACTIVE
       - ARCHIVED
       type: string
+      description: |-
+        * `ACTIVE` - Active
+        * `ARCHIVED` - Archived
     EnrichedNormalizedCompletion:
       type: object
       properties:
@@ -902,7 +972,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
-          description: The reason the generation finished.
+          description: |-
+            The reason the generation finished.
+
+            * `LENGTH` - LENGTH
+            * `STOP` - STOP
+            * `UNKNOWN` - UNKNOWN
         logprobs:
           allOf:
           - $ref: '#/components/schemas/NormalizedLogProbs'
@@ -912,6 +987,8 @@ components:
         model_version_id:
           type: string
           description: The ID of the model version used to generate this completion.
+        type:
+          $ref: '#/components/schemas/ContentTypeEnum'
       required:
       - finish_reason
       - id
@@ -923,6 +1000,10 @@ components:
       - STAGING
       - PRODUCTION
       type: string
+      description: |-
+        * `DEVELOPMENT` - Development
+        * `STAGING` - Staging
+        * `PRODUCTION` - Production
     EvaluationParams:
       type: object
       properties:
@@ -943,6 +1024,10 @@ components:
       - STOP
       - UNKNOWN
       type: string
+      description: |-
+        * `LENGTH` - LENGTH
+        * `STOP` - STOP
+        * `UNKNOWN` - UNKNOWN
     GenerateBodyRequest:
       type: object
       properties:
@@ -984,7 +1069,11 @@ components:
         logprobs:
           allOf:
           - $ref: '#/components/schemas/LogprobsEnum'
-          description: Which logprobs to include, if any. Defaults to NONE.
+          description: |-
+            Which logprobs to include, if any. Defaults to NONE.
+
+            * `ALL` - ALL
+            * `NONE` - NONE
     GenerateRequest:
       type: object
       properties:
@@ -1115,16 +1204,28 @@ components:
       - INDEXED
       - FAILED
       type: string
+      description: |-
+        * `AWAITING_PROCESSING` - Awaiting Processing
+        * `QUEUED` - Queued
+        * `INDEXING` - Indexing
+        * `INDEXED` - Indexed
+        * `FAILED` - Failed
     LogprobsEnum:
       enum:
       - ALL
       - NONE
       type: string
+      description: |-
+        * `ALL` - ALL
+        * `NONE` - NONE
     ModelTypeEnum:
       enum:
       - GENERATE
       - CLASSIFY
       type: string
+      description: |-
+        * `GENERATE` - Generate
+        * `CLASSIFY` - Classify
     ModelVersionBuildConfig:
       type: object
       properties:
@@ -1173,45 +1274,7 @@ components:
       required:
       - num_tokens
       - text
-    ModelVersionExecConfigParameters:
-      type: object
-      properties:
-        temperature:
-          type: number
-          format: double
-        max_tokens:
-          type: integer
-        stop:
-          type: array
-          items:
-            type: string
-          nullable: true
-        top_p:
-          type: number
-          format: double
-        top_k:
-          type: number
-          format: double
-        frequency_penalty:
-          type: number
-          format: double
-        presence_penalty:
-          type: number
-          format: double
-        logit_bias:
-          type: object
-          additionalProperties:
-            type: number
-            format: double
-          nullable: true
-      required:
-      - frequency_penalty
-      - max_tokens
-      - presence_penalty
-      - stop
-      - temperature
-      - top_p
-    ModelVersionExecConfigRead:
+    ModelVersionExecConfig:
       type: object
       properties:
         parameters:
@@ -1234,7 +1297,43 @@ components:
       required:
       - input_variables
       - parameters
-      - prompt_syntax_version
+    ModelVersionExecConfigParameters:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: double
+        max_tokens:
+          type: integer
+        top_p:
+          type: number
+          format: double
+        frequency_penalty:
+          type: number
+          format: double
+        presence_penalty:
+          type: number
+          format: double
+        logit_bias:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
+        stop:
+          type: array
+          items:
+            type: string
+          nullable: true
+        top_k:
+          type: number
+          format: double
+      required:
+      - frequency_penalty
+      - max_tokens
+      - presence_penalty
+      - temperature
+      - top_p
     ModelVersionRead:
       type: object
       properties:
@@ -1255,11 +1354,24 @@ components:
         model_type:
           allOf:
           - $ref: '#/components/schemas/ModelTypeEnum'
-          description: The type of task this model is used for.
+          description: |-
+            The type of task this model is used for.
+
+            * `GENERATE` - Generate
+            * `CLASSIFY` - Classify
         provider:
           allOf:
           - $ref: '#/components/schemas/ProviderEnum'
-          description: Which LLM provider this model version is associated with.
+          description: |-
+            Which LLM provider this model version is associated with.
+
+            * `ANTHROPIC` - Anthropic
+            * `COHERE` - Cohere
+            * `GOOGLE` - Google
+            * `HOSTED` - Hosted
+            * `MOSAICML` - MosaicML
+            * `OPENAI` - OpenAI
+            * `PYQ` - Pyq
         external_id:
           type: string
           description: The unique id of this model version as it exists in the above
@@ -1271,7 +1383,7 @@ components:
           description: Configuration used to build this model version.
         exec_config:
           allOf:
-          - $ref: '#/components/schemas/ModelVersionExecConfigRead'
+          - $ref: '#/components/schemas/ModelVersionExecConfig'
           description: Configuration used to execute this model version.
         status:
           $ref: '#/components/schemas/ModelVersionReadStatusEnum'
@@ -1291,6 +1403,11 @@ components:
       - CREATION_FAILED
       - DISABLED
       type: string
+      description: |-
+        * `CREATING` - Creating
+        * `READY` - Ready
+        * `CREATION_FAILED` - Creation Failed
+        * `DISABLED` - Disabled
     ModelVersionSandboxSnapshot:
       type: object
       properties:
@@ -1371,6 +1488,7 @@ components:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
       type: string
+      description: '* `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit'
     ProcessingStateEnum:
       enum:
       - QUEUED
@@ -1378,6 +1496,11 @@ components:
       - PROCESSED
       - FAILED
       type: string
+      description: |-
+        * `QUEUED` - Queued
+        * `PROCESSING` - Processing
+        * `PROCESSED` - Processed
+        * `FAILED` - Failed
     PromptTemplateBlock:
       type: object
       properties:
@@ -1419,32 +1542,68 @@ components:
       type: object
       properties:
         chat_role:
-          $ref: '#/components/schemas/ChatMessageRole'
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
         chat_message_unterminated:
           type: boolean
           default: false
         template:
           type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/ContentTypeEnum'
+          nullable: true
+        function_name:
+          type: string
+          nullable: true
+        function_description:
+          type: string
+          nullable: true
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
         blocks:
           type: array
           items:
-            type: object
-            additionalProperties: {}
+            $ref: '#/components/schemas/PromptTemplateBlock'
+          nullable: true
     PromptTemplateBlockPropertiesRequest:
       type: object
       properties:
         chat_role:
-          $ref: '#/components/schemas/ChatMessageRole'
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
         chat_message_unterminated:
           type: boolean
           default: false
         template:
           type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/ContentTypeEnum'
+          nullable: true
+        function_name:
+          type: string
+          nullable: true
+          minLength: 1
+        function_description:
+          type: string
+          nullable: true
+          minLength: 1
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
         blocks:
           type: array
           items:
-            type: object
-            additionalProperties: {}
+            $ref: '#/components/schemas/PromptTemplateBlockRequest'
+          nullable: true
     PromptTemplateBlockRequest:
       type: object
       properties:
@@ -1482,9 +1641,18 @@ components:
       - COHERE
       - GOOGLE
       - HOSTED
+      - MOSAICML
       - OPENAI
       - PYQ
       type: string
+      description: |-
+        * `ANTHROPIC` - Anthropic
+        * `COHERE` - Cohere
+        * `GOOGLE` - Google
+        * `HOSTED` - Hosted
+        * `MOSAICML` - MosaicML
+        * `OPENAI` - OpenAI
+        * `PYQ` - Pyq
     RegisterPromptErrorResponse:
       type: object
       properties:
@@ -1579,7 +1747,16 @@ components:
         provider:
           allOf:
           - $ref: '#/components/schemas/ProviderEnum'
-          description: The initial LLM provider to use for this prompt
+          description: |-
+            The initial LLM provider to use for this prompt
+
+            * `ANTHROPIC` - Anthropic
+            * `COHERE` - Cohere
+            * `GOOGLE` - Google
+            * `HOSTED` - Hosted
+            * `MOSAICML` - MosaicML
+            * `OPENAI` - OpenAI
+            * `PYQ` - Pyq
         model:
           type: string
           minLength: 1
@@ -1718,7 +1895,7 @@ components:
           type: string
         type:
           allOf:
-          - $ref: '#/components/schemas/TypeEnum'
+          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
           nullable: true
           default: TEXT
         value:
@@ -1737,7 +1914,7 @@ components:
           minLength: 1
         type:
           allOf:
-          - $ref: '#/components/schemas/TypeEnum'
+          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
           nullable: true
           default: TEXT
         value:
@@ -1748,6 +1925,14 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - key
+    ScenarioInputTypeEnum:
+      enum:
+      - TEXT
+      - CHAT_HISTORY
+      type: string
+      description: |-
+        * `TEXT` - Text
+        * `CHAT_HISTORY` - Chat History
     SearchErrorResponse:
       type: object
       properties:
@@ -1898,18 +2083,28 @@ components:
         processing_state:
           allOf:
           - $ref: '#/components/schemas/ProcessingStateEnum'
-          description: An enum value representing where this document is along its
-            processing lifecycle. Note that this is different than its indexing lifecycle.
+          description: |-
+            An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
+
+            * `QUEUED` - Queued
+            * `PROCESSING` - Processing
+            * `PROCESSED` - Processed
+            * `FAILED` - Failed
         processing_failure_reason:
           allOf:
           - $ref: '#/components/schemas/ProcessingFailureReasonEnum'
           nullable: true
-          description: An enum value representing why the document could not be processed.
-            Is null unless processing_state is FAILED.
+          description: |-
+            An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
+
+            * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
         status:
           allOf:
           - $ref: '#/components/schemas/SlimDocumentStatusEnum'
-          description: The document's current status.
+          description: |-
+            The document's current status.
+
+            * `ACTIVE` - Active
         keywords:
           type: array
           items:
@@ -1929,6 +2124,7 @@ components:
       enum:
       - ACTIVE
       type: string
+      description: '* `ACTIVE` - Active'
     SubmitCompletionActualRequest:
       type: object
       properties:
@@ -2039,11 +2235,6 @@ components:
       required:
       - evaluation_params
       - input_values
-    TypeEnum:
-      enum:
-      - TEXT
-      - CHAT_HISTORY
-      type: string
     UploadDocumentBodyRequest:
       type: object
       properties:
