@@ -680,8 +680,8 @@ paths:
                 $ref: '#/components/schemas/UploadDocumentErrorResponse'
           description: ''
       servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
+        - url: https://documents.vellum.ai
+          x-name: Documents
 components:
   schemas:
     BlockTypeEnum:

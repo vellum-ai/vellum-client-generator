@@ -49,6 +49,6 @@ Here are the steps required to publish a new version of our API clients.
     Note: We should automate the step of adding `server` related info back as part of `make generate-swagger-api-client`.
 6. Run `fern check` to make sure all is good.
 7. Optionally run `fern generate` to see the newly generated clients locally.
-    - If this is your first time, run hit `Y` to logging in and fern will log you in through GitHub.
+    - If this is your first time, fern will ask you to log in. Hit `Y` to proceed logging in through GitHub.
 8. Commit and push the changes to the `main` branch.
 9. Create a new Release within Github. This will trigger a github action that will publish the new clients to their respective repos.
