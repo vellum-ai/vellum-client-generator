@@ -771,9 +771,6 @@ components:
     ConditionalNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/ConditionalNodeResultData'
       required:
@@ -788,9 +785,6 @@ components:
     ConstantValueChatHistoryVariable:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         value:
           type: array
           items:
@@ -802,9 +796,6 @@ components:
     ConstantValueJsonVariable:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         value:
           type: object
           additionalProperties: {}
@@ -815,9 +806,6 @@ components:
     ConstantValueStringVariable:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         value:
           type: string
           nullable: true
@@ -835,9 +823,6 @@ components:
     DeploymentNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/DeploymentNodeResultData'
       required:
@@ -1659,9 +1644,6 @@ components:
     PromptNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/PromptNodeResultData'
       required:
@@ -2050,9 +2032,6 @@ components:
     SandboxNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/SandboxNodeResultData'
       required:
@@ -2157,9 +2136,6 @@ components:
     SearchNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/SearchNodeResultData'
       required:
@@ -2422,9 +2398,6 @@ components:
     TerminalNodeResult:
       type: object
       properties:
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/TerminalNodeResultData'
       required:
@@ -2578,9 +2551,6 @@ components:
         external_id:
           type: string
           nullable: true
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
@@ -2595,9 +2565,6 @@ components:
         external_id:
           type: string
           nullable: true
-        type:
-          type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
