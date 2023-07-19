@@ -782,36 +782,6 @@ components:
         source_handle_id:
           type: string
           nullable: true
-    ConstantValueChatHistoryVariable:
-      type: object
-      properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          nullable: true
-      required:
-      - type
-      - value
-    ConstantValueJsonVariable:
-      type: object
-      properties:
-        value:
-          type: object
-          additionalProperties: {}
-          nullable: true
-      required:
-      - type
-      - value
-    ConstantValueStringVariable:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-      required:
-      - type
-      - value
     ContentType:
       enum:
       - STRING
@@ -2395,6 +2365,35 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    TerminalNodeChatHistoryResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+      required:
+      - name
+      - type
+      - value
+    TerminalNodeJsonResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        value:
+          type: object
+          additionalProperties: {}
+      required:
+      - name
+      - type
+      - value
     TerminalNodeResult:
       type: object
       properties:
@@ -2412,15 +2411,28 @@ components:
       - output
     TerminalNodeResultOutput:
       oneOf:
-      - $ref: '#/components/schemas/ConstantValueStringVariable'
-      - $ref: '#/components/schemas/ConstantValueJsonVariable'
-      - $ref: '#/components/schemas/ConstantValueChatHistoryVariable'
+      - $ref: '#/components/schemas/TerminalNodeStringResult'
+      - $ref: '#/components/schemas/TerminalNodeJsonResult'
+      - $ref: '#/components/schemas/TerminalNodeChatHistoryResult'
       discriminator:
         propertyName: type
         mapping:
-          STRING: '#/components/schemas/ConstantValueStringVariable'
-          JSON: '#/components/schemas/ConstantValueJsonVariable'
-          CHAT_HISTORY: '#/components/schemas/ConstantValueChatHistoryVariable'
+          STRING: '#/components/schemas/TerminalNodeStringResult'
+          JSON: '#/components/schemas/TerminalNodeJsonResult'
+          CHAT_HISTORY: '#/components/schemas/TerminalNodeChatHistoryResult'
+    TerminalNodeStringResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        value:
+          type: string
+      required:
+      - name
+      - type
+      - value
     TestSuiteTestCase:
       type: object
       properties:
