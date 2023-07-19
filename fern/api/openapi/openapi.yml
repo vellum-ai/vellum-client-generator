@@ -209,7 +209,7 @@ paths:
       responses:
         '200':
           content:
-            application/x-ndjson:
+            application/json:
               schema:
                 $ref: '#/components/schemas/WorkflowStreamEvent'
           description: ''
@@ -286,7 +286,7 @@ paths:
       responses:
         '200':
           content:
-            application/x-ndjson:
+            application/json:
               schema:
                 $ref: '#/components/schemas/GenerateStreamResponse'
           description: ''
