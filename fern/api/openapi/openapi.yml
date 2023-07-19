@@ -249,6 +249,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
         '404':
           content:
             application/json:
@@ -291,6 +297,12 @@ paths:
                 $ref: '#/components/schemas/GenerateStreamResponse'
           description: ''
         '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '403':
           content:
             application/json:
               schema:
@@ -1139,6 +1151,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkflowRequestInputRequest'
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally include a unique identifier for tracking purposes.
       required:
       - inputs
     FinishReasonEnum:
@@ -2529,18 +2546,30 @@ components:
     WorkflowExecutionNodeResultEvent:
       type: object
       properties:
+        run_id:
+          type: string
+        external_id:
+          type: string
+          nullable: true
         data:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
       - data
+      - run_id
       - type
     WorkflowExecutionWorkflowResultEvent:
       type: object
       properties:
+        run_id:
+          type: string
+        external_id:
+          type: string
+          nullable: true
         data:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
       - data
+      - run_id
       - type
     WorkflowNodeResultData:
       oneOf:
@@ -2654,8 +2683,6 @@ components:
       properties:
         id:
           type: string
-        workflow_result_id:
-          type: string
         state:
           $ref: '#/components/schemas/WorkflowResultEventStateEnum'
         ts:
@@ -2668,7 +2695,6 @@ components:
       - id
       - state
       - ts
-      - workflow_result_id
     WorkflowResultEventStateEnum:
       enum:
       - INITIATED
