@@ -189,6 +189,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimDocumentList'
           description: ''
+  /v1/execute-workflow-stream:
+    post:
+      operationId: execute_workflow_stream
+      description: |-
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Executes a deployed Workflow and streams back its results.
+      tags:
+      - execute-workflow-stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteWorkflowStreamRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/WorkflowStreamEvent'
+          description: ''
+      x-fern-streaming: true
+      servers:
+        - url: https://predict.vellum.ai
+          x-name: Predict
   /v1/generate:
     post:
       operationId: generate
@@ -216,6 +244,12 @@ paths:
                 $ref: '#/components/schemas/GenerateResponse'
           description: ''
         '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '403':
           content:
             application/json:
               schema:
@@ -258,11 +292,17 @@ paths:
       responses:
         '200':
           content:
-            application/json:
+            application/x-ndjson:
               schema:
                 $ref: '#/components/schemas/GenerateStreamResponse'
           description: ''
         '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateErrorResponse'
+          description: ''
+        '403':
           content:
             application/json:
               schema:
@@ -728,6 +768,50 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
+    ConditionalNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConditionalNodeResultData'
+      required:
+      - data
+      - type
+    ConditionalNodeResultData:
+      type: object
+      properties:
+        source_handle_id:
+          type: string
+          nullable: true
+    ConstantValueChatHistoryVariable:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - type
+      - value
+    ConstantValueJsonVariable:
+      type: object
+      properties:
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - type
+      - value
+    ConstantValueStringVariable:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+      required:
+      - type
+      - value
     ContentType:
       enum:
       - STRING
@@ -736,6 +820,27 @@ components:
       description: |-
         * `STRING` - STRING
         * `JSON` - JSON
+    DeploymentNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeploymentNodeResultData'
+      required:
+      - data
+      - type
+    DeploymentNodeResultData:
+      type: object
+      properties:
+        output_id:
+          type: string
+        text:
+          type: string
+          nullable: true
+        delta:
+          type: string
+          nullable: true
+      required:
+      - output_id
     DeploymentRead:
       type: object
       properties:
@@ -1021,6 +1126,38 @@ components:
           type: string
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
+    ExecuteWorkflowStreamRequest:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the Workflow Deployment. Must provide either this
+            or workflow_deployment_name.
+        workflow_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the Workflow Deployment. Must provide either this
+            or workflow_deployment_id.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Workflow Deployment
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowRequestInputRequest'
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally include a unique identifier for tracking purposes.
+      required:
+      - inputs
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -1504,6 +1641,27 @@ components:
         * `PROCESSING` - Processing
         * `PROCESSED` - Processed
         * `FAILED` - Failed
+    PromptNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PromptNodeResultData'
+      required:
+      - data
+      - type
+    PromptNodeResultData:
+      type: object
+      properties:
+        output_id:
+          type: string
+        text:
+          type: string
+          nullable: true
+        delta:
+          type: string
+          nullable: true
+      required:
+      - output_id
     PromptTemplateBlock:
       type: object
       properties:
@@ -1871,6 +2029,27 @@ components:
           allOf:
           - $ref: '#/components/schemas/EvaluationParamsRequest'
           nullable: true
+    SandboxNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SandboxNodeResultData'
+      required:
+      - data
+      - type
+    SandboxNodeResultData:
+      type: object
+      properties:
+        output_id:
+          type: string
+        text:
+          type: string
+          nullable: true
+        delta:
+          type: string
+          nullable: true
+      required:
+      - output_id
     SandboxScenario:
       type: object
       properties:
@@ -1954,6 +2133,33 @@ components:
             minLength: 1
           nullable: true
           description: The document external IDs to filter by
+    SearchNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SearchNodeResultData'
+      required:
+      - data
+      - type
+    SearchNodeResultData:
+      type: object
+      properties:
+        results_output_id:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        text_output_id:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+      required:
+      - results
+      - results_output_id
     SearchRequestBodyRequest:
       type: object
       properties:
@@ -2189,6 +2395,32 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    TerminalNodeResult:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TerminalNodeResultData'
+      required:
+      - data
+      - type
+    TerminalNodeResultData:
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/TerminalNodeResultOutput'
+      required:
+      - output
+    TerminalNodeResultOutput:
+      oneOf:
+      - $ref: '#/components/schemas/ConstantValueStringVariable'
+      - $ref: '#/components/schemas/ConstantValueJsonVariable'
+      - $ref: '#/components/schemas/ConstantValueChatHistoryVariable'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/ConstantValueStringVariable'
+          JSON: '#/components/schemas/ConstantValueJsonVariable'
+          CHAT_HISTORY: '#/components/schemas/ConstantValueChatHistoryVariable'
     TestSuiteTestCase:
       type: object
       properties:
@@ -2311,6 +2543,177 @@ components:
           $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
+    WorkflowExecutionNodeResultEvent:
+      type: object
+      properties:
+        run_id:
+          type: string
+        external_id:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/WorkflowNodeResultEvent'
+      required:
+      - data
+      - run_id
+      - type
+    WorkflowExecutionWorkflowResultEvent:
+      type: object
+      properties:
+        run_id:
+          type: string
+        external_id:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/WorkflowResultEvent'
+      required:
+      - data
+      - run_id
+      - type
+    WorkflowNodeResultData:
+      oneOf:
+      - $ref: '#/components/schemas/PromptNodeResult'
+      - $ref: '#/components/schemas/SandboxNodeResult'
+      - $ref: '#/components/schemas/DeploymentNodeResult'
+      - $ref: '#/components/schemas/SearchNodeResult'
+      - $ref: '#/components/schemas/ConditionalNodeResult'
+      - $ref: '#/components/schemas/TerminalNodeResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          PROMPT: '#/components/schemas/PromptNodeResult'
+          SANDBOX: '#/components/schemas/SandboxNodeResult'
+          DEPLOYMENT: '#/components/schemas/DeploymentNodeResult'
+          SEARCH: '#/components/schemas/SearchNodeResult'
+          CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
+          TERMINAL: '#/components/schemas/TerminalNodeResult'
+    WorkflowNodeResultEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        node_id:
+          type: string
+        node_result_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventStateEnum'
+        ts:
+          type: string
+          format: date-time
+          nullable: true
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        error:
+          type: string
+          nullable: true
+      required:
+      - data
+      - id
+      - node_id
+      - node_result_id
+      - state
+    WorkflowNodeResultEventStateEnum:
+      enum:
+      - INITIATED
+      - STREAMING
+      - FULFILLED
+      - REJECTED
+      type: string
+      description: |-
+        * `INITIATED` - INITIATED
+        * `STREAMING` - STREAMING
+        * `FULFILLED` - FULFILLED
+        * `REJECTED` - REJECTED
+    WorkflowRequestChatHistoryInputRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Workflow.
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+      required:
+      - name
+      - value
+    WorkflowRequestInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/WorkflowRequestStringInputRequest'
+      - $ref: '#/components/schemas/WorkflowRequestJSONInputRequest'
+      - $ref: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/WorkflowRequestStringInputRequest'
+          JSON: '#/components/schemas/WorkflowRequestJSONInputRequest'
+          CHAT_HISTORY: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+    WorkflowRequestJSONInputRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Workflow.
+        value:
+          type: object
+          additionalProperties: {}
+      required:
+      - name
+      - value
+    WorkflowRequestStringInputRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Workflow.
+        value:
+          type: string
+      required:
+      - name
+      - value
+    WorkflowResultEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowResultEventStateEnum'
+        ts:
+          type: string
+          format: date-time
+        error:
+          type: string
+          nullable: true
+      required:
+      - id
+      - state
+      - ts
+    WorkflowResultEventStateEnum:
+      enum:
+      - INITIATED
+      - FULFILLED
+      - REJECTED
+      type: string
+      description: |-
+        * `INITIATED` - INITIATED
+        * `FULFILLED` - FULFILLED
+        * `REJECTED` - REJECTED
+    WorkflowStreamEvent:
+      oneOf:
+      - $ref: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
+      - $ref: '#/components/schemas/WorkflowExecutionNodeResultEvent'
+      discriminator:
+        propertyName: type
+        mapping:
+          WORKFLOW: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
+          NODE: '#/components/schemas/WorkflowExecutionNodeResultEvent'
   securitySchemes:
     apiKeyAuth:
       type: apiKey
