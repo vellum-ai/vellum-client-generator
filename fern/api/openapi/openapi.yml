@@ -1480,6 +1480,7 @@ components:
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
+            * `MYSTIC` - Mystic
             * `OPENAI` - OpenAI
             * `PYQ` - Pyq
         external_id:
@@ -1773,6 +1774,7 @@ components:
       - GOOGLE
       - HOSTED
       - MOSAICML
+      - MYSTIC
       - OPENAI
       - PYQ
       type: string
@@ -1782,6 +1784,7 @@ components:
         * `GOOGLE` - Google
         * `HOSTED` - Hosted
         * `MOSAICML` - MosaicML
+        * `MYSTIC` - Mystic
         * `OPENAI` - OpenAI
         * `PYQ` - Pyq
     RegisterPromptErrorResponse:
@@ -1886,6 +1889,7 @@ components:
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
+            * `MYSTIC` - Mystic
             * `OPENAI` - OpenAI
             * `PYQ` - Pyq
         model:
@@ -2555,6 +2559,24 @@ components:
           $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
+    WorkflowEventError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          $ref: '#/components/schemas/WorkflowExecutionEventErrorCode'
+      required:
+      - code
+      - message
+    WorkflowExecutionEventErrorCode:
+      enum:
+      - WORKFLOW_INITIALIZATION
+      - NODE_EXECUTION
+      type: string
+      description: |-
+        * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+        * `NODE_EXECUTION` - NODE_EXECUTION
     WorkflowExecutionNodeResultEvent:
       type: object
       properties:
@@ -2610,7 +2632,7 @@ components:
         node_result_id:
           type: string
         state:
-          $ref: '#/components/schemas/WorkflowNodeResultEventStateEnum'
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
         ts:
           type: string
           format: date-time
@@ -2620,7 +2642,8 @@ components:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
         error:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/WorkflowEventError'
           nullable: true
       required:
       - data
@@ -2628,7 +2651,7 @@ components:
       - node_id
       - node_result_id
       - state
-    WorkflowNodeResultEventStateEnum:
+    WorkflowNodeResultEventState:
       enum:
       - INITIATED
       - STREAMING
@@ -2696,27 +2719,90 @@ components:
         id:
           type: string
         state:
-          $ref: '#/components/schemas/WorkflowResultEventStateEnum'
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
         ts:
           type: string
           format: date-time
+        output:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowResultEventOutputData'
+          nullable: true
         error:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/WorkflowEventError'
           nullable: true
       required:
       - id
+      - output
       - state
       - ts
-    WorkflowResultEventStateEnum:
-      enum:
-      - INITIATED
-      - FULFILLED
-      - REJECTED
-      type: string
-      description: |-
-        * `INITIATED` - INITIATED
-        * `FULFILLED` - FULFILLED
-        * `REJECTED` - REJECTED
+    WorkflowResultEventOutputData:
+      oneOf:
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataString'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataJSON'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/WorkflowResultEventOutputDataString'
+          JSON: '#/components/schemas/WorkflowResultEventOutputDataJSON'
+          CHAT_HISTORY: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
+    WorkflowResultEventOutputDataChatHistory:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - name
+      - node_id
+      - state
+      - type
+    WorkflowResultEventOutputDataJSON:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - name
+      - node_id
+      - state
+      - type
+      - value
+    WorkflowResultEventOutputDataString:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - name
+      - node_id
+      - state
+      - type
+      - value
     WorkflowStreamEvent:
       oneOf:
       - $ref: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
