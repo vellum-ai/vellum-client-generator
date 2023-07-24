@@ -209,7 +209,7 @@ paths:
       responses:
         '200':
           content:
-            application/json:
+            application/x-ndjson:
               schema:
                 $ref: '#/components/schemas/WorkflowStreamEvent'
           description: ''
@@ -292,7 +292,7 @@ paths:
       responses:
         '200':
           content:
-            application/json:
+            application/x-ndjson:
               schema:
                 $ref: '#/components/schemas/GenerateStreamResponse'
           description: ''
@@ -771,6 +771,9 @@ components:
     ConditionalNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/ConditionalNodeResultData'
       required:
@@ -793,6 +796,9 @@ components:
     DeploymentNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/DeploymentNodeResultData'
       required:
@@ -1615,6 +1621,9 @@ components:
     PromptNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/PromptNodeResultData'
       required:
@@ -2006,6 +2015,9 @@ components:
     SandboxNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/SandboxNodeResultData'
       required:
@@ -2110,6 +2122,9 @@ components:
     SearchNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/SearchNodeResultData'
       required:
@@ -2376,6 +2391,9 @@ components:
           type: string
           description: The unique name given to the terminal node that produced this
             output.
+        type:
+          type: string
+          readOnly: true
         value:
           type: array
           items:
@@ -2391,6 +2409,9 @@ components:
           type: string
           description: The unique name given to the terminal node that produced this
             output.
+        type:
+          type: string
+          readOnly: true
         value:
           type: object
           additionalProperties: {}
@@ -2401,6 +2422,9 @@ components:
     TerminalNodeResult:
       type: object
       properties:
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/TerminalNodeResultData'
       required:
@@ -2431,6 +2455,9 @@ components:
           type: string
           description: The unique name given to the terminal node that produced this
             output.
+        type:
+          type: string
+          readOnly: true
         value:
           type: string
       required:
@@ -2585,6 +2612,9 @@ components:
         external_id:
           type: string
           nullable: true
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
@@ -2599,6 +2629,9 @@ components:
         external_id:
           type: string
           nullable: true
+        type:
+          type: string
+          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
@@ -2756,6 +2789,9 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
+        type:
+          type: string
+          readOnly: true
         value:
           type: array
           items:
@@ -2775,6 +2811,9 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
+        type:
+          type: string
+          readOnly: true
         value:
           type: object
           additionalProperties: {}
@@ -2794,6 +2833,9 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
+        type:
+          type: string
+          readOnly: true
         value:
           type: string
           nullable: true
