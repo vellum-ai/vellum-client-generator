@@ -2792,12 +2792,19 @@ components:
         type:
           type: string
           readOnly: true
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
         value:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
       required:
+      - delta
       - name
       - node_id
       - state
@@ -2814,11 +2821,18 @@ components:
         type:
           type: string
           readOnly: true
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
         value:
           type: object
           additionalProperties: {}
           nullable: true
       required:
+      - delta
       - name
       - node_id
       - state
@@ -2836,10 +2850,18 @@ components:
         type:
           type: string
           readOnly: true
+        delta:
+          type: string
+          nullable: true
+          description: The newly output string value, meant to be concatenated with
+            all previous. Will be non-null for events of state STREAMING.
         value:
           type: string
           nullable: true
+          description: The entire string value. Will be non-null for events of state
+            FULFILLED.
       required:
+      - delta
       - name
       - node_id
       - state
