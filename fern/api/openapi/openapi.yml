@@ -213,6 +213,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowStreamEvent'
           description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteWorkflowStreamErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteWorkflowStreamErrorResponse'
+          description: ''
       x-fern-streaming: true
       servers:
         - url: https://predict.vellum.ai
@@ -1102,6 +1114,14 @@ components:
           type: string
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
+    ExecuteWorkflowStreamErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
     ExecuteWorkflowStreamRequest:
       type: object
       properties:
