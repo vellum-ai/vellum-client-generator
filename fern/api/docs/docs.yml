@@ -7,7 +7,17 @@ navigation:
 title: Vellum | API Docs
 colors:
   accentPrimary: "#a3d3ff"
-logo: 
+logo:
   path: ./logo.png
   href: https://www.vellum.ai/
 favicon: ./favicon.ico
+navbar-links:
+  - type: secondary
+    text: Products
+    url: https://vellum.ai/products
+  - type: secondary
+    text: Blog
+    url: https://vellum.ai/blog
+  - type: primary
+    text: Start 14 day trial
+    url: https://app.vellum.ai/signup
