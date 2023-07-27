@@ -7,8 +7,9 @@ navigation:
 title: Vellum | API Docs
 colors:
   accentPrimary: "#a3d3ff"
-logo: 
+logo:
   path: ./logo.png
+  height: 20
   href: https://www.vellum.ai/
 favicon: ./favicon.ico
 navbar-links:
