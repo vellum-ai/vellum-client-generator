@@ -785,7 +785,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/ConditionalNodeResultData'
       required:
@@ -810,7 +809,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/DeploymentNodeResultData'
       required:
@@ -1425,6 +1423,7 @@ components:
           description: Names of the input variables specified in the prompt template.
         prompt_template:
           type: string
+          nullable: true
           description: The template used to generate prompts for this model version.
         prompt_block_data:
           $ref: '#/components/schemas/PromptTemplateBlockData'
@@ -1643,7 +1642,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/PromptNodeResultData'
       required:
@@ -1726,6 +1724,9 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
+        function_forced:
+          type: boolean
+          nullable: true
         blocks:
           type: array
           items:
@@ -1759,6 +1760,9 @@ components:
         function_parameters:
           type: object
           additionalProperties: {}
+          nullable: true
+        function_forced:
+          type: boolean
           nullable: true
         blocks:
           type: array
@@ -2037,7 +2041,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/SandboxNodeResultData'
       required:
@@ -2144,7 +2147,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/SearchNodeResultData'
       required:
@@ -2200,6 +2202,7 @@ components:
       properties:
         limit:
           type: integer
+          maximum: 1000
           nullable: true
           description: The maximum number of results to return.
         weights:
@@ -2413,7 +2416,6 @@ components:
             output.
         type:
           type: string
-          readOnly: true
         value:
           type: array
           items:
@@ -2431,7 +2433,6 @@ components:
             output.
         type:
           type: string
-          readOnly: true
         value:
           type: object
           additionalProperties: {}
@@ -2444,7 +2445,6 @@ components:
       properties:
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/TerminalNodeResultData'
       required:
@@ -2477,7 +2477,6 @@ components:
             output.
         type:
           type: string
-          readOnly: true
         value:
           type: string
       required:
@@ -2620,10 +2619,12 @@ components:
       enum:
       - WORKFLOW_INITIALIZATION
       - NODE_EXECUTION
+      - NODE_EXECUTION_COUNT_LIMIT_REACHED
       type: string
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
         * `NODE_EXECUTION` - NODE_EXECUTION
+        * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
     WorkflowExecutionNodeResultEvent:
       type: object
       properties:
@@ -2634,7 +2635,6 @@ components:
           nullable: true
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
@@ -2651,7 +2651,6 @@ components:
           nullable: true
         type:
           type: string
-          readOnly: true
         data:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
@@ -2723,12 +2722,15 @@ components:
           type: string
           minLength: 1
           description: The variable's name, as defined in the Workflow.
+        type:
+          type: string
         value:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
+      - type
       - value
     WorkflowRequestInputRequest:
       oneOf:
@@ -2748,11 +2750,14 @@ components:
           type: string
           minLength: 1
           description: The variable's name, as defined in the Workflow.
+        type:
+          type: string
         value:
           type: object
           additionalProperties: {}
       required:
       - name
+      - type
       - value
     WorkflowRequestStringInputRequest:
       type: object
@@ -2761,10 +2766,13 @@ components:
           type: string
           minLength: 1
           description: The variable's name, as defined in the Workflow.
+        type:
+          type: string
         value:
           type: string
       required:
       - name
+      - type
       - value
     WorkflowResultEvent:
       type: object
@@ -2809,15 +2817,14 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
-        type:
-          type: string
-          readOnly: true
         delta:
           type: string
           nullable: true
           readOnly: true
           description: The newly output string value. Only relevant for string outputs
             with a state of STREAMING.
+        type:
+          type: string
         value:
           type: array
           items:
@@ -2838,15 +2845,14 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
-        type:
-          type: string
-          readOnly: true
         delta:
           type: string
           nullable: true
           readOnly: true
           description: The newly output string value. Only relevant for string outputs
             with a state of STREAMING.
+        type:
+          type: string
         value:
           type: object
           additionalProperties: {}
@@ -2867,14 +2873,13 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEventState'
         node_id:
           type: string
-        type:
-          type: string
-          readOnly: true
         delta:
           type: string
           nullable: true
           description: The newly output string value, meant to be concatenated with
             all previous. Will be non-null for events of state STREAMING.
+        type:
+          type: string
         value:
           type: string
           nullable: true
