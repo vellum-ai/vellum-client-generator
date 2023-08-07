@@ -572,9 +572,53 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchErrorResponse'
           description: ''
+  /v1/set-document-metadata:
+    post:
+      operationId: set_document_metadata
+      description: |-
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Set the metadata for a document to be used for search filtering.
+
+        **Note:** Uses a base url of `https://documents.vellum.ai`.
+      tags:
+      - documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetDocumentMetadataRequestBodyRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDocumentMetadataResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDocumentMetadataErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDocumentMetadataErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDocumentMetadataErrorResponse'
+          description: ''
       servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
+        - url: https://documents.vellum.ai
+          x-name: Documents
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
@@ -882,10 +926,15 @@ components:
         last_deployed_on:
           type: string
           format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputVariable'
       required:
       - active_model_version_ids
       - created
       - id
+      - input_variables
       - label
       - last_deployed_on
       - model_type
@@ -1344,6 +1393,29 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
+    InputVariable:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        type:
+          $ref: '#/components/schemas/InputVariableType'
+      required:
+      - id
+      - key
+      - type
+    InputVariableType:
+      enum:
+      - STRING
+      - JSON
+      - CHAT_HISTORY
+      type: string
+      description: |-
+        * `STRING` - STRING
+        * `JSON` - JSON
+        * `CHAT_HISTORY` - CHAT_HISTORY
     LogprobsEnum:
       enum:
       - ALL
@@ -1352,6 +1424,68 @@ components:
       description: |-
         * `ALL` - ALL
         * `NONE` - NONE
+    MetadataFilterConfigRequest:
+      type: object
+      properties:
+        combinator:
+          allOf:
+          - $ref: '#/components/schemas/MetadataFilterRuleCombinator'
+          nullable: true
+        negated:
+          type: boolean
+          nullable: true
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataFilterRuleRequest'
+          nullable: true
+        field:
+          type: string
+          nullable: true
+          minLength: 1
+        operator:
+          type: string
+          nullable: true
+          minLength: 1
+        value:
+          type: string
+          nullable: true
+          minLength: 1
+    MetadataFilterRuleCombinator:
+      enum:
+      - and
+      - or
+      type: string
+      description: |-
+        * `and` - AND
+        * `or` - OR
+    MetadataFilterRuleRequest:
+      type: object
+      properties:
+        combinator:
+          allOf:
+          - $ref: '#/components/schemas/MetadataFilterRuleCombinator'
+          nullable: true
+        negated:
+          type: boolean
+          nullable: true
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataFilterRuleRequest'
+          nullable: true
+        field:
+          type: string
+          nullable: true
+          minLength: 1
+        operator:
+          type: string
+          nullable: true
+          minLength: 1
+        value:
+          type: string
+          nullable: true
+          minLength: 1
     ModelTypeEnum:
       enum:
       - GENERATE
@@ -1419,8 +1553,8 @@ components:
         input_variables:
           type: array
           items:
-            $ref: '#/components/schemas/PromptTemplateInputVariable'
-          description: Names of the input variables specified in the prompt template.
+            $ref: '#/components/schemas/InputVariable'
+          description: Input variables specified in the prompt template.
         prompt_template:
           type: string
           nullable: true
@@ -1783,23 +1917,6 @@ components:
       - block_type
       - id
       - properties
-    PromptTemplateInputVariable:
-      type: object
-      properties:
-        key:
-          type: string
-          description: The name of the input variable.
-      required:
-      - key
-    PromptTemplateInputVariableRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          minLength: 1
-          description: The name of the input variable.
-      required:
-      - key
     ProviderEnum:
       enum:
       - ANTHROPIC
@@ -1889,8 +2006,8 @@ components:
         input_variables:
           type: array
           items:
-            $ref: '#/components/schemas/PromptTemplateInputVariableRequest'
-          description: Names of the input variables specified in the prompt template.
+            $ref: '#/components/schemas/RegisteredPromptInputVariableRequest'
+          description: The input variables specified in the prompt template.
       required:
       - input_variables
       - prompt_block_data
@@ -1990,6 +2107,21 @@ components:
       - id
       - label
       - name
+    RegisteredPromptInputVariableRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          minLength: 1
+        type:
+          allOf:
+          - $ref: '#/components/schemas/InputVariableType'
+          default: STRING
+      required:
+      - key
     RegisteredPromptModelVersion:
       type: object
       properties:
@@ -2142,6 +2274,11 @@ components:
             minLength: 1
           nullable: true
           description: The document external IDs to filter by
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/MetadataFilterConfigRequest'
+          nullable: true
+          description: The metadata filters to apply to the search
     SearchNodeResult:
       type: object
       properties:
@@ -2278,6 +2415,44 @@ components:
       required:
       - keywords
       - semantic_similarity
+    SetDocumentMetadataErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    SetDocumentMetadataRequestBodyRequest:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the document to update. Must provide either this
+            or `external_id`
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The external ID of the document to update. Must provide either
+            this or `document_id`
+        metadata:
+          type: object
+          additionalProperties: {}
+          description: The metadata to set on the document. This will overwrite any
+            existing metadata.
+      required:
+      - metadata
+    SetDocumentMetadataResponse:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+          description: The ID of the newly created document.
+      required:
+      - document_id
     SlimDocument:
       type: object
       properties:
