@@ -616,6 +616,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/SetDocumentMetadataErrorResponse'
           description: ''
+      servers:
+        - url: https://documents.vellum.ai
+          x-name: Documents
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
