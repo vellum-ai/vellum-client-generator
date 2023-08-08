@@ -2741,6 +2741,12 @@ components:
           nullable: true
           description: Optionally include a list of keywords that'll be associated
             with this document. Used when performing keyword searches.
+        metadata:
+          type: string
+          format: byte
+          nullable: true
+          description: A stringified JSON object containing any metadata associated
+            with the document that you'd like to filter upon later.
       required:
       - contents
       - label
