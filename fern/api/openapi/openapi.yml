@@ -2867,7 +2867,6 @@ components:
       properties:
         execution_id:
           type: string
-          nullable: true
         run_id:
           type: string
           nullable: true
@@ -2880,13 +2879,13 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
       - data
+      - execution_id
       - type
     WorkflowExecutionWorkflowResultEvent:
       type: object
       properties:
         execution_id:
           type: string
-          nullable: true
         run_id:
           type: string
           nullable: true
@@ -2900,6 +2899,7 @@ components:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
       - data
+      - execution_id
       - type
     WorkflowNodeResultData:
       oneOf:
