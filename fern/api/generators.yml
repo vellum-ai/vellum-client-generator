@@ -14,7 +14,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node-staging
       - name: fernapi/fern-python-sdk
-        version: 0.3.8-rc16
+        version: 0.3.15
         # TODO(vellum): configure publish to private coordinate
         # output:
         #   location: pypi
@@ -44,7 +44,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
       - name: fernapi/fern-python-sdk
-        version: 0.3.8-rc16
+        version: 0.3.15
         output:
           location: pypi
           package-name: vellum-ai
