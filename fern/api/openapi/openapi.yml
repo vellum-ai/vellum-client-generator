@@ -189,6 +189,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimDocumentList'
           description: ''
+  /v1/documents/{id}:
+    patch:
+      operationId: documents_partial_update
+      description: |2
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      tags:
+      - documents
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentRead'
+          description: ''
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -849,7 +884,7 @@ components:
           maxLength: 150
         status:
           allOf:
-          - $ref: '#/components/schemas/DeploymentReadStatusEnum'
+          - $ref: '#/components/schemas/DeploymentStatus'
           description: |-
             The current status of the deployment
 
@@ -895,7 +930,7 @@ components:
       - last_deployed_on
       - model_type
       - name
-    DeploymentReadStatusEnum:
+    DeploymentStatus:
       enum:
       - ACTIVE
       - INACTIVE
@@ -1051,6 +1086,73 @@ components:
       description: |-
         * `ACTIVE` - Active
         * `ARCHIVED` - Archived
+    DocumentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        external_id:
+          type: string
+          nullable: true
+          description: The unique id of this document as it exists in the user's system.
+          maxLength: 1000
+        last_uploaded_at:
+          type: string
+          format: date-time
+        label:
+          type: string
+          description: A human-readable label for the document. Defaults to the originally
+            uploaded file's file name.
+          maxLength: 1000
+        processing_state:
+          allOf:
+          - $ref: '#/components/schemas/ProcessingStateEnum'
+          description: |-
+            The current processing state of the document
+
+            * `QUEUED` - Queued
+            * `PROCESSING` - Processing
+            * `PROCESSED` - Processed
+            * `FAILED` - Failed
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentStatus'
+          description: |-
+            The current status of the document
+
+            * `ACTIVE` - Active
+        original_file_url:
+          type: string
+          nullable: true
+          readOnly: true
+        processed_file_url:
+          type: string
+          nullable: true
+          readOnly: true
+        document_to_document_indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDocumentToDocumentIndex'
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: A previously supplied JSON object containing metadata that
+            can filtered on when searching.
+      required:
+      - document_to_document_indexes
+      - id
+      - label
+      - last_uploaded_at
+      - original_file_url
+      - processed_file_url
+    DocumentStatus:
+      enum:
+      - ACTIVE
+      type: string
+      description: '* `ACTIVE` - Active'
     EnrichedNormalizedCompletion:
       type: object
       properties:
@@ -1379,6 +1481,46 @@ components:
         * `STRING` - STRING
         * `JSON` - JSON
         * `CHAT_HISTORY` - CHAT_HISTORY
+    LogicalOperator:
+      enum:
+      - '='
+      - '!='
+      - <
+      - '>'
+      - <=
+      - '>='
+      - contains
+      - beginsWith
+      - endsWith
+      - doesNotContain
+      - doesNotBeginWith
+      - doesNotEndWith
+      - 'null'
+      - notNull
+      - in
+      - notIn
+      - between
+      - notBetween
+      type: string
+      description: |-
+        * `=` - EQUALS
+        * `!=` - DOES_NOT_EQUAL
+        * `<` - LESS_THAN
+        * `>` - GREATER_THAN
+        * `<=` - LESS_THAN_OR_EQUAL_TO
+        * `>=` - GREATER_THAN_OR_EQUAL_TO
+        * `contains` - CONTAINS
+        * `beginsWith` - BEGINS_WITH
+        * `endsWith` - ENDS_WITH
+        * `doesNotContain` - DOES_NOT_CONTAIN
+        * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
+        * `doesNotEndWith` - DOES_NOT_END_WITH
+        * `null` - NULL
+        * `notNull` - NOT_NULL
+        * `in` - IN
+        * `notIn` - NOT_IN
+        * `between` - BETWEEN
+        * `notBetween` - NOT_BETWEEN
     LogprobsEnum:
       enum:
       - ALL
@@ -1407,9 +1549,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/LogicalOperator'
           nullable: true
-          minLength: 1
         value:
           type: string
           nullable: true
@@ -1442,9 +1584,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/LogicalOperator'
           nullable: true
-          minLength: 1
         value:
           type: string
           nullable: true
@@ -1717,6 +1859,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimDocument'
+    PatchedDocumentUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document. Defaults to the originally
+            uploaded file's file name.
+          maxLength: 1000
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DocumentStatus'
+          description: |-
+            The current status of the document
+
+            * `ACTIVE` - Active
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: A JSON object containing any metadata associated with the document
+            that you'd like to filter upon later.
     ProcessingFailureReasonEnum:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
@@ -2425,7 +2589,7 @@ components:
             * `INVALID_FILE` - Invalid File
         status:
           allOf:
-          - $ref: '#/components/schemas/SlimDocumentStatusEnum'
+          - $ref: '#/components/schemas/DocumentStatus'
           description: |-
             The document's current status.
 
@@ -2445,11 +2609,6 @@ components:
       - id
       - label
       - last_uploaded_at
-    SlimDocumentStatusEnum:
-      enum:
-      - ACTIVE
-      type: string
-      description: '* `ACTIVE` - Active'
     SubmitCompletionActualRequest:
       type: object
       properties:
@@ -2748,6 +2907,7 @@ components:
       properties:
         execution_id:
           type: string
+          nullable: true
         run_id:
           type: string
           nullable: true
@@ -2760,13 +2920,13 @@ components:
           $ref: '#/components/schemas/WorkflowNodeResultEvent'
       required:
       - data
-      - execution_id
       - type
     WorkflowExecutionWorkflowResultEvent:
       type: object
       properties:
         execution_id:
           type: string
+          nullable: true
         run_id:
           type: string
           nullable: true
@@ -2780,7 +2940,6 @@ components:
           $ref: '#/components/schemas/WorkflowResultEvent'
       required:
       - data
-      - execution_id
       - type
     WorkflowNodeResultData:
       oneOf:
