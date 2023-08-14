@@ -248,6 +248,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowStreamEvent'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
         '404':
           content:
             application/json:
@@ -2643,6 +2650,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
       required:
       - name
       - type
@@ -2659,6 +2667,7 @@ components:
         value:
           type: object
           additionalProperties: {}
+          nullable: true
       required:
       - name
       - type
@@ -2702,6 +2711,7 @@ components:
           type: string
         value:
           type: string
+          nullable: true
       required:
       - name
       - type
