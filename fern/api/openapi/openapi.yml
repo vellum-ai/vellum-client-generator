@@ -2857,13 +2857,15 @@ components:
     WorkflowExecutionEventErrorCode:
       enum:
       - WORKFLOW_INITIALIZATION
-      - NODE_EXECUTION
       - NODE_EXECUTION_COUNT_LIMIT_REACHED
+      - NODE_EXECUTION
+      - LLM_PROVIDER
       type: string
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
-        * `NODE_EXECUTION` - NODE_EXECUTION
         * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
+        * `NODE_EXECUTION` - NODE_EXECUTION
+        * `LLM_PROVIDER` - LLM_PROVIDER
     WorkflowExecutionEventType:
       enum:
       - NODE
