@@ -615,8 +615,8 @@ paths:
                 $ref: '#/components/schemas/SearchErrorResponse'
           description: ''
       servers:
-        - url: https://documents.vellum.ai
-          x-name: Documents
+        - url: https://predict.vellum.ai
+          x-name: Predict
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
