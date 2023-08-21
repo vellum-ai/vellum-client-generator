@@ -1,16 +1,24 @@
+instances: 
+  - url: vellum.docs.dev.buildwithfern.com
+
 navigation:
   - section: Introduction
     contents:
       - page: Getting started
-        path: ./intro.mdx
+        path: ./markdown/intro.mdx
   - api: API Reference
 title: Vellum | API Docs
 colors:
-  accentPrimary: "#a3d3ff"
+  accentPrimary: 
+    dark: "#a3d3ff"
+    light: "#2c60e2"
+  background:
+    light: "#FFFFFF"
 logo:
-  path: ./logo.png
+  dark: ./assets/logo-dark.png
+  light: ./assets/logo-light.png
   href: https://www.vellum.ai/
-favicon: ./favicon.ico
+favicon: ./assets/favicon.ico
 navbar-links:
   - type: secondary
     text: Products

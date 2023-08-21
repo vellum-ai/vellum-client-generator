@@ -3,11 +3,6 @@ groups:
     generators:
       - name: fernapi/fern-typescript-sdk
         version: 0.5.18
-        # TODO(vellum): configure publish to private coordinate
-        # output:
-        #   location: npm
-        #   package-name: vellum-ai
-        #   token: ${NPM_TOKEN}
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
@@ -15,20 +10,11 @@ groups:
           repository: vellum-ai/vellum-client-node-staging
       - name: fernapi/fern-python-sdk
         version: 0.3.15
-        # TODO(vellum): configure publish to private coordinate
-        # output:
-        #   location: pypi
-        #   package-name: vellum-ai
-        #   token: ${PYPI_TOKEN}
         github:
           repository: vellum-ai/vellum-client-python-staging
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-  staging-docs:
-    docs:
-      domain: vellum-staging.docs.buildwithfern.com
-    generators: []
 
   production:
     generators:
@@ -54,9 +40,3 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-  production-docs:
-    docs:
-      domain: vellum.docs.buildwithfern.com
-      custom-domains:
-        - docs.vellum.ai
-    generators: []
