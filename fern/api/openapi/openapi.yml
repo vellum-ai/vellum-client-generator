@@ -224,6 +224,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
+    delete:
+      operationId: documents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      tags:
+      - documents
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
