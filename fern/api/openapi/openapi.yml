@@ -863,29 +863,6 @@ components:
       description: |-
         * `STRING` - STRING
         * `JSON` - JSON
-    DeploymentNodeResult:
-      type: object
-      properties:
-        type:
-          type: string
-        data:
-          $ref: '#/components/schemas/DeploymentNodeResultData'
-      required:
-      - data
-      - type
-    DeploymentNodeResultData:
-      type: object
-      properties:
-        output_id:
-          type: string
-        text:
-          type: string
-          nullable: true
-        delta:
-          type: string
-          nullable: true
-      required:
-      - output_id
     DeploymentRead:
       type: object
       properties:
@@ -926,12 +903,9 @@ components:
             * `PRODUCTION` - Production
         model_type:
           allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
-          description: |-
-            The type of model this deployment serves
-
-            * `GENERATE` - Generate
-            * `CLASSIFY` - Classify
+          - $ref: '#/components/schemas/ModelTypeDeprecated'
+          readOnly: true
+          deprecated: true
         active_model_version_ids:
           type: array
           items:
@@ -1500,11 +1474,13 @@ components:
       - STRING
       - JSON
       - CHAT_HISTORY
+      - SEARCH_RESULTS
       type: string
       description: |-
         * `STRING` - STRING
         * `JSON` - JSON
         * `CHAT_HISTORY` - CHAT_HISTORY
+        * `SEARCH_RESULTS` - SEARCH_RESULTS
     LogprobsEnum:
       enum:
       - ALL
@@ -1575,7 +1551,7 @@ components:
           type: string
           nullable: true
           minLength: 1
-    ModelTypeEnum:
+    ModelTypeDeprecated:
       enum:
       - GENERATE
       - CLASSIFY
@@ -1711,12 +1687,9 @@ components:
           maxLength: 150
         model_type:
           allOf:
-          - $ref: '#/components/schemas/ModelTypeEnum'
-          description: |-
-            The type of task this model is used for.
-
-            * `GENERATE` - Generate
-            * `CLASSIFY` - Classify
+          - $ref: '#/components/schemas/ModelTypeDeprecated'
+          readOnly: true
+          deprecated: true
         provider:
           allOf:
           - $ref: '#/components/schemas/ProviderEnum'
@@ -1787,6 +1760,92 @@ components:
       required:
       - id
       - sandbox_id
+    NodeInputCompiledChatHistoryValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
+    NodeInputCompiledJsonValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
+    NodeInputCompiledSearchResultsValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
+    NodeInputCompiledStringValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
+    NodeInputVariableCompiledValue:
+      oneOf:
+      - $ref: '#/components/schemas/NodeInputCompiledStringValue'
+      - $ref: '#/components/schemas/NodeInputCompiledJsonValue'
+      - $ref: '#/components/schemas/NodeInputCompiledChatHistoryValue'
+      - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NodeInputCompiledStringValue'
+          JSON: '#/components/schemas/NodeInputCompiledJsonValue'
+          CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
+          SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -2282,29 +2341,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/EvaluationParamsRequest'
           nullable: true
-    SandboxNodeResult:
-      type: object
-      properties:
-        type:
-          type: string
-        data:
-          $ref: '#/components/schemas/SandboxNodeResultData'
-      required:
-      - data
-      - type
-    SandboxNodeResultData:
-      type: object
-      properties:
-        output_id:
-          type: string
-        text:
-          type: string
-          nullable: true
-        delta:
-          type: string
-          nullable: true
-      required:
-      - output_id
     SandboxScenario:
       type: object
       properties:
@@ -2411,17 +2447,18 @@ components:
         results:
           type: array
           items:
-            type: object
-            additionalProperties: {}
+            $ref: '#/components/schemas/SearchResult'
+          description: The results of the search. Each result represents a chunk that
+            matches the search query.
         text_output_id:
           type: string
-          nullable: true
         text:
           type: string
           nullable: true
       required:
       - results
       - results_output_id
+      - text_output_id
     SearchRequestBodyRequest:
       type: object
       properties:
@@ -2485,22 +2522,22 @@ components:
     SearchResult:
       type: object
       properties:
-        document:
-          allOf:
-          - $ref: '#/components/schemas/Document'
-          description: The document that contains the chunk that matched the search
-            query.
         text:
           type: string
           description: The text of the chunk that matched the search query.
-        keywords:
-          type: array
-          items:
-            type: string
         score:
           type: number
           format: double
           description: A score representing how well the chunk matches the search
+            query.
+        keywords:
+          type: array
+          items:
+            type: string
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          description: The document that contains the chunk that matched the search
             query.
       required:
       - document
@@ -2654,9 +2691,104 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    TemplatingNodeChatHistoryResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeJsonResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeResult:
+      type: object
+      properties:
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/TemplatingNodeResultData'
+      required:
+      - data
+      - type
+    TemplatingNodeResultData:
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/TemplatingNodeResultOutput'
+      required:
+      - output
+    TemplatingNodeResultOutput:
+      oneOf:
+      - $ref: '#/components/schemas/TemplatingNodeStringResult'
+      - $ref: '#/components/schemas/TemplatingNodeJsonResult'
+      - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
+      - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/TemplatingNodeStringResult'
+          JSON: '#/components/schemas/TemplatingNodeJsonResult'
+          CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
+          SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
+    TemplatingNodeSearchResultsResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeStringResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TerminalNodeChatHistoryResult:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
           description: The unique name given to the terminal node that produced this
@@ -2675,6 +2807,10 @@ components:
     TerminalNodeJsonResult:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
           description: The unique name given to the terminal node that produced this
@@ -2711,15 +2847,43 @@ components:
       - $ref: '#/components/schemas/TerminalNodeStringResult'
       - $ref: '#/components/schemas/TerminalNodeJsonResult'
       - $ref: '#/components/schemas/TerminalNodeChatHistoryResult'
+      - $ref: '#/components/schemas/TerminalNodeSearchResultsResult'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/TerminalNodeStringResult'
           JSON: '#/components/schemas/TerminalNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TerminalNodeChatHistoryResult'
+          SEARCH_RESULTS: '#/components/schemas/TerminalNodeSearchResultsResult'
+    TerminalNodeSearchResultsResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
     TerminalNodeStringResult:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
           description: The unique name given to the terminal node that produced this
@@ -2877,12 +3041,14 @@ components:
       - NODE_EXECUTION_COUNT_LIMIT_REACHED
       - NODE_EXECUTION
       - LLM_PROVIDER
+      - INVALID_TEMPLATE
       type: string
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
         * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
         * `NODE_EXECUTION` - NODE_EXECUTION
         * `LLM_PROVIDER` - LLM_PROVIDER
+        * `INVALID_TEMPLATE` - INVALID_TEMPLATE
     WorkflowExecutionEventType:
       enum:
       - NODE
@@ -2933,18 +3099,16 @@ components:
     WorkflowNodeResultData:
       oneOf:
       - $ref: '#/components/schemas/PromptNodeResult'
-      - $ref: '#/components/schemas/SandboxNodeResult'
-      - $ref: '#/components/schemas/DeploymentNodeResult'
       - $ref: '#/components/schemas/SearchNodeResult'
+      - $ref: '#/components/schemas/TemplatingNodeResult'
       - $ref: '#/components/schemas/ConditionalNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
       discriminator:
         propertyName: type
         mapping:
           PROMPT: '#/components/schemas/PromptNodeResult'
-          SANDBOX: '#/components/schemas/SandboxNodeResult'
-          DEPLOYMENT: '#/components/schemas/DeploymentNodeResult'
           SEARCH: '#/components/schemas/SearchNodeResult'
+          TEMPLATING: '#/components/schemas/TemplatingNodeResult'
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
     WorkflowNodeResultEvent:
@@ -2969,6 +3133,11 @@ components:
         error:
           allOf:
           - $ref: '#/components/schemas/WorkflowEventError'
+          nullable: true
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeInputVariableCompiledValue'
           nullable: true
       required:
       - data
@@ -3075,15 +3244,21 @@ components:
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataString'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataJSON'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/WorkflowResultEventOutputDataString'
           JSON: '#/components/schemas/WorkflowResultEventOutputDataJSON'
           CHAT_HISTORY: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
+          SEARCH_RESULTS: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
     WorkflowResultEventOutputDataChatHistory:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
         state:
@@ -3109,9 +3284,14 @@ components:
       - node_id
       - state
       - type
+      - value
     WorkflowResultEventOutputDataJSON:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
         state:
@@ -3137,9 +3317,46 @@ components:
       - state
       - type
       - value
+    WorkflowResultEventOutputDataSearchResults:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - delta
+      - name
+      - node_id
+      - state
+      - type
+      - value
     WorkflowResultEventOutputDataString:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
         state:
