@@ -918,7 +918,7 @@ components:
         input_variables:
           type: array
           items:
-            $ref: '#/components/schemas/InputVariable'
+            $ref: '#/components/schemas/VellumVariable'
       required:
       - active_model_version_ids
       - created
@@ -1456,31 +1456,6 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
-    InputVariable:
-      type: object
-      properties:
-        id:
-          type: string
-        key:
-          type: string
-        type:
-          $ref: '#/components/schemas/InputVariableType'
-      required:
-      - id
-      - key
-      - type
-    InputVariableType:
-      enum:
-      - STRING
-      - JSON
-      - CHAT_HISTORY
-      - SEARCH_RESULTS
-      type: string
-      description: |-
-        * `STRING` - STRING
-        * `JSON` - JSON
-        * `CHAT_HISTORY` - CHAT_HISTORY
-        * `SEARCH_RESULTS` - SEARCH_RESULTS
     LogprobsEnum:
       enum:
       - ALL
@@ -1618,7 +1593,7 @@ components:
         input_variables:
           type: array
           items:
-            $ref: '#/components/schemas/InputVariable'
+            $ref: '#/components/schemas/VellumVariable'
           description: Input variables specified in the prompt template.
         prompt_template:
           type: string
@@ -2291,7 +2266,7 @@ components:
           minLength: 1
         type:
           allOf:
-          - $ref: '#/components/schemas/InputVariableType'
+          - $ref: '#/components/schemas/VellumVariableType'
           default: STRING
       required:
       - key
@@ -3025,6 +3000,31 @@ components:
           $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
+    VellumVariable:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        type:
+          $ref: '#/components/schemas/VellumVariableType'
+      required:
+      - id
+      - key
+      - type
+    VellumVariableType:
+      enum:
+      - STRING
+      - JSON
+      - CHAT_HISTORY
+      - SEARCH_RESULTS
+      type: string
+      description: |-
+        * `STRING` - String
+        * `JSON` - JSON
+        * `CHAT_HISTORY` - Chat History
+        * `SEARCH_RESULTS` - Search Results
     WorkflowEventError:
       type: object
       properties:
