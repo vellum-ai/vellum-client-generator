@@ -938,27 +938,6 @@ components:
         * `ACTIVE` - Active
         * `INACTIVE` - Inactive
         * `ARCHIVED` - Archived
-    Document:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The ID of the document.
-        label:
-          type: string
-          description: The human-readable name for the document.
-          maxLength: 1000
-        external_id:
-          type: string
-          nullable: true
-          description: The unique ID of the document as represented in an external
-            system and specified when it was originally uploaded.
-          maxLength: 1000
-      required:
-      - id
-      - label
     DocumentDocumentToDocumentIndex:
       type: object
       properties:
@@ -1138,7 +1117,7 @@ components:
           additionalProperties: {}
           nullable: true
           description: A previously supplied JSON object containing metadata that
-            can filtered on when searching.
+            can be filtered on when searching.
       required:
       - document_to_document_indexes
       - id
@@ -2511,7 +2490,7 @@ components:
             type: string
         document:
           allOf:
-          - $ref: '#/components/schemas/Document'
+          - $ref: '#/components/schemas/SearchResultDocument'
           description: The document that contains the chunk that matched the search
             query.
       required:
@@ -2519,6 +2498,33 @@ components:
       - keywords
       - score
       - text
+    SearchResultDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The ID of the document.
+        label:
+          type: string
+          description: The human-readable name for the document.
+          maxLength: 1000
+        external_id:
+          type: string
+          nullable: true
+          description: The unique ID of the document as represented in an external
+            system and specified when it was originally uploaded.
+          maxLength: 1000
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: A previously supplied JSON object containing metadata that
+            can be filtered on when searching.
+      required:
+      - id
+      - label
     SearchResultMergingRequest:
       type: object
       properties:
@@ -2596,6 +2602,12 @@ components:
             type: string
           description: A list of keywords associated with this document. Originally
             provided when uploading the document.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: A previously supplied JSON object containing metadata that
+            can be filtered on when searching.
         document_to_document_indexes:
           type: array
           items:
