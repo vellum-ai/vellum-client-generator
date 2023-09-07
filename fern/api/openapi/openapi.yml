@@ -245,7 +245,7 @@ paths:
     post:
       operationId: execute_workflow_stream
       description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Executes a deployed Workflow and streams back its results.
       tags:
@@ -677,6 +677,28 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+  /v1/submit-workflow-execution-actuals:
+    post:
+      operationId: submit_workflow_execution_actuals
+      description: |-
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
+
+        **Note:** Uses a base url of `https://predict.vellum.ai`.
+      tags:
+      - submit-workflow-execution-actuals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitWorkflowExecutionActualsRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          description: No response body
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -2678,6 +2700,41 @@ components:
           description: Feedback regarding the quality of previously generated completions
       required:
       - actuals
+    SubmitWorkflowExecutionActualRequest:
+      oneOf:
+      - $ref: '#/components/schemas/WorkflowExecutionActualStringRequest'
+      - $ref: '#/components/schemas/WorkflowExecutionActualJsonRequest'
+      - $ref: '#/components/schemas/WorkflowExecutionActualChatHistoryRequest'
+      discriminator:
+        propertyName: output_type
+        mapping:
+          STRING: '#/components/schemas/WorkflowExecutionActualStringRequest'
+          JSON: '#/components/schemas/WorkflowExecutionActualJsonRequest'
+          CHAT_HISTORY: '#/components/schemas/WorkflowExecutionActualChatHistoryRequest'
+    SubmitWorkflowExecutionActualsRequest:
+      type: object
+      properties:
+        actuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmitWorkflowExecutionActualRequest'
+          description: Feedback regarding the quality of an output on a previously
+            executed workflow.
+        execution_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of a previously executed workflow.
+            Must provide either this or external_id.
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The external ID that was originally provided by when executing
+            the workflow, if applicable, that you'd now like to submit actuals for.
+            Must provide either this or execution_id.
+      required:
+      - actuals
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -3047,6 +3104,126 @@ components:
       required:
       - code
       - message
+    WorkflowExecutionActualChatHistoryRequest:
+      type: object
+      properties:
+        output_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of a workflow output. Must provide
+            either this or output_key. output_key is typically preferred.
+        output_key:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The user-defined name of a workflow output. Must provide either
+            this or output_id. Should correspond to the `Name` specified in a Final
+            Output Node. Generally preferred over output_id.
+        quality:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
+            representing the quality of the output. 0 is the worst, 1 is the best.
+        timestamp:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide the timestamp representing when this feedback
+            was collected. Used for reporting purposes.
+        output_type:
+          type: string
+          description: The variable type of the output that this actual is being submitted
+            for.
+        desired_output_value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
+          description: Optionally provide the value that the output ideally should
+            have been.
+      required:
+      - output_type
+    WorkflowExecutionActualJsonRequest:
+      type: object
+      properties:
+        output_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of a workflow output. Must provide
+            either this or output_key. output_key is typically preferred.
+        output_key:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The user-defined name of a workflow output. Must provide either
+            this or output_id. Should correspond to the `Name` specified in a Final
+            Output Node. Generally preferred over output_id.
+        quality:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
+            representing the quality of the output. 0 is the worst, 1 is the best.
+        timestamp:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide the timestamp representing when this feedback
+            was collected. Used for reporting purposes.
+        output_type:
+          type: string
+          description: The variable type of the output that this actual is being submitted
+            for.
+        desired_output_value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Optionally provide the value that the output ideally should
+            have been.
+      required:
+      - output_type
+    WorkflowExecutionActualStringRequest:
+      type: object
+      properties:
+        output_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of a workflow output. Must provide
+            either this or output_key. output_key is typically preferred.
+        output_key:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The user-defined name of a workflow output. Must provide either
+            this or output_id. Should correspond to the `Name` specified in a Final
+            Output Node. Generally preferred over output_id.
+        quality:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
+            representing the quality of the output. 0 is the worst, 1 is the best.
+        timestamp:
+          type: number
+          format: double
+          nullable: true
+          description: Optionally provide the timestamp representing when this feedback
+            was collected. Used for reporting purposes.
+        output_type:
+          type: string
+          description: The variable type of the output that this actual is being submitted
+            for.
+        desired_output_value:
+          type: string
+          nullable: true
+          description: Optionally provide the value that the output ideally should
+            have been.
+      required:
+      - output_type
     WorkflowExecutionEventErrorCode:
       enum:
       - WORKFLOW_INITIALIZATION
