@@ -1457,46 +1457,6 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
-    LogicalOperator:
-      enum:
-      - '='
-      - '!='
-      - <
-      - '>'
-      - <=
-      - '>='
-      - contains
-      - beginsWith
-      - endsWith
-      - doesNotContain
-      - doesNotBeginWith
-      - doesNotEndWith
-      - 'null'
-      - notNull
-      - in
-      - notIn
-      - between
-      - notBetween
-      type: string
-      description: |-
-        * `=` - EQUALS
-        * `!=` - DOES_NOT_EQUAL
-        * `<` - LESS_THAN
-        * `>` - GREATER_THAN
-        * `<=` - LESS_THAN_OR_EQUAL_TO
-        * `>=` - GREATER_THAN_OR_EQUAL_TO
-        * `contains` - CONTAINS
-        * `beginsWith` - BEGINS_WITH
-        * `endsWith` - ENDS_WITH
-        * `doesNotContain` - DOES_NOT_CONTAIN
-        * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
-        * `doesNotEndWith` - DOES_NOT_END_WITH
-        * `null` - NULL
-        * `notNull` - NOT_NULL
-        * `in` - IN
-        * `notIn` - NOT_IN
-        * `between` - BETWEEN
-        * `notBetween` - NOT_BETWEEN
     LogprobsEnum:
       enum:
       - ALL
@@ -1525,9 +1485,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          allOf:
-          - $ref: '#/components/schemas/LogicalOperator'
+          type: string
           nullable: true
+          minLength: 1
         value:
           type: string
           nullable: true
@@ -1560,9 +1520,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          allOf:
-          - $ref: '#/components/schemas/LogicalOperator'
+          type: string
           nullable: true
+          minLength: 1
         value:
           type: string
           nullable: true
