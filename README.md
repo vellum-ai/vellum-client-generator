@@ -48,6 +48,7 @@ Here are the steps required to publish a new version of our API clients.
 5. Check the diff and selectively add everything except for deletions to `server` and additions to `LogicalOperator`. These were manually added + deleted respectively.
     1. We plan to automate the step of adding `server` related info back as part of `make generate-swagger-api-client`.
     2. We plan to support `LogicalOperator` as part of https://app.shortcut.com/vellum/story/810
+    3. If you are adding a new API to the `predict` server, be sure to manually add the appropriate `server` configuration.
 6. Run `fern check` to make sure all is good.
 7. Optionally run `fern generate` to see the newly generated clients locally.
     - If this is your first time, fern will ask you to log in. Hit `Y` to proceed logging in through GitHub.

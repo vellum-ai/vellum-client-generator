@@ -699,6 +699,9 @@ paths:
       responses:
         '200':
           description: No response body
+      servers:
+        - url: https://predict.vellum.ai
+          x-name: Predict
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
