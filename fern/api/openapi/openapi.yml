@@ -15,9 +15,9 @@ info:
 
     ### API Stability
     Some of the APIs documented within are undergoing active development. Use the
-    <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+    <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">GA</strong>
     and
-    <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+    <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Beta</strong>
     tags to differentiate between those that are stable and those that are not.
 
     ### Base URLs
@@ -40,11 +40,7 @@ paths:
   /v1/deployments/{id}:
     get:
       operationId: deployments_retrieve
-      description: |2
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Used to retrieve a deployment given its ID or name.
+      description: Used to retrieve a deployment given its ID or name.
       parameters:
       - in: path
         name: id
@@ -63,13 +59,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
+      x-fern-availability: beta
   /v1/document-indexes:
     post:
       operationId: document_indexes_create
-      description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Creates a new document index.
+      description: Creates a new document index.
       tags:
       - document-indexes
       requestBody:
@@ -143,14 +137,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
+      x-fern-availability: beta
   /v1/documents:
     get:
       operationId: documents_list
-      description: |2
-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
-        Used to list documents. Optionally filter on supported fields.
+      description: Used to list documents. Optionally filter on supported fields.
       parameters:
       - in: query
         name: document_index_id
@@ -189,14 +180,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimDocumentList'
           description: ''
+      x-fern-availability: ga
   /v1/documents/{id}:
     patch:
       operationId: documents_partial_update
-      description: |2
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+      description: Update a Document, keying off of its Vellum-generated ID. Particularly
+        useful for updating its metadata.
       parameters:
       - in: path
         name: id
@@ -224,6 +213,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
+      x-fern-availability: beta
     delete:
       operationId: documents_destroy
       parameters:
@@ -244,10 +234,7 @@ paths:
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
-      description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
-
-        Executes a deployed Workflow and streams back its results.
+      description: Executes a deployed Workflow and streams back its results.
       tags:
       - execute-workflow-stream
       requestBody:
@@ -292,8 +279,6 @@ paths:
     post:
       operationId: generate
       description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a completion using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -338,15 +323,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
+      x-fern-availability: ga
   /v1/generate-stream:
     post:
       operationId: generate_stream
       description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a stream of completions using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -395,14 +376,11 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+      x-fern-availability: ga
   /v1/model-versions/{id}:
     get:
       operationId: model_versions_retrieve
-      description: |2
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Used to retrieve a model version given its ID.
+      description: Used to retrieve a model version given its ID.
       parameters:
       - in: path
         name: id
@@ -422,13 +400,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ModelVersionRead'
           description: ''
+      x-fern-availability: beta
   /v1/model-versions/{id}/compile-prompt:
     post:
       operationId: model_version_compile_prompt
-      description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Compiles the prompt backing the model version using the provided input values.
+      description: Compiles the prompt backing the model version using the provided
+        input values.
       parameters:
       - in: path
         name: id
@@ -454,12 +431,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ModelVersionCompilePromptResponse'
           description: ''
+      x-fern-availability: beta
   /v1/registered-prompts/register:
     post:
       operationId: register_prompt
       description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
         partners, not directly by Vellum users.
 
@@ -487,12 +463,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegisterPromptErrorResponse'
           description: ''
+      x-fern-availability: beta
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
       description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
 
         If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
@@ -559,13 +534,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/SandboxScenario'
           description: ''
+      x-fern-availability: beta
   /v1/sandboxes/{id}/scenarios/{scenario_id}:
     delete:
       operationId: delete_sandbox_scenario
-      description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
-        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
+      description: Deletes an existing scenario from a sandbox, keying off of the
+        provided scenario id.
       parameters:
       - in: path
         name: id
@@ -587,12 +561,11 @@ paths:
       responses:
         '204':
           description: No response body
+      x-fern-availability: beta
   /v1/search:
     post:
       operationId: search
       description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Perform a search against a document index.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -634,12 +607,11 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+      x-fern-availability: ga
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
       description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Used to submit feedback regarding the quality of previously generated completions.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -677,15 +649,13 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+      x-fern-availability: ga
   /v1/submit-workflow-execution-actuals:
     post:
       operationId: submit_workflow_execution_actuals
-      description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
-        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+      description: "    Used to submit feedback regarding the quality of previous\
+        \ workflow execution and its outputs.\n\n    **Note:** Uses a base url of\
+        \ `https://predict.vellum.ai`.    "
       tags:
       - submit-workflow-execution-actuals
       requestBody:
@@ -702,12 +672,11 @@ paths:
       servers:
         - url: https://predict.vellum.ai
           x-name: Predict
+      x-fern-availability: ga
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
       description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
 
         If an id is provided and has a match, the test case will be updated. If no id is provided or no match
@@ -740,12 +709,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteTestCase'
           description: ''
+      x-fern-availability: beta
   /v1/test-suites/{id}/test-cases/{test_case_id}:
     delete:
       operationId: delete_test_suite_test_case
-      description: |-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
+      description: |
         Deletes an existing test case for a test suite, keying off of the test case id.
       parameters:
       - in: path
@@ -768,12 +736,11 @@ paths:
       responses:
         '204':
           description: No response body
+      x-fern-availability: beta
   /v1/upload-document:
     post:
       operationId: documents_upload
       description: |-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Upload a document to be indexed and used for search.
 
         **Note:** Uses a base url of `https://documents.vellum.ai`.
@@ -818,6 +785,7 @@ paths:
       servers:
         - url: https://documents.vellum.ai
           x-name: Documents
+      x-fern-availability: ga
 components:
   schemas:
     BlockTypeEnum:
@@ -3231,6 +3199,7 @@ components:
       enum:
       - WORKFLOW_INITIALIZATION
       - NODE_EXECUTION_COUNT_LIMIT_REACHED
+      - INTERNAL_SERVER_ERROR
       - NODE_EXECUTION
       - LLM_PROVIDER
       - INVALID_TEMPLATE
@@ -3238,6 +3207,7 @@ components:
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
         * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
+        * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
         * `NODE_EXECUTION` - NODE_EXECUTION
         * `LLM_PROVIDER` - LLM_PROVIDER
         * `INVALID_TEMPLATE` - INVALID_TEMPLATE
