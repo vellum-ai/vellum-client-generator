@@ -1,4 +1,8 @@
 {
   "organization": "vellum",
+<<<<<<< HEAD
   "version": "0.15.0-rc19"
+=======
+  "version": "0.15.0-rc16-1-g035a17b0"
+>>>>>>> 4e148a9 (setup help center tab)
 }
