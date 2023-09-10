@@ -40,11 +40,9 @@ paths:
   /v1/deployments/{id}:
     get:
       operationId: deployments_retrieve
-      description: |2
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
+      description:
         Used to retrieve a deployment given its ID or name.
+      x-fern-availability: beta
       parameters:
       - in: path
         name: id
