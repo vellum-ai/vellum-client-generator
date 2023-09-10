@@ -15,10 +15,6 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-<<<<<<< HEAD
-
-=======
->>>>>>> 4e148a9 (setup help center tab)
   production:
     generators:
       - name: fernapi/fern-typescript-sdk

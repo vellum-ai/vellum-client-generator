@@ -1,0 +1,61 @@
+When using an LLM, you input a prompt and get back a completion. 
+However, in order for a prompt to be reusable, you’ll want to 
+be able to specify certain parts of it dynamically.
+
+That’s where prompt templates come in. Prompt templates contain 
+the fixed parts of a prompt with placeholders for the parts that 
+might change from run to run. When you use a prompt template, 
+you pass in specific values for the placeholders to create 
+the final prompt that’s sent to the LLM.
+
+Vellum’s Prompt Syntax supports dynamically constructed 
+prompts via [jinja templating](https://jinja.palletsprojects.com/en/3.1.x/templates/) 
+and what we call “blocks.”
+
+## Jinja Templating
+
+Jinja is a powerful templating syntax useful for dynamic content.
+Most commonly, you’ll use it to reference Prompt Variables. 
+Below are the most common things you’re likely to want to do, 
+but you can find jinja’s complete documentation 
+[here](https://jinja.palletsprojects.com/en/3.1.x/templates/).
+
+### Variables
+Reference variables using double-curly-brackets. For example,
+
+<CodeBlock title="Reference Variables">
+```
+You are a {{ personality_type }} AI assistant.
+```
+</CodeBlock>
+
+<Callout intent="warning">
+  Note that all variables are treated as strings!
+</Callout>
+
+### Conditionals
+
+Perform conditional logic based on your input variables using if/else statements
+
+<CodeBlock title="Conditional Example">
+```
+You are a {{ personality_type }} AI assistant.
+{% if personality_type == "rude" %}
+You end every message with a frowning emoji.
+{% else %}
+You end every message with a smiling emoji.
+{% endif %}
+```
+</CodeBlock>
+
+### Comments
+
+You can use jinja to leave comments in your prompt that don’t use up any 
+tokens when compiled and sent to the LLM. For example,
+
+<CodeBlock title="Comment Example">
+```
+{# This is a comment #}
+Hello, world!
+```
+</CodeBlock>

@@ -4,25 +4,35 @@ instances:
     custom-domain: docs.vellum.ai
 
 tabs: 
-  api: 
+  api:
     display-name: API Reference
-    icon: book
+    icon: "fa-solid fa-code"
   help:
     display-name: Help Center
-    icon: square-question
+    icon: "fa-solid fa-cube"
 navigation:
   - tab: help
     layout:
-      - section: Introduction
+      - section: Prompts
         contents:
-          - page: Getting started
-            path: ./docs/content/intro.mdx
+          - page: Prompt Template Syntax
+            path: ./docs/content/help/prompts/template-prompt-syntax.mdx
+          - page: Playground History and Collaboration
+            path: ./docs/content/help/prompts/playground-history.mdx
+      - section: Documents
+        contents:
+          - page: Uploading Documents
+            path: ./docs/content/help/documents/uploading-documents.mdx
+      - section: Deployments
+        contents:
+          - page: Monitoring production traffic
+            path: ./docs/content/help/deployments/monitoring-production-traffic.mdx
   - tab: api
     layout:
       - section: Introduction
         contents:
           - page: Getting started
-            path: ./docs/content/intro.mdx
+            path: ./docs/content/api/intro.mdx
       - api: API Reference
 title: Vellum | Documentation
 colors:
