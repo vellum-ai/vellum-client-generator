@@ -273,8 +273,8 @@ paths:
           description: ''
       x-fern-streaming: true
       servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/generate:
     post:
       operationId: generate
@@ -324,6 +324,9 @@ paths:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
       x-fern-availability: ga
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/generate-stream:
     post:
       operationId: generate_stream
@@ -373,10 +376,10 @@ paths:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
       x-fern-streaming: true
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
       x-fern-availability: ga
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/model-versions/{id}:
     get:
       operationId: model_versions_retrieve
@@ -604,10 +607,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchErrorResponse'
           description: ''
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
       x-fern-availability: ga
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
@@ -646,10 +649,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubmitCompletionActualsErrorResponse'
           description: ''
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
       x-fern-availability: ga
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/submit-workflow-execution-actuals:
     post:
       operationId: submit_workflow_execution_actuals
@@ -669,10 +672,10 @@ paths:
       responses:
         '200':
           description: No response body
-      servers:
-        - url: https://predict.vellum.ai
-          x-name: Predict
       x-fern-availability: ga
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -782,10 +785,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/UploadDocumentErrorResponse'
           description: ''
-      servers:
-        - url: https://documents.vellum.ai
-          x-name: Documents
       x-fern-availability: ga
+      servers:
+      - url: https://documents.vellum.ai
+        x-name: Documents
 components:
   schemas:
     BlockTypeEnum:
@@ -1428,6 +1431,101 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
+    LogicalOperator:
+      enum:
+      - '='
+      - '!='
+      - <
+      - '>'
+      - <=
+      - '>='
+      - contains
+      - beginsWith
+      - endsWith
+      - doesNotContain
+      - doesNotBeginWith
+      - doesNotEndWith
+      - 'null'
+      - notNull
+      - in
+      - notIn
+      - between
+      - notBetween
+      type: string
+      description: |-
+        * `=` - EQUALS
+        * `!=` - DOES_NOT_EQUAL
+        * `<` - LESS_THAN
+        * `>` - GREATER_THAN
+        * `<=` - LESS_THAN_OR_EQUAL_TO
+        * `>=` - GREATER_THAN_OR_EQUAL_TO
+        * `contains` - CONTAINS
+        * `beginsWith` - BEGINS_WITH
+        * `endsWith` - ENDS_WITH
+        * `doesNotContain` - DOES_NOT_CONTAIN
+        * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
+        * `doesNotEndWith` - DOES_NOT_END_WITH
+        * `null` - NULL
+        * `notNull` - NOT_NULL
+        * `in` - IN
+        * `notIn` - NOT_IN
+        * `between` - BETWEEN
+        * `notBetween` - NOT_BETWEEN
+      x-fern-enum:
+        '=':
+          name: EQUALS
+          description: Equals
+        '!=':
+          name: DOES_NOT_EQUAL
+          description: Does not equal
+        <:
+          name: LESS_THAN
+          description: Less than
+        '>':
+          name: GREATER_THAN
+          description: Greater than
+        <=:
+          name: LESS_THAN_OR_EQUAL_TO
+          description: Less than or equal to
+        '>=':
+          name: GREATER_THAN_OR_EQUAL_TO
+          description: Greater than or equal to
+        contains:
+          name: CONTAINS
+          description: Contains
+        beginsWith:
+          name: BEGINS_WITH
+          description: Begins with
+        endsWith:
+          name: ENDS_WITH
+          description: Ends with
+        doesNotContain:
+          name: DOES_NOT_CONTAIN
+          description: Does not contain
+        doesNotBeginWith:
+          name: DOES_NOT_BEGIN_WITH
+          description: Does not begin with
+        doesNotEndWith:
+          name: DOES_NOT_END_WITH
+          description: Does not end with
+        'null':
+          name: 'NULL'
+          description: 'Null'
+        notNull:
+          name: NOT_NULL
+          description: Not null
+        in:
+          name: IN
+          description: In
+        notIn:
+          name: NOT_IN
+          description: Not in
+        between:
+          name: BETWEEN
+          description: Between
+        notBetween:
+          name: NOT_BETWEEN
+          description: Not between
     LogprobsEnum:
       enum:
       - ALL
@@ -1456,9 +1554,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/LogicalOperator'
           nullable: true
-          minLength: 1
         value:
           type: string
           nullable: true
@@ -1491,9 +1589,9 @@ components:
           nullable: true
           minLength: 1
         operator:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/LogicalOperator'
           nullable: true
-          minLength: 1
         value:
           type: string
           nullable: true
