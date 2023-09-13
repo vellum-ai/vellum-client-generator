@@ -34,12 +34,12 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: fern generate --group staging --log-level debug
+        run: fern generate --docs --instance vellum-staging.docs.buildwithfern.com --log-level debug
       
       - name: Generate Staging Docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: fern generate --group staging-docs --log-level debug
+        run: fern generate --docs --instance vellum.docs.buildwithfern.com --log-level debug
 
   fern-generate-production:
     needs: fern-check

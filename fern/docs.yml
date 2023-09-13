@@ -1,16 +1,21 @@
+instances: 
+  - url: vellum-staging.docs.buildwithfern.com
+  - url: vellum.docs.buildwithfern.com
+    custom-domain: docs.vellum.ai
+
 navigation:
   - section: Introduction
     contents:
       - page: Getting started
-        path: ./intro.mdx
+        path: ./docs/intro.mdx
   - api: API Reference
 title: Vellum | API Docs
 colors:
   accentPrimary: "#a3d3ff"
 logo:
-  path: ./logo.png
+  dark: ./docs/logo.png
   href: https://www.vellum.ai/
-favicon: ./favicon.ico
+favicon: ./docs/favicon.ico
 navbar-links:
   - type: secondary
     text: Products
