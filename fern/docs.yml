@@ -13,6 +13,10 @@ tabs:
 navigation:
   - tab: help
     layout:
+      - section: Welcome
+        contents:
+          - page: Getting Started
+            path: ./docs/content/help/welcome/intro.mdx
       - section: Prompts
         contents:
           - page: Prompt Template Syntax
