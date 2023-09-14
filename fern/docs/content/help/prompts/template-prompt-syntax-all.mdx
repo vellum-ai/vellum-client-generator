@@ -136,7 +136,7 @@ This definitive response from the model allows developers building LLM features 
 
 To define a function, you first need to choose a model that supports function calling and click the new `+ Add Function` button at the bottom of your prompt:
 
-[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc95a73ae-a823-4e14-a2be-914d22136a5c%2FScreenshot_2023-07-19_at_11.31.21_AM.png?table=block&id=aefd89dd-fd43-4c12-9633-abf5858cf869&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1920&userId=&cache=v2)
+![Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc95a73ae-a823-4e14-a2be-914d22136a5c%2FScreenshot_2023-07-19_at_11.31.21_AM.png?table=block&id=aefd89dd-fd43-4c12-9633-abf5858cf869&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1920&userId=&cache=v2)
 
 Then, click the entry that is created and a modal will appear where you can start defining your function! There are three important sections to consider:
 
@@ -144,19 +144,19 @@ Then, click the entry that is created and a modal will appear where you can star
 - `Description` - This is a natural language description of what your function does. This is the part most used by the model to decide which function to call and should be considered counting towards your token count.
 - `Paramaters` - The set of parameters your functions accept. Each parameter will also have a `Name`, `Description`, & `Type` that the model uses to decide what values the function should be called with.
 
-[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F08f1aeb4-03b1-4045-9730-524c28a25db0%2FScreenshot_2023-07-19_at_11.34.39_AM.png?table=block&id=3945d1fc-e542-4ea1-8742-573d69511bdc&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1830&userId=&cache=v2)
+![Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F08f1aeb4-03b1-4045-9730-524c28a25db0%2FScreenshot_2023-07-19_at_11.34.39_AM.png?table=block&id=3945d1fc-e542-4ea1-8742-573d69511bdc&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1830&userId=&cache=v2)
 
-[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3841d984-2632-4a05-aba4-1188d0695bcb%2FScreenshot_2023-07-19_at_11.35.32_AM.png?table=block&id=5eb2f520-c471-47f4-8a2f-14cf8da4dffa&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
+![Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3841d984-2632-4a05-aba4-1188d0695bcb%2FScreenshot_2023-07-19_at_11.35.32_AM.png?table=block&id=5eb2f520-c471-47f4-8a2f-14cf8da4dffa&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
 
 When you then call the model with a prompt along with these function definitions, the model will then decide whether it makes sense to call one of the defined functions or return the standard text response. If it decides to call a defined function, the response will be a JSON directing which function to call and with which parameter values:
 
-[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fbcac5f2f-ee74-43d5-8d65-2340d3e3aefe%2FScreenshot_2023-07-19_at_11.53.45_AM.png?table=block&id=62eab971-c60b-4ba8-bc31-adadd6f93de2&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
+![Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fbcac5f2f-ee74-43d5-8d65-2340d3e3aefe%2FScreenshot_2023-07-19_at_11.53.45_AM.png?table=block&id=62eab971-c60b-4ba8-bc31-adadd6f93de2&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
 
 Notice that in this example, the model is directing us to call the `get_current_weather` function with the `location` parameter set to `Boston, MA`. At this point, it is up to the **\*\***\***\*\***app developer**\*\***\***\*\*** to actually invoke the function - the model itself does not have access to the execution logic. These functions should represent public or private APIs that the app developer supports and could invoke once instructed by the model.
 
 Once the function is called and a response is observed, the response should be fed back to the LLM as a **\*\*\*\***function**\*\*\*\*** message so that the model knows what was the outcome of calling that function. The model will then be able to use the response of that function when deciding how to respond next in order to satisfy the original prompt.
 
-[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4e9acfb0-27a2-4eef-b6fa-3e5b9eedefe9%2FScreenshot_2023-07-19_at_12.05.03_PM.png?table=block&id=f9130d68-89cd-4b11-a065-4097ed5448be&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
+![Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4e9acfb0-27a2-4eef-b6fa-3e5b9eedefe9%2FScreenshot_2023-07-19_at_12.05.03_PM.png?table=block&id=f9130d68-89cd-4b11-a065-4097ed5448be&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
 
 Notice that we need to specify the original response from the model as an \***\*\*\*\***assistant\***\*\*\*\*** message, before following up with a **\*\*\*\***function**\*\*\*\*** message. The final output from the model then represents its understanding of the user’s prompt and the output of the function it had access to.
 
@@ -170,4 +170,4 @@ Once you have reached this point, you’ll have everything you’ll need to add 
 
 Given the powerful and dynamic nature of Vellum’s prompt syntax, you may want to see what the final, compiled payload sent to the model provider after all variable substitutions and jinja templating is applied. You can do this in the Playground UI like so:
 
-[Image](https://file.notion.so/f/s/e7418d58-0880-45d3-a2ac-101e112d3fe2/payloadpreview.gif?id=a0393af1-5c35-4d91-b382-b734e033bffe&table=block&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&expirationTimestamp=1694736000000&signature=g_9n8EEidzaCcgsooQYqsMPn-ooBx-yB2XSRkwcbplY)
+![Image](https://file.notion.so/f/s/e7418d58-0880-45d3-a2ac-101e112d3fe2/payloadpreview.gif?id=a0393af1-5c35-4d91-b382-b734e033bffe&table=block&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&expirationTimestamp=1694736000000&signature=g_9n8EEidzaCcgsooQYqsMPn-ooBx-yB2XSRkwcbplY)

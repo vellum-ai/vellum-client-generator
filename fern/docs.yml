@@ -3,7 +3,7 @@ instances:
   - url: vellum.docs.buildwithfern.com
     custom-domain: docs.vellum.ai
 
-tabs: 
+tabs:
   api:
     display-name: API Reference
     icon: "fa-solid fa-code"
