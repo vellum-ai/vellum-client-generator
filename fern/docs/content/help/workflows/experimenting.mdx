@@ -1,0 +1,39 @@
+## About Workflows
+
+Workflows is a product in Vellum's LLM dev platform that helps you quickly prototype, deploy, and manage complex chains of LLM calls and the business logic that tie them together. We solve the "whack-a-mole" problem encountered by companies that use popular open source frameworks to build AI applications, but are scared to make changes for fear of introducing regressions in production.
+
+The Workflows UI consists of a graphical app builder where you can string together various nodes and test various input values through this system. Each prompt can also be tested extensively through Playground & Test Suites. When implemented effectively, Workflows can help you build advanced LLM applications
+
+This is an intro article on how to use the Workflow Sandboxes. Refer to the two articles below for common Workflow archetypes & how to integrate with Workflows in production.
+
+[Using a Workflow in production](https://www.notion.so/Using-a-Workflow-in-production-8200b206e346444fad767c4d48fc30ee?pvs=21)
+
+[Common Workflow Architectures](https://www.notion.so/Common-Workflow-Architectures-99a505bdaebe491f91e3767a69c04e76?pvs=21)
+
+## Supported Node Types, as of August 14, 2023
+
+The names of nodes can be edited in-line once the node has been added to the UI. You can add as many nodes as you want to your Workflow. Since there is extreme flexibility in how Workflows can be created, you can modify your architecture to your desire by starting from these building blocks. Common architectures are shared in a separate help center doc ([Common Workflow Architectures](https://www.notion.so/Common-Workflow-Architectures-99a505bdaebe491f91e3767a69c04e76?pvs=21)) and will be updated over time.
+
+[Image](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa6573716-a36b-4825-9cbe-1b6a42589c07%2FScreenshot_2023-08-14_at_5.16.16_PM.png?table=block&id=e5d716f5-bbd0-47fc-a70d-6ddd1cba2b89&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=770&userId=&cache=v2)
+
+### 1. Prompt Nodes
+
+A core part of any LLM application. This node represents a call to a Large Language Model. Similar to Vellum Prompts, you can use test out models from any of the major providers or open source community, including OpenAI, Anthropic, Cohere, Google, Mosaic, Falcon-40b & Llama-2.
+
+Upon creating a Prompt Node you’ll be asked to import a prompt from an existing Deployment, Sandbox, or create one from scratch. Prompts are defined by their variables, prompt template, model provider, and parameters. Refer to this help center article to learn more about our prompt syntax ([Vellum Prompt Template Syntax](https://www.notion.so/Vellum-Prompt-Template-Syntax-feb9571846894af9a7dfe63cda821ed3?pvs=21)) and this article for common prompt templates ([Common Prompt Templates](https://www.notion.so/Common-Prompt-Templates-7c4f356721804e7497e5765715b45d4e?pvs=21))
+
+![Screenshot 2023-08-14 at 6.31.37 PM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/176b032f-2e76-46b8-a512-98cda98e29e2/Screenshot_2023-08-14_at_6.31.37_PM.png)
+
+### 2. Search Node
+
+The Search Node returns results from a Document Index stored inside Vellum Search. Once your documents are uploaded in an index (details on how to do that here: [Uploading Documents](https://www.notion.so/Uploading-Documents-b4d8587ca59146afa7c45435d8db5691?pvs=21)), you can start using them in a Workflow.
+
+The index in a Search Node can be fixed for the Workflow or chosen dynamically based on the output of an upstream node. Additional configuration options, similar to the ones in Vellum Search are also available in the Search Node.
+
+![Screenshot 2023-08-14 at 6.31.04 PM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/851861cc-affb-43a3-a9b0-f929b6fea326/Screenshot_2023-08-14_at_6.31.04_PM.png)
+
+### 3. Conditional Node
+
+Conditional Nodes are extremely powerful because they can help you diverge the execution path of your Workflow based on the results of an upstream node. The Conditional Node supports as many if-else-if conditions as you’d like and the rules can be grouped / nested within each other.
+
+The number of exit options from a conditional node equal the number of if-else-if conditions created on the node

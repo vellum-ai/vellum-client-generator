@@ -19,16 +19,32 @@ navigation:
             path: ./docs/content/help/welcome/intro.mdx
       - section: Prompts
         contents:
-          - page: Prompt Template Syntax
+          - page: Vellum Prompt Template Syntax
             path: ./docs/content/help/prompts/template-prompt-syntax.mdx
+          - page: Common Prompt Templates
+            path: ./docs/content/help/prompts/common-prompt-templates.mdx
           - page: Playground History and Collaboration
             path: ./docs/content/help/prompts/playground-history.mdx
+          - page: How to Evaluate Outputs?
+            path: ./docs/content/help/prompts/how-to-evaluate-outputs.mdx
       - section: Documents
         contents:
           - page: Uploading Documents
             path: ./docs/content/help/documents/uploading-documents.mdx
+          - page: Running Searches in Playground
+            path: ./docs/content/help/documents/running-searches.mdx
+          - page: Integrating w/ Search API
+            path: ./docs/content/help/documents/integrating-search.mdx
+      - section: Workflows
+        contents:
+          - page: Introduction to Workflows
+            path: ./docs/content/help/workflows/intro.mdx
+          - page: Experimenting with Workflows
+            path: ./docs/content/help/workflows/experimenting.mdx
       - section: Deployments
         contents:
+          - page: How to use Vellum in production?
+            path: ./docs/content/help/deployments/how-to-use-vellum-in-production.mdx
           - page: Monitoring production traffic
             path: ./docs/content/help/deployments/monitoring-production-traffic.mdx
   - tab: api

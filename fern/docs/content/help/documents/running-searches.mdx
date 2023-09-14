@@ -1,0 +1,19 @@
+Vellum Search can be used to include relevant context in a prompt at run-time that fits within LLM token window limits. Typically, the query that produces the search results comes from an end-user.
+
+For example, here’s a prompt used to answer questions, pulling the source materials for an answer from a document index. The remainder of this article references variables from this prompt to explain the mechanics.
+
+```
+Answer questions based on the context provided below without
+using any other knowledge. If the question can't be answered
+using the provided context say "Sorry, I don't know."
+Answer in the following format:
+
+Question: ..
+Answer: ..
+
+---
+{context_str}
+---
+Question: {query_str}
+Answer:
+```
