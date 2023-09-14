@@ -10,12 +10,13 @@ For Step 3, make sure you have a variable in Vellum Playground where search resu
 
 There’s a code snippet for the Search API in the Document Index. There are 3 variables to call the API:
 
-- `index_name` - Index that is searched across
-- `query` - Search query (usually a user input)
-- `options` - Optional configuration that drives search behavior. Namely used to determine the max number of results returned in the response. You can also use:
+- **index_name** - Index that is searched across
+- **query** - Search query (usually a user input)
+- **options** - Optional configuration that drives search behavior. Namely used to 
+determine the max number of results returned in the response. You can also use:
+- **weights** - to change the prioritization between keyword matches vs semantic similarity
+- **result_merging** - to automatically merge overlapping chunks into larger chunks without redundant content
+- **filters** - to perform rule-based filtering prior to matching on keywords / semantic similarity. 
+For more info, see [Metadata Filtering](https://www.notion.so/Metadata-Filtering-6a702af7649843feafc2bb05f04cb3c8?pvs=21)
 
-  - `weights` - to change the prioritization between keyword matches vs semantic similarity
-  - `result_merging` - to automatically merge overlapping chunks into larger chunks without redundant content
-  - `filters` - to perform rule-based filtering prior to matching on keywords / semantic similarity. For more info, see [Metadata Filtering](https://www.notion.so/Metadata-Filtering-6a702af7649843feafc2bb05f04cb3c8?pvs=21)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/63476604-59f8-44b4-9094-6d8f628aac5c/Untitled.png)
+![Untitled](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F63476604-59f8-44b4-9094-6d8f628aac5c%2FUntitled.png?table=block&id=20b87da6-3d51-4934-93b8-7ef264c79549&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1400&userId=&cache=v2)
