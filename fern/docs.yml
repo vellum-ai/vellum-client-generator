@@ -21,14 +21,12 @@ navigation:
             path: ./docs/content/help/welcome/getting-support.mdx
       - section: Prompts
         contents:
-          - page: Vellum Prompt Template Syntax
-            path: ./docs/content/help/prompts/template-prompt-syntax.mdx
-          - page: Common Prompt Templates
-            path: ./docs/content/help/prompts/common-prompt-templates.mdx
-          - page: Playground History and Collaboration
-            path: ./docs/content/help/prompts/playground-history.mdx
-          - page: How to Evaluate Outputs?
-            path: ./docs/content/help/prompts/how-to-evaluate-outputs.mdx
+          - page: Prompt Engineering in Vellum
+            path: ./docs/content/help/prompts/prompt-engineering-in-vellum.mdx
+          - page: Collaborating on Prompts
+            path: ./docs/content/help/prompts/collaborating-on-prompts.mdx
+          - page: Quantitatively Evaluating Outputs
+            path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
       - section: Documents
         contents:
           - page: Uploading Documents
