@@ -15,8 +15,10 @@ navigation:
     layout:
       - section: Welcome
         contents:
-          - page: Getting Started
+          - page: Welcome to Vellum
             path: ./docs/content/help/welcome/intro.mdx
+          - page: Getting Support
+            path: ./docs/content/help/welcome/getting-support.mdx
       - section: Prompts
         contents:
           - page: Vellum Prompt Template Syntax
