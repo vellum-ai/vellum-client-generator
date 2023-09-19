@@ -27,6 +27,16 @@ navigation:
             path: ./docs/content/help/prompts/collaborating-on-prompts.mdx
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
+      - section: Deployments
+        contents:
+          - page: Prompt Lifecycle Management
+            path: ./docs/content/help/deployments/prompt-lifecycle-management.mdx
+          - page: Observability in Production
+            path: ./docs/content/help/deployments/observability-in-production.mdx
+          - page: Monitoring Production Trends
+            path: ./docs/content/help/deployments/monitoring-production-trends.mdx
+          - page: Replaying Requests & Backtesting
+            path: ./docs/content/help/deployments/replaying-requests-and-backtesting.mdx
       - section: Documents
         contents:
           - page: Uploading Documents
@@ -41,12 +51,6 @@ navigation:
             path: ./docs/content/help/workflows/intro.mdx
           - page: Experimenting with Workflows
             path: ./docs/content/help/workflows/experimenting.mdx
-      - section: Deployments
-        contents:
-          - page: How to use Vellum in production?
-            path: ./docs/content/help/deployments/how-to-use-vellum-in-production.mdx
-          - page: Monitoring production traffic
-            path: ./docs/content/help/deployments/monitoring-production-traffic.mdx
   - tab: api
     layout:
       - section: Introduction
