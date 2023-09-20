@@ -11,6 +11,7 @@ This repository contains
 
 - Vellum's Fern API Definition which lives in the [definition](./fern/api/definition/) folder
 - Generators (see [generators.yml](./fern/api/generators.yml))
+- Definition for Help Documentation
 
 ## What is in the API Definition?
 
@@ -50,3 +51,18 @@ Here are the steps required to publish a new version of our API clients.
     - If this is your first time, fern will ask you to log in. Hit `Y` to proceed logging in through GitHub.
 7. Commit and push the changes to the `main` branch.
 8. Create a new Release within Github. This will trigger a github action that will publish the new clients to their respective repos.
+
+## Upgrading Fern
+You can use the following command to upgrade fern to the latest version:
+```bash
+fern upgrade --rc
+```
+
+## Docs Site
+You can publish the docs to the staging site by running the following command:
+```bash
+fern generate --docs --instance vellum-staging.docs.buildwithfern.com
+```
+
+If you run into errors, you can add the ` --log-level debug` flag to get more information. You might need to be added
+to the Vellum org in Fern, which requires contacting the fern team in #fern-x-vellum in Slack.
