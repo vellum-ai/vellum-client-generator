@@ -8,6 +8,24 @@ Useful if you want to ensure that you’re not providing too much context to a p
 
 ![String Manipulation](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F31726ad7-4cdb-4a88-bf83-6540efb92c1a%2F2023-08-25_13-57-24.png?table=block&id=454c438f-e20a-424f-96eb-007cb7b64662&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
 
+<CodeBlock title="Template">
+    ```jinja2
+    {{ user_input[:10] }}
+    ```
+</CodeBlock>
+
+<CodeBlock title="Example">
+    ```
+    Inputs:
+    -------
+    user_input = "Hello, world!"
+
+    Output:
+    -------
+    "Hello, wor"
+    ```
+</CodeBlock>
+
 
 # JSON Manipulation
 
@@ -19,6 +37,41 @@ Here’s how to do it:
 
 ![JSON Manipulation](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa5758616-810b-43e0-bd69-3b6d7721940a%2F2023-08-25_18-10-44.png?table=block&id=a4e2edc4-3c36-4407-b1fa-60681c1f9983&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
 
+<CodeBlock title="Template">
+    ```jinja2
+    {% if maybe_json|is_valid_json_string %}
+        {{ maybe_json }}
+    {% else %}
+        {{ {} }}
+    {% endif %}
+    ```
+</CodeBlock>
+
+<CodeBlocks>
+    <CodeBlock title="Example 1: Valid JSON">
+        ```
+        Inputs:
+        -------
+        maybe_json = '{"key": "value"}'
+
+        Output:
+        -------
+        {"key": "value"}
+        ```
+    </CodeBlock>
+    <CodeBlock title="Example 2: Invalid JSON">
+        ```
+        Inputs:
+        -------
+        maybe_json = 'not valid json'
+
+        Output:
+        -------
+        {}
+        ```
+    </CodeBlock>
+</CodeBlocks>
+
 
 # Chat History Manipulation
 
@@ -29,6 +82,31 @@ If you’re building a chatbot and conversations can be long-lived, you may find
 Once simple solution is to only ever include the most recent `n` messages from the conversation. Here’s how you can do this:
 
 ![Chat History Manipulation](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8abac24f-f598-4016-abdc-f87baf354da8%2F2023-08-25_18-27-15.png?table=block&id=d8e81e3d-9ae1-4ceb-b6df-87fcf193aa2e&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+
+<CodeBlock title="Template">
+    ```jinja2
+    {{ chat_history[-2:]|to_json }}
+    ```
+</CodeBlock>
+
+<CodeBlock title="Example">
+    ```
+    Inputs:
+    -------
+    chat_history = [
+        {"role": "USER", "text": "What color is the sky?"},
+        {"role": "ASSISTANT", "text": "Blue"},
+        {"role": "USER", "text": "But why"}
+    ]
+
+    Output:
+    -------
+    [
+        {"role": "ASSISTANT", "text": "Blue"},
+        {"role": "USER", "text": "But why"}
+    ]
+    ```
+</CodeBlock>
 
 
 # Search Result Manipulation
@@ -42,6 +120,70 @@ However, if you want your Prompt to cite its sources and say where it got the in
 The template below takes in the raw search results and performs custom chunk concatenation, but also pulls in info from the document associated with each chunk.
 
 ![Search Result Manipulation](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8c68490d-c1c3-4c9e-bb52-8b64d1294257%2F2023-08-30_20-15-38.png?table=block&id=6ce6571f-8479-4748-b1ed-58d28a3e34ad&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+
+<CodeBlock title="Template">
+    ```jinja2
+    {% for result in search_results -%}
+    Source:
+    {{ result.document.label }}
+
+    Content:
+    {{ result.text }}
+    {% if not loop.last %}
+
+    #####
+
+    {% endif %}
+    {% endfor %}
+    ```
+</CodeBlock>
+
+<CodeBlock title="Example">
+    ```
+    Inputs:
+    -------
+    search_results = [
+        {
+            "text": "Hello, world!",
+            "score": 0.015,
+            "keywords": ["hello", "world”],
+            "document": {
+                "id": "22df06cf-c876-45ef-a162-4836c410e37b",
+                "label": "introduction.txt",
+                "external_id": "introduction.txt"
+            }
+        },
+        {
+            "text": "The sky is blue.",
+            "score": 0.005,
+            "keywords": ["sky", "blue”],
+            "document": {
+                "id": "d9655f5f-885e-400e-b000-00b605a03a99",
+                "label": "description.txt",
+                "external_id": "description.txt"
+            }
+        }
+    ]
+
+    Output:
+    -------
+    Source:
+    introduction.txt
+
+    Content:
+    Hello, world!
+
+
+    #####
+
+
+    Source:
+    description.txt
+
+    Content:
+    The sky is blue.
+    ```
+</CodeBlock>
 
 
 # Need Help?
