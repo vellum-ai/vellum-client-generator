@@ -17,49 +17,66 @@ navigation:
         contents:
           - page: Welcome to Vellum
             path: ./docs/content/help/welcome/intro.mdx
+            slug: welcome
           - page: Getting Support
             path: ./docs/content/help/welcome/getting-support.mdx
+            slug: getting-support
       - section: Prompts
         contents:
           - page: Prompt Engineering in Vellum
             path: ./docs/content/help/prompts/prompt-engineering-in-vellum.mdx
+            slug: prompt-engineering
           - page: Collaborating on Prompts
             path: ./docs/content/help/prompts/collaborating-on-prompts.mdx
+            slug: collaboration
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
+            slug: quantitative-evaluation
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
             path: ./docs/content/help/deployments/prompt-lifecycle-management.mdx
+            slug: prompt-lifecycle-management
           - page: Observability in Production
             path: ./docs/content/help/deployments/observability-in-production.mdx
+            slug: observability
           - page: Monitoring Production Trends
             path: ./docs/content/help/deployments/monitoring-production-trends.mdx
+            slug: monitoring
           - page: Replaying Requests & Backtesting
             path: ./docs/content/help/deployments/replaying-requests-and-backtesting.mdx
+            slug: replaying-requests
       - section: Documents
         contents:
           - page: Uploading Documents
             path: ./docs/content/help/documents/uploading-documents.mdx
+            slug: uploading-documents
           - page: Running Searches in Playground
             path: ./docs/content/help/documents/running-searches.mdx
+            slug: running-searches
           - page: Integrating w/ Search API
             path: ./docs/content/help/documents/integrating-search.mdx
+            slug: api-integration
           - page: Metadata Filtering
             path: ./docs/content/help/documents/metadata-filtering.mdx
+            slug: metadata-filtering
       - section: Workflows
         contents:
           - page: Introduction to Workflows
             path: ./docs/content/help/workflows/intro.mdx
+            slug: introduction
           - page: Experimenting with Workflows
             path: ./docs/content/help/workflows/experimenting.mdx
+            slug: experimentation
           - page: Common Architectures
             path: ./docs/content/help/workflows/common-architectures.mdx
+            slug: common-architectures
           - page: Common Data Transformation Templates
             path: ./docs/content/help/workflows/common-data-transforms.mdx
+            slug: common-data-transforms
           - page: Integrating w/ APIs
             path: ./docs/content/help/workflows/integrating.mdx
-            slug: integrating
+            slug: api-integration
   - tab: api
     layout:
       - section: Introduction
