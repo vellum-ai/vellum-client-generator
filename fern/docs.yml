@@ -93,11 +93,11 @@ logo:
 favicon: ./docs/assets/favicon.ico
 navbar-links:
   - type: secondary
-    text: Products
-    url: https://vellum.ai/products
-  - type: secondary
     text: Blog
     url: https://vellum.ai/blog
+  - type: secondary
+    text: Log In
+    url: https://app.vellum.ai/
   - type: primary
-    text: Start 14 day trial
-    url: https://app.vellum.ai/signup
+    text: Request Demo
+    url: https://www.vellum.ai/landing-pages/request-demo
