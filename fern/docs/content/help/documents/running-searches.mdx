@@ -17,3 +17,24 @@ Answer: ..
 Question: {query_str}
 Answer:
 ```
+
+## Step 1: How to add relevant context to `context_str` variable
+
+In Vellum Playground, each variable has a **🔍** icon to include search results in Playground
+
+![Screen Shot 2023-03-08 at 10.03.25 PM.png](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F03a5afec-0b86-4fae-87c4-93d7dd31984f%2FScreen_Shot_2023-03-08_at_10.03.25_PM.png?table=block&id=4711df56-0109-4004-9f7f-6c65402f4eae&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1730&userId=&cache=v2)
+
+Clicking this button opens up a modal to return Search results for a given query. Follow these steps in the modal:
+
+- Enter the Document Index that should be queried against
+- Type the search query (note: this should be the same as the `query_str` in the prompt variable)
+- Choose the number of chunks to be returned, the separators between each chunk and hit Run. By default, Vellum returns 3 chunks and uses new lines as separators.
+- Clicking Apply adds these results to the `context_str` variable
+
+![Screen Shot 2023-03-08 at 5.32.25 PM.png](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffd1ab629-0076-4535-a2b1-67dd7bd2c95a%2FScreen_Shot_2023-03-08_at_5.32.25_PM.png?table=block&id=b82fc3fc-e279-41c7-83c5-70faa31e655c&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1730&userId=&cache=v2)
+
+## Step 2: How to use the context to get results
+
+Copy/paste the same user query into the `query_str` variable. Hit Run on the Playground and see the results against a variety of prompts.
+
+![Screen Shot 2023-03-08 at 9.29.34 PM.png](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3ccc7864-4a6d-4786-b7be-e61e3b7a2bac%2FScreen_Shot_2023-03-08_at_9.29.34_PM.png?table=block&id=f6976bcd-dd2b-48d7-8dde-f3da8d9d4dd7&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1730&userId=&cache=v2)

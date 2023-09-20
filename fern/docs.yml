@@ -45,6 +45,8 @@ navigation:
             path: ./docs/content/help/documents/running-searches.mdx
           - page: Integrating w/ Search API
             path: ./docs/content/help/documents/integrating-search.mdx
+          - page: Metadata Filtering
+            path: ./docs/content/help/documents/metadata-filtering.mdx
       - section: Workflows
         contents:
           - page: Introduction to Workflows
