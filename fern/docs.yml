@@ -53,6 +53,13 @@ navigation:
             path: ./docs/content/help/workflows/intro.mdx
           - page: Experimenting with Workflows
             path: ./docs/content/help/workflows/experimenting.mdx
+          - page: Common Architectures
+            path: ./docs/content/help/workflows/common-architectures.mdx
+          - page: Common Data Transformation Templates
+            path: ./docs/content/help/workflows/common-data-transforms.mdx
+          - page: Integrating w/ APIs
+            path: ./docs/content/help/workflows/integrating.mdx
+            slug: integrating
   - tab: api
     layout:
       - section: Introduction
