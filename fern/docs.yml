@@ -32,6 +32,9 @@ navigation:
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
+          - page: Webhook Evaluation Metric
+            path: ./docs/content/help/prompts/webhook-evaluation-metric.mdx
+            slug: webhook-evaluation-metric
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
