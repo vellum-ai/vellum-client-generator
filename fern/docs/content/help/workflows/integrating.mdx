@@ -1,0 +1,21 @@
+Once you have your Workflow built in Vellum’s UI, we provide an easy way to use it in production. Vellum handles the execution of the Workflow — all you need to provide are the input variables to call the Workflow. Vellum abstracts away the need to store the prompts, semantic search & the business logic tying together these prompts in your code base. Using Workflows in production becomes a matter of minutes, not days.
+
+This help center article covers how to make the integration, and the monitoring options you have once in production.
+
+## Workflow Code Snippet Integration
+
+Once you Deploy the Workflow from the UI, you’re taken to a code snippet which you need to use to call this Workflow in production. The adjacent screenshot shows the Workflow Deployment’s name & its input variables
+
+![Workflow Details](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4a45cfe7-26ca-4f37-99e1-6422debe8ab7%2F2023-08-27_16-32-34.png?table=block&id=9cc51dde-7462-4afa-8ddb-e83df027bece&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+
+![Workflow API Code Snippet](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4672dc9c-871b-4769-aadf-54cc11ed0a5d%2F2023-08-27_16-34-51.png?table=block&id=a13ef30d-915c-4f0d-97f0-e1607b0c2daf&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+
+## Workflow Executions
+
+Once you start making requests to the Workflow, all the executions are stored in the Executions tab for monitoring purposes. Any time you find an edge case in production, you can save that specific Execution back as a Scenario for future testing. This is typically used to build out your test bank and debugging unexpected behavior. By running this Scenario in the UI you can see what the responses were at each step and tweak the Workflow logic (prompts, semantic search, business logic tying together the prompts)
+
+![Workflow Execution Observability](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F31bcc154-4551-43b4-a297-214df9473cee%2FScreenshot_2023-08-27_at_4.54.44_PM.png?table=block&id=84d8e9c8-f048-42d1-9229-8c484fb8d8b3&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+
+## Workflow Executions Details
+
+Clicking the View Details button on the Execution brings you to a UI where you can see the inputs, outputs and latency at each step of the Workflow when it was run in production

@@ -1,0 +1,21 @@
+All the row-level Completions found in the "Completions" tab of a Prompt Deployment can
+be monitored in aggregate via the "Monitoring" tab.
+
+This is especially useful for spotting trends in things like request volume, latency,
+quality, and more. If there are other visualizations you'd like to see here, please share that feedback with us!
+
+The charts you see can be filtered down to specific time ranges using the “Relative Date” button.
+
+![Deployment Details](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F79e7e1d0-cac4-4ef6-a4b6-ce5c00302c32%2FUntitled.png?table=block&id=6ef24046-96eb-4c93-980b-9485f31b5551&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=&cache=v2)
+
+**Number of Completions:** Number of requests made against the Generate endpoint
+
+**Average Quality over Time:** Quality tracked for each completion. This is only 
+visible if Quality is filled out either through the UI or Actuals Endpoint API
+
+**Number of Completions w/ Actuals Submitted:** Number of requests that have an 
+associated quality / Actuals indication
+
+**Average Latency Over Time:** Time taken for the request to complete
+
+**Num LLM Provider Errors Over Time:** Number of errors from the LLM provider

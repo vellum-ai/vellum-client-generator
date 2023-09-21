@@ -1,0 +1,21 @@
+Despite how well you test your Prompts before promoting them to production, edge cases you didn't expect will likely appear.
+The Prompt Lifecycle Management page described how to update a Deployed Prompt. Before doing so, however, it’s best practice
+to replay recent requests seen in prod to the new prompt and spot check to confirm that outputs look reasonable.
+LLMs are sometimes unpredictable, even changing the word “good” to “great” in a prompt can result in differing outputs!
+
+## Starting a Back-test
+After clicking the "Deploy" button below a Prompt and selecting "Update Existing Deployment", you'll see an option
+to "Run Back-Tests".
+
+![Run Back-Tests Button](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3761e8a9-ab01-4b34-9530-9d5f6bc0a32b%2FScreen_Shot_2023-05-03_at_6.56.30_PM.png?table=block&id=7abe6e61-3a67-46af-ace6-2836e5c3a725&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1730&userId=&cache=v2)
+
+## Spot-Checking the "Before" and "After"
+
+In the back-testing UI, you can choose which entries you want to replay. This will re-use the prompt variable input values
+previously used to generate a new Completion. You can compare this "After" to the original output (the "Before") to
+get a sense for how this Prompt would have performed in production had it been live the whole time.
+
+![Back Testing Prompt Requests](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F04457fd1-2f1a-49b7-845c-2178a6cd7493%2FScreen_Shot_2023-05-03_at_7.27.36_PM.png?table=block&id=f86b21ec-d9b5-4bbe-9b54-f05a91fa7d98&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1730&userId=&cache=v2)
+
+Once you're happy, you can close out and proceed to update the Deployment, or pump the breaks and do more Prompt engineering
+if it's not good enough.
