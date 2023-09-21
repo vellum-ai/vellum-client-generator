@@ -23,9 +23,11 @@ of scenarios, you can also use it to quantitatively evaluate model quality.
 
 ## Initial Set Up
 
-Toggle the Evaluate Outputs button on to start evaluating output quality
+Go to the Settings menu and click the Evaluate Outputs toggle to start evaluating output quality
 
-![Initial Set Up](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffa8ed485-aa83-4dcf-958f-9b26a97f8c2c%2FScreen_Shot_2023-05-03_at_3.36.38_PM.png?table=block&id=4c309d1a-2a0f-46fe-a692-7d36fbdb8ae0&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=670&userId=&cache=v2)
+![Prompt Settings](https://storage.googleapis.com/vellum-public/help-docs/prompt_settings.png)
+
+![Enable Output Evaluation](https://storage.googleapis.com/vellum-public/help-docs/enable_output_evaluation.png)
 
 
 Vellum currently supports 4 evaluation operators:
@@ -40,7 +42,7 @@ Vellum currently supports 4 evaluation operators:
 
 You’re expected to include the target/correct response for each scenario while evaluating output quality.
 
-![Defining Target Responses](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0e7c1b7b-9060-4b20-a594-175b3aa51c5d%2FScreen_Shot_2023-05-03_at_3.49.16_PM.png?table=block&id=c44c3868-f60f-499e-81eb-6e8dcb57ebcd&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=580&userId=&cache=v2)
+![Defining Target Responses](https://storage.googleapis.com/vellum-public/help-docs/define_targets.png)
 
 ## Interpreting Output Quality
 
@@ -48,7 +50,7 @@ Vellum will compare the model generated response for each prompt against the tar
 
 Each cell gets its own score and the total for each model/prompt combination (column) is averaged at the top. You can use this feature to see how close, on average, each model/prompt combination is to the target response you’d expect
 
-![Interpreting Output Quality](https://vellum-ai.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb727e0a6-dabe-4144-8768-665a89d7d7f3%2FScreen_Shot_2023-05-03_at_3.58.38_PM.png?table=block&id=f34588e5-28cf-4d46-b1f0-30d781f9b2e8&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=860&userId=&cache=v2)
+![Interpreting Output Quality](https://storage.googleapis.com/vellum-public/help-docs/interpretting_output_quality.png)
 
 
 # Bulk Quantitative Evaluation via Test Suites
@@ -64,7 +66,7 @@ Let's take a look at how to set them up and use them in Vellum.
 ### Creating a Test Suite
 Go to the <a href="https://app.vellum.ai/test-suites" target="_blank">Test Suites tab</a> and click on Create Test Suite.
 
-![Test Suites](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb312c988-e594-47a8-8aaa-78ee276f6782%2FScreen_Shot_2023-05-03_at_4.45.14_PM.png?table=block&id=c4862144-b7a0-4490-ad25-2b3c503eed9e&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1060&userId=242952a1-fd51-4ea4-92e7-f832187512ce&cache=v2)
+![Test Suites](https://storage.googleapis.com/vellum-public/help-docs/create_test_suite.png)
 
 Fill out details about the test suite on the next screen.
 - Label / Name: How would you like to refer to this Test Suite?
@@ -74,6 +76,9 @@ Fill out details about the test suite on the next screen.
     - Regex Match: Best for tasks where you know the exact structure/syntax of the output
     - Semantic Similarity: Best used when the exact wording of the output doesn't matter, as long as it conveys the intended meaning.
     - Webhook: Best used for custom use cases and bespoke evaluation
+
+![Test Suite Configuration](https://storage.googleapis.com/vellum-public/help-docs/test_suite_configuration.png)
+
 
 ### Defining Test Cases
 The way Test Cases work is you define a set of example "Input Values" and a "Target" value.
@@ -92,18 +97,18 @@ You can define Test Cases in one of three ways:
 2. Via a CSV upload
 3. Via an API call
 
-![Defining Test Cases](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F017b3f91-d5b8-47e3-a823-1c825888be96%2FScreen_Shot_2023-05-03_at_5.03.16_PM.png?table=block&id=088b0739-8c71-4231-aa64-fee82cfcaaf1&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1060&userId=242952a1-fd51-4ea4-92e7-f832187512ce&cache=v2)
+![Defining Test Cases](https://storage.googleapis.com/vellum-public/help-docs/defining_test_cases.png)
 
 ### Running a Test Suite
 Once you've defined your Test Suite and Test Cases, you can use it in a Prompt. Go to that Prompt, scroll to the bottom,
 and click on the Test Suite dropdown. Select the Test Suite you want to include.
 
-![Using a Test Suite in a Prompt](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F353c0731-fc01-426e-b934-932cc3adc6b2%2FScreen_Shot_2023-05-03_at_5.06.04_PM.png?table=block&id=8fb20746-6885-405b-8e8e-30ea2088a2c7&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1150&userId=242952a1-fd51-4ea4-92e7-f832187512ce&cache=v2)
+![Using a Test Suite in a Prompt](https://storage.googleapis.com/vellum-public/help-docs/associating_test_suites_with_prompts.png)
 
 You can then run the Test Suite against one or more Prompt Variants. Running each Variant against the Test Suite
 shows how close each model generated response is to the target response and an average for the whole prompt.
 This should give you a quick visual indicator on which prompt does well across all your test cases! You can toggle
 between seeing the numerical scores vs the actual output, and can export csvs of the results.
 
-![Running a Test Suite](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F16eb7967-ab26-4a9f-8984-3b0fe8b61b68%2FScreen_Shot_2023-05-03_at_5.10.00_PM.png?table=block&id=180dde88-3794-427f-b79e-83f6ec23b838&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=2000&userId=242952a1-fd51-4ea4-92e7-f832187512ce&cache=v2)
+![Running a Test Suite](https://storage.googleapis.com/vellum-public/help-docs/running_test_suites.png)
 

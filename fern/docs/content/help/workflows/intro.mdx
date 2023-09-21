@@ -20,7 +20,7 @@ Let’s take a look at each
 
 The behavior of most Workflows depend on 1 or more dynamic Input. For example, you could define a single Input named `query` that your Workflow depends on.
 
-![Workflow Input Variables](https://vellum-ai.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F71c05e3e-272b-4acf-9889-90a304d95d06%2F50563f91-bace-4c23-85a8-76868ce52357%2F2023-09-07_20-04-51.png?table=block&id=fc20ce93-79f1-4350-9e6d-2c716c8aa699&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+![Workflow Input Variables](https://storage.googleapis.com/vellum-public/help-docs/workflow_input_variables.png)
 
 ### Scenarios
 
@@ -34,13 +34,13 @@ Nodes are the steps in your Workflow where some action will take place. Some Nod
 
 For example, the `Prompt Node` is used to pass Input Variables into a Prompt and execute an LLM. It generates an output that can then be used as an input to other downstream Nodes.
 
-![Workflow Nodes](https://vellum-ai.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F71c05e3e-272b-4acf-9889-90a304d95d06%2F040dab2b-9d91-4a76-91e7-e9838e46f5a6%2F2023-09-07_20-07-47.png?table=block&id=0acafeff-1bc2-4529-a648-647f81395bb2&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+![Workflow Nodes](https://storage.googleapis.com/vellum-public/help-docs/workflow_nodes.png)
 
 ### Edges
 
 Edges connect Nodes and define the order in which they are executed. The are represented as the lines in between Nodes.
 
-![Workflow Edges](https://vellum-ai.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F71c05e3e-272b-4acf-9889-90a304d95d06%2Fa4397922-89e5-4fd6-890d-0e2852fc07f8%2F2023-09-07_20-10-26.png?table=block&id=591214c4-8c93-4c23-89fa-438d0c97b560&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+![Workflow Edges](https://storage.googleapis.com/vellum-public/help-docs/workflow_edges.png)
 
 Note that a Node has access to the output data from all upstream Nodes, ********not just******** the Node(s) that it’s directly connected to via an Edge.
 
@@ -50,7 +50,7 @@ There’s a special Node called a “Final Output Node.” They’re used to ind
 
 In the below example, I have a Final Output Node named `final-output` that subscribes to a string output that comes from the `OpenAI Help Center` Prompt Node.
 
-![Workflow Final Output](https://vellum-ai.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F71c05e3e-272b-4acf-9889-90a304d95d06%2F2de742cb-89a9-45f0-9b85-ecdec6534626%2F2023-09-07_20-15-10.png?table=block&id=11d01ee8-4d39-421d-a320-5a1e5440b9b0&spaceId=71c05e3e-272b-4acf-9889-90a304d95d06&width=1770&userId=&cache=v2)
+![Workflow Final Output](https://storage.googleapis.com/vellum-public/help-docs/workflow_final_output.png)
 
 Final Output Nodes are particularly important when you Deploy a Workflow and invoke it via API. By default, only the data that Final Output Nodes subscribe to will be returned by the API.
 
