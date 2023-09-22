@@ -1,4 +1,20 @@
 groups:
+   staging:
+    generators:
+      - name: fernapi/fern-typescript-sdk
+        version: 0.5.18
+        config:
+          namespaceExport: Vellum
+          timeoutInSeconds: infinity
+        github:
+          repository: vellum-ai/vellum-client-node-staging
+      - name: fernapi/fern-python-sdk
+        version: 0.4.4
+        github:
+          repository: vellum-ai/vellum-client-python-staging
+        config:
+          client_class_name: Vellum
+          timeout_in_seconds: infinity
   production:
     generators:
       - name: fernapi/fern-typescript-sdk
