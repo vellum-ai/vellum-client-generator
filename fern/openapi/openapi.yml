@@ -138,6 +138,29 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
       x-fern-availability: beta
+  /v1/document-indexes/{id}:
+    get:
+      operationId: document_indexes_retrieve
+      description: Used to retrieve a Document Index given its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Document Index's ID or its unique name
+        required: true
+      tags:
+      - document-indexes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
+      x-fern-availability: beta
   /v1/documents:
     get:
       operationId: documents_list
@@ -791,6 +814,39 @@ paths:
         x-name: Documents
 components:
   schemas:
+    ApiNodeResult:
+      type: object
+      properties:
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/ApiNodeResultData'
+      required:
+      - data
+      - type
+    ApiNodeResultData:
+      type: object
+      properties:
+        text_output_id:
+          type: string
+        text:
+          type: string
+          nullable: true
+        json_output_id:
+          type: string
+        json:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        status_code_output_id:
+          type: string
+        status_code:
+          type: integer
+      required:
+      - json_output_id
+      - status_code
+      - status_code_output_id
+      - text_output_id
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -851,14 +907,6 @@ components:
         source_handle_id:
           type: string
           nullable: true
-    ContentType:
-      enum:
-      - STRING
-      - JSON
-      type: string
-      description: |-
-        * `STRING` - STRING
-        * `JSON` - JSON
     DeploymentRead:
       type: object
       properties:
@@ -1162,7 +1210,7 @@ components:
           type: string
           description: The ID of the model version used to generate this completion.
         type:
-          $ref: '#/components/schemas/ContentType'
+          $ref: '#/components/schemas/VellumVariableType'
       required:
       - finish_reason
       - id
@@ -1266,8 +1314,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GenerateRequest'
-          description: The generation requests to make. Supplying multiple will perform
-            a bulk request to the LLM provided when possible.
+          description: The generation request to make. Bulk requests are no longer
+            supported, this field must be an array of length 1.
         options:
           allOf:
           - $ref: '#/components/schemas/GenerateOptionsRequest'
@@ -1379,8 +1427,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GenerateRequest'
-          description: The generation requests to make. Supplying multiple will perform
-            a bulk request to the LLM provided when possible.
+          description: The generation request to make. Bulk requests are no longer
+            supported, this field must be an array of length 1.
         options:
           allOf:
           - $ref: '#/components/schemas/GenerateOptionsRequest'
@@ -1682,8 +1730,10 @@ components:
         temperature:
           type: number
           format: double
+          nullable: true
         max_tokens:
           type: integer
+          nullable: true
         top_p:
           type: number
           format: double
@@ -1709,9 +1759,7 @@ components:
           format: double
       required:
       - frequency_penalty
-      - max_tokens
       - presence_penalty
-      - temperature
       - top_p
     ModelVersionRead:
       type: object
@@ -1842,6 +1890,23 @@ components:
       - node_input_id
       - type
       - value
+    NodeInputCompiledNumberValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: integer
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledSearchResultsValue:
       type: object
       properties:
@@ -1881,6 +1946,7 @@ components:
     NodeInputVariableCompiledValue:
       oneOf:
       - $ref: '#/components/schemas/NodeInputCompiledStringValue'
+      - $ref: '#/components/schemas/NodeInputCompiledNumberValue'
       - $ref: '#/components/schemas/NodeInputCompiledJsonValue'
       - $ref: '#/components/schemas/NodeInputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
@@ -1888,6 +1954,7 @@ components:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/NodeInputCompiledStringValue'
+          NUMBER: '#/components/schemas/NodeInputCompiledNumberValue'
           JSON: '#/components/schemas/NodeInputCompiledJsonValue'
           CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
@@ -2064,7 +2131,7 @@ components:
           nullable: true
         template_type:
           allOf:
-          - $ref: '#/components/schemas/ContentType'
+          - $ref: '#/components/schemas/VellumVariableType'
           nullable: true
         function_name:
           type: string
@@ -2099,7 +2166,7 @@ components:
           nullable: true
         template_type:
           allOf:
-          - $ref: '#/components/schemas/ContentType'
+          - $ref: '#/components/schemas/VellumVariableType'
           nullable: true
         function_name:
           type: string
@@ -2536,7 +2603,9 @@ components:
         limit:
           type: integer
           maximum: 1000
+          minimum: 1
           nullable: true
+          default: 10
           description: The maximum number of results to return.
         weights:
           allOf:
@@ -2621,23 +2690,25 @@ components:
       properties:
         enabled:
           type: boolean
+          default: true
           description: Whether to enable merging results
-      required:
-      - enabled
     SearchWeightsRequest:
       type: object
       properties:
         semantic_similarity:
           type: number
           format: double
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.8
           description: The relative weight to give to semantic similarity
         keywords:
           type: number
           format: double
-          description: The relative weight to give to keyword matches
-      required:
-      - keywords
-      - semantic_similarity
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.2
+          description: The relative weight to give to keywords
     SlimDocument:
       type: object
       properties:
@@ -2835,6 +2906,20 @@ components:
       - id
       - type
       - value
+    TemplatingNodeNumberResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TemplatingNodeResult:
       type: object
       properties:
@@ -2855,6 +2940,7 @@ components:
     TemplatingNodeResultOutput:
       oneOf:
       - $ref: '#/components/schemas/TemplatingNodeStringResult'
+      - $ref: '#/components/schemas/TemplatingNodeNumberResult'
       - $ref: '#/components/schemas/TemplatingNodeJsonResult'
       - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
       - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
@@ -2862,6 +2948,7 @@ components:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/TemplatingNodeStringResult'
+          NUMBER: '#/components/schemas/TemplatingNodeNumberResult'
           JSON: '#/components/schemas/TemplatingNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
@@ -2938,6 +3025,26 @@ components:
       - name
       - type
       - value
+    TerminalNodeNumberResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        type:
+          type: string
+        value:
+          type: integer
+          nullable: true
+      required:
+      - name
+      - type
+      - value
     TerminalNodeResult:
       type: object
       properties:
@@ -2958,6 +3065,7 @@ components:
     TerminalNodeResultOutput:
       oneOf:
       - $ref: '#/components/schemas/TerminalNodeStringResult'
+      - $ref: '#/components/schemas/TerminalNodeNumberResult'
       - $ref: '#/components/schemas/TerminalNodeJsonResult'
       - $ref: '#/components/schemas/TerminalNodeChatHistoryResult'
       - $ref: '#/components/schemas/TerminalNodeSearchResultsResult'
@@ -2965,6 +3073,7 @@ components:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/TerminalNodeStringResult'
+          NUMBER: '#/components/schemas/TerminalNodeNumberResult'
           JSON: '#/components/schemas/TerminalNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TerminalNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TerminalNodeSearchResultsResult'
@@ -3154,15 +3263,17 @@ components:
     VellumVariableType:
       enum:
       - STRING
+      - NUMBER
       - JSON
       - CHAT_HISTORY
       - SEARCH_RESULTS
       type: string
       description: |-
-        * `STRING` - String
+        * `STRING` - STRING
+        * `NUMBER` - NUMBER
         * `JSON` - JSON
-        * `CHAT_HISTORY` - Chat History
-        * `SEARCH_RESULTS` - Search Results
+        * `CHAT_HISTORY` - CHAT_HISTORY
+        * `SEARCH_RESULTS` - SEARCH_RESULTS
     WorkflowEventError:
       type: object
       properties:
@@ -3362,6 +3473,7 @@ components:
       - $ref: '#/components/schemas/SearchNodeResult'
       - $ref: '#/components/schemas/TemplatingNodeResult'
       - $ref: '#/components/schemas/ConditionalNodeResult'
+      - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
       discriminator:
         propertyName: type
@@ -3370,6 +3482,7 @@ components:
           SEARCH: '#/components/schemas/SearchNodeResult'
           TEMPLATING: '#/components/schemas/TemplatingNodeResult'
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
+          API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
     WorkflowNodeResultEvent:
       type: object
@@ -3502,6 +3615,7 @@ components:
     WorkflowResultEventOutputData:
       oneOf:
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataString'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataNumber'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataJSON'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
@@ -3509,6 +3623,7 @@ components:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/WorkflowResultEventOutputDataString'
+          NUMBER: '#/components/schemas/WorkflowResultEventOutputDataNumber'
           JSON: '#/components/schemas/WorkflowResultEventOutputDataJSON'
           CHAT_HISTORY: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
           SEARCH_RESULTS: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
@@ -3569,6 +3684,37 @@ components:
         value:
           type: object
           additionalProperties: {}
+          nullable: true
+      required:
+      - delta
+      - name
+      - node_id
+      - state
+      - type
+      - value
+    WorkflowResultEventOutputDataNumber:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
+        type:
+          type: string
+        value:
+          type: integer
           nullable: true
       required:
       - delta
