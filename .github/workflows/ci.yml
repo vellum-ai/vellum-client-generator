@@ -34,7 +34,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: fern generate --group staging --version ${{ github.ref_name }} --log-level debug
+        run: fern generate --group staging --log-level debug
       
       - name: Generate Staging Docs
         env:
