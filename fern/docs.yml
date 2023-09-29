@@ -1,4 +1,4 @@
-instances: 
+instances:
   - url: vellum-staging.docs.buildwithfern.com
   - url: vellum.docs.buildwithfern.com
     custom-domain: docs.vellum.ai
@@ -80,6 +80,11 @@ navigation:
           - page: Integrating w/ APIs
             path: ./docs/content/help/workflows/integrating.mdx
             slug: api-integration
+      - section: Security
+        contents:
+          - page: HMAC Authentication
+            path: ./docs/content/help/security/hmac-authentication.mdx
+            slug: hmac-authentication
   - tab: api
     layout:
       - section: Introduction
