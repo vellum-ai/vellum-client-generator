@@ -59,10 +59,41 @@ fern upgrade --rc
 ```
 
 ## Docs Site
+Fern hosts our docs site at [https://docs.vellum.ai/](https://docs.vellum.ai/). The site navigation and page structure
+is defined by the [docs.yml](./fern/api/docs.yml) file. The content for each page is defined in the [help](./docs/content/help) folder
+as `.mdx` files using markdown syntax.
+
+### Static Assets
+Fern is in the process of adding support for relative links to static assets like images. In the meantime, we host all
+images ourselves in [this public GCS bucket](https://console.cloud.google.com/storage/browser/vellum-public/help-docs?project=vocify-prod).
+
+### Custom Components
+You'll notice the usage of some custom components like `CodeBlock`. These are specific to fern.
+
+
+### Local Development
+Fern has not yet released a mechanism to locally compile and preview the docs site. In the meantime, you can
+deploy to our staging site to preview your changes (see below for deploying to staging).
+
+
+### Deploying the Docs Site
 You can publish the docs to the staging site by running the following command:
 ```bash
 fern generate --docs --instance vellum-staging.docs.buildwithfern.com
 ```
 
-If you run into errors, you can add the ` --log-level debug` flag to get more information. You might need to be added
+The staging site can be found at [vellum-staging.docs.buildwithfern.com](https://vellum-staging.docs.buildwithfern.com/).
+
+You can publish the docs to production by running:
+```bash
+fern generate --docs --instance vellum.docs.buildwithfern.com
+```
+
+The production site can be found at [docs.vellum.ai](https://docs.vellum.ai/).
+
+### Troubleshooting
+
+If you run into errors, you can add the ` --log-level debug` flag to get more information.
+
+If you get a 403 error, you may need to first run `fern login`. You might also need to be added
 to the Vellum org in Fern, which requires contacting the fern team in #fern-x-vellum in Slack.
