@@ -1,8 +1,8 @@
-This guide will walk you through the process of setting up and using HMAC authentication in Vellum. HMAC authentication provides an additional layer of security for your API calls and webhooks.
+This guide will walk you through the process of setting up and using HMAC authentication in Vellum. HMAC authentication provides an additional layer of security for outgoing API calls and webhooks.
 
 ## Setup
 
-1. **Create a new secret token securely.** You can do this in Python using the `secrets` module. Here's a simple example:
+1. **Create a new secret token securely:** You can do this in Python using the `secrets` module. Here's a simple example:
 
 <CodeBlock title="Python Secret Token Generation">
 ```python
@@ -11,7 +11,7 @@ print(secrets.token_hex(16))
 ```
 </CodeBlock>
 
-2. **Provide your secret token to Vellum.** Navigate to the [API keys page](https://app.vellum.ai/api-keys). Click the "Provide HMAC Token" button and enter your secret token.
+2. **Provide your secret token to Vellum:** Navigate to the [API keys page](https://app.vellum.ai/api-keys). Click the "Provide HMAC Token" button and enter your secret token.
 
 ## Usage
 
@@ -21,9 +21,9 @@ Only outgoing webhooks and API calls from Vellum include HMAC authentication.
 
 Each request will contain two headers: `X-Vellum-Timestamp` and `X-Vellum-Signature`.
 
-1. **Verify the timestamp.** Check that the value of `X-Vellum-Timestamp` is within the last 60 seconds.
+1. **Verify the timestamp:** Check that the value of `X-Vellum-Timestamp` is within the last 60 seconds.
 
-2. **Create the message string.** Concatenate the following values together, separated by one newline character, into a new string `message`:
+2. **Create the message string:** Concatenate the following values together, separated by one newline character, into a new string `message`:
     - `X-Vellum-Timestamp`
     - The request method (GET, POST, etc)
     - The request URL
