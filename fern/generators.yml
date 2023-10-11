@@ -9,7 +9,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node-staging
       - name: fernapi/fern-python-sdk
-        version: 0.4.4
+        version: 0.6.0-rc0
         github:
           repository: vellum-ai/vellum-client-python-staging
         config:
@@ -29,7 +29,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
       - name: fernapi/fern-python-sdk
-        version: 0.4.4
+        version: 0.6.0-rc0
         output:
           location: pypi
           package-name: vellum-ai
