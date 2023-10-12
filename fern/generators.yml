@@ -28,6 +28,7 @@ groups:
           timeoutInSeconds: infinity
         github:
           repository: vellum-ai/vellum-client-node
+          mode: pull-request
       - name: fernapi/fern-python-sdk
         version: 0.6.0-rc0
         output:
@@ -36,6 +37,7 @@ groups:
           token: ${PYPI_TOKEN}
         github:
           repository: vellum-ai/vellum-client-python
+          mode: pull-request
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
