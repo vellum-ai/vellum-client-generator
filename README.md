@@ -45,12 +45,13 @@ Here are the steps required to publish a new version of our API clients.
 1. cd into the `django` directory from within the [main vellum repo](https://github.com/vellum-ai/vellum)
 2. Run `make generate-swagger-all`
 3. Open the generated `schema_api_client_v1.yaml` file
-4. Copy the contents of the file and paste it into the definition within this repo: [fern/api/openapi/openapi.yaml](./fern/api/openapi/openapi.yaml)
+4. Copy the contents of the file and paste it into the definition within this repo: [fern/openapi/openapi.yaml](./fern/openapi/openapi.yaml)
 5. Optionally run `fern check` to make sure all is good.
 6. Optionally run `fern generate` to see the newly generated clients locally.
     - If this is your first time, fern will ask you to log in. Hit `Y` to proceed logging in through GitHub.
-7. Commit and push the changes to the `main` branch.
-8. Create a new Release within Github. This will trigger a github action that will publish the new clients to their respective repos.
+7. Commit and push the changes to a new branch an open a PR
+8. Upon approval by at least one other reviewer, merge the branch into `main`.
+9. Create a new Release within Github. This will trigger a github action that will publish the new clients to their respective repos.
 
 ## Upgrading Fern
 You can use the following command to upgrade fern to the latest version:
