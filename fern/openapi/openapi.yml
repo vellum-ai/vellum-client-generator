@@ -483,6 +483,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegisterPromptResponse'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPromptErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPromptErrorResponse'
+          description: ''
         '409':
           content:
             application/json:
@@ -945,11 +957,6 @@ components:
             * `DEVELOPMENT` - Development
             * `STAGING` - Staging
             * `PRODUCTION` - Production
-        model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeDeprecated'
-          readOnly: true
-          deprecated: true
         active_model_version_ids:
           type: array
           items:
@@ -970,7 +977,6 @@ components:
       - input_variables
       - label
       - last_deployed_on
-      - model_type
       - name
     DeploymentStatus:
       enum:
@@ -1209,6 +1215,9 @@ components:
         model_version_id:
           type: string
           description: The ID of the model version used to generate this completion.
+        prompt_version_id:
+          type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/VellumVariableType'
       required:
@@ -1644,14 +1653,6 @@ components:
           type: string
           nullable: true
           minLength: 1
-    ModelTypeDeprecated:
-      enum:
-      - GENERATE
-      - CLASSIFY
-      type: string
-      description: |-
-        * `GENERATE` - Generate
-        * `CLASSIFY` - Classify
     ModelVersionBuildConfig:
       type: object
       properties:
@@ -1665,6 +1666,10 @@ components:
           nullable: true
           description: Information about the sandbox snapshot that was used to create
             this model version, if applicable.
+        prompt_version_id:
+          type: string
+          format: uuid
+          nullable: true
       required:
       - base_model
     ModelVersionCompilePromptRequestRequest:
@@ -1778,11 +1783,6 @@ components:
           type: string
           description: Human-friendly name for this model version.
           maxLength: 150
-        model_type:
-          allOf:
-          - $ref: '#/components/schemas/ModelTypeDeprecated'
-          readOnly: true
-          deprecated: true
         provider:
           allOf:
           - $ref: '#/components/schemas/ProviderEnum'
@@ -1794,8 +1794,9 @@ components:
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
-            * `MYSTIC` - Mystic
             * `OPENAI` - OpenAI
+            * `HUGGINGFACE` - HuggingFace
+            * `MYSTIC` - Mystic
             * `PYQ` - Pyq
         external_id:
           type: string
@@ -1819,7 +1820,6 @@ components:
       - external_id
       - id
       - label
-      - model_type
       - provider
     ModelVersionReadStatusEnum:
       enum:
@@ -1866,6 +1866,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
+    NodeInputCompiledErrorValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
           nullable: true
       required:
       - key
@@ -1950,6 +1968,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledJsonValue'
       - $ref: '#/components/schemas/NodeInputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
+      - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
       discriminator:
         propertyName: type
         mapping:
@@ -1958,6 +1977,7 @@ components:
           JSON: '#/components/schemas/NodeInputCompiledJsonValue'
           CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
+          ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -2209,8 +2229,9 @@ components:
       - GOOGLE
       - HOSTED
       - MOSAICML
-      - MYSTIC
       - OPENAI
+      - HUGGINGFACE
+      - MYSTIC
       - PYQ
       type: string
       description: |-
@@ -2219,8 +2240,9 @@ components:
         * `GOOGLE` - Google
         * `HOSTED` - Hosted
         * `MOSAICML` - MosaicML
-        * `MYSTIC` - Mystic
         * `OPENAI` - OpenAI
+        * `HUGGINGFACE` - HuggingFace
+        * `MYSTIC` - Mystic
         * `PYQ` - Pyq
     RegisterPromptErrorResponse:
       type: object
@@ -2324,8 +2346,9 @@ components:
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
-            * `MYSTIC` - Mystic
             * `OPENAI` - OpenAI
+            * `HUGGINGFACE` - HuggingFace
+            * `MYSTIC` - Mystic
             * `PYQ` - Pyq
         model:
           type: string
@@ -2891,6 +2914,21 @@ components:
       - id
       - type
       - value
+    TemplatingNodeErrorResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TemplatingNodeJsonResult:
       type: object
       properties:
@@ -2944,6 +2982,7 @@ components:
       - $ref: '#/components/schemas/TemplatingNodeJsonResult'
       - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
       - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
+      - $ref: '#/components/schemas/TemplatingNodeErrorResult'
       discriminator:
         propertyName: type
         mapping:
@@ -2952,6 +2991,7 @@ components:
           JSON: '#/components/schemas/TemplatingNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
+          ERROR: '#/components/schemas/TemplatingNodeErrorResult'
     TemplatingNodeSearchResultsResult:
       type: object
       properties:
@@ -2999,6 +3039,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    TerminalNodeErrorResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
           nullable: true
       required:
       - name
@@ -3069,6 +3130,7 @@ components:
       - $ref: '#/components/schemas/TerminalNodeJsonResult'
       - $ref: '#/components/schemas/TerminalNodeChatHistoryResult'
       - $ref: '#/components/schemas/TerminalNodeSearchResultsResult'
+      - $ref: '#/components/schemas/TerminalNodeErrorResult'
       discriminator:
         propertyName: type
         mapping:
@@ -3077,6 +3139,7 @@ components:
           JSON: '#/components/schemas/TerminalNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TerminalNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TerminalNodeSearchResultsResult'
+          ERROR: '#/components/schemas/TerminalNodeErrorResult'
     TerminalNodeSearchResultsResult:
       type: object
       properties:
@@ -3247,6 +3310,26 @@ components:
           $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
+    VellumError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          $ref: '#/components/schemas/VellumErrorCodeEnum'
+      required:
+      - code
+      - message
+    VellumErrorCodeEnum:
+      enum:
+      - INVALID_REQUEST
+      - PROVIDER_ERROR
+      - INTERNAL_SERVER_ERROR
+      type: string
+      description: |-
+        * `INVALID_REQUEST` - INVALID_REQUEST
+        * `PROVIDER_ERROR` - PROVIDER_ERROR
+        * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
     VellumVariable:
       type: object
       properties:
@@ -3267,6 +3350,7 @@ components:
       - JSON
       - CHAT_HISTORY
       - SEARCH_RESULTS
+      - ERROR
       type: string
       description: |-
         * `STRING` - STRING
@@ -3274,6 +3358,7 @@ components:
         * `JSON` - JSON
         * `CHAT_HISTORY` - CHAT_HISTORY
         * `SEARCH_RESULTS` - SEARCH_RESULTS
+        * `ERROR` - ERROR
     WorkflowEventError:
       type: object
       properties:
@@ -3619,6 +3704,7 @@ components:
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataJSON'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataError'
       discriminator:
         propertyName: type
         mapping:
@@ -3627,6 +3713,7 @@ components:
           JSON: '#/components/schemas/WorkflowResultEventOutputDataJSON'
           CHAT_HISTORY: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
           SEARCH_RESULTS: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
+          ERROR: '#/components/schemas/WorkflowResultEventOutputDataError'
     WorkflowResultEventOutputDataChatHistory:
       type: object
       properties:
@@ -3652,6 +3739,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - delta
+      - name
+      - node_id
+      - state
+      - type
+      - value
+    WorkflowResultEventOutputDataError:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
           nullable: true
       required:
       - delta
