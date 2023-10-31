@@ -103,7 +103,7 @@ background-image: ./docs/assets/background.svg
 navbar-links:
   - type: secondary
     text: Blog
-    url: https://vellum.ai/blog
+    url: https://www.vellum.ai/blog
   - type: secondary
     text: Log In
     url: https://app.vellum.ai/
