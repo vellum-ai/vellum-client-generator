@@ -15,6 +15,10 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+      - name: fernapi/fern-go-sdk
+        version: 0.9.0
+        github:
+          repository: vellum-ai/vellum-client-go-staging
   production:
     generators:
       - name: fernapi/fern-typescript-sdk
@@ -39,3 +43,7 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+      - name: fernapi/fern-go-sdk
+        version: 0.9.0
+        github:
+          repository: vellum-ai/vellum-client-go
