@@ -1,7 +1,7 @@
 groups:
   staging:
     generators:
-      - name: fernapi/fern-typescript-sdk
+      - name: fernapi/fern-typescript-node-sdk
         version: 0.8.6
         config:
           namespaceExport: Vellum
