@@ -22,7 +22,7 @@ groups:
   production:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.5.18
+        version: 0.8.6
         output:
           location: npm
           package-name: vellum-ai
