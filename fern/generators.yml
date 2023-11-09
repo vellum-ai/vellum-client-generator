@@ -21,7 +21,7 @@ groups:
           repository: vellum-ai/vellum-client-go-staging
   production:
     generators:
-      - name: fernapi/fern-typescript-sdk
+      - name: fernapi/fern-typescript-node-sdk
         version: 0.8.6
         output:
           location: npm
