@@ -427,37 +427,6 @@ paths:
                 $ref: '#/components/schemas/ModelVersionRead'
           description: ''
       x-fern-availability: beta
-  /v1/model-versions/{id}/compile-prompt:
-    post:
-      operationId: model_version_compile_prompt
-      description: Compiles the prompt backing the model version using the provided
-        input values.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this model version.
-        required: true
-      tags:
-      - model-versions
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ModelVersionCompilePromptRequestRequest'
-        required: true
-      security:
-      - apiKeyAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ModelVersionCompilePromptResponse'
-          description: ''
-      x-fern-availability: beta
   /v1/registered-prompts/register:
     post:
       operationId: register_prompt
@@ -1217,13 +1186,19 @@ components:
           description: The ID of the model version used to generate this completion.
         prompt_version_id:
           type: string
-          nullable: true
         type:
           $ref: '#/components/schemas/VellumVariableType'
+        deployment_release_tag:
+          type: string
+        model_name:
+          type: string
       required:
+      - deployment_release_tag
       - finish_reason
       - id
+      - model_name
       - model_version_id
+      - prompt_version_id
       - text
     EnvironmentEnum:
       enum:
@@ -1672,39 +1647,6 @@ components:
           nullable: true
       required:
       - base_model
-    ModelVersionCompilePromptRequestRequest:
-      type: object
-      properties:
-        input_values:
-          type: object
-          additionalProperties: {}
-          description: Key/value pairs for each variable found within the model version's
-            prompt template.
-      required:
-      - input_values
-    ModelVersionCompilePromptResponse:
-      type: object
-      properties:
-        prompt:
-          allOf:
-          - $ref: '#/components/schemas/ModelVersionCompiledPrompt'
-          description: Information about the compiled prompt.
-      required:
-      - prompt
-    ModelVersionCompiledPrompt:
-      type: object
-      properties:
-        text:
-          type: string
-          description: The fully compiled prompt in normalized ChatML syntax after
-            all variable substitutions and templating functions are applied.
-        num_tokens:
-          type: integer
-          minimum: 0
-          description: The approximate number of tokens used by the compiled prompt.
-      required:
-      - num_tokens
-      - text
     ModelVersionExecConfig:
       type: object
       properties:
@@ -1790,6 +1732,8 @@ components:
             Which LLM provider this model version is associated with.
 
             * `ANTHROPIC` - Anthropic
+            * `AWS_BEDROCK` - AWS Bedrock
+            * `AZURE_OPENAI` - Azure OpenAI
             * `COHERE` - Cohere
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
@@ -1798,6 +1742,7 @@ components:
             * `HUGGINGFACE` - HuggingFace
             * `MYSTIC` - Mystic
             * `PYQ` - Pyq
+            * `REPLICATE` - Replicate
         external_id:
           type: string
           description: The unique id of this model version as it exists in the above
@@ -1918,7 +1863,8 @@ components:
         type:
           type: string
         value:
-          type: integer
+          type: number
+          format: double
           nullable: true
       required:
       - key
@@ -2225,6 +2171,8 @@ components:
     ProviderEnum:
       enum:
       - ANTHROPIC
+      - AWS_BEDROCK
+      - AZURE_OPENAI
       - COHERE
       - GOOGLE
       - HOSTED
@@ -2233,9 +2181,12 @@ components:
       - HUGGINGFACE
       - MYSTIC
       - PYQ
+      - REPLICATE
       type: string
       description: |-
         * `ANTHROPIC` - Anthropic
+        * `AWS_BEDROCK` - AWS Bedrock
+        * `AZURE_OPENAI` - Azure OpenAI
         * `COHERE` - Cohere
         * `GOOGLE` - Google
         * `HOSTED` - Hosted
@@ -2244,6 +2195,7 @@ components:
         * `HUGGINGFACE` - HuggingFace
         * `MYSTIC` - Mystic
         * `PYQ` - Pyq
+        * `REPLICATE` - Replicate
     RegisterPromptErrorResponse:
       type: object
       properties:
@@ -2305,9 +2257,6 @@ components:
     RegisterPromptPromptInfoRequest:
       type: object
       properties:
-        prompt_syntax_version:
-          type: integer
-          default: 2
         prompt_block_data:
           $ref: '#/components/schemas/PromptTemplateBlockDataRequest'
         input_variables:
@@ -2342,6 +2291,8 @@ components:
             The initial LLM provider to use for this prompt
 
             * `ANTHROPIC` - Anthropic
+            * `AWS_BEDROCK` - AWS Bedrock
+            * `AZURE_OPENAI` - Azure OpenAI
             * `COHERE` - Cohere
             * `GOOGLE` - Google
             * `HOSTED` - Hosted
@@ -2350,6 +2301,7 @@ components:
             * `HUGGINGFACE` - HuggingFace
             * `MYSTIC` - Mystic
             * `PYQ` - Pyq
+            * `REPLICATE` - Replicate
         model:
           type: string
           minLength: 1
@@ -2369,7 +2321,6 @@ components:
       - name
       - parameters
       - prompt
-      - provider
     RegisterPromptResponse:
       type: object
       properties:
@@ -2389,6 +2340,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/RegisteredPromptModelVersion'
           description: Information about the generated model version
+          deprecated: true
+        prompt_version_id:
+          type: string
+          format: uuid
+          description: The ID of the generated prompt version
         deployment:
           allOf:
           - $ref: '#/components/schemas/RegisteredPromptDeployment'
@@ -2397,6 +2353,7 @@ components:
       - deployment
       - model_version
       - prompt
+      - prompt_version_id
       - sandbox
       - sandbox_snapshot
     RegisteredPromptDeployment:
@@ -2952,7 +2909,8 @@ components:
         type:
           type: string
         value:
-          type: integer
+          type: number
+          format: double
           nullable: true
       required:
       - id
@@ -3100,7 +3058,8 @@ components:
         type:
           type: string
         value:
-          type: integer
+          type: number
+          format: double
           nullable: true
       required:
       - name
@@ -3833,7 +3792,8 @@ components:
         type:
           type: string
         value:
-          type: integer
+          type: number
+          format: double
           nullable: true
       required:
       - delta
