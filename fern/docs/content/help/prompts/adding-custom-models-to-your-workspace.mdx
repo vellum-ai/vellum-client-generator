@@ -1,0 +1,62 @@
+Vellum supports several of the industry's most popular models by default available in your workspace right away. However, there are several ways to have a custom model that give your business some additional advantage not provided by these off the shelf models, like higher rate limits and more domain specific training. These models can also be setup for use within Vellum!
+
+There are several different types of models that fall under this category. We outline the steps below on how to add these models to your workspace.
+
+## OpenAI Finetuned Models
+
+When you finetune a model on OpenAI, you will be given a model identifier that now represents your new model. We surface an unofficial API that could be used to then add this model to your workspace. Note that this API is not yet found in our API docs as it's subject to change:
+
+```python
+response = requests.post(
+    url="https://api.vellum.ai/v1/ml-models/template",
+    json={
+        "model_identifier": "ft:gpt-3.5-turbo-0613:vellum:your-model-1234567890",
+        "template_name": "OPENAI_FINETUNED",
+    },
+    headers={"X_API_KEY": os.environ["VELLUM_API_KEY"]},
+)
+data = response.json()
+# Unique id representing your access to this model
+print(data["ml_model_to_workspace_id"])
+```
+
+## Azure OpenAI
+
+Deploying an OpenAI model in your Azure environment gives you higher rate limits than the off the shelf OpenAI models. The deployment will come with it a new endpoint URL and a API Key. To setup the model in your workspace:
+
+1. Add your api key as a **Workspace Secret** from within the `API Keys` page, named `AZURE_OPENAI_API_KEY`
+2. Reach out to us on Slack specifying which model you deployed and what endpoint it can be reached with
+
+We'll get started on setting up the model in your workspace and it should be accessible within Vellum same day.
+
+## AWS Bedrock Claude
+
+Deploying Claude on AWS Bedrock within your AWS managed infrastructure gives you higher rate limits than the off the self model provided by Anthropic. Once you [finish setting up the model on Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/setting-up.html), create an IAM user that has permissions to invoke the model. Here's an example IAM Policy document:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "bedrock:InvokeModel",
+                "bedrock:InvokeModelWithResponseStream"
+            ],
+            "Resource": [
+                "arn:aws:bedrock:*:123412341234:provisioned-model/*",
+                "arn:aws:bedrock:*::foundation-model/*"
+            ]
+        }
+    ]
+}
+```
+
+Be sure to replace the `123412341234` with your _actual_ AWS Account Id. Create an `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` key pair for that user, and set those values as **Workspace Secrets** of the same name, found within the `API Keys` tab on Vellum.
+
+Once your secrets are set up, notify us on Slack which AWS region your model is hosted and we can get it connected to your workspace.
+
+## Request a Model
+
+Don't see a custom model listed here but want to try it within Vellum? Reach out to us on Slack for support!
