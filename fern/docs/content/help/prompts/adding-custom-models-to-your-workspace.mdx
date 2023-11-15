@@ -2,9 +2,9 @@ Vellum supports several of the industry's most popular models by default availab
 
 There are several different types of models that fall under this category. We outline the steps below on how to add these models to your workspace.
 
-## OpenAI Finetuned Models
+## OpenAI Fine-tuned Models
 
-When you finetune a model on OpenAI, you will be given a model identifier that now represents your new model. We surface an unofficial API that could be used to then add this model to your workspace. Note that this API is not yet found in our API docs as it's subject to change:
+When you fine-tune a model on OpenAI, you'll be given a model identifier that uniquely identifies your new model. You can see and use this model natively in Vellum by adding it to Vellum via the below unofficial API. Note that this API is not yet found in our API docs as this is an early-access feature and subject to change.
 
 ```python
 response = requests.post(
