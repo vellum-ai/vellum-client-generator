@@ -29,6 +29,9 @@ navigation:
           - page: Collaborating on Prompts
             path: ./docs/content/help/prompts/collaborating-on-prompts.mdx
             slug: collaboration
+          - page: Adding Custom Models to your Workspace
+            path: ./docs/content/help/prompts/adding-custom-models-to-your-workspace.mdx
+            slug: custom-models
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
