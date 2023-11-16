@@ -1257,6 +1257,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkflowRequestInputRequest'
+          description: The list of inputs defined in the Workflow's deployment with
+            their corresponding values.
         external_id:
           type: string
           nullable: true
@@ -2221,8 +2223,7 @@ components:
           type: number
           format: double
         top_k:
-          type: number
-          format: double
+          type: integer
         frequency_penalty:
           type: number
           format: double
@@ -2665,6 +2666,29 @@ components:
       required:
       - id
       - label
+    SearchResultDocumentRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: The human-readable name for the document.
+          maxLength: 1000
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The unique ID of the document as represented in an external
+            system and specified when it was originally uploaded.
+          maxLength: 1000
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: A previously supplied JSON object containing metadata that
+            can be filtered on when searching.
+      required:
+      - label
     SearchResultMergingRequest:
       type: object
       properties:
@@ -2672,6 +2696,33 @@ components:
           type: boolean
           default: true
           description: Whether to enable merging results
+    SearchResultRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          minLength: 1
+          description: The text of the chunk that matched the search query.
+        score:
+          type: number
+          format: double
+          description: A score representing how well the chunk matches the search
+            query.
+        keywords:
+          type: array
+          items:
+            type: string
+            minLength: 1
+        document:
+          allOf:
+          - $ref: '#/components/schemas/SearchResultDocumentRequest'
+          description: The document that contains the chunk that matched the search
+            query.
+      required:
+      - document
+      - keywords
+      - score
+      - text
     SearchWeightsRequest:
       type: object
       properties:
@@ -3141,54 +3192,266 @@ components:
       - name
       - type
       - value
+    TestCaseChatHistoryVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseChatHistoryVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseErrorVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseErrorVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumErrorRequest'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseJsonVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseJsonVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseNumberVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseNumberVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseSearchResultsVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseSearchResultsVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResultRequest'
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseStringVariableValue:
+      type: object
+      properties:
+        variable_id:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseStringVariableValueRequest:
+      type: object
+      properties:
+        variable_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - type
+      - value
+      - variable_id
+    TestCaseVariableValue:
+      oneOf:
+      - $ref: '#/components/schemas/TestCaseStringVariableValue'
+      - $ref: '#/components/schemas/TestCaseNumberVariableValue'
+      - $ref: '#/components/schemas/TestCaseJsonVariableValue'
+      - $ref: '#/components/schemas/TestCaseChatHistoryVariableValue'
+      - $ref: '#/components/schemas/TestCaseSearchResultsVariableValue'
+      - $ref: '#/components/schemas/TestCaseErrorVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/TestCaseStringVariableValue'
+          NUMBER: '#/components/schemas/TestCaseNumberVariableValue'
+          JSON: '#/components/schemas/TestCaseJsonVariableValue'
+          CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
+          SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
+          ERROR: '#/components/schemas/TestCaseErrorVariableValue'
+    TestCaseVariableValueRequest:
+      oneOf:
+      - $ref: '#/components/schemas/TestCaseStringVariableValueRequest'
+      - $ref: '#/components/schemas/TestCaseNumberVariableValueRequest'
+      - $ref: '#/components/schemas/TestCaseJsonVariableValueRequest'
+      - $ref: '#/components/schemas/TestCaseChatHistoryVariableValueRequest'
+      - $ref: '#/components/schemas/TestCaseSearchResultsVariableValueRequest'
+      - $ref: '#/components/schemas/TestCaseErrorVariableValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/TestCaseStringVariableValueRequest'
+          NUMBER: '#/components/schemas/TestCaseNumberVariableValueRequest'
+          JSON: '#/components/schemas/TestCaseJsonVariableValueRequest'
+          CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValueRequest'
+          SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValueRequest'
+          ERROR: '#/components/schemas/TestCaseErrorVariableValueRequest'
     TestSuiteTestCase:
       type: object
       properties:
-        test_case_id:
+        id:
           type: string
-          description: The id of the test case to update. If none is provided, an
-            id will be generated and a new test case will be appended.
         label:
           type: string
           nullable: true
-          description: A human-friendly label for the test case.
         input_values:
-          type: object
-          additionalProperties: {}
-          description: Key/value pairs for each input variable that the Test Suite
-            expects.
-        evaluation_params:
-          allOf:
-          - $ref: '#/components/schemas/EvaluationParams'
-          description: Parameters to use when evaluating the test case, specific to
-            the test suite's evaluation metric.
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseVariableValue'
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseVariableValue'
       required:
-      - evaluation_params
+      - evaluation_values
       - input_values
     TestSuiteTestCaseRequest:
       type: object
       properties:
-        test_case_id:
+        id:
           type: string
           minLength: 1
-          description: The id of the test case to update. If none is provided, an
-            id will be generated and a new test case will be appended.
         label:
           type: string
           nullable: true
-          description: A human-friendly label for the test case.
         input_values:
-          type: object
-          additionalProperties: {}
-          description: Key/value pairs for each input variable that the Test Suite
-            expects.
-        evaluation_params:
-          allOf:
-          - $ref: '#/components/schemas/EvaluationParamsRequest'
-          description: Parameters to use when evaluating the test case, specific to
-            the test suite's evaluation metric.
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseVariableValueRequest'
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseVariableValueRequest'
       required:
-      - evaluation_params
+      - evaluation_values
       - input_values
     UploadDocumentBodyRequest:
       type: object
@@ -3289,6 +3552,17 @@ components:
         * `INVALID_REQUEST` - INVALID_REQUEST
         * `PROVIDER_ERROR` - PROVIDER_ERROR
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+    VellumErrorRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          minLength: 1
+        code:
+          $ref: '#/components/schemas/VellumErrorCodeEnum'
+      required:
+      - code
+      - message
     VellumVariable:
       type: object
       properties:
