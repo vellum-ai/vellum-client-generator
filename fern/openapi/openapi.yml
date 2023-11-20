@@ -1275,16 +1275,10 @@ components:
     ErrorExecutePromptResponse:
       type: object
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/ExecutePromptResponseMeta'
-          nullable: true
+        value:
+          $ref: '#/components/schemas/VellumError'
         type:
           type: string
-        value:
-          allOf:
-          - $ref: '#/components/schemas/VellumError'
-          nullable: true
         execution_id:
           type: string
       required:
@@ -1355,47 +1349,6 @@ components:
           ERROR: '#/components/schemas/ErrorExecutePromptResponse'
           JSON: '#/components/schemas/JSONExecutePromptResponse'
           STRING: '#/components/schemas/StringExecutePromptResponse'
-    ExecutePromptResponseFulfilledMeta:
-      type: object
-      properties:
-        state:
-          type: string
-      required:
-      - state
-    ExecutePromptResponseInitiatedMeta:
-      type: object
-      properties:
-        state:
-          type: string
-      required:
-      - state
-    ExecutePromptResponseMeta:
-      oneOf:
-      - $ref: '#/components/schemas/ExecutePromptResponseInitiatedMeta'
-      - $ref: '#/components/schemas/ExecutePromptResponseStreamingMeta'
-      - $ref: '#/components/schemas/ExecutePromptResponseFulfilledMeta'
-      - $ref: '#/components/schemas/ExecutePromptResponseRejectedMeta'
-      discriminator:
-        propertyName: state
-        mapping:
-          INITIATED: '#/components/schemas/ExecutePromptResponseInitiatedMeta'
-          STREAMING: '#/components/schemas/ExecutePromptResponseStreamingMeta'
-          FULFILLED: '#/components/schemas/ExecutePromptResponseFulfilledMeta'
-          REJECTED: '#/components/schemas/ExecutePromptResponseRejectedMeta'
-    ExecutePromptResponseRejectedMeta:
-      type: object
-      properties:
-        state:
-          type: string
-      required:
-      - state
-    ExecutePromptResponseStreamingMeta:
-      type: object
-      properties:
-        state:
-          type: string
-      required:
-      - state
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
@@ -1640,16 +1593,11 @@ components:
     JSONExecutePromptResponse:
       type: object
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/ExecutePromptResponseMeta'
-          nullable: true
-        type:
-          type: string
         value:
           type: object
           additionalProperties: {}
-          nullable: true
+        type:
+          type: string
         execution_id:
           type: string
       required:
@@ -3031,15 +2979,10 @@ components:
     StringExecutePromptResponse:
       type: object
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/ExecutePromptResponseMeta'
-          nullable: true
-        type:
-          type: string
         value:
           type: string
-          nullable: true
+        type:
+          type: string
         execution_id:
           type: string
       required:
