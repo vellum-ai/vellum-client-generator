@@ -31,6 +31,8 @@ If you're looking to improve the velocity or quality of your LLM development, Te
 
 Well done! You've now created a test suite that can test any prompt with the input variables you specified.
 
+![Test Suite Details Overview](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-details-overview.png)
+
 By default, your test suite will utilize the Exact Match evaluator to check for whether the output is desirable.
 To learn how to use evaluators other than Exact Match, see Vellum's [Custom Evaluators](#custom-evaluators).
 
@@ -53,6 +55,8 @@ Let's create your first test case now.
 
 Almost there! Now that you have your first Test Case, you're ready to run it against a prompt.
 
+![Test Suite Details Test Cases](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-details-test-cases.png)
+
 ## Run your first Test Suite
 
 Test Suites can be run on any prompt that uses the same input variables you configured earlier. Let's try it.
@@ -61,6 +65,10 @@ Test Suites can be run on any prompt that uses the same input variables you conf
 2. Scroll to Add Test Suite at the bottom of the page.
 3. Attach a Test Suite by clicking the "+ Include" button.
 4. Press the blue "Run" to execute the Test Suite
+
+![Add Test Suite to Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/add-prompt-test-suite.png)
+
+![Run Test Suite on Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/run-prompt-test-suite.png)
 
 # Advanced usage
 
@@ -105,4 +113,11 @@ The key difference Workflow Test Suites have is that Workflows may have multiple
 You may choose to test some of them, or all of them.
 
 Workflow Test Suites can be run from the "Evaluations" tab in the [Workflow Builder](https://app.vellum.ai/workflow-sandboxes).
-It works very similarly as testing prompts, but you're able to create new test cases inline.
+It works very similarly as testing prompts, but you can create new test cases inline.
+
+One common pitfall is trying to attach a Test Suite where the output variable is named `completion`
+to a Workflow where the output variable is something else. You will receive a warning when this happens.
+
+![Interface Mismatch](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/interface-mismatch.png)
+
+![Interface Match](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/interface-match.png)
