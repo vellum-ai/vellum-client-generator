@@ -21,28 +21,82 @@ If you're looking to improve the velocity or quality of your LLM development, Te
 
 ## Create your first Test Suite
 
-Vellum currently supports 4 evaluation operators:
+1. Visit the [Test Suites tab](https://app.vellum.ai/test-suites) in Vellum to open the Test Suites page
+2. Click the blue Create Test Suite button at the top-right of the page to open the Create Test Suite page.
+3. In the "Label" field at the top left, enter "My First Test Suite"
+4. In the "Input Variables" list within the "Execution Interface" section, replace "Variable 1" with the name of the input variable used in your prompt.
+5. If your prompt has additional input variables, you can click "+ Add" below your existing variables to add them.
+   Note that the input variables you configure here must exactly match the input variables to your prompt.
+6. Leave the remaining fields as their default values, and click the blue "Create" button at the bottom right.
 
-- Exact match (best used for classification use cases)
-- Regex match (best used for data extraction use cases)
-- Semantic similarity (best used for creative/generative use cases)
-- Webhook (best used for custom use cases and bespoke evaluation)
+Well done! You've now created a test suite that can test any prompt with the input variables you specified.
+
+By default, your test suite will utilize the Exact Match evaluator to check for whether the output is desirable.
+To learn how to use evaluators other than Exact Match, see Vellum's [Custom Evaluators](#custom-evaluators).
 
 ## Create your first Test Case
 
+Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input variable
+in your prompt, and a target variable. When a Test Suite is run, Vellum will iterate over every Test Case it contains.
+For each Test Case, it will feed the provided inputs into the prompt. The output of the prompt will be compared against
+the target column, and a score will be provided based on the evaluator being used.
+
+With your first Test Suite created, you should be on the "Test Suite Details" page.
+Let's create your first test case now.
+
+1. Navigate to the "Test Cases" tab.
+2. Click the blue "+ Add Test Case" button just below the tab to add a new Test Case row.
+3. You can leave the "Label" field alone for now - it's used to help you visually identify your Test Cases.
+4. Enter a value for each of your input variables. For example, if you have an input variable `user_age`, you may enter "28".
+5. In the `target` field, enter "This is the expected output of my prompt."
+6. Click outside of your Test Case row to save. You should get a notification that it was successful.
+
+Almost there! Now that you have your first Test Case, you're ready to run it against a prompt.
+
 ## Run your first Test Suite
+
+Test Suites can be run on any prompt that uses the same input variables you configured earlier. Let's try it.
+
+1. Navigate to any prompt sandbox in the "Prompts" tab.
+2. Scroll to Add Test Suite at the bottom of the page.
+3. Attach a Test Suite by clicking the "+ Include" button.
+4. Press the blue "Run" to execute the Test Suite
 
 # Advanced usage
 
-## Advanced Evaluators
+## Custom Evaluators
+
+- Regex match (best used for data extraction use cases)
+- Semantic similarity (best used for creative/generative use cases)
+- Webhook (best used for custom use cases and bespoke evaluation)
+- JSON Validity (best used to ensure JSON output)
+- JSON Schema Match (best used to ensure JSON output of a specific structure)
 
 ## Multiple Evaluators
 
+It's possible for a Test Suite to have multiple evaluators run simultaneously.
+This is often desirable when the output is complex and must meet multiple criterion.
+For example, you may want to validate that an output semantically means "I'm very happy",
+but must contain the word "ecstatic".
+
+Additional evaluators can be configured on an existing Test Suite under the "Evaluation Metrics" section
+of the "Test Suite Details" page. Any additional columns needed by that evaluator will be editable
+under the "Test Cases" tab.
+
+When running the Test Suite, a dropdown is available at the top to select the metric for which you want to see the results.
+
 ## Upload Test Cases
+
+To help you migrate your Test Cases into Vellum, we provide two methods for bulk Test Case uploads.
 
 ### Via CSV
 
+Under the "Test Cases" tab on the "Test Suite Details" page, there is a blue "Upload Test Cases" button.
+Clicking that button will open a modal that allows you to bulk upload test cases via a CSV file.
+
 ### Via API
+
+To upload test cases via API, please consult a team member at Vellum.
 
 ## Testing Workflows
 
@@ -51,92 +105,4 @@ The key difference Workflow Test Suites have is that Workflows may have multiple
 You may choose to test some of them, or all of them.
 
 Workflow Test Suites can be run from the "Evaluations" tab in the [Workflow Builder](insert url).
-![Evaluations Tab](insert url)
-
-Start by attaching a Test Suite to your Workflow.
-![Attach Workflow Test Suite](insert url)
-
-The inputs and outputs of your Test Suite must match the inputs and outputs of your Workflow.
-If they do not, you will be shown a warning, and your test suite may not run successfully.
-![Mismatched Interface Warning](insert url)
-
-After attachinging the workflow, you can run it.
-![Run Workflow Test Suite](insert url)
-
-## Defining Target Responses
-
-You’re expected to include the target/correct response for each scenario while evaluating output quality.
-
-![Defining Target Responses](https://storage.googleapis.com/vellum-public/help-docs/define_targets.png)
-
-## Interpreting Output Quality
-
-Vellum will compare the model generated response for each prompt against the target response. For semantic similarity, we measure how close the model generated response is in meaning to the target response. Regex match & Exact match have either a 0 or 1 response for each cell.
-
-Each cell gets its own score and the total for each model/prompt combination (column) is averaged at the top. You can use this feature to see how close, on average, each model/prompt combination is to the target response you’d expect
-
-![Interpreting Output Quality](https://storage.googleapis.com/vellum-public/help-docs/interpretting_output_quality.png)
-
-# Bulk Quantitative Evaluation via Test Suites
-
-Manual evaluation and spot checking begins to break down when you have more than ~10 scenarios.
-This is where Test Suites come in. Test Suites are a way to define a large number of scenarios and evaluate them in bulk.
-You typically run them once you think your Prompt is getting to a reasonably stable state and you're ready to evaluate
-it against a large number of scenarios.
-
-Let's take a look at how to set them up and use them in Vellum.
-
-## Initial Set Up
-
-### Creating a Test Suite
-
-Go to the <a href="https://app.vellum.ai/test-suites" target="_blank">Test Suites tab</a> and click on Create Test Suite.
-
-![Test Suites](https://storage.googleapis.com/vellum-public/help-docs/create_test_suite.png)
-
-Fill out details about the test suite on the next screen.
-
-- Label / Name: How would you like to refer to this Test Suite?
-- Expected Prompt Variables: The variables that are passed into the prompt at run-time. **Note:** the variable names here need to be exactly the same as the variable names in Playground.
-- Evaluation Metric: Choose how you would like to compare the model generated response with the target response.
-  - Exact Match: Best for classification tasks where there's a definitive correct answer.
-  - Regex Match: Best for tasks where you know the exact structure/syntax of the output
-  - Semantic Similarity: Best used when the exact wording of the output doesn't matter, as long as it conveys the intended meaning.
-  - Webhook: Best used for custom use cases and bespoke evaluation
-
-![Test Suite Configuration](https://storage.googleapis.com/vellum-public/help-docs/test_suite_configuration.png)
-
-### Defining Test Cases
-
-The way Test Cases work is you define a set of example "Input Values" and a "Target" value.
-Then, when the Test Suite is executed, Vellum iterates over the Test Cases and for each, uses the Input Values
-and a Prompt to generate some output. It then compares that output to your defined target value using the Test Suite's
-configured evaluation metric.
-
-For example, if your Test Suite is configured to use Exact Match, then Vellum says "If the model generated output is exactly
-the same as the target output, then this Test Case passes. Otherwise, it fails."
-
-Or, if your Test Suite is configured to use Semantic Similarity, then Vellum says "The more semantically similar the
-model's generated output is to the target value, then the higher the score for this Test Case."
-
-You can define Test Cases in one of three ways:
-
-1. Manually via the UI
-2. Via a CSV upload
-3. Via an API call
-
-![Defining Test Cases](https://storage.googleapis.com/vellum-public/help-docs/defining_test_cases.png)
-
-### Running a Test Suite
-
-Once you've defined your Test Suite and Test Cases, you can use it in a Prompt. Go to that Prompt, scroll to the bottom,
-and click on the Test Suite dropdown. Select the Test Suite you want to include.
-
-![Using a Test Suite in a Prompt](https://storage.googleapis.com/vellum-public/help-docs/associating_test_suites_with_prompts.png)
-
-You can then run the Test Suite against one or more Prompt Variants. Running each Variant against the Test Suite
-shows how close each model generated response is to the target response and an average for the whole prompt.
-This should give you a quick visual indicator on which prompt does well across all your test cases! You can toggle
-between seeing the numerical scores vs the actual output, and can export csvs of the results.
-
-![Running a Test Suite](https://storage.googleapis.com/vellum-public/help-docs/running_test_suites.png)
+It works very similarly as testing prompts, but you're able to create new test cases inline.
