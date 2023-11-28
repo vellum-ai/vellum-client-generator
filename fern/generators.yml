@@ -17,8 +17,8 @@ groups:
           repository: vellum-ai/vellum-client-node-staging
           mode: pull-request
         config:
-          client_class_name: Vellum
-          timeout_in_seconds: infinity
+          namespaceExport: Vellum
+          timeoutInSeconds: infinity
   branch-go:
     generators:
       - name: fernapi/fern-go-sdk
