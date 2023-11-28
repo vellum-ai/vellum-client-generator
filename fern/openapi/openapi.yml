@@ -60,6 +60,26 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
       x-fern-availability: beta
+  /v1/deployments/provider-payload:
+    post:
+      operationId: retrieve_provider_payload
+      tags:
+      - deployments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeploymentProviderPayloadRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentProviderPayloadResponse'
+          description: ''
   /v1/document-indexes:
     post:
       operationId: document_indexes_create
@@ -299,6 +319,51 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
+  /v1/execute-prompt-stream:
+    post:
+      operationId: execute_prompt_stream
+      description: Executes a deployed Prompt and streams back the results.
+      tags:
+      - execute-prompt-stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutePromptRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptStreamingResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -451,7 +516,8 @@ paths:
   /v1/model-versions/{id}:
     get:
       operationId: model_versions_retrieve
-      description: Used to retrieve a model version given its ID.
+      description: Deprecated. Use the `deployments/provider-payload` endpoint to
+        fetch information that we send to Model providers.
       parameters:
       - in: path
         name: id
@@ -464,6 +530,7 @@ paths:
       - model-versions
       security:
       - apiKeyAuth: []
+      deprecated: true
       responses:
         '200':
           content:
@@ -950,6 +1017,36 @@ components:
         source_handle_id:
           type: string
           nullable: true
+    DeploymentProviderPayloadRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the deployment. Must provide either this or deployment_name.
+        deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the deployment. Must provide either this or deployment_id.
+        inputs:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            description: The list of inputs defined in the Prompt's deployment with
+              their corresponding values.
+      required:
+      - inputs
+    DeploymentProviderPayloadResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          additionalProperties: {}
+      required:
+      - payload
     DeploymentRead:
       type: object
       properties:
@@ -994,6 +1091,9 @@ components:
             type: string
             format: uuid
           readOnly: true
+          description: Deprecated. The Prompt execution endpoints return a `prompt_version_id`
+            that could be used instead.
+          deprecated: true
         last_deployed_on:
           type: string
           format: date-time
@@ -1275,11 +1375,11 @@ components:
     ErrorExecutePromptResponse:
       type: object
       properties:
+        execution_id:
+          type: string
         value:
           $ref: '#/components/schemas/VellumError'
         type:
-          type: string
-        execution_id:
           type: string
       required:
       - execution_id
@@ -1313,7 +1413,10 @@ components:
         inputs:
           type: array
           items:
-            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            allOf:
+            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            description: The list of inputs defined in the Prompt's deployment with
+              their corresponding values.
         prompt_deployment_id:
           type: string
           format: uuid
@@ -1349,6 +1452,19 @@ components:
           ERROR: '#/components/schemas/ErrorExecutePromptResponse'
           JSON: '#/components/schemas/JSONExecutePromptResponse'
           STRING: '#/components/schemas/StringExecutePromptResponse'
+    ExecutePromptStreamingResponse:
+      oneOf:
+      - $ref: '#/components/schemas/InitiatedExecutePromptStreamingResponse'
+      - $ref: '#/components/schemas/StreamingExecutePromptStreamingResponse'
+      - $ref: '#/components/schemas/FulfilledExecutePromptStreamingResponse'
+      - $ref: '#/components/schemas/RejectedExecutePromptStreamingResponse'
+      discriminator:
+        propertyName: state
+        mapping:
+          INITIATED: '#/components/schemas/InitiatedExecutePromptStreamingResponse'
+          STREAMING: '#/components/schemas/StreamingExecutePromptStreamingResponse'
+          FULFILLED: '#/components/schemas/FulfilledExecutePromptStreamingResponse'
+          REJECTED: '#/components/schemas/RejectedExecutePromptStreamingResponse'
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
@@ -1408,6 +1524,16 @@ components:
         * `LENGTH` - LENGTH
         * `STOP` - STOP
         * `UNKNOWN` - UNKNOWN
+    FulfilledExecutePromptStreamingResponse:
+      type: object
+      properties:
+        state:
+          type: string
+        data:
+          $ref: '#/components/schemas/ExecutePromptResponse'
+      required:
+      - data
+      - state
     GenerateBodyRequest:
       type: object
       properties:
@@ -1590,15 +1716,35 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
+    InitiatedExecutePromptResponse:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/VellumVariableType'
+        execution_id:
+          type: string
+      required:
+      - execution_id
+      - type
+    InitiatedExecutePromptStreamingResponse:
+      type: object
+      properties:
+        state:
+          type: string
+        data:
+          $ref: '#/components/schemas/InitiatedExecutePromptResponse'
+      required:
+      - data
+      - state
     JSONExecutePromptResponse:
       type: object
       properties:
+        execution_id:
+          type: string
         value:
           type: object
           additionalProperties: {}
         type:
-          type: string
-        execution_id:
           type: string
       required:
       - execution_id
@@ -2586,6 +2732,29 @@ components:
           description: The ID of the generated sandbox snapshot.
       required:
       - id
+    RejectedExecutePromptResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          $ref: '#/components/schemas/VellumError'
+        execution_id:
+          type: string
+      required:
+      - execution_id
+      - type
+      - value
+    RejectedExecutePromptStreamingResponse:
+      type: object
+      properties:
+        state:
+          type: string
+        data:
+          $ref: '#/components/schemas/RejectedExecutePromptResponse'
+      required:
+      - data
+      - state
     SandboxMetricInputParams:
       type: object
       properties:
@@ -2976,14 +3145,24 @@ components:
       - id
       - label
       - last_uploaded_at
+    StreamingExecutePromptStreamingResponse:
+      type: object
+      properties:
+        state:
+          type: string
+        data:
+          $ref: '#/components/schemas/ExecutePromptResponse'
+      required:
+      - data
+      - state
     StringExecutePromptResponse:
       type: object
       properties:
+        execution_id:
+          type: string
         value:
           type: string
         type:
-          type: string
-        execution_id:
           type: string
       required:
       - execution_id
