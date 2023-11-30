@@ -32,12 +32,17 @@ navigation:
           - page: Adding Custom Models to your Workspace
             path: ./docs/content/help/prompts/adding-custom-models-to-your-workspace.mdx
             slug: custom-models
+      - section: Evaluation
+        contents:
           - page: Quantitatively Evaluating Outputs
-            path: ./docs/content/help/prompts/quantitatively-evaluating-outputs.mdx
+            path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
           - page: Webhook Evaluation Metric
-            path: ./docs/content/help/prompts/webhook-evaluation-metric.mdx
+            path: ./docs/content/help/evaluation/webhook-evaluation-metric.mdx
             slug: webhook-evaluation-metric
+          - page: Workflow Evaluation Metric
+            path: ./docs/content/help/evaluation/workflow-evaluation-metric.mdx
+            slug: workflow-evaluation-metric
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management

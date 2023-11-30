@@ -34,7 +34,7 @@ Well done! You've now created a test suite that can test any prompt with the inp
 ![Test Suite Details Overview](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-details-overview.png)
 
 By default, your test suite will utilize the Exact Match evaluator to check for whether the output is desirable.
-To learn how to use evaluators other than Exact Match, see Vellum's [Custom Evaluators](#custom-evaluators).
+To learn how to use evaluators other than Exact Match, see Vellum's [Evaluation Metrics](#evaluation-metrics).
 
 ## Create your first Test Case
 
@@ -72,13 +72,69 @@ Test Suites can be run on any prompt that uses the same input variables you conf
 
 # Advanced usage
 
-## Custom Evaluators
+## Evaluation Metrics
 
-- Regex match (best used for data extraction use cases)
-- Semantic similarity (best used for creative/generative use cases)
-- Webhook (best used for custom use cases and bespoke evaluation)
-- JSON Validity (best used to ensure JSON output)
-- JSON Schema Match (best used to ensure JSON output of a specific structure)
+### Exact Match
+
+Check that the output is exactly equal to the target.
+
+Returns a score of 1 if the output is an exact match, and 0 otherwise.
+
+### Regex Match
+
+Check that the specified regular expression can be found in the output.
+
+Returns a score of 1 if the regular expression matches, and 0 otherwise.
+
+Note that unless the regular expression is explicitly anchored, it can match anywhere in the output.
+
+### Semantic Similarity
+
+Check that the output is semantically similar to the target.
+
+Returns a score between 0 and 1, where 1 is a perfect match.
+
+Uses a [cross encoder](https://huggingface.co/cross-encoder/stsb-roberta-large) to compute the similarity.
+
+### Webhook
+
+Use an external endpoint to evaluate the output.
+
+See [Webhook Evaluation Metric](/help-center/evaluation/webhook-evaluation-metric) for more details.
+
+### JSON Validity
+
+Check that the output is valid JSON.
+
+Returns a score of 1 if the output is valid JSON, and 0 otherwise.
+
+### JSON Schema Match
+
+Check that the output matches a specified JSON schema.
+
+Returns a score of 1 if the output matches the schema, and 0 otherwise.
+
+### Workflow
+
+Run a Workflow to evaluate the output.
+
+See [Workflow Evaluation Metric](/help-center/evaluation/workflow-evaluation-metric) for more details.
+
+### Code
+
+Run custom Python code to evaluate the output.
+
+The code must include a function named `main` that takes the function arguments specified when creating the metric and returns a dictionary with keys `score` and optionally `normalized_score`.
+
+<CodeBlock title="Example">
+```python
+def main(input_1, input_2, target, completion):
+    return {
+        "score": 10,
+        "normalized_score": 0.5,  // Optional, must be in the interval [0, 1] if provided
+    }
+```
+</CodeBlock>
 
 ## Multiple Evaluators
 
