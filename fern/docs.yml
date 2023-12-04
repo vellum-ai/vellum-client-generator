@@ -85,6 +85,9 @@ navigation:
           - page: Common Data Transformation Templates
             path: ./docs/content/help/workflows/common-data-transforms.mdx
             slug: common-data-transforms
+          - page: Code Execution Node Examples
+            path: ./docs/content/help/workflows/code-execution-node-examples.mdx
+            slug: code-execution-node-examples
           - page: Integrating w/ APIs
             path: ./docs/content/help/workflows/integrating.mdx
             slug: api-integration

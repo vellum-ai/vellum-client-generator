@@ -1,0 +1,41 @@
+The Code Execution Node supports running arbitrary Python code to perform data transformations in your Workflow. It can simplify your workflow, especially in cases where a combination of Conditional, Templating, and Merge nodes are used. Below are some example use cases:
+
+# Arithmetic
+
+### Check if a number is a multiple of another
+
+{/* prettier-ignore */}
+<CodeBlock title="Code">
+    ```python
+    def main(
+        arg1: int, 
+        arg2: int,
+    ) -> int:
+        # this function returns the multiple if arg1 is a multiple of arg2
+        # or the remainder otherwise
+        if arg1 % arg2 == 0:
+            return arg1 / arg2
+        else:
+            return arg1 % arg2
+    ```
+</CodeBlock>
+{/* prettier-ignore-end */}
+
+# JSON Manipulation
+
+### Remap the keys
+
+{/* prettier-ignore */}
+<CodeBlock title="Code">
+    ```python
+    def main(
+        arg: dict
+    ) -> dict:
+        return {
+          "newKey": arg.get("oldKey", None)
+        }
+
+    ```
+
+</CodeBlock>
+{/* prettier-ignore-end */}
