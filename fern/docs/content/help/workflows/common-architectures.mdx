@@ -24,3 +24,29 @@ If you’re building an agent that answers questions coming from users (e.g., a 
 - Step 4: Set up variables and hit Run!
 
 ![Conditional Routing Workflow](https://storage.googleapis.com/vellum-public/help-docs/message_routing_workflow.png)
+
+## 3. Calling a Prompt for each item in an array
+
+Workflows support looping - you simply need to draw an edge from a later node back to a node that preceeded it. We recommend to always include a Conditional Node when introducing a loop to specify when that loop will exit. Here's an example of a loop that calls a prompt node for each item in an array, then exits with the output.
+
+![Workflow Looping Example](https://storage.googleapis.com/vellum-public/help-docs/workflow_loop_example.png)
+
+Here are the steps involved in this example:
+- Step 1: We define a `input_items` JSON input that has our list of items that we want to iterate over.
+- Step 2: We define a Templating Node that outputs a JSON with the current iterator (`item`) and the current output array (`output`):
+```jinja
+{% if index == 0 %}
+    {"item": "{{ input_items[index] }}", "output": [] }
+{% elif index < input_items | length %}
+    {"item": "{{ input_items[index] }}", "output": {{ json.dumps(output_items['output'] + [prompt_output]) }} }
+{% else %}
+    {"item": null, "output": {{ json.dumps(output_items['output'] + [prompt_output]) }} }
+{% endif %}
+```
+- Step 3: The templating node above takes as inputs:
+    1. The `input_items` array as a JSON input
+    2. The current `index` by using its own execution counter.
+    3. The current `output_items`, using a fallback mapped to a JSON input variable of an empty array.
+    4. The current `prompt_output`, using a fallback mapped to a Text input variable of an empty string.
+- Step 4: The templating node feeds into a conditional node, that calls a Prompt node when the prompt's execution counter is less than the length of the array. It outputs to a terminal node in the else branch.
+- Step 5: The Prompt node receives the edge from the conditional node's IF branch, and feeds back to the templating node with its output.
