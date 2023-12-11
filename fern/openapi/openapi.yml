@@ -274,96 +274,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /v1/execute-prompt:
-    post:
-      operationId: execute_prompt
-      description: Executes a deployed Prompt and returns the result.
-      tags:
-      - execute-prompt
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExecutePromptRequest'
-        required: true
-      security:
-      - apiKeyAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptResponse'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-  /v1/execute-prompt-stream:
-    post:
-      operationId: execute_prompt_stream
-      description: Executes a deployed Prompt and streams back the results.
-      tags:
-      - execute-prompt-stream
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExecutePromptRequest'
-        required: true
-      security:
-      - apiKeyAuth: []
-      responses:
-        '200':
-          content:
-            application/x-ndjson:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptStreamingResponse'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
-          description: ''
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -817,7 +727,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TestSuiteTestCaseRequest'
+              $ref: '#/components/schemas/UpsertTestSuiteTestCaseRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -1001,6 +911,131 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
+    CodeExecutionNodeChatHistoryResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeErrorResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeJsonResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeNumberResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeResult:
+      type: object
+      properties:
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/CodeExecutionNodeResultData'
+      required:
+      - data
+      - type
+    CodeExecutionNodeResultData:
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/CodeExecutionNodeResultOutput'
+      required:
+      - output
+    CodeExecutionNodeResultOutput:
+      oneOf:
+      - $ref: '#/components/schemas/CodeExecutionNodeStringResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeNumberResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeJsonResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeErrorResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/CodeExecutionNodeStringResult'
+          NUMBER: '#/components/schemas/CodeExecutionNodeNumberResult'
+          JSON: '#/components/schemas/CodeExecutionNodeJsonResult'
+          CHAT_HISTORY: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
+          SEARCH_RESULTS: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
+          ERROR: '#/components/schemas/CodeExecutionNodeErrorResult'
+    CodeExecutionNodeSearchResultsResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeStringResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     ConditionalNodeResult:
       type: object
       properties:
@@ -1372,19 +1407,6 @@ components:
         * `DEVELOPMENT` - Development
         * `STAGING` - Staging
         * `PRODUCTION` - Production
-    ErrorExecutePromptResponse:
-      type: object
-      properties:
-        execution_id:
-          type: string
-        value:
-          $ref: '#/components/schemas/VellumError'
-        type:
-          type: string
-      required:
-      - execution_id
-      - type
-      - value
     EvaluationParams:
       type: object
       properties:
@@ -1399,72 +1421,6 @@ components:
           type: string
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
-    ExecutePromptApiErrorResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Details about why the request failed.
-      required:
-      - detail
-    ExecutePromptRequest:
-      type: object
-      properties:
-        inputs:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
-        prompt_deployment_id:
-          type: string
-          format: uuid
-          nullable: true
-          description: The ID of the Prompt Deployment. Must provide either this or
-            prompt_deployment_name.
-        prompt_deployment_name:
-          type: string
-          nullable: true
-          minLength: 1
-          description: The name of the Prompt Deployment. Must provide either this
-            or prompt_deployment_id.
-        release_tag:
-          type: string
-          nullable: true
-          minLength: 1
-          description: Optionally specify a release tag if you want to pin to a specific
-            release of the Prompt Deployment
-        external_id:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - inputs
-    ExecutePromptResponse:
-      oneOf:
-      - $ref: '#/components/schemas/ErrorExecutePromptResponse'
-      - $ref: '#/components/schemas/JSONExecutePromptResponse'
-      - $ref: '#/components/schemas/StringExecutePromptResponse'
-      discriminator:
-        propertyName: type
-        mapping:
-          ERROR: '#/components/schemas/ErrorExecutePromptResponse'
-          JSON: '#/components/schemas/JSONExecutePromptResponse'
-          STRING: '#/components/schemas/StringExecutePromptResponse'
-    ExecutePromptStreamingResponse:
-      oneOf:
-      - $ref: '#/components/schemas/InitiatedExecutePromptStreamingResponse'
-      - $ref: '#/components/schemas/StreamingExecutePromptStreamingResponse'
-      - $ref: '#/components/schemas/FulfilledExecutePromptStreamingResponse'
-      - $ref: '#/components/schemas/RejectedExecutePromptStreamingResponse'
-      discriminator:
-        propertyName: state
-        mapping:
-          INITIATED: '#/components/schemas/InitiatedExecutePromptStreamingResponse'
-          STREAMING: '#/components/schemas/StreamingExecutePromptStreamingResponse'
-          FULFILLED: '#/components/schemas/FulfilledExecutePromptStreamingResponse'
-          REJECTED: '#/components/schemas/RejectedExecutePromptStreamingResponse'
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
@@ -1524,16 +1480,6 @@ components:
         * `LENGTH` - LENGTH
         * `STOP` - STOP
         * `UNKNOWN` - UNKNOWN
-    FulfilledExecutePromptStreamingResponse:
-      type: object
-      properties:
-        state:
-          type: string
-        data:
-          $ref: '#/components/schemas/ExecutePromptResponse'
-      required:
-      - data
-      - state
     GenerateBodyRequest:
       type: object
       properties:
@@ -1716,40 +1662,6 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
-    InitiatedExecutePromptResponse:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/VellumVariableType'
-        execution_id:
-          type: string
-      required:
-      - execution_id
-      - type
-    InitiatedExecutePromptStreamingResponse:
-      type: object
-      properties:
-        state:
-          type: string
-        data:
-          $ref: '#/components/schemas/InitiatedExecutePromptResponse'
-      required:
-      - data
-      - state
-    JSONExecutePromptResponse:
-      type: object
-      properties:
-        execution_id:
-          type: string
-        value:
-          type: object
-          additionalProperties: {}
-        type:
-          type: string
-      required:
-      - execution_id
-      - type
-      - value
     JSONInputRequest:
       type: object
       properties:
@@ -2101,6 +2013,120 @@ components:
       required:
       - id
       - sandbox_id
+    NamedTestCaseChatHistoryVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseErrorVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumErrorRequest'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseJsonVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseNumberVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseSearchResultsVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResultRequest'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseStringVariableValueRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseVariableValueRequest:
+      oneOf:
+      - $ref: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseNumberVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseJsonVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
+          NUMBER: '#/components/schemas/NamedTestCaseNumberVariableValueRequest'
+          JSON: '#/components/schemas/NamedTestCaseJsonVariableValueRequest'
+          CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
+          SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
+          ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
     NodeInputCompiledChatHistoryValue:
       type: object
       properties:
@@ -2732,29 +2758,6 @@ components:
           description: The ID of the generated sandbox snapshot.
       required:
       - id
-    RejectedExecutePromptResponse:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          $ref: '#/components/schemas/VellumError'
-        execution_id:
-          type: string
-      required:
-      - execution_id
-      - type
-      - value
-    RejectedExecutePromptStreamingResponse:
-      type: object
-      properties:
-        state:
-          type: string
-        data:
-          $ref: '#/components/schemas/RejectedExecutePromptResponse'
-      required:
-      - data
-      - state
     SandboxMetricInputParams:
       type: object
       properties:
@@ -3145,29 +3148,6 @@ components:
       - id
       - label
       - last_uploaded_at
-    StreamingExecutePromptStreamingResponse:
-      type: object
-      properties:
-        state:
-          type: string
-        data:
-          $ref: '#/components/schemas/ExecutePromptResponse'
-      required:
-      - data
-      - state
-    StringExecutePromptResponse:
-      type: object
-      properties:
-        execution_id:
-          type: string
-        value:
-          type: string
-        type:
-          type: string
-      required:
-      - execution_id
-      - type
-      - value
     StringInputRequest:
       type: object
       properties:
@@ -3581,23 +3561,6 @@ components:
       - type
       - value
       - variable_id
-    TestCaseChatHistoryVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessageRequest'
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
     TestCaseErrorVariableValue:
       type: object
       properties:
@@ -3608,22 +3571,6 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
-    TestCaseErrorVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
-        type:
-          type: string
-        value:
-          allOf:
-          - $ref: '#/components/schemas/VellumErrorRequest'
           nullable: true
       required:
       - type
@@ -3644,43 +3591,11 @@ components:
       - type
       - value
       - variable_id
-    TestCaseJsonVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
-        type:
-          type: string
-        value:
-          type: object
-          additionalProperties: {}
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
     TestCaseNumberVariableValue:
       type: object
       properties:
         variable_id:
           type: string
-        type:
-          type: string
-        value:
-          type: number
-          format: double
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
-    TestCaseNumberVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
         type:
           type: string
         value:
@@ -3707,43 +3622,11 @@ components:
       - type
       - value
       - variable_id
-    TestCaseSearchResultsVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResultRequest'
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
     TestCaseStringVariableValue:
       type: object
       properties:
         variable_id:
           type: string
-        type:
-          type: string
-        value:
-          type: string
-          nullable: true
-      required:
-      - type
-      - value
-      - variable_id
-    TestCaseStringVariableValueRequest:
-      type: object
-      properties:
-        variable_id:
-          type: string
-          minLength: 1
         type:
           type: string
         value:
@@ -3770,23 +3653,6 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
-    TestCaseVariableValueRequest:
-      oneOf:
-      - $ref: '#/components/schemas/TestCaseStringVariableValueRequest'
-      - $ref: '#/components/schemas/TestCaseNumberVariableValueRequest'
-      - $ref: '#/components/schemas/TestCaseJsonVariableValueRequest'
-      - $ref: '#/components/schemas/TestCaseChatHistoryVariableValueRequest'
-      - $ref: '#/components/schemas/TestCaseSearchResultsVariableValueRequest'
-      - $ref: '#/components/schemas/TestCaseErrorVariableValueRequest'
-      discriminator:
-        propertyName: type
-        mapping:
-          STRING: '#/components/schemas/TestCaseStringVariableValueRequest'
-          NUMBER: '#/components/schemas/TestCaseNumberVariableValueRequest'
-          JSON: '#/components/schemas/TestCaseJsonVariableValueRequest'
-          CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValueRequest'
-          SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValueRequest'
-          ERROR: '#/components/schemas/TestCaseErrorVariableValueRequest'
     TestSuiteTestCase:
       type: object
       properties:
@@ -3803,26 +3669,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestCaseVariableValue'
-      required:
-      - evaluation_values
-      - input_values
-    TestSuiteTestCaseRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          minLength: 1
-        label:
-          type: string
-          nullable: true
-        input_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCaseVariableValueRequest'
-        evaluation_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCaseVariableValueRequest'
       required:
       - evaluation_values
       - input_values
@@ -3905,6 +3751,26 @@ components:
           $ref: '#/components/schemas/SandboxMetricInputParamsRequest'
       required:
       - inputs
+    UpsertTestSuiteTestCaseRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        label:
+          type: string
+          nullable: true
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+      required:
+      - evaluation_values
+      - input_values
     VellumError:
       type: object
       properties:
@@ -4163,6 +4029,7 @@ components:
       - $ref: '#/components/schemas/PromptNodeResult'
       - $ref: '#/components/schemas/SearchNodeResult'
       - $ref: '#/components/schemas/TemplatingNodeResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeResult'
       - $ref: '#/components/schemas/ConditionalNodeResult'
       - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
@@ -4172,6 +4039,7 @@ components:
           PROMPT: '#/components/schemas/PromptNodeResult'
           SEARCH: '#/components/schemas/SearchNodeResult'
           TEMPLATING: '#/components/schemas/TemplatingNodeResult'
+          CODE_EXECUTION: '#/components/schemas/CodeExecutionNodeResult'
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
