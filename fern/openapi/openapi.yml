@@ -4111,12 +4111,14 @@ components:
       - $ref: '#/components/schemas/WorkflowRequestStringInputRequest'
       - $ref: '#/components/schemas/WorkflowRequestJSONInputRequest'
       - $ref: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+      - $ref: '#/components/schemas/WorkflowRequestNumberInputRequest'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/WorkflowRequestStringInputRequest'
           JSON: '#/components/schemas/WorkflowRequestJSONInputRequest'
           CHAT_HISTORY: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+          NUMBER: '#/components/schemas/WorkflowRequestNumberInputRequest'
     WorkflowRequestJSONInputRequest:
       type: object
       properties:
@@ -4129,6 +4131,22 @@ components:
         value:
           type: object
           additionalProperties: {}
+      required:
+      - name
+      - type
+      - value
+    WorkflowRequestNumberInputRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Workflow.
+        type:
+          type: string
+        value:
+          type: number
+          format: double
       required:
       - name
       - type
