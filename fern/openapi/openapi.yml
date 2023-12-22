@@ -86,6 +86,7 @@ paths:
       description: Creates a new document index.
       tags:
       - document-indexes
+      - folder-entities
       requestBody:
         content:
           application/json:
