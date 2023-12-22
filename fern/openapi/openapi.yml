@@ -332,7 +332,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExecutePromptRequest'
+              $ref: '#/components/schemas/ExecutePromptStreamRequest'
         required: true
       security:
       - apiKeyAuth: []
@@ -1615,6 +1615,61 @@ components:
         mapping:
           FULFILLED: '#/components/schemas/FulfilledExecutePromptResponse'
           REJECTED: '#/components/schemas/RejectedExecutePromptResponse'
+    ExecutePromptStreamRequest:
+      type: object
+      properties:
+        inputs:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            description: The list of inputs defined in the Prompt's deployment with
+              their corresponding values.
+        prompt_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the Prompt Deployment. Must provide either this or
+            prompt_deployment_name.
+        prompt_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Prompt Deployment
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          nullable: true
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        raw_overrides:
+          $ref: '#/components/schemas/RawPromptExecutionOverridesRequest'
+        expand_raw:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Returns the raw API response data sent from the model host.
+            Combined with `raw_overrides`, it can be used to access new features from
+            models.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - inputs
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
