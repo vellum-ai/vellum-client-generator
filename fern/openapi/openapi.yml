@@ -86,6 +86,7 @@ paths:
       description: Creates a new document index.
       tags:
       - document-indexes
+      - folder-entities
       requestBody:
         content:
           application/json:
@@ -274,6 +275,103 @@ paths:
       responses:
         '204':
           description: No response body
+  /v1/execute-prompt:
+    post:
+      operationId: execute_prompt
+      description: Executes a deployed Prompt and returns the result.
+      tags:
+      - execute-prompt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutePromptRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
+  /v1/execute-prompt-stream:
+    post:
+      operationId: execute_prompt_stream
+      description: Executes a deployed Prompt and streams back the results.
+      tags:
+      - execute-prompt-stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutePromptStreamRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptEvent'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+      x-fern-streaming: true
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -1407,6 +1505,18 @@ components:
         * `DEVELOPMENT` - Development
         * `STAGING` - Staging
         * `PRODUCTION` - Production
+    ErrorVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - type
+      - value
     EvaluationParams:
       type: object
       properties:
@@ -1421,6 +1531,146 @@ components:
           type: string
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
+    ExecutePromptApiErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    ExecutePromptEvent:
+      oneOf:
+      - $ref: '#/components/schemas/InitiatedExecutePromptEvent'
+      - $ref: '#/components/schemas/StreamingExecutePromptEvent'
+      - $ref: '#/components/schemas/FulfilledExecutePromptEvent'
+      - $ref: '#/components/schemas/RejectedExecutePromptEvent'
+      discriminator:
+        propertyName: state
+        mapping:
+          INITIATED: '#/components/schemas/InitiatedExecutePromptEvent'
+          STREAMING: '#/components/schemas/StreamingExecutePromptEvent'
+          FULFILLED: '#/components/schemas/FulfilledExecutePromptEvent'
+          REJECTED: '#/components/schemas/RejectedExecutePromptEvent'
+    ExecutePromptRequest:
+      type: object
+      properties:
+        inputs:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            description: The list of inputs defined in the Prompt's deployment with
+              their corresponding values.
+        prompt_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the Prompt Deployment. Must provide either this or
+            prompt_deployment_name.
+        prompt_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Prompt Deployment
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          nullable: true
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        raw_overrides:
+          $ref: '#/components/schemas/RawPromptExecutionOverridesRequest'
+        expand_raw:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Returns the raw API response data sent from the model host.
+            Combined with `raw_overrides`, it can be used to access new features from
+            models.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - inputs
+    ExecutePromptResponse:
+      oneOf:
+      - $ref: '#/components/schemas/FulfilledExecutePromptResponse'
+      - $ref: '#/components/schemas/RejectedExecutePromptResponse'
+      discriminator:
+        propertyName: state
+        mapping:
+          FULFILLED: '#/components/schemas/FulfilledExecutePromptResponse'
+          REJECTED: '#/components/schemas/RejectedExecutePromptResponse'
+    ExecutePromptStreamRequest:
+      type: object
+      properties:
+        inputs:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
+            description: The list of inputs defined in the Prompt's deployment with
+              their corresponding values.
+        prompt_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the Prompt Deployment. Must provide either this or
+            prompt_deployment_name.
+        prompt_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Prompt Deployment
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          nullable: true
+          description: The name of the Prompt Deployment. Must provide either this
+            or prompt_deployment_id.
+        raw_overrides:
+          $ref: '#/components/schemas/RawPromptExecutionOverridesRequest'
+        expand_raw:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Returns the raw API response data sent from the model host.
+            Combined with `raw_overrides`, it can be used to access new features from
+            models.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - inputs
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
@@ -1480,6 +1730,66 @@ components:
         * `LENGTH` - LENGTH
         * `STOP` - STOP
         * `UNKNOWN` - UNKNOWN
+    FulfilledEnum:
+      type: string
+      enum:
+      - FULFILLED
+    FulfilledExecutePromptEvent:
+      type: object
+      description: The final data event returned indicating that the stream has ended
+        and all final resolved values from the model can be found.
+      properties:
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptOutput'
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/FulfilledPromptExecutionMeta'
+      required:
+      - execution_id
+      - outputs
+      - state
+    FulfilledExecutePromptResponse:
+      type: object
+      description: The successful response from the model containing all of the resolved
+        values generated by the prompt.
+      properties:
+        meta:
+          $ref: '#/components/schemas/PromptExecutionMeta'
+        raw:
+          type: object
+          additionalProperties: {}
+          description: The subset of the raw response from the model that the request
+            opted into with `expand_raw`.
+        execution_id:
+          type: string
+          description: The ID of the execution.
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptOutput'
+      required:
+      - execution_id
+      - outputs
+      - state
+    FulfilledPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
+        finish_reason:
+          allOf:
+          - $ref: '#/components/schemas/FinishReasonEnum'
+          nullable: true
     GenerateBodyRequest:
       type: object
       properties:
@@ -1662,6 +1972,41 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
+    InitiatedEnum:
+      type: string
+      enum:
+      - INITIATED
+    InitiatedExecutePromptEvent:
+      type: object
+      description: The initial data returned indicating that the response from the
+        model has returned and begun streaming.
+      properties:
+        state:
+          $ref: '#/components/schemas/InitiatedEnum'
+        meta:
+          $ref: '#/components/schemas/InitiatedPromptExecutionMeta'
+        execution_id:
+          type: string
+      required:
+      - execution_id
+      - state
+    InitiatedPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        model_name:
+          type: string
+          nullable: true
+        latency:
+          type: integer
+          nullable: true
+        deployment_release_tag:
+          type: string
+          nullable: true
+        prompt_version_id:
+          type: string
+          nullable: true
     JSONInputRequest:
       type: object
       properties:
@@ -1676,6 +2021,18 @@ components:
           additionalProperties: {}
       required:
       - name
+      - type
+      - value
+    JsonVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
       - type
       - value
     LogicalOperator:
@@ -1954,6 +2311,7 @@ components:
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
             * `OPENAI` - OpenAI
+            * `FIREWORKS_AI` - Fireworks AI
             * `HUGGINGFACE` - HuggingFace
             * `MYSTIC` - Mystic
             * `PYQ` - Pyq
@@ -2351,6 +2709,34 @@ components:
         * `PROCESSING` - Processing
         * `PROCESSED` - Processed
         * `FAILED` - Failed
+    PromptDeploymentExpandMetaRequestRequest:
+      type: object
+      properties:
+        model_name:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the model identifier
+            representing the ML Model invoked by the Prompt Deployment.
+        latency:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the time in nanoseconds
+            it took to execute the Prompt Deployment.
+        deployment_release_tag:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the release tag of the
+            Prompt Deployment.
+        prompt_version_id:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the ID of the Prompt
+            Version backing the deployment.
+        finish_reason:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the reason provided by
+            the model for why the execution finished.
     PromptDeploymentInputRequest:
       oneOf:
       - $ref: '#/components/schemas/StringInputRequest'
@@ -2362,6 +2748,27 @@ components:
           STRING: '#/components/schemas/StringInputRequest'
           JSON: '#/components/schemas/JSONInputRequest'
           CHAT_HISTORY: '#/components/schemas/ChatHistoryInputRequest'
+    PromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        model_name:
+          type: string
+          nullable: true
+        latency:
+          type: integer
+          nullable: true
+        deployment_release_tag:
+          type: string
+          nullable: true
+        prompt_version_id:
+          type: string
+          nullable: true
+        finish_reason:
+          allOf:
+          - $ref: '#/components/schemas/FinishReasonEnum'
+          nullable: true
     PromptNodeResult:
       type: object
       properties:
@@ -2385,6 +2792,17 @@ components:
           nullable: true
       required:
       - output_id
+    PromptOutput:
+      oneOf:
+      - $ref: '#/components/schemas/StringVariableValue'
+      - $ref: '#/components/schemas/JsonVariableValue'
+      - $ref: '#/components/schemas/ErrorVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVariableValue'
+          JSON: '#/components/schemas/JsonVariableValue'
+          ERROR: '#/components/schemas/ErrorVariableValue'
     PromptTemplateBlock:
       type: object
       properties:
@@ -2481,7 +2899,6 @@ components:
         function_description:
           type: string
           nullable: true
-          minLength: 1
         function_parameters:
           type: object
           additionalProperties: {}
@@ -2518,6 +2935,7 @@ components:
       - HOSTED
       - MOSAICML
       - OPENAI
+      - FIREWORKS_AI
       - HUGGINGFACE
       - MYSTIC
       - PYQ
@@ -2532,10 +2950,30 @@ components:
         * `HOSTED` - Hosted
         * `MOSAICML` - MosaicML
         * `OPENAI` - OpenAI
+        * `FIREWORKS_AI` - Fireworks AI
         * `HUGGINGFACE` - HuggingFace
         * `MYSTIC` - Mystic
         * `PYQ` - Pyq
         * `REPLICATE` - Replicate
+    RawPromptExecutionOverridesRequest:
+      type: object
+      properties:
+        body:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+            minLength: 1
+          nullable: true
+          description: The raw headers to send to the model host.
+        url:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The raw URL to send to the model host.
     RegisterPromptErrorResponse:
       type: object
       properties:
@@ -2637,6 +3075,7 @@ components:
             * `HOSTED` - Hosted
             * `MOSAICML` - MosaicML
             * `OPENAI` - OpenAI
+            * `FIREWORKS_AI` - Fireworks AI
             * `HUGGINGFACE` - HuggingFace
             * `MYSTIC` - Mystic
             * `PYQ` - Pyq
@@ -2758,6 +3197,62 @@ components:
           description: The ID of the generated sandbox snapshot.
       required:
       - id
+    RejectedEnum:
+      type: string
+      enum:
+      - REJECTED
+    RejectedExecutePromptEvent:
+      type: object
+      description: The final data returned indicating an error occurred during the
+        stream.
+      properties:
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        error:
+          $ref: '#/components/schemas/VellumError'
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/RejectedPromptExecutionMeta'
+      required:
+      - error
+      - execution_id
+      - state
+    RejectedExecutePromptResponse:
+      type: object
+      description: The unsuccessful response from the model containing an error of
+        what went wrong.
+      properties:
+        meta:
+          $ref: '#/components/schemas/PromptExecutionMeta'
+        raw:
+          type: object
+          additionalProperties: {}
+          description: The subset of the raw response from the model that the request
+            opted into with `expand_raw`.
+        execution_id:
+          type: string
+          description: The ID of the execution.
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        error:
+          $ref: '#/components/schemas/VellumError'
+      required:
+      - error
+      - execution_id
+      - state
+    RejectedPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
+        finish_reason:
+          allOf:
+          - $ref: '#/components/schemas/FinishReasonEnum'
+          nullable: true
     SandboxMetricInputParams:
       type: object
       properties:
@@ -3148,6 +3643,42 @@ components:
       - id
       - label
       - last_uploaded_at
+    StreamingEnum:
+      type: string
+      enum:
+      - STREAMING
+    StreamingExecutePromptEvent:
+      type: object
+      description: The data returned for each delta during the prompt execution stream.
+      properties:
+        state:
+          $ref: '#/components/schemas/StreamingEnum'
+        output:
+          $ref: '#/components/schemas/PromptOutput'
+        output_index:
+          type: integer
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/StreamingPromptExecutionMeta'
+        raw:
+          type: object
+          additionalProperties: {}
+          description: The subset of the raw response from the model that the request
+            opted into with `expand_raw`.
+      required:
+      - execution_id
+      - output
+      - output_index
+      - state
+    StreamingPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
     StringInputRequest:
       type: object
       properties:
@@ -3161,6 +3692,17 @@ components:
           type: string
       required:
       - name
+      - type
+      - value
+    StringVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
       - type
       - value
     SubmitCompletionActualRequest:
@@ -3823,6 +4365,7 @@ components:
       - CHAT_HISTORY
       - SEARCH_RESULTS
       - ERROR
+      - ARRAY
       type: string
       description: |-
         * `STRING` - STRING
@@ -3831,6 +4374,7 @@ components:
         * `CHAT_HISTORY` - CHAT_HISTORY
         * `SEARCH_RESULTS` - SEARCH_RESULTS
         * `ERROR` - ERROR
+        * `ARRAY` - ARRAY
     WorkflowEventError:
       type: object
       properties:
@@ -4111,12 +4655,14 @@ components:
       - $ref: '#/components/schemas/WorkflowRequestStringInputRequest'
       - $ref: '#/components/schemas/WorkflowRequestJSONInputRequest'
       - $ref: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+      - $ref: '#/components/schemas/WorkflowRequestNumberInputRequest'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/WorkflowRequestStringInputRequest'
           JSON: '#/components/schemas/WorkflowRequestJSONInputRequest'
           CHAT_HISTORY: '#/components/schemas/WorkflowRequestChatHistoryInputRequest'
+          NUMBER: '#/components/schemas/WorkflowRequestNumberInputRequest'
     WorkflowRequestJSONInputRequest:
       type: object
       properties:
@@ -4129,6 +4675,22 @@ components:
         value:
           type: object
           additionalProperties: {}
+      required:
+      - name
+      - type
+      - value
+    WorkflowRequestNumberInputRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Workflow.
+        type:
+          type: string
+        value:
+          type: number
+          format: double
       required:
       - name
       - type
