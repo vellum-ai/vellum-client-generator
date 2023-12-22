@@ -319,6 +319,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/execute-prompt-stream:
     post:
       operationId: execute_prompt_stream
@@ -364,6 +367,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
+      x-fern-streaming: true
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -940,30 +947,6 @@ components:
       - status_code
       - status_code_output_id
       - text_output_id
-    ArrayVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValue'
-      required:
-      - type
-      - value
-    ArrayVariableValueRequest:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValueRequest'
-      required:
-      - type
-      - value
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -991,32 +974,6 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
-      - type
-      - value
-    ChatHistoryVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          nullable: true
-      required:
-      - type
-      - value
-    ChatHistoryVariableValueRequest:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessageRequest'
-          nullable: true
-      required:
       - type
       - value
     ChatMessage:
@@ -1559,18 +1516,6 @@ components:
       required:
       - type
       - value
-    ErrorVariableValueRequest:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          allOf:
-          - $ref: '#/components/schemas/VellumErrorRequest'
-          nullable: true
-      required:
-      - type
-      - value
     EvaluationParams:
       type: object
       properties:
@@ -1657,8 +1602,7 @@ components:
             models.
         metadata:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Json'
+          additionalProperties: {}
           nullable: true
       required:
       - inputs
@@ -1762,8 +1706,7 @@ components:
           $ref: '#/components/schemas/PromptExecutionMeta'
         raw:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Json'
+          additionalProperties: {}
           description: The subset of the raw response from the model that the request
             opted into with `expand_raw`.
         execution_id:
@@ -2024,34 +1967,7 @@ components:
       - name
       - type
       - value
-    Json:
-      oneOf:
-      - type: boolean
-      - type: integer
-      - type: number
-        format: double
-      - type: string
-        minLength: 1
-      - type: array
-        items:
-          $ref: '#/components/schemas/Json'
-      - type: object
-        additionalProperties:
-          $ref: '#/components/schemas/Json'
-      nullable: true
     JsonVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: object
-          additionalProperties: {}
-          nullable: true
-      required:
-      - type
-      - value
-    JsonVariableValueRequest:
       type: object
       properties:
         type:
@@ -2399,22 +2315,6 @@ components:
       required:
       - id
       - sandbox_id
-    NamedTestCaseArrayVariableValueRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValueRequest'
-      required:
-      - name
-      - type
-      - value
     NamedTestCaseChatHistoryVariableValueRequest:
       type: object
       properties:
@@ -2520,7 +2420,6 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
-      - $ref: '#/components/schemas/NamedTestCaseArrayVariableValueRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -2530,7 +2429,6 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
-          ARRAY: '#/components/schemas/NamedTestCaseArrayVariableValueRequest'
     NodeInputCompiledChatHistoryValue:
       type: object
       properties:
@@ -2693,30 +2591,6 @@ components:
       - text_offset
       - token
       - top_logprobs
-    NumberVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: number
-          format: double
-          nullable: true
-      required:
-      - type
-      - value
-    NumberVariableValueRequest:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: number
-          format: double
-          nullable: true
-      required:
-      - type
-      - value
     PaginatedSlimDocumentList:
       type: object
       properties:
@@ -3030,8 +2904,7 @@ components:
       properties:
         body:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Json'
+          additionalProperties: {}
           nullable: true
         headers:
           type: object
@@ -3298,8 +3171,7 @@ components:
           $ref: '#/components/schemas/PromptExecutionMeta'
         raw:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Json'
+          additionalProperties: {}
           description: The subset of the raw response from the model that the request
             opted into with `expand_raw`.
         execution_id:
@@ -3628,32 +3500,6 @@ components:
       - keywords
       - score
       - text
-    SearchResultsVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResult'
-          nullable: true
-      required:
-      - type
-      - value
-    SearchResultsVariableValueRequest:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResultRequest'
-          nullable: true
-      required:
-      - type
-      - value
     SearchWeightsRequest:
       type: object
       properties:
@@ -3761,8 +3607,7 @@ components:
           $ref: '#/components/schemas/StreamingPromptExecutionMeta'
         raw:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Json'
+          additionalProperties: {}
           description: The subset of the raw response from the model that the request
             opted into with `expand_raw`.
       required:
@@ -3794,17 +3639,6 @@ components:
       - type
       - value
     StringVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: string
-          nullable: true
-      required:
-      - type
-      - value
-    StringVariableValueRequest:
       type: object
       properties:
         type:
@@ -4197,21 +4031,6 @@ components:
       - name
       - type
       - value
-    TestCaseArrayVariableValue:
-      type: object
-      properties:
-        variable_id:
-          type: string
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValue'
-      required:
-      - type
-      - value
-      - variable_id
     TestCaseChatHistoryVariableValue:
       type: object
       properties:
@@ -4311,7 +4130,6 @@ components:
       - $ref: '#/components/schemas/TestCaseChatHistoryVariableValue'
       - $ref: '#/components/schemas/TestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/TestCaseErrorVariableValue'
-      - $ref: '#/components/schemas/TestCaseArrayVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -4321,7 +4139,6 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
-          ARRAY: '#/components/schemas/TestCaseArrayVariableValue'
     TestSuiteTestCase:
       type: object
       properties:
@@ -4440,44 +4257,6 @@ components:
       required:
       - evaluation_values
       - input_values
-    VariableValue:
-      oneOf:
-      - $ref: '#/components/schemas/StringVariableValue'
-      - $ref: '#/components/schemas/NumberVariableValue'
-      - $ref: '#/components/schemas/JsonVariableValue'
-      - $ref: '#/components/schemas/ChatHistoryVariableValue'
-      - $ref: '#/components/schemas/SearchResultsVariableValue'
-      - $ref: '#/components/schemas/ErrorVariableValue'
-      - $ref: '#/components/schemas/ArrayVariableValue'
-      discriminator:
-        propertyName: type
-        mapping:
-          STRING: '#/components/schemas/StringVariableValue'
-          NUMBER: '#/components/schemas/NumberVariableValue'
-          JSON: '#/components/schemas/JsonVariableValue'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
-          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
-          ERROR: '#/components/schemas/ErrorVariableValue'
-          ARRAY: '#/components/schemas/ArrayVariableValue'
-    VariableValueRequest:
-      oneOf:
-      - $ref: '#/components/schemas/StringVariableValueRequest'
-      - $ref: '#/components/schemas/NumberVariableValueRequest'
-      - $ref: '#/components/schemas/JsonVariableValueRequest'
-      - $ref: '#/components/schemas/ChatHistoryVariableValueRequest'
-      - $ref: '#/components/schemas/SearchResultsVariableValueRequest'
-      - $ref: '#/components/schemas/ErrorVariableValueRequest'
-      - $ref: '#/components/schemas/ArrayVariableValueRequest'
-      discriminator:
-        propertyName: type
-        mapping:
-          STRING: '#/components/schemas/StringVariableValueRequest'
-          NUMBER: '#/components/schemas/NumberVariableValueRequest'
-          JSON: '#/components/schemas/JsonVariableValueRequest'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValueRequest'
-          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValueRequest'
-          ERROR: '#/components/schemas/ErrorVariableValueRequest'
-          ARRAY: '#/components/schemas/ArrayVariableValueRequest'
     VellumError:
       type: object
       properties:
