@@ -278,7 +278,11 @@ paths:
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
-      description: Executes a deployed Prompt and returns the result.
+      description: |-
+        Executes a deployed Prompt and returns the result.
+
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
       tags:
       - execute-prompt
       requestBody:
@@ -326,7 +330,11 @@ paths:
   /v1/execute-prompt-stream:
     post:
       operationId: execute_prompt_stream
-      description: Executes a deployed Prompt and streams back the results.
+      description: |-
+        Executes a deployed Prompt and streams back the results.
+
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
       tags:
       - execute-prompt-stream
       requestBody:
