@@ -13,7 +13,7 @@ While JSON Validity checks for whether the output is JSON and JSON Schema Match 
 neither checks for exact key/value matches per test case. Using the following Python code,
 it's possible to check that the output matches a known JSON regardless of order or spacing.
 
-```
+```python
 def main(
     completion: str,
     target: str,
@@ -23,7 +23,7 @@ def main(
     target_dict = json.loads(target)
     completion_set = set(completion_dict.items())
     target_set = set(target_dict.items())
-    is_equal = completion_set - target_set == target_set - completion_set
+    is_equal = completion_set == target_set
 
     return {
         "score": 1.0 if is_equal else 0.0,
@@ -35,7 +35,7 @@ def main(
 A common problem with exact match comparison using LLM outputs is that often there is additional leading or trailing whitespace.
 We can create an exact match evaluator that ignores such whitespace with a few short lines of Python.
 
-```
+```python
 def main(
     completion: str,
     target: str,
