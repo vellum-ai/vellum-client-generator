@@ -1786,6 +1786,24 @@ components:
       - execution_id
       - outputs
       - state
+    FulfilledFunctionCall:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+      required:
+      - arguments
+      - name
+      - state
     FulfilledPromptExecutionMeta:
       type: object
       description: The subset of the metadata tracked by Vellum during prompt execution
@@ -1798,6 +1816,25 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
+    FunctionCall:
+      oneOf:
+      - $ref: '#/components/schemas/FulfilledFunctionCall'
+      - $ref: '#/components/schemas/RejectedFunctionCall'
+      discriminator:
+        propertyName: state
+        mapping:
+          FULFILLED: '#/components/schemas/FulfilledFunctionCall'
+          REJECTED: '#/components/schemas/RejectedFunctionCall'
+    FunctionCallVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          $ref: '#/components/schemas/FunctionCall'
+      required:
+      - type
+      - value
     GenerateBodyRequest:
       type: object
       properties:
@@ -2805,12 +2842,14 @@ components:
       - $ref: '#/components/schemas/StringVariableValue'
       - $ref: '#/components/schemas/JsonVariableValue'
       - $ref: '#/components/schemas/ErrorVariableValue'
+      - $ref: '#/components/schemas/FunctionCallVariableValue'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/StringVariableValue'
           JSON: '#/components/schemas/JsonVariableValue'
           ERROR: '#/components/schemas/ErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     PromptTemplateBlock:
       type: object
       properties:
@@ -3248,6 +3287,23 @@ components:
       required:
       - error
       - execution_id
+      - state
+    RejectedFunctionCall:
+      type: object
+      description: Returned if the function call failed to parse for some reason.
+      properties:
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        error:
+          $ref: '#/components/schemas/VellumError'
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+      required:
+      - error
+      - name
       - state
     RejectedPromptExecutionMeta:
       type: object
@@ -4374,6 +4430,7 @@ components:
       - SEARCH_RESULTS
       - ERROR
       - ARRAY
+      - FUNCTION_CALL
       type: string
       description: |-
         * `STRING` - STRING
@@ -4383,6 +4440,7 @@ components:
         * `SEARCH_RESULTS` - SEARCH_RESULTS
         * `ERROR` - ERROR
         * `ARRAY` - ARRAY
+        * `FUNCTION_CALL` - FUNCTION_CALL
     WorkflowEventError:
       type: object
       properties:
