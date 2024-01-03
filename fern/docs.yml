@@ -43,6 +43,9 @@ navigation:
           - page: Workflow Evaluation Metric
             path: ./docs/content/help/evaluation/workflow-evaluation-metric.mdx
             slug: workflow-evaluation-metric
+          - page: Code Execution Evaluation Metric
+            path: ./docs/content/help/evaluation/code-execution-evaluation-metric.mdx
+            slug: code-execution-evaluation-metric
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
