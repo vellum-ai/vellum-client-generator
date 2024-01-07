@@ -1,0 +1,58 @@
+name: fern
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Fern
+        run: npm install -g fern-api
+
+      - name: Check API is valid
+        run: fern check
+
+  preview-docs:
+    needs: check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Fern
+        run: npm install -g fern-api
+
+      - name: Generate Documentation Preview
+        id: doc_preview
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: |
+          output=$(fern generate --docs --preview --log-level debug)
+          echo "$output"
+          preview_url=$(echo "$output" | grep -oP '(?<=Published docs to )https://[^\s]*')
+          echo "preview_url=$preview_url" >> $GITHUB_ENV
+
+      - name: Post Preview URL in Pull Request
+        if: ${{ env.preview_url }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const preview_url = '${{ env.preview_url }}';
+            const issue_number = context.issue.number;
+            github.issues.createComment({
+              ...context.repo,
+              issue_number: issue_number,
+              body: `🔗 Published Documentation Preview: ${preview_url}`
+            })
