@@ -1,0 +1,39 @@
+name: fern
+
+on: [push]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Fern
+        run: npm install -g fern-api
+
+      - name: Check API is valid
+        run: fern check
+
+  publish-sdks:
+    needs: check
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Fern
+        run: npm install -g fern-api
+
+      - name: Generate SDKs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          fern generate --group publish --log-level debug --version ${{ github.ref_name }}
