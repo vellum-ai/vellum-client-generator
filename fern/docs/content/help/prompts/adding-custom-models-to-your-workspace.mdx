@@ -1,61 +1,24 @@
 Vellum supports several of the industry's most popular models by default available in your workspace right away. However, you may wish to use a custom model that gives your business some additional advantage not provided by these off the shelf models, such as higher rate limits or more domain-specific training. These models can also be set up for use within Vellum!
 
-There are several different types of models that fall under this category. We outline the steps below on how to add these models to your workspace.
+Custom models fall under two categories: _private_ models and _public_ models. Both could be added via the `Models` tab within Vellum.
 
-## OpenAI Fine-tuned Models
+## Adding Private Models
 
-When you fine-tune a model on OpenAI, you'll be given a model identifier that uniquely identifies your new model. You can see and use this model natively in Vellum by adding it to Vellum via the below unofficial API. Note that this API is not yet found in our API docs as this is an early-access feature and subject to change.
+Private models are _new_ instances of models that were created by you outside of Vellum and are looking to integrate into the platform. When you navigate to the models page, the supported types of private models will be accessible from a section on the top of the page:
 
-```python
-response = requests.post(
-    url="https://api.vellum.ai/v1/ml-models/template",
-    json={
-        "model_identifier": "ft:gpt-3.5-turbo-0613:vellum:your-model-1234567890",
-        "template_name": "OPENAI_FINETUNED",
-    },
-    headers={"X_API_KEY": os.environ["VELLUM_API_KEY"]},
-)
-data = response.json()
-# Unique id representing your access to this model
-print(data["ml_model_to_workspace_id"])
-```
+![Adding Private Custom Models](https://storage.googleapis.com/vellum-public/help-docs/supported-private-model-templates.png)
 
-## Azure OpenAI
+Clicking on one of the templates will take you to an onboarding flow on how to connect your private model to Vellum. Once you've completed the pre-requisite steps and add in the requested form info, your model should be successfully added to your workspace!
 
-Deploying an OpenAI model in your Azure environment has a number of advantages compared to off-the-shelf OpenAI models, including higher rate limits and more predictable uptime. The Azure deployment will come with a endpoint URL and an API Key. To setup the model in your workspace:
+## Adding Public Models
 
-1. Add your api key as a **Workspace Secret** from within the [API Keys page](https://app.vellum.ai/api-keys), named `AZURE_OPENAI_API_KEY`
-2. Reach out to us on Slack specifying which model you deployed and what endpoint it can be reached at
+Public models are _shared_ instances of models that are hosted by model providers and are granted access to them by various authentication schemes, most commonly via an API Token. Some are enabled in your workspace by default when you create a new workspace in Vellum. To find other public models not yet enabled in your workspace, navigate to the models page and scroll down to the `Available Models` section:
 
-We'll get started on setting up the model in your workspace and it should be accessible within Vellum the same day.
+![Adding Public Custom Models](https://storage.googleapis.com/vellum-public/help-docs/supported-public-models.png)
 
-## AWS Bedrock Claude
+To help filter the options, you could select just `Available` in the drop down on the right or use the search bar to look for the specific model of interest.
 
-Deploying Claude on AWS Bedrock within your AWS managed infrastructure has a number of advantages compared to off-the-shelf Anthropic models, including higher rate limits and more predictable uptime. Once you [finish setting up the model on Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/setting-up.html), create an IAM user that has permissions to invoke the model. Here's an example IAM Policy document:
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "bedrock:InvokeModel",
-                "bedrock:InvokeModelWithResponseStream"
-            ],
-            "Resource": [
-                "arn:aws:bedrock:*:123412341234:provisioned-model/*",
-                "arn:aws:bedrock:*::foundation-model/*"
-            ]
-        }
-    ]
-}
-```
-
-Be sure to replace the `123412341234` with your _actual_ AWS Account ID. Create an `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` key pair for that user, and set those values as **Workspace Secrets** of the same name, found within the [API Keys](https://app.vellum.ai/api-keys) tab in Vellum.
-
-Once your secrets are set up, notify us on Slack which AWS region your model is hosted in and we can get it connected to your Workspace.
+While most of these models require just adding your API key from the relevant model provider, some like those from `AWS Bedrock` will require some additional steps taken within your account. These directions will be laid out within each model's onboarding modal when you click to enable them in your workspace.
 
 ## Request a Model
 
