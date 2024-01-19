@@ -39,10 +39,10 @@ jobs:
           fern generate --group branch-python --log-level debug
           fern generate --group branch-go --log-level debug
       
-      - name: Generate Branch Docs
+      - name: Generate Staging Docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: fern generate --docs --instance vellum-branch.docs.buildwithfern.com --log-level debug
+        run: fern generate --docs --instance vellum-staging.docs.buildwithfern.com --log-level debug
 
   fern-generate-staging:
     needs: fern-check
