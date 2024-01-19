@@ -23,15 +23,15 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node-staging
           mode: pull-request
+          license: MIT
+          keywords: ["vellum", "ai", "llm"]
+          description: "A Typescript Node Library to interact with the Vellum API"
+          authors: ["devops@vellum.ai", "fern[bot]"]
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
         location: 
           output: package.json
-        license: MIT
-        keywords: ["vellum", "ai", "llm"]
-        description: "A Typescript Node Library to interact with the Vellum API"
-        authors: ["devops@vellum.ai", "fern[bot]"]
   branch-go:
     generators:
       - name: fernapi/fern-go-sdk
@@ -55,12 +55,12 @@ groups:
           timeoutInSeconds: infinity
         github:
           repository: vellum-ai/vellum-client-node-staging
+          license: MIT
+          keywords: ["vellum", "ai", "llm"]
+          description: "A Typescript Node Library to interact with the Vellum API"
+          authors: ["devops@vellum.ai", "fern[bot]"]
         location: 
           output: package.json
-        license: MIT
-        keywords: ["vellum", "ai", "llm"]
-        description: "A Typescript Node Library to interact with the Vellum API"
-        authors: ["devops@vellum.ai", "fern[bot]"]
       - name: fernapi/fern-python-sdk
         version: 0.6.5
         github:
@@ -99,12 +99,12 @@ groups:
           timeoutInSeconds: infinity
         github:
           repository: vellum-ai/vellum-client-node
+          license: MIT
+          keywords: ["vellum", "ai", "llm"]
+          description: "A Typescript Node Library to interact with the Vellum API"
+          authors: ["devops@vellum.ai", "fern[bot]"]
         location: 
           output: package.json
-        license: MIT
-        keywords: ["vellum", "ai", "llm"]
-        description: "A Typescript Node Library to interact with the Vellum API"
-        authors: ["devops@vellum.ai", "fern[bot]"]
       - name: fernapi/fern-python-sdk
         version: 0.6.5
         output:
