@@ -1046,6 +1046,54 @@ components:
       - status_code
       - status_code_output_id
       - text_output_id
+    ArrayChatMessageContent:
+      type: object
+      description: A list of chat message content items.
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayChatMessageContentItem'
+      required:
+      - type
+      - value
+    ArrayChatMessageContentItem:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContent'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContent'
+      - $ref: '#/components/schemas/ImageChatMessageContent'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContent'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
+          IMAGE: '#/components/schemas/ImageChatMessageContent'
+    ArrayChatMessageContentItemRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContentRequest'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
+      - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContentRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
+          IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+    ArrayChatMessageContentRequest:
+      type: object
+      description: A list of chat message content items.
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayChatMessageContentItemRequest'
+      required:
+      - type
+      - value
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1060,6 +1108,7 @@ components:
         * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     ChatHistoryInputRequest:
       type: object
+      description: A user input representing a list of chat messages
       properties:
         name:
           type: string
@@ -1082,9 +1131,38 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/ChatMessageRole'
+        content:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageContent'
+          nullable: true
       required:
       - role
-      - text
+    ChatMessageContent:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContent'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContent'
+      - $ref: '#/components/schemas/ArrayChatMessageContent'
+      - $ref: '#/components/schemas/ImageChatMessageContent'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContent'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
+          ARRAY: '#/components/schemas/ArrayChatMessageContent'
+          IMAGE: '#/components/schemas/ImageChatMessageContent'
+    ChatMessageContentRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContentRequest'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
+      - $ref: '#/components/schemas/ArrayChatMessageContentRequest'
+      - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContentRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
+          ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
+          IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
     ChatMessageRequest:
       type: object
       properties:
@@ -1092,9 +1170,12 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/ChatMessageRole'
+        content:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageContentRequest'
+          nullable: true
       required:
       - role
-      - text
     ChatMessageRole:
       enum:
       - SYSTEM
@@ -1264,10 +1345,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
       required:
       - inputs
     DeploymentProviderPayloadResponse:
@@ -1645,10 +1725,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
         prompt_deployment_id:
           type: string
           format: uuid
@@ -1709,10 +1788,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
         prompt_deployment_id:
           type: string
           format: uuid
@@ -1904,6 +1982,64 @@ components:
         mapping:
           FULFILLED: '#/components/schemas/FulfilledFunctionCall'
           REJECTED: '#/components/schemas/RejectedFunctionCall'
+    FunctionCallChatMessageContent:
+      type: object
+      description: A function call value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          $ref: '#/components/schemas/FunctionCallChatMessageContentValue'
+      required:
+      - type
+      - value
+    FunctionCallChatMessageContentRequest:
+      type: object
+      description: A function call value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          $ref: '#/components/schemas/FunctionCallChatMessageContentValueRequest'
+      required:
+      - type
+      - value
+    FunctionCallChatMessageContentValue:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        name:
+          type: string
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+      required:
+      - arguments
+      - name
+    FunctionCallChatMessageContentValueRequest:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        name:
+          type: string
+          minLength: 1
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - arguments
+      - name
+    FunctionCallEnum:
+      type: string
+      enum:
+      - FUNCTION_CALL
     FunctionCallVariableValue:
       type: object
       properties:
@@ -2082,6 +2218,32 @@ components:
       required:
       - completion
       - completion_index
+    ImageChatMessageContent:
+      type: object
+      description: An image value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          $ref: '#/components/schemas/VellumImage'
+      required:
+      - type
+      - value
+    ImageChatMessageContentRequest:
+      type: object
+      description: An image value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          $ref: '#/components/schemas/VellumImageRequest'
+      required:
+      - type
+      - value
+    ImageEnum:
+      type: string
+      enum:
+      - IMAGE
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -2133,6 +2295,7 @@ components:
           nullable: true
     JSONInputRequest:
       type: object
+      description: A user input representing a JSON object
       properties:
         name:
           type: string
@@ -3981,8 +4144,35 @@ components:
         latency:
           type: integer
           nullable: true
+    StringChatMessageContent:
+      type: object
+      description: A string value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    StringChatMessageContentRequest:
+      type: object
+      description: A string value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    StringEnum:
+      type: string
+      enum:
+      - STRING
     StringInputRequest:
       type: object
+      description: A user input representing a string value
       properties:
         name:
           type: string
@@ -4646,6 +4836,29 @@ components:
       required:
       - code
       - message
+    VellumImage:
+      type: object
+      properties:
+        src:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
+    VellumImageRequest:
+      type: object
+      properties:
+        src:
+          type: string
+          minLength: 1
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
     VellumVariable:
       type: object
       properties:
@@ -4669,6 +4882,7 @@ components:
       - ERROR
       - ARRAY
       - FUNCTION_CALL
+      - IMAGE
       type: string
       description: |-
         * `STRING` - STRING
@@ -4679,6 +4893,7 @@ components:
         * `ERROR` - ERROR
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
+        * `IMAGE` - IMAGE
     WorkflowEventError:
       type: object
       properties:
