@@ -106,6 +106,9 @@ navigation:
           - page: Getting started
             path: ./docs/content/api/intro.mdx
       - api: API Reference
+        snippets:
+          python: fern-api
+          typescript: "@fern-api/node-sdk"
 title: Vellum | Documentation
 colors:
   accentPrimary: "#C7D2FE"

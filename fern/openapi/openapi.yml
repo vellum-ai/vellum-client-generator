@@ -37,6 +37,51 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 paths:
+  /v1/deployments:
+    get:
+      operationId: deployments_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+        description: |-
+          The current status of the deployment
+
+          * `ACTIVE` - Active
+          * `ARCHIVED` - Archived
+      tags:
+      - deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSlimDeploymentReadList'
+          description: ''
   /v1/deployments/{id}:
     get:
       operationId: deployments_retrieve
@@ -921,6 +966,51 @@ paths:
       servers:
       - url: https://documents.vellum.ai
         x-name: Documents
+  /v1/workflow-deployments:
+    get:
+      operationId: workflow_deployments_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+        description: |-
+          The current status of the workflow deployment
+
+          * `ACTIVE` - Active
+          * `ARCHIVED` - Archived
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSlimWorkflowDeploymentList'
+          description: ''
 components:
   schemas:
     ApiNodeResult:
@@ -956,6 +1046,54 @@ components:
       - status_code
       - status_code_output_id
       - text_output_id
+    ArrayChatMessageContent:
+      type: object
+      description: A list of chat message content items.
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayChatMessageContentItem'
+      required:
+      - type
+      - value
+    ArrayChatMessageContentItem:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContent'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContent'
+      - $ref: '#/components/schemas/ImageChatMessageContent'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContent'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
+          IMAGE: '#/components/schemas/ImageChatMessageContent'
+    ArrayChatMessageContentItemRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContentRequest'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
+      - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContentRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
+          IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+    ArrayChatMessageContentRequest:
+      type: object
+      description: A list of chat message content items.
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayChatMessageContentItemRequest'
+      required:
+      - type
+      - value
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -970,6 +1108,7 @@ components:
         * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     ChatHistoryInputRequest:
       type: object
+      description: A user input representing a list of chat messages
       properties:
         name:
           type: string
@@ -992,9 +1131,38 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/ChatMessageRole'
+        content:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageContent'
+          nullable: true
       required:
       - role
-      - text
+    ChatMessageContent:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContent'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContent'
+      - $ref: '#/components/schemas/ArrayChatMessageContent'
+      - $ref: '#/components/schemas/ImageChatMessageContent'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContent'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
+          ARRAY: '#/components/schemas/ArrayChatMessageContent'
+          IMAGE: '#/components/schemas/ImageChatMessageContent'
+    ChatMessageContentRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringChatMessageContentRequest'
+      - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
+      - $ref: '#/components/schemas/ArrayChatMessageContentRequest'
+      - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringChatMessageContentRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
+          ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
+          IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
     ChatMessageRequest:
       type: object
       properties:
@@ -1002,9 +1170,12 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/ChatMessageRole'
+        content:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageContentRequest'
+          nullable: true
       required:
       - role
-      - text
     ChatMessageRole:
       enum:
       - SYSTEM
@@ -1174,10 +1345,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
       required:
       - inputs
     DeploymentProviderPayloadResponse:
@@ -1210,12 +1380,11 @@ components:
           maxLength: 150
         status:
           allOf:
-          - $ref: '#/components/schemas/DeploymentStatus'
+          - $ref: '#/components/schemas/EntityStatus'
           description: |-
             The current status of the deployment
 
             * `ACTIVE` - Active
-            * `INACTIVE` - Inactive
             * `ARCHIVED` - Archived
         environment:
           allOf:
@@ -1226,6 +1395,13 @@ components:
             * `DEVELOPMENT` - Development
             * `STAGING` - Staging
             * `PRODUCTION` - Production
+        last_deployed_on:
+          type: string
+          format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
         active_model_version_ids:
           type: array
           items:
@@ -1235,13 +1411,6 @@ components:
           description: Deprecated. The Prompt execution endpoints return a `prompt_version_id`
             that could be used instead.
           deprecated: true
-        last_deployed_on:
-          type: string
-          format: date-time
-        input_variables:
-          type: array
-          items:
-            $ref: '#/components/schemas/VellumVariable'
       required:
       - active_model_version_ids
       - created
@@ -1250,16 +1419,6 @@ components:
       - label
       - last_deployed_on
       - name
-    DeploymentStatus:
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - ARCHIVED
-      type: string
-      description: |-
-        * `ACTIVE` - Active
-        * `INACTIVE` - Inactive
-        * `ARCHIVED` - Archived
     DocumentDocumentToDocumentIndex:
       type: object
       properties:
@@ -1303,7 +1462,7 @@ components:
           maxLength: 150
         status:
           allOf:
-          - $ref: '#/components/schemas/DocumentIndexStatus'
+          - $ref: '#/components/schemas/EntityStatus'
           description: |-
             The current status of the document index
 
@@ -1352,7 +1511,7 @@ components:
           maxLength: 150
         status:
           allOf:
-          - $ref: '#/components/schemas/DocumentIndexStatus'
+          - $ref: '#/components/schemas/EntityStatus'
           description: |-
             The current status of the document index
 
@@ -1377,14 +1536,6 @@ components:
       - indexing_config
       - label
       - name
-    DocumentIndexStatus:
-      enum:
-      - ACTIVE
-      - ARCHIVED
-      type: string
-      description: |-
-        * `ACTIVE` - Active
-        * `ARCHIVED` - Archived
     DocumentRead:
       type: object
       properties:
@@ -1503,6 +1654,14 @@ components:
       - model_version_id
       - prompt_version_id
       - text
+    EntityStatus:
+      enum:
+      - ACTIVE
+      - ARCHIVED
+      type: string
+      description: |-
+        * `ACTIVE` - Active
+        * `ARCHIVED` - Archived
     EnvironmentEnum:
       enum:
       - DEVELOPMENT
@@ -1566,10 +1725,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
         prompt_deployment_id:
           type: string
           format: uuid
@@ -1630,10 +1788,9 @@ components:
         inputs:
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/PromptDeploymentInputRequest'
-            description: The list of inputs defined in the Prompt's deployment with
-              their corresponding values.
+            $ref: '#/components/schemas/PromptDeploymentInputRequest'
+          description: The list of inputs defined in the Prompt's deployment with
+            their corresponding values.
         prompt_deployment_id:
           type: string
           format: uuid
@@ -1825,6 +1982,64 @@ components:
         mapping:
           FULFILLED: '#/components/schemas/FulfilledFunctionCall'
           REJECTED: '#/components/schemas/RejectedFunctionCall'
+    FunctionCallChatMessageContent:
+      type: object
+      description: A function call value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          $ref: '#/components/schemas/FunctionCallChatMessageContentValue'
+      required:
+      - type
+      - value
+    FunctionCallChatMessageContentRequest:
+      type: object
+      description: A function call value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          $ref: '#/components/schemas/FunctionCallChatMessageContentValueRequest'
+      required:
+      - type
+      - value
+    FunctionCallChatMessageContentValue:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        name:
+          type: string
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+      required:
+      - arguments
+      - name
+    FunctionCallChatMessageContentValueRequest:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        name:
+          type: string
+          minLength: 1
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - arguments
+      - name
+    FunctionCallEnum:
+      type: string
+      enum:
+      - FUNCTION_CALL
     FunctionCallVariableValue:
       type: object
       properties:
@@ -2003,6 +2218,32 @@ components:
       required:
       - completion
       - completion_index
+    ImageChatMessageContent:
+      type: object
+      description: An image value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          $ref: '#/components/schemas/VellumImage'
+      required:
+      - type
+      - value
+    ImageChatMessageContentRequest:
+      type: object
+      description: An image value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          $ref: '#/components/schemas/VellumImageRequest'
+      required:
+      - type
+      - value
+    ImageEnum:
+      type: string
+      enum:
+      - IMAGE
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -2054,6 +2295,7 @@ components:
           nullable: true
     JSONInputRequest:
       type: object
+      description: A user input representing a JSON object
       properties:
         name:
           type: string
@@ -2321,6 +2563,10 @@ components:
         top_k:
           type: number
           format: double
+        custom_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
       required:
       - frequency_penalty
       - presence_penalty
@@ -2692,6 +2938,26 @@ components:
       - text_offset
       - token
       - top_logprobs
+    PaginatedSlimDeploymentReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlimDeploymentRead'
     PaginatedSlimDocumentList:
       type: object
       properties:
@@ -2712,6 +2978,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimDocument'
+    PaginatedSlimWorkflowDeploymentList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlimWorkflowDeployment'
     PatchedDocumentUpdateRequest:
       type: object
       properties:
@@ -3058,6 +3344,10 @@ components:
           additionalProperties:
             type: number
             format: double
+          nullable: true
+        custom_parameters:
+          type: object
+          additionalProperties: {}
           nullable: true
       required:
       - frequency_penalty
@@ -3637,6 +3927,57 @@ components:
           minimum: 0.0
           default: 0.2
           description: The relative weight to give to keywords
+    SlimDeploymentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        label:
+          type: string
+          description: A human-readable label for the deployment
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this deployment within its
+            workspace
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the deployment
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this deployment is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+        last_deployed_on:
+          type: string
+          format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+      required:
+      - created
+      - id
+      - input_variables
+      - label
+      - last_deployed_on
+      - name
     SlimDocument:
       type: object
       properties:
@@ -3707,6 +4048,66 @@ components:
       - id
       - label
       - last_uploaded_at
+    SlimWorkflowDeployment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: A name that uniquely identifies this workflow deployment within
+            its workspace
+          maxLength: 150
+        label:
+          type: string
+          description: A human-readable label for the workflow deployment
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the workflow deployment
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this workflow deployment is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        last_deployed_on:
+          type: string
+          format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The input variables this Workflow Deployment expects to receive
+            values for when it is executed.
+        output_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The output variables this Workflow Deployment will produce
+            when it is executed.
+      required:
+      - created
+      - id
+      - input_variables
+      - label
+      - last_deployed_on
+      - name
+      - output_variables
     StreamingEnum:
       type: string
       enum:
@@ -3743,8 +4144,35 @@ components:
         latency:
           type: integer
           nullable: true
+    StringChatMessageContent:
+      type: object
+      description: A string value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    StringChatMessageContentRequest:
+      type: object
+      description: A string value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    StringEnum:
+      type: string
+      enum:
+      - STRING
     StringInputRequest:
       type: object
+      description: A user input representing a string value
       properties:
         name:
           type: string
@@ -4408,6 +4836,29 @@ components:
       required:
       - code
       - message
+    VellumImage:
+      type: object
+      properties:
+        src:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
+    VellumImageRequest:
+      type: object
+      properties:
+        src:
+          type: string
+          minLength: 1
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
     VellumVariable:
       type: object
       properties:
@@ -4431,6 +4882,7 @@ components:
       - ERROR
       - ARRAY
       - FUNCTION_CALL
+      - IMAGE
       type: string
       description: |-
         * `STRING` - STRING
@@ -4441,6 +4893,7 @@ components:
         * `ERROR` - ERROR
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
+        * `IMAGE` - IMAGE
     WorkflowEventError:
       type: object
       properties:

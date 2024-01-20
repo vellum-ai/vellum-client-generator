@@ -6,16 +6,31 @@ groups:
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+          # license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Python Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: pypi
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.0
+        version: 0.9.4
         github:
           repository: vellum-ai/vellum-client-node-staging
           mode: pull-request
+          license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Typescript Node Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: package.json
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
@@ -26,19 +41,42 @@ groups:
         github:
           repository: vellum-ai/vellum-client-go-staging
           mode: pull-request
+        # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+        # license: MIT
+        # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+        # keywords: ["vellum", "ai", "llm"]
+        # description: "A Go Library to interact with the Vellum API"
+        # authors: ["devops@vellum.ai", "fern[bot]"]
+        # location: 
+        #   output: go.mod
   staging:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.0
+        version: 0.9.4
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
         github:
           repository: vellum-ai/vellum-client-node-staging
+          license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Typescript Node Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: package.json
       - name: fernapi/fern-python-sdk
         version: 0.6.5
         github:
           repository: vellum-ai/vellum-client-python-staging
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+          # license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Python Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: pypi
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
@@ -46,10 +84,18 @@ groups:
         version: 0.9.0
         github:
           repository: vellum-ai/vellum-client-go-staging
+        # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+        # license: MIT
+        # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+        # keywords: ["vellum", "ai", "llm"]
+        # description: "A Go Library to interact with the Vellum API"
+        # authors: ["devops@vellum.ai", "fern[bot]"]
+        # location: 
+        #   output: go.mod
   production:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.0
+        version: 0.9.4
         output:
           location: npm
           package-name: vellum-ai
@@ -59,6 +105,13 @@ groups:
           timeoutInSeconds: infinity
         github:
           repository: vellum-ai/vellum-client-node
+          license: MIT
+          # location: 
+          #   output: package.json
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Typescript Node Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
       - name: fernapi/fern-python-sdk
         version: 0.6.5
         output:
@@ -67,6 +120,14 @@ groups:
           token: ${PYPI_TOKEN}
         github:
           repository: vellum-ai/vellum-client-python
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+          # license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Python Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: pypi
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
@@ -74,3 +135,11 @@ groups:
         version: 0.9.0
         github:
           repository: vellum-ai/vellum-client-go
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
+          # license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Go Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: go.mod
