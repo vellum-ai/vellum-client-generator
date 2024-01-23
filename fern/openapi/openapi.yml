@@ -2093,18 +2093,8 @@ components:
       - state
     FulfilledExecuteWorkflowWorkflowResultEvent:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: The successful response from the Workflow execution containing
+        the produced outputs.
       properties:
         id:
           type: string
@@ -3779,18 +3769,8 @@ components:
       - state
     RejectedExecuteWorkflowWorkflowResultEvent:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: The unsuccessful response from the Workflow execution containing
+        an error specifying what went wrong.
       properties:
         id:
           type: string
@@ -5447,18 +5427,7 @@ components:
           IMAGE: '#/components/schemas/WorkflowOutputImage'
     WorkflowOutputArray:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: An array of outputs from a Workflow execution.
       properties:
         id:
           type: string
@@ -5479,18 +5448,7 @@ components:
       - value
     WorkflowOutputChatHistory:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A chat history output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5511,18 +5469,7 @@ components:
       - value
     WorkflowOutputError:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: An error output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5541,18 +5488,7 @@ components:
       - value
     WorkflowOutputFunctionCall:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A function call output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5571,18 +5507,7 @@ components:
       - value
     WorkflowOutputImage:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: An image output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5601,18 +5526,7 @@ components:
       - value
     WorkflowOutputJSON:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A JSON output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5632,18 +5546,7 @@ components:
       - value
     WorkflowOutputNumber:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A number output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5663,18 +5566,7 @@ components:
       - value
     WorkflowOutputSearchResults:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A search results output from a Workflow execution.
       properties:
         id:
           type: string
@@ -5695,18 +5587,7 @@ components:
       - value
     WorkflowOutputString:
       type: object
-      description: |-
-        A `DataclassSerializer` is just a regular `Serializer`, except that:
-
-        * A set of default fields are automatically populated.
-        * A set of default validators are automatically populated.
-        * Default `.create()` and `.update()` implementations are provided.
-
-        The process of automatically determining a set of serializer fields based on the dataclass fields is slightly
-        complex, but you almost certainly don't need to dig into the implementation.
-
-        If the `DataclassSerializer` class *doesn't* generate the set of fields that you need you should either declare the
-        extra/differing fields explicitly on the serializer class, or simply use a `Serializer` class.
+      description: A string output from a Workflow execution.
       properties:
         id:
           type: string
