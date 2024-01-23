@@ -425,6 +425,47 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/execute-workflow:
+    post:
+      operationId: execute_workflow
+      description: Executes a deployed Workflow and returns its outputs.
+      tags:
+      - execute-workflow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteWorkflowRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteWorkflowResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteWorkflowErrorResponse'
+          description: ''
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
@@ -1094,6 +1135,22 @@ components:
       required:
       - type
       - value
+    ArrayEnum:
+      type: string
+      enum:
+      - ARRAY
+    ArrayVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValue'
+      required:
+      - type
+      - value
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1106,6 +1163,10 @@ components:
         * `CHAT_HISTORY` - CHAT_HISTORY
         * `JINJA` - JINJA
         * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
+    ChatHistoryEnum:
+      type: string
+      enum:
+      - CHAT_HISTORY
     ChatHistoryInputRequest:
       type: object
       description: A user input representing a list of chat messages
@@ -1122,6 +1183,19 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
+      - type
+      - value
+    ChatHistoryVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
       - type
       - value
     ChatMessage:
@@ -1672,6 +1746,10 @@ components:
         * `DEVELOPMENT` - Development
         * `STAGING` - Staging
         * `PRODUCTION` - Production
+    ErrorEnum:
+      type: string
+      enum:
+      - ERROR
     ErrorVariableValue:
       type: object
       properties:
@@ -1689,6 +1767,7 @@ components:
       properties:
         target:
           type: string
+          nullable: true
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
     EvaluationParamsRequest:
@@ -1696,6 +1775,7 @@ components:
       properties:
         target:
           type: string
+          nullable: true
           description: The target value to compare the LLM output against. Typically
             what you expect or desire the LLM output to be.
     ExecutePromptApiErrorResponse:
@@ -1836,6 +1916,65 @@ components:
           nullable: true
       required:
       - inputs
+    ExecuteWorkflowErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about why the request failed.
+      required:
+      - detail
+    ExecuteWorkflowRequest:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the Workflow Deployment. Must provide either this
+            or workflow_deployment_name.
+        workflow_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name of the Workflow Deployment. Must provide either this
+            or workflow_deployment_id.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Workflow Deployment
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowRequestInputRequest'
+          description: The list of inputs defined in the Workflow's Deployment with
+            their corresponding values.
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally include a unique identifier for monitoring purposes.
+      required:
+      - inputs
+    ExecuteWorkflowResponse:
+      type: object
+      properties:
+        execution_id:
+          type: string
+        run_id:
+          type: string
+          nullable: true
+          deprecated: true
+        external_id:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/ExecuteWorkflowWorkflowResultEvent'
+      required:
+      - data
+      - execution_id
     ExecuteWorkflowStreamErrorResponse:
       type: object
       properties:
@@ -1885,6 +2024,15 @@ components:
             unstable and should be used with caution.
       required:
       - inputs
+    ExecuteWorkflowWorkflowResultEvent:
+      oneOf:
+      - $ref: '#/components/schemas/FulfilledExecuteWorkflowWorkflowResultEvent'
+      - $ref: '#/components/schemas/RejectedExecuteWorkflowWorkflowResultEvent'
+      discriminator:
+        propertyName: state
+        mapping:
+          FULFILLED: '#/components/schemas/FulfilledExecuteWorkflowWorkflowResultEvent'
+          REJECTED: '#/components/schemas/RejectedExecuteWorkflowWorkflowResultEvent'
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -1943,6 +2091,27 @@ components:
       - execution_id
       - outputs
       - state
+    FulfilledExecuteWorkflowWorkflowResultEvent:
+      type: object
+      description: The successful response from the Workflow execution containing
+        the produced outputs.
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        ts:
+          type: string
+          format: date-time
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowOutput'
+      required:
+      - id
+      - outputs
+      - state
+      - ts
     FulfilledFunctionCall:
       type: object
       description: The final resolved function call value.
@@ -2310,6 +2479,10 @@ components:
       - name
       - type
       - value
+    JsonEnum:
+      type: string
+      enum:
+      - JSON
     JsonVariableValue:
       type: object
       properties:
@@ -2938,6 +3111,22 @@ components:
       - text_offset
       - token
       - top_logprobs
+    NumberEnum:
+      type: string
+      enum:
+      - NUMBER
+    NumberVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
@@ -3578,6 +3767,25 @@ components:
       - error
       - execution_id
       - state
+    RejectedExecuteWorkflowWorkflowResultEvent:
+      type: object
+      description: The unsuccessful response from the Workflow execution containing
+        an error specifying what went wrong.
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        ts:
+          type: string
+          format: date-time
+        error:
+          $ref: '#/components/schemas/WorkflowEventError'
+      required:
+      - error
+      - id
+      - state
+      - ts
     RejectedFunctionCall:
       type: object
       description: Returned if the function call failed to parse for some reason.
@@ -3653,10 +3861,12 @@ components:
           default: TEXT
         value:
           type: string
+          nullable: true
         chat_history:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
       required:
       - key
     ScenarioInputRequest:
@@ -3672,10 +3882,12 @@ components:
           default: TEXT
         value:
           type: string
+          nullable: true
         chat_history:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
       required:
       - key
     ScenarioInputTypeEnum:
@@ -3684,8 +3896,8 @@ components:
       - CHAT_HISTORY
       type: string
       description: |-
-        * `TEXT` - Text
-        * `CHAT_HISTORY` - Chat History
+        * `TEXT` - TEXT
+        * `CHAT_HISTORY` - CHAT_HISTORY
     SearchErrorResponse:
       type: object
       properties:
@@ -3910,6 +4122,23 @@ components:
       - keywords
       - score
       - text
+    SearchResultsEnum:
+      type: string
+      enum:
+      - SEARCH_RESULTS
+    SearchResultsVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - type
+      - value
     SearchWeightsRequest:
       type: object
       properties:
@@ -4805,6 +5034,27 @@ components:
       required:
       - evaluation_values
       - input_values
+    VariableValue:
+      oneOf:
+      - $ref: '#/components/schemas/StringVariableValue'
+      - $ref: '#/components/schemas/NumberVariableValue'
+      - $ref: '#/components/schemas/JsonVariableValue'
+      - $ref: '#/components/schemas/ChatHistoryVariableValue'
+      - $ref: '#/components/schemas/SearchResultsVariableValue'
+      - $ref: '#/components/schemas/ErrorVariableValue'
+      - $ref: '#/components/schemas/ArrayVariableValue'
+      - $ref: '#/components/schemas/FunctionCallVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVariableValue'
+          NUMBER: '#/components/schemas/NumberVariableValue'
+          JSON: '#/components/schemas/JsonVariableValue'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
+          ERROR: '#/components/schemas/ErrorVariableValue'
+          ARRAY: '#/components/schemas/ArrayVariableValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     VellumError:
       type: object
       properties:
@@ -5152,6 +5402,208 @@ components:
         * `STREAMING` - STREAMING
         * `FULFILLED` - FULFILLED
         * `REJECTED` - REJECTED
+    WorkflowOutput:
+      oneOf:
+      - $ref: '#/components/schemas/WorkflowOutputString'
+      - $ref: '#/components/schemas/WorkflowOutputNumber'
+      - $ref: '#/components/schemas/WorkflowOutputJSON'
+      - $ref: '#/components/schemas/WorkflowOutputChatHistory'
+      - $ref: '#/components/schemas/WorkflowOutputSearchResults'
+      - $ref: '#/components/schemas/WorkflowOutputError'
+      - $ref: '#/components/schemas/WorkflowOutputArray'
+      - $ref: '#/components/schemas/WorkflowOutputFunctionCall'
+      - $ref: '#/components/schemas/WorkflowOutputImage'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/WorkflowOutputString'
+          NUMBER: '#/components/schemas/WorkflowOutputNumber'
+          JSON: '#/components/schemas/WorkflowOutputJSON'
+          CHAT_HISTORY: '#/components/schemas/WorkflowOutputChatHistory'
+          SEARCH_RESULTS: '#/components/schemas/WorkflowOutputSearchResults'
+          ERROR: '#/components/schemas/WorkflowOutputError'
+          ARRAY: '#/components/schemas/WorkflowOutputArray'
+          FUNCTION_CALL: '#/components/schemas/WorkflowOutputFunctionCall'
+          IMAGE: '#/components/schemas/WorkflowOutputImage'
+    WorkflowOutputArray:
+      type: object
+      description: An array of outputs from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValue'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputChatHistory:
+      type: object
+      description: A chat history output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputError:
+      type: object
+      description: An error output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
+        value:
+          $ref: '#/components/schemas/VellumError'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputFunctionCall:
+      type: object
+      description: A function call output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          $ref: '#/components/schemas/FunctionCall'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputImage:
+      type: object
+      description: An image output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          $ref: '#/components/schemas/VellumImage'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputJSON:
+      type: object
+      description: A JSON output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
+          type: object
+          additionalProperties: {}
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputNumber:
+      type: object
+      description: A number output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/NumberEnum'
+        value:
+          type: number
+          format: double
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputSearchResults:
+      type: object
+      description: A search results output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/SearchResultsEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputString:
+      type: object
+      description: A string output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+      required:
+      - id
+      - name
+      - type
+      - value
     WorkflowRequestChatHistoryInputRequest:
       type: object
       properties:
@@ -5246,6 +5698,11 @@ components:
         error:
           allOf:
           - $ref: '#/components/schemas/WorkflowEventError'
+          nullable: true
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowOutput'
           nullable: true
       required:
       - id
