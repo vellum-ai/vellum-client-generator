@@ -466,7 +466,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecuteWorkflowErrorResponse'
           description: ''
-      x-fern-ignore: true
+      servers:
+      - url: https://predict.vellum.ai
+        x-name: Predict
   /v1/execute-workflow-stream:
     post:
       operationId: execute_workflow_stream
