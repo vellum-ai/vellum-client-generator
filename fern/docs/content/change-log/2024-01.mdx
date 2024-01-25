@@ -1,0 +1,125 @@
+## Prompt Deployment Usage Tracking
+*January 29th, 2024*
+
+Going forward, Vellum will now keep track of the token utilization of your Prompt Deployments. You can keep tabs on
+input, output, and total tokens used per request.
+
+![Token Count Row Data](https://storage.googleapis.com/vellum-public/help-docs/token-count-row-data.png)
+
+You can also view this data in aggregate in the Monitoring tab.
+
+![Token Count Time-Series Data](https://storage.googleapis.com/vellum-public/help-docs/token-count-time-series-data.png)
+
+---
+
+## Single Editor Mode
+*January 25th, 2024*
+
+We've collaborated with our friends at [velt.dev](https://velt.dev/) to deliver an all new "Single Editor Mode" in
+Prompt and Workflow Sandboxes. Wit this, only one person can edit a Prompt/Workflow at a time and you can hand off
+editing control to another collaborator. This is useful when you want to avoid conflicts when multiple people are
+trying to edit the same Prompt/Workflow at the same time. Check out the video below to see it in action!
+
+https://www.loom.com/share/d9f1d01fe6464d0d8fca17bc901f08f1
+
+---
+
+## API to Execute Workflow w/o Streaming
+*January 23rd, 2024*
+
+We've added a new API endpoint for executing a Workflow Deployment without streaming back its incremental results. This is useful
+when you want to execute a Workflow and only care about its final result or if you're invoking your Workflow
+via a service that doesn't support HTTP Streaming like Zapier.
+
+---
+
+## Workflow Deployment Execution Visualization Improvements
+*January 22nd, 2024*
+
+Now, when visiting the details page for a Workflow Deployment Execution, you'll find an improved loading state as well
+as a simplified view for Conditional Nodes.
+
+---
+
+## Upload/Download of Function Definitions
+*January 18th, 2024*
+
+You can now easily import your existing function definition files (JSON or YAML) into Vellum function calling blocks
+as well as export functions you've already defined in Vellum to pass along to engineers for implementation.
+
+https://www.loom.com/share/f70e5c1999e14433bfcd601b927638d4
+
+
+---
+
+## Image Support for OpenAI Vision Models
+*January 18th, 2024*
+
+Vellum now has API support for interacting with OpenAI's vision models, such as `gpt-4-vision-preview`.
+You can learn more about OpenAI Vision models [here](https://platform.openai.com/docs/guides/vision). Note that there is
+limited support for images in the Vellum UI at this time, but you can still use the API to interact with OpenAI Vision models.
+UI support coming soon!
+
+---
+
+## Folders
+*January 12th, 2024*
+
+https://www.loom.com/share/bb9c72caee8b413685be766cfc37d7a2
+
+You can now organize entities in Vellum via folders! You can nest folders, share them by url, and move entities between folders.
+
+---
+
+## Support for OpenAI JSON Mode, User ID, and Seed Params
+*January 11th, 2024*
+
+![OpenAI Custom Parameters](https://storage.googleapis.com/vellum-public/help-docs/open-ai-custom-params.png)
+
+There is now native support for setting the `user` and `seed` parameters in OpenAI API requests, as well as specifying
+that the response format be of type JSON. You can learn more about how these parameters are used by OpenAI in
+their docs [here](https://platform.openai.com/docs/api-reference/chat/create).
+
+---
+
+## Cloning Workflow Scenarios
+*January 9th, 2024*
+
+![Clone Workflow Scenario](https://storage.googleapis.com/vellum-public/help-docs/clone-workflow-scenario.png)
+
+You can now clone a Workflow Scenario to create a new Scenario based on an existing one. This is useful when you want to
+create a new Scenario that is similar to an existing one, but with some changes.
+
+---
+
+## API Key Metadata
+*January 9th, 2024*
+
+![API Key Metadata](https://storage.googleapis.com/vellum-public/help-docs/api-key-metadata.png)
+
+Now you can add and view metadata for your Vellum API keys. For example, you can see when an API key was created and by whom.
+You can also assign a label to an API key to help you keep track of its purpose and an environment tag so that you know
+where it's used.
+
+---
+
+## Top-Level Workflow Execution Actions
+*January 4th, 2024*
+
+![Top-Level Workflow Execution Actions](https://storage.googleapis.com/vellum-public/help-docs/top-level-workflow-execution-actions.png)
+
+You can now find the following actions at the top-level of the Workflow and Prompt Deployment Execution pages:
+- Save as Scenario: Useful for saving an edge case seen in production as a Scenario for qualitative eval.
+- Save as Test Case: Useful for saving an edge case seen in production to your bank of Test Cases for quantitative eval.
+- View Details: Drill in to see specifics about that specific Execution.
+
+---
+
+## Improved Error Messages in Code & API Nodes
+*January 2nd, 2024*
+
+![Improved Error Messages in Code & API Nodes](https://storage.googleapis.com/vellum-public/help-docs/workflow-api-node-code-node-error-messages.png)
+
+API Nodes and Code Nodes within Workflows now have improved error messages. When an error occurs, the error message
+will now include the line number and column number where the error occurred. This will make it easier to debug errors
+in your Workflows.
