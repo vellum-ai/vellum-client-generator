@@ -75,6 +75,34 @@ You can learn more about OpenAI Vision models [here](https://platform.openai.com
 limited support for images in the Vellum UI at this time, but you can still use the API to interact with OpenAI Vision models.
 UI support coming soon!
 
+Here's a quick example on how to send an image to the model, using our python sdk:
+
+```python
+image_link = "https://storage.googleapis.com/vellum-public/help-docs/add_prompt_block_button.png"
+response = client.execute_prompt(
+    prompt_deployment_name="github-loom-demo",
+    inputs=[
+        PromptDeploymentInputRequest_ChatHistory(
+            name="$chat_history",
+            value=[
+                ChatMessageRequest(
+                    role=ChatMessageRole.USER,
+                    content={
+                        "type": "ARRAY",
+                        "value": [
+                            {"type": "STRING", "value": "What's in this image?"},
+                            {"type": "IMAGE", "value": {"src": image_link}},
+                        ],
+                    },
+                )
+            ],
+            type=VellumVariableType.CHAT_HISTORY,
+        ),
+    ],
+)
+print(response.outputs[0].value)
+```
+
 ---
 
 ## Folders
@@ -91,6 +119,15 @@ You can now organize entities in Vellum via folders! You can nest folders, share
   src="https://storage.googleapis.com/vellum-public/help-docs/folders-demo.mp4"
 ></video>
 
+
+---
+
+## Support for Google Gemini Safety Settings
+*January 12th, 2024*
+
+There is now native support for setting the `safetySettint` parameters in Google Gemini prompts. You can learn more about how these parameters are used by Google in their docs [here](https://ai.google.dev/api/rest/v1beta/SafetySetting).
+
+![Gemini Custom Parameters](https://storage.googleapis.com/vellum-public/help-docs/gemini-custom-params.png)
 
 ---
 
