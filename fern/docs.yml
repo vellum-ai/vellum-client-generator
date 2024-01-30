@@ -10,6 +10,9 @@ tabs:
   help:
     display-name: Help Center
     icon: "fa-solid fa-cube"
+  change-log:
+    display-name: Changelog
+    icon: "fa-solid fa-bolt"
 navigation:
   - tab: help
     layout:
@@ -109,6 +112,13 @@ navigation:
         snippets:
           python: fern-api
           typescript: "@fern-api/node-sdk"
+  - tab: change-log
+    layout:
+      - section: "2024"
+        contents:
+          - page: January
+            path: ./docs/content/change-log/2024-01.mdx
+            slug: 2024-01
 title: Vellum | Documentation
 colors:
   accentPrimary: "#C7D2FE"
