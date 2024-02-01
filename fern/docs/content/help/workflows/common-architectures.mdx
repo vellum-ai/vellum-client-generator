@@ -50,3 +50,15 @@ Here are the steps involved in this example:
     4. The current `prompt_output`, using a fallback mapped to a Text input variable of an empty string.
 - Step 4: The templating node feeds into a conditional node, that calls a Prompt node when the prompt's execution counter is less than the length of the array. It outputs to a terminal node in the else branch.
 - Step 5: The Prompt node receives the edge from the conditional node's IF branch, and feeds back to the templating node with its output.
+
+## 4. Retrying a Prompt Node in case of non-deterministic failure
+
+Prompt nodes support two selectable outputs - one from the model in case of a valid output and one in case of a non deterministic error. Model hosts fail for all sorts of reasons that include timeouts, rate limits, or server overload. You could make your production-grade LLM features resilient to these features by adding retry logic into your Workflows!
+
+![Workflow Retry Example](https://storage.googleapis.com/vellum-public/help-docs/workflow_retry_example.png)
+
+Here are the steps involved in this example:
+- Step 1: Define a standard Prompt Node
+- Step 2: Define a Conditional Node (`Error Check`) that reads from the new Error output from the Prompt Node and checks to see if it's not null.
+- Step 3: Define another Conditional Node (`Retry Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
+- Step 4: Loop back to the Prompt Node if it's under the limit, exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
