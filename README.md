@@ -1,4 +1,4 @@
-# Vellum API
+# Vellum API & Docs
 
 Tagging a release on this repository will update the following clients:
 
@@ -64,28 +64,41 @@ Fern hosts our docs site at [https://docs.vellum.ai/](https://docs.vellum.ai/). 
 is defined by the [docs.yml](./fern/api/docs.yml) file. The content for each page is defined in the [help](./docs/content/help) folder
 as `.mdx` files using markdown syntax.
 
+### Best Practices for Writing Docs
+See [here](https://www.notion.so/vellum-ai/Guide-to-Writing-Product-Updates-6ebad76d47274d7180a55eef13946bbd) for
+best practices when writing customer-facing product docs. These guidelines apply to help docs, change log items, and more.
+
+In addition to those guidelines, you should also strive to:
+1. Ensure each page defines title, description, and image properties. This is important for SEO and social sharing.
+2. Embed Loom videos as iframes. Update the video's title directly in Loom.
+
 ### Static Assets
 Fern is in the process of adding support for relative links to static assets like images. In the meantime, we host all
 images ourselves in [this public GCS bucket](https://console.cloud.google.com/storage/browser/vellum-public/help-docs?project=vocify-prod).
 
 ### Custom Components
-You'll notice the usage of some custom components like `CodeBlock`. These are specific to fern.
+You'll notice the usage of some custom components like `CodeBlock`. These are specific to fern. Docs for available
+custom components can be found [here](https://docs.buildwithfern.com/generate-docs/component-library).
 
 
 ### Local Development
-Fern has not yet released a mechanism to locally compile and preview the docs site. In the meantime, you can
-deploy to our staging site to preview your changes (see below for deploying to staging).
+Fern has not yet released a mechanism to locally compile and preview the docs site. Instead, you have two options:
+1) Deploy to a shared staging site by following the steps below; or
+2) Open a PR. There's automation that'll comment with each new commit and include a link to a publicly visible preview site.
 
 
-### Deploying the Docs Site
-You can publish the docs to the staging site by running the following command:
+### Deploying Docs to Staging
+You can publish the docs to our shared staging site by running the following command:
 ```bash
 fern generate --docs --instance vellum-staging.docs.buildwithfern.com
 ```
 
 The staging site can be found at [vellum-staging.docs.buildwithfern.com](https://vellum-staging.docs.buildwithfern.com/).
 
-You can publish the docs to production by running:
+### Deploying Docs to Production
+Deployment to production happens manually with each merge to main that results in a diff to the docs. If for some
+reason you need to deploy docs manually, you can run:
+
 ```bash
 fern generate --docs --instance vellum.docs.buildwithfern.com
 ```
