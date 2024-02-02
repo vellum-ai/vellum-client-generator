@@ -1,4 +1,5 @@
 instances:
+  - url: vellum-staging.docs.buildwithfern.com
   - url: vellum.docs.buildwithfern.com
     custom-domain: docs.vellum.ai
 
