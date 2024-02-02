@@ -1,9 +1,9 @@
 ## Prompt Node Retries
 *February 1st, 2024*
 
-Prompt Nodes in workflows now emit a selectable output for instances of when it errors. Users could use this to now build Vellum Workflow-native retry functionality for your prompts!
+You can now detect when a Prompt Node within a Workflow errors by using a Conditional Node. Using this, you can now build out retry logic around Prompt Nodes within your Workflow! This is useful if you want to catch retryable errors (like rate limit errors from an LLM provider) and try making the call to the LLM again.
 
-Check out the video below for an example of how this works:
+See a demo of it in action here:
 
 <iframe src="https://www.loom.com/embed/770a1ac0bbaa4f9d9192d336eb0a191c"
   width="100%"
