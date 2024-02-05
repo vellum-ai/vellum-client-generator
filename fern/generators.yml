@@ -49,6 +49,18 @@ groups:
         # authors: ["devops@vellum.ai", "fern[bot]"]
         # location: 
         #   output: go.mod
+  branch-ruby:
+    generators:
+      - name: fernapi/fern-ruby-sdk
+        version: 0.0.4-1-2059079
+        output:
+          location: rubygems
+          package-name: vellum_ai
+        github:
+          repository: vellum-ai/vellum-client-ruby-staging
+          mode: pull-request
+        config:
+          clientClassName: Vellum
   staging:
     generators:
       - name: fernapi/fern-typescript-node-sdk
@@ -92,6 +104,15 @@ groups:
         # authors: ["devops@vellum.ai", "fern[bot]"]
         # location: 
         #   output: go.mod
+      - name: fernapi/fern-ruby-sdk
+        version: 0.0.4-1-2059079
+        output:
+          location: rubygems
+          package-name: vellum_ai
+        github:
+          repository: vellum-ai/vellum-client-ruby-staging
+        config:
+          clientClassName: Vellum
   production:
     generators:
       - name: fernapi/fern-typescript-node-sdk
@@ -143,3 +164,13 @@ groups:
           # authors: ["devops@vellum.ai", "fern[bot]"]
           # location: 
           #   output: go.mod
+      - name: fernapi/fern-ruby-sdk
+        version: 0.0.4-1-2059079
+        output:
+          location: rubygems
+          package-name: vellum_ai
+          api-key: ${RUBYGEM_API_KEY}
+        github:
+          repository: vellum-ai/vellum-client-ruby
+        config:
+          clientClassName: Vellum
