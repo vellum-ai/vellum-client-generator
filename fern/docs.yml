@@ -111,7 +111,7 @@ navigation:
       - api: API Reference
         snippets:
           python: vellum-ai
-          typescript: "vellum-ai"
+          typescript: vellum-ai
   - tab: change-log
     layout:
       - section: "2024"
