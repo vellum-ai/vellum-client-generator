@@ -110,8 +110,8 @@ navigation:
             path: ./docs/content/api/intro.mdx
       - api: API Reference
         snippets:
-          python: fern-api
-          typescript: "@fern-api/node-sdk"
+          python: vellum-ai
+          typescript: "vellum-ai"
   - tab: change-log
     layout:
       - section: "2024"
