@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  pull_request:
+    paths:
+      - 'fern/openapi/openapi.yml'
+
+jobs:
+  fern-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Fern
+        run: npm install -g fern-api
+
+      - name: Check Fern API is valid
+        run: fern check
+
+  fern-generate-branch:
+    needs: fern-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Download Fern
+        run: npm install -g fern-api
+
+      - name: Release Branch SDKs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+        run: |
+          fern generate --group branch-node --log-level debug
+          fern generate --group branch-python --log-level debug
+          fern generate --group branch-go --log-level debug
+          fern generate --group branch-ruby --log-level debug

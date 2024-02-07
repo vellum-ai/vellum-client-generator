@@ -6,8 +6,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-          # license: MIT
+          license: MIT
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
@@ -41,8 +40,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-go-staging
           mode: pull-request
-        # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-        # license: MIT
+          license: MIT
         # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
         # keywords: ["vellum", "ai", "llm"]
         # description: "A Go Library to interact with the Vellum API"
@@ -81,8 +79,7 @@ groups:
         version: 0.6.5
         github:
           repository: vellum-ai/vellum-client-python-staging
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-          # license: MIT
+          license: MIT
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
@@ -96,14 +93,13 @@ groups:
         version: 0.9.0
         github:
           repository: vellum-ai/vellum-client-go-staging
-        # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-        # license: MIT
-        # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-        # keywords: ["vellum", "ai", "llm"]
-        # description: "A Go Library to interact with the Vellum API"
-        # authors: ["devops@vellum.ai", "fern[bot]"]
-        # location: 
-        #   output: go.mod
+          license: MIT
+          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
+          # keywords: ["vellum", "ai", "llm"]
+          # description: "A Go Library to interact with the Vellum API"
+          # authors: ["devops@vellum.ai", "fern[bot]"]
+          # location: 
+          #   output: go.mod
       - name: fernapi/fern-ruby-sdk
         version: 0.0.4-1-2059079
         output:
@@ -141,8 +137,7 @@ groups:
           token: ${PYPI_TOKEN}
         github:
           repository: vellum-ai/vellum-client-python
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-          # license: MIT
+          license: MIT
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
@@ -156,8 +151,7 @@ groups:
         version: 0.9.0
         github:
           repository: vellum-ai/vellum-client-go
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1835
-          # license: MIT
+          license: MIT
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
