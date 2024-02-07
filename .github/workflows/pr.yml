@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'fern/openapi/openapi.yml'
+      - 'fern/generators.yml'
 
 jobs:
   fern-check:
