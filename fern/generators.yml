@@ -56,6 +56,7 @@ groups:
           package-name: vellum_ai
         github:
           repository: vellum-ai/vellum-client-ruby-staging
+          license: MIT
           mode: pull-request
         config:
           clientClassName: Vellum
@@ -107,6 +108,7 @@ groups:
           package-name: vellum_ai
         github:
           repository: vellum-ai/vellum-client-ruby-staging
+          license: MIT
         config:
           clientClassName: Vellum
   production:
@@ -166,5 +168,6 @@ groups:
           api-key: ${RUBYGEM_API_KEY}
         github:
           repository: vellum-ai/vellum-client-ruby
+          license: MIT
         config:
           clientClassName: Vellum
