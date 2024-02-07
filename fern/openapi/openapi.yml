@@ -462,7 +462,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecuteWorkflowErrorResponse'
           description: ''
-      x-fern-ignore: true
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -1059,6 +1058,7 @@ components:
   schemas:
     ApiNodeResult:
       type: object
+      description: A Node Result Event emitted from an API Node.
       properties:
         type:
           type: string
@@ -1138,22 +1138,6 @@ components:
       required:
       - type
       - value
-    ArrayEnum:
-      type: string
-      enum:
-      - ARRAY
-    ArrayVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValue'
-      required:
-      - type
-      - value
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1186,19 +1170,6 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
-      - type
-      - value
-    ChatHistoryVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          nullable: true
-      required:
       - type
       - value
     ChatMessage:
@@ -1328,6 +1299,7 @@ components:
       - value
     CodeExecutionNodeResult:
       type: object
+      description: A Node Result Event emitted from a Code Execution Node.
       properties:
         type:
           type: string
@@ -1392,6 +1364,7 @@ components:
       - value
     ConditionalNodeResult:
       type: object
+      description: A Node Result Event emitted from a Conditional Node.
       properties:
         type:
           type: string
@@ -2129,6 +2102,37 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
+    FulfilledWorkflowNodeResultEvent:
+      type: object
+      description: An event that indicates that the node has fulfilled its execution.
+      properties:
+        id:
+          type: string
+        node_id:
+          type: string
+        node_result_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        ts:
+          type: string
+          format: date-time
+          nullable: true
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        output_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeOutputCompiledValue'
+          nullable: true
+      required:
+      - data
+      - id
+      - node_id
+      - node_result_id
+      - state
     FunctionCall:
       oneOf:
       - $ref: '#/components/schemas/FulfilledFunctionCall'
@@ -2449,6 +2453,37 @@ components:
         prompt_version_id:
           type: string
           nullable: true
+    InitiatedWorkflowNodeResultEvent:
+      type: object
+      description: An event that indicates that the node has initiated its execution.
+      properties:
+        id:
+          type: string
+        node_id:
+          type: string
+        node_result_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/InitiatedEnum'
+        ts:
+          type: string
+          format: date-time
+          nullable: true
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeInputVariableCompiledValue'
+          nullable: true
+      required:
+      - data
+      - id
+      - node_id
+      - node_result_id
+      - state
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object
@@ -3062,6 +3097,114 @@ components:
           CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
+    NodeOutputCompiledChatHistoryValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledErrorValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledJsonValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledNumberValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/NumberEnum'
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledSearchResultsValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/SearchResultsEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledStringValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledValue:
+      oneOf:
+      - $ref: '#/components/schemas/NodeOutputCompiledStringValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledNumberValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledJsonValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledErrorValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NodeOutputCompiledStringValue'
+          NUMBER: '#/components/schemas/NodeOutputCompiledNumberValue'
+          JSON: '#/components/schemas/NodeOutputCompiledJsonValue'
+          CHAT_HISTORY: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
+          SEARCH_RESULTS: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
+          ERROR: '#/components/schemas/NodeOutputCompiledErrorValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -3102,18 +3245,6 @@ components:
       type: string
       enum:
       - NUMBER
-    NumberVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: number
-          format: double
-          nullable: true
-      required:
-      - type
-      - value
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
@@ -3278,6 +3409,7 @@ components:
           nullable: true
     PromptNodeResult:
       type: object
+      description: A Node Result Event emitted from a Prompt Node.
       properties:
         type:
           type: string
@@ -3803,6 +3935,35 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
+    RejectedWorkflowNodeResultEvent:
+      type: object
+      description: An event that indicates that the node has rejected its execution.
+      properties:
+        id:
+          type: string
+        node_id:
+          type: string
+        node_result_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        ts:
+          type: string
+          format: date-time
+          nullable: true
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        error:
+          $ref: '#/components/schemas/WorkflowEventError'
+      required:
+      - data
+      - error
+      - id
+      - node_id
+      - node_result_id
+      - state
     SandboxScenario:
       type: object
       properties:
@@ -3894,6 +4055,7 @@ components:
           description: The metadata filters to apply to the search
     SearchNodeResult:
       type: object
+      description: A Node Result Event emitted from a Search Node.
       properties:
         type:
           type: string
@@ -4097,19 +4259,6 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
-    SearchResultsVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResult'
-          nullable: true
-      required:
-      - type
-      - value
     SearchWeightsRequest:
       type: object
       properties:
@@ -4344,6 +4493,39 @@ components:
         latency:
           type: integer
           nullable: true
+    StreamingWorkflowNodeResultEvent:
+      type: object
+      description: An event that indicates that the node has execution is in progress.
+      properties:
+        id:
+          type: string
+        node_id:
+          type: string
+        node_result_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/StreamingEnum'
+        ts:
+          type: string
+          format: date-time
+          nullable: true
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        output:
+          allOf:
+          - $ref: '#/components/schemas/NodeOutputCompiledValue'
+          nullable: true
+        output_index:
+          type: integer
+          nullable: true
+      required:
+      - data
+      - id
+      - node_id
+      - node_result_id
+      - state
     StringChatMessageContent:
       type: object
       description: A string value that is used in a chat message.
@@ -4556,6 +4738,7 @@ components:
       - value
     TemplatingNodeResult:
       type: object
+      description: A Node Result Event emitted from a Templating Node.
       properties:
         type:
           type: string
@@ -4705,6 +4888,7 @@ components:
       - value
     TerminalNodeResult:
       type: object
+      description: A Node Result Event emitted from a Terminal Node.
       properties:
         type:
           type: string
@@ -5005,27 +5189,6 @@ components:
       required:
       - evaluation_values
       - input_values
-    VariableValue:
-      oneOf:
-      - $ref: '#/components/schemas/StringVariableValue'
-      - $ref: '#/components/schemas/NumberVariableValue'
-      - $ref: '#/components/schemas/JsonVariableValue'
-      - $ref: '#/components/schemas/ChatHistoryVariableValue'
-      - $ref: '#/components/schemas/SearchResultsVariableValue'
-      - $ref: '#/components/schemas/ErrorVariableValue'
-      - $ref: '#/components/schemas/ArrayVariableValue'
-      - $ref: '#/components/schemas/FunctionCallVariableValue'
-      discriminator:
-        propertyName: type
-        mapping:
-          STRING: '#/components/schemas/StringVariableValue'
-          NUMBER: '#/components/schemas/NumberVariableValue'
-          JSON: '#/components/schemas/JsonVariableValue'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
-          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
-          ERROR: '#/components/schemas/ErrorVariableValue'
-          ARRAY: '#/components/schemas/ArrayVariableValue'
-          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     VellumError:
       type: object
       properties:
@@ -5271,6 +5434,7 @@ components:
         * `WORKFLOW` - Workflow
     WorkflowExecutionNodeResultEvent:
       type: object
+      description: A NODE-level event emitted from the workflow's execution.
       properties:
         execution_id:
           type: string
@@ -5290,6 +5454,7 @@ components:
       - type
     WorkflowExecutionWorkflowResultEvent:
       type: object
+      description: A WORKFLOW-level event emitted from the workflow's execution.
       properties:
         execution_id:
           type: string
@@ -5328,39 +5493,18 @@ components:
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
     WorkflowNodeResultEvent:
-      type: object
-      properties:
-        id:
-          type: string
-        node_id:
-          type: string
-        node_result_id:
-          type: string
-        state:
-          $ref: '#/components/schemas/WorkflowNodeResultEventState'
-        ts:
-          type: string
-          format: date-time
-          nullable: true
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WorkflowNodeResultData'
-          nullable: true
-        error:
-          allOf:
-          - $ref: '#/components/schemas/WorkflowEventError'
-          nullable: true
-        input_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeInputVariableCompiledValue'
-          nullable: true
-      required:
-      - data
-      - id
-      - node_id
-      - node_result_id
-      - state
+      oneOf:
+      - $ref: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
+      - $ref: '#/components/schemas/StreamingWorkflowNodeResultEvent'
+      - $ref: '#/components/schemas/FulfilledWorkflowNodeResultEvent'
+      - $ref: '#/components/schemas/RejectedWorkflowNodeResultEvent'
+      discriminator:
+        propertyName: state
+        mapping:
+          INITIATED: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
+          STREAMING: '#/components/schemas/StreamingWorkflowNodeResultEvent'
+          FULFILLED: '#/components/schemas/FulfilledWorkflowNodeResultEvent'
+          REJECTED: '#/components/schemas/RejectedWorkflowNodeResultEvent'
     WorkflowNodeResultEventState:
       enum:
       - INITIATED
@@ -5381,7 +5525,6 @@ components:
       - $ref: '#/components/schemas/WorkflowOutputChatHistory'
       - $ref: '#/components/schemas/WorkflowOutputSearchResults'
       - $ref: '#/components/schemas/WorkflowOutputError'
-      - $ref: '#/components/schemas/WorkflowOutputArray'
       - $ref: '#/components/schemas/WorkflowOutputFunctionCall'
       - $ref: '#/components/schemas/WorkflowOutputImage'
       discriminator:
@@ -5393,30 +5536,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/WorkflowOutputChatHistory'
           SEARCH_RESULTS: '#/components/schemas/WorkflowOutputSearchResults'
           ERROR: '#/components/schemas/WorkflowOutputError'
-          ARRAY: '#/components/schemas/WorkflowOutputArray'
           FUNCTION_CALL: '#/components/schemas/WorkflowOutputFunctionCall'
           IMAGE: '#/components/schemas/WorkflowOutputImage'
-    WorkflowOutputArray:
-      type: object
-      description: An array of outputs from a Workflow execution.
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          description: The output's name, as defined in the workflow
-        type:
-          $ref: '#/components/schemas/ArrayEnum'
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValue'
-      required:
-      - id
-      - name
-      - type
-      - value
     WorkflowOutputChatHistory:
       type: object
       description: A chat history output from a Workflow execution.
@@ -5699,6 +5820,7 @@ components:
           ERROR: '#/components/schemas/WorkflowResultEventOutputDataError'
     WorkflowResultEventOutputDataChatHistory:
       type: object
+      description: A Chat History output streamed from a Workflow execution.
       properties:
         id:
           type: string
@@ -5732,6 +5854,7 @@ components:
       - value
     WorkflowResultEventOutputDataError:
       type: object
+      description: An Error output streamed from a Workflow execution.
       properties:
         id:
           type: string
@@ -5764,6 +5887,7 @@ components:
       - value
     WorkflowResultEventOutputDataJSON:
       type: object
+      description: A JSON output streamed from a Workflow execution.
       properties:
         id:
           type: string
@@ -5796,6 +5920,7 @@ components:
       - value
     WorkflowResultEventOutputDataNumber:
       type: object
+      description: A number output streamed from a Workflow execution.
       properties:
         id:
           type: string
@@ -5828,6 +5953,7 @@ components:
       - value
     WorkflowResultEventOutputDataSearchResults:
       type: object
+      description: A Search Results output streamed from a Workflow execution.
       properties:
         id:
           type: string
@@ -5861,6 +5987,7 @@ components:
       - value
     WorkflowResultEventOutputDataString:
       type: object
+      description: A string output streamed from a Workflow execution.
       properties:
         id:
           type: string
