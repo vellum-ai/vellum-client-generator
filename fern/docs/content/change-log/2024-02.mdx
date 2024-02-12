@@ -2,15 +2,28 @@
 title: Changelog | February, 2024
 ---
 
+## Evaluation Reports
+
+_February 12th, 2024_
+
+Test Suite Runs have received a big upgrade, and now live in its own tab - Evaluations. You are now able to compare a Prompt or Workflow Variant against a Deployment, and view aggregate metrics like Median or P90.
+
+See a demo of the complete set of updates here:
+
+<iframe src="https://place.holder.url" width="100%" height="450px"></iframe>
+
 ## Fireworks Function Calling Model
-*February 5nd, 2024*
+
+_February 5nd, 2024_
 
 OpenAI's GPT models have traditionally led the way in supporting structured data generation through function calling. But late last year Fireworks AI splashed in with their own [function calling model](https://blog.fireworks.ai/fireworks-raises-the-quality-bar-with-function-calling-model-and-api-release-e7f49d1e98e9)! This model is now available in Vellum for those interested in an open source alternative to GPT.
 ![Fireworks Function Call Model](https://storage.googleapis.com/vellum-public/help-docs/fireworks-function-call.png)
 
 ---
+
 ## Cloning Workflow Nodes
-*February 2nd, 2024*
+
+_February 2nd, 2024_
 
 When you hover over any node in your Workflow editor, you will see a new `Duplicate Node` icon. Clicking on this will create a new copy of a node! Never again will you need to start a node from scratch when you want to just tweak a field or two.
 
@@ -19,13 +32,15 @@ When you hover over any node in your Workflow editor, you will see a new `Duplic
 ---
 
 ## Prompt Node Retries
-*February 1st, 2024*
+
+_February 1st, 2024_
 
 You can now detect when a Prompt Node within a Workflow errors by using a Conditional Node. Using this, you can now build out retry logic around Prompt Nodes within your Workflow! This is useful if you want to catch retryable errors (like rate limit errors from an LLM provider) and try making the call to the LLM again.
 
 See a demo of it in action here:
 
-<iframe src="https://www.loom.com/embed/770a1ac0bbaa4f9d9192d336eb0a191c"
+<iframe
+  src="https://www.loom.com/embed/770a1ac0bbaa4f9d9192d336eb0a191c"
   width="100%"
   height="450px"
 ></iframe>
