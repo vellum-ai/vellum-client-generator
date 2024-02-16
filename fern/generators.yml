@@ -50,7 +50,7 @@ groups:
   branch-ruby:
     generators:
       - name: fernapi/fern-ruby-sdk
-        version: 0.0.4-1-2059079
+        version: 0.1.1
         output:
           location: rubygems
           package-name: vellum_ai
@@ -161,7 +161,7 @@ groups:
           # location: 
           #   output: go.mod
       - name: fernapi/fern-ruby-sdk
-        version: 0.0.4-1-2059079
+        version: 0.1.1
         output:
           location: rubygems
           package-name: vellum_ai
