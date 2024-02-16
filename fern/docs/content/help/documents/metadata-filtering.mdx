@@ -1,4 +1,4 @@
-Some use-cases of Vellum Search require you to narrow in on a subset of documents prior to searching based on keyword match / semantic similarity. For example, you might want to search across historical conversations *for a specific user* or only across documents *that have specific tags*.
+Some use-cases of Vellum Search require you to narrow in on a subset of documents prior to searching based on keyword match / semantic similarity. For example, you might want to search across historical conversations _for a specific user_ or only across documents _that have specific tags_.
 
 You can do this through metadata filtering.
 
@@ -25,7 +25,7 @@ You can also view metadata associated with a document and edit it after it’s b
 
 ### Through the API
 
-You can provide metadata as *stringified* JSON upon initial upload using the [upload Documents API here](https://docs.vellum.ai/api-reference/api-reference/documents/upload).
+You can provide metadata as _stringified_ JSON upon initial upload using the [upload Documents API here](https://docs.vellum.ai/api-reference/api-reference/documents/upload).
 
 You can also update a document’s metadata after-the-fact using the the `Document - Partial Update` [endpoint here](https://docs.vellum.ai/api-reference/api-reference/documents/partial-update).
 
@@ -36,6 +36,8 @@ Note that in this endpoint, you can simply provide a JSON object (rather than a 
 You use the `search` endpoint to perform a search against an index (documented [here](https://docs.vellum.ai/api-reference/api-reference/search)). This endpoint exposes an `options.filters.metadata` field for filtering against your provided metadata prior to matching on keywords/semantic similarity.
 
 The syntax of the `metadata` property supports complex boolean logic and was borrowed from [React Query Builder](https://react-querybuilder.js.org/). You can use their [demo here](https://react-querybuilder.js.org/demo#addRuleToNewGroups=false&autoSelectField=true&autoSelectOperator=true&debugMode=false&disabled=false&enableDragAndDrop=false&independentCombinators=false&justifiedLayout=false&listsAsArrays=false&parseNumbers=false&resetOnFieldChange=true&resetOnOperatorChange=false&showBranches=false&showCloneButtons=false&showCombinatorsBetweenRules=false&showLockButtons=false&showNotToggle=false&validateQuery=false) to get a feel for the query syntax.
+
+Note that values for fields must be JSON-deserializable. If you're looking to filter against a string, then the value passed in should contain escaped double quotes.
 
 ### Example
 
