@@ -1,19 +1,19 @@
 ## Introduction to Deployment Release Tags
-As you start having many versions of your Prompt or Workflow Deployments, being able to plan and update these releases becomes an important consideration. 
+As you start having many versions of your Prompts or Workflows, being able to plan and update these deployment releases becomes an important consideration. 
 
 In Vellum, you have multiple ways to manage releases so you can easily promote prompt changes from your development or staging environments into production with as much flexibility or control as required by your team!
 
 Let's take a look at some different strategies to manage releases in Vellum.
 
-## TL;DR Watch a Video Walkthrough of Release Tags in Vellum
-<iframe src="https://www.loom.com/share/e6da73037c984c799e00558b3919217c?sid=48de73e8-d18f-4bfd-848a-0374f18a625b"
+<Callout intent="info">
+This page highlights Prompt Deployments but the same holds true for managing your Workflow Deployments releases as well.
+</Callout>
+
+## TL;DR Watch a Video Walkthrough Instead
+<iframe src="https://www.loom.com/share/e6da73037c984c799e00558b3919217c?sid=6f4a93f0-062c-4d24-ab24-a8834f0050fb"
   width="100%"
   height="450px"
 ></iframe>
-
-<Callout intent="info">
-This page highlights Prompt Deployments but the same approaches are available in Vellum for managing Workflow Deployment releases as well.
-</Callout>
 
 
 ## Three Ways to Release Prompts
@@ -30,7 +30,7 @@ This method simplifies your deployment process by automatically incorporating an
 
 For more flexibility, Vellum lets you define Custom Release Tags. Custom Release Tags are floating tags that you define and can be moved by authorized users directly within the Vellum Playground. 
 
-You can assign multiple Custom Release Tags to a single Prompt Deployment, providing flexibility in managing releases according to different criteria or environments. 
+You can assign multiple Custom Release Tags for a single Prompt Deployment, providing flexibility in allowing multiple environments to pin to the same releases.
 
 For example, you can assign Custom Release Tags to point to a version of your prompt in both your “Production” and “Staging” environments.
 
@@ -54,21 +54,20 @@ This method is ideal if your organization prioritizes strict version management 
 
 Release tags can be created:
 
-1. Within the Create New or Update Existing tabs of the Deploy Prompt/Workflow modal in a Prompt or Workflow Sandbox
-2. By opening the release tags modal from the Releases tab of the Deployment Details page
-
+1. Within the Create New or Update Existing tabs of the Deploy Prompt modal in a Prompt Sandbox
 ![Creating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-on-deploy%20.png)
+
+2. By opening the release tags modal from the Releases tab of the Deployment Details page
 
 
 ## Updating a Custom Release Tag
 
 Release tags can be updated:
 
-1. Within the Update Existing tab of the Deploy Prompt/Workflow modal in a Prompt or Workflow Sandbox
-2. By opening the Assign Release Tags modal from the Releases tab of the Deployment Details page
-
+1. Within the Update Existing tab of the Deploy Prompt modal in a Prompt Sandbox
 ![Updating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-update-on-deploy.png)
 
+2. By opening the Assign Release Tags modal from the Releases tab of the Deployment Details page
 ![Creating Release Tags Post Deployment](https://storage.googleapis.com/vellum-public/help-docs/release-tags-post-deploy.png)
 
 ### Pinning to a Deployment Release Tag in Code
@@ -77,9 +76,9 @@ Both the Vellum Execute Prompt and Execute Workflow API’s accept an optional `
 
 If no `release_tag` parameter is provided, the request will default to the latest version of that Prompt Deployment.
 
-More details on how to do this: ![Vellum API Docs](https://docs.vellum.ai/api-reference/api-reference/execute-prompt)
+More details on how to do this: ![Vellum API Docs](/api-reference/api-reference/execute-prompt)
 
-<CodeBlock title="Example">
+<CodeBlock title="Example Request">
 ```
 curl -X POST \
 --url "https://predict.vellum.ai/v1/execute-prompt" \
