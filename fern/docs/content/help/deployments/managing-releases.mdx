@@ -1,5 +1,5 @@
 ## Introduction to Deployment Release Tags
-As you start having many versions of your Prompt and Workflow Deployments, being able to plan and update these releases becomes an important consideration. 
+As you start having many versions of your Prompt or Workflow Deployments, being able to plan and update these releases becomes an important consideration. 
 
 In Vellum, you have multiple ways to manage releases so you can easily promote prompt changes from your development or staging environments into production with as much flexibility or control as required by your team!
 
@@ -10,6 +10,10 @@ Let's take a look at some different strategies to manage releases in Vellum.
   width="100%"
   height="450px"
 ></iframe>
+
+<Callout intent="info">
+This page highlights Prompt Deployments but the same approaches are available in Vellum for managing Workflow Deployment releases as well.
+</Callout>
 
 
 ## Three Ways to Release Prompts
@@ -67,7 +71,6 @@ Release tags can be updated:
 
 ![Creating Release Tags Post Deployment](https://storage.googleapis.com/vellum-public/help-docs/release-tags-post-deploy.png)
 
-
 ### Pinning to a Deployment Release Tag in Code
 
 Both the Vellum Execute Prompt and Execute Workflow API’s accept an optional `release_tag` parameter to pin your request to a specific release tag. When these release tags are updated via the Vellum Playground to point to new versions of a prompt or workflow, these changes will reflect in these requests.
@@ -95,5 +98,7 @@ curl -X POST \
   “release_tag”: “my-awesome-tag”
 }
   '
+
+
 ```
 </CodeBlock>
