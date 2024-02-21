@@ -63,6 +63,9 @@ navigation:
           - page: Replaying Requests & Backtesting
             path: ./docs/content/help/deployments/replaying-requests-and-backtesting.mdx
             slug: replaying-requests
+          - page: Managing Releases
+            path: ./docs/content/help/deployments/managing-releases.mdx
+            slug: managing-releases
       - section: Documents
         contents:
           - page: Uploading Documents
