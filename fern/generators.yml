@@ -19,7 +19,7 @@ groups:
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.4
+        version: 0.11.5
         github:
           repository: vellum-ai/vellum-client-node-staging
           mode: pull-request
@@ -63,7 +63,7 @@ groups:
   staging:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.4
+        version: 0.11.5
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
@@ -114,7 +114,7 @@ groups:
   production:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.9.4
+        version: 0.11.5
         output:
           location: npm
           package-name: vellum-ai
