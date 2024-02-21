@@ -1,43 +1,56 @@
 ## Introduction to Deployment Release Tags
-As you start having many versions of a Prompt or Workflow, being able to manage these deployment releases becomes an important consideration. 
 
-In Vellum, you have multiple ways to manage releases so you can easily promote prompt changes from your development or staging environments into production with as much flexibility or control as required by your team.
+As you start having many versions of a Prompt or Workflow, being able to manage these deployment releases becomes an important consideration.
+
+In Vellum, you have multiple ways to manage releases so you can easily promote prompt / workflow changes from your development or staging environments into production with as much flexibility or control as required by your team.
 
 Let's take a look at some of the different release strategies in Vellum!
 
+## TL;DR Watch a Video Walkthrough Instead
+
+<iframe
+  src="https://www.loom.com/embed/56992fb51372400ebdb69228c0b53b5d"
+  width="100%"
+  height="450px"
+></iframe>
+
 <Callout intent="info">
-This page highlights Prompt Deployments but the same holds true for managing your Workflow Deployment releases as well.
+  This page highlights Prompt Deployments but the same holds true for managing
+  your Workflow Deployment releases
 </Callout>
 
-## Three Ways to Release Prompts
+## Three Ways to Release Prompts or Workflows
 
 ### 1. Don’t Specify a Release Tag and Always Use Latest
 
-Every time you create a new [Prompt Deployment](/help-center/deployments/prompt-lifecycle-management) or update an existing one, Vellum will automatically assign it as latest. 
+Every time you create a new [Prompt or Workflow Deployment](/help-center/deployments/prompt-lifecycle-management) or update an existing one, Vellum will automatically assign it as latest.
 
-In this approach, you always point to the latest prompt available for a given Prompt Deployment. You do this by making your Vellum API requests without providing a specific Deployment Release Tag.
+In this approach, you always point to the latest prompt or workflow available for a given Deployment by making your Vellum API requests without providing a specific Release Tag.
 
-This method simplifies your deployment process by automatically incorporating any updates or changes made to your prompt in the Vellum Playground.
+This method simplifies your deployment process by automatically incorporating any changes that you deploy from your Prompt or Workflow Sandbox.
 
 ### 2. Use Custom Release Tags
 
-For more flexibility, Vellum lets you define Custom Release Tags. Custom Release Tags are floating tags that you define and can be moved by authorized users directly within the Vellum Playground. 
+For more flexibility, Vellum lets you define Custom Release Tags. Custom Release Tags are floating tags that you define and can be moved by authorized users directly within the Vellum app.
 
-You can assign multiple Custom Release Tags for a single Prompt Deployment, providing flexibility in allowing multiple environments to pin to the same releases.
+You can assign multiple Custom Release Tags to a single Prompt or Workflow Deployment, providing flexibility to granularly assign and update versions across different environments.
 
 For example, you can assign Custom Release Tags to point to a version of your prompt in both your “Production” and “Staging” environments.
 
 This method offers you the ability to manage your releases according to your own specific workflow and versioning requirements.
 
 <Callout intent="info">
-Note that Custom Release Tags follow a specific format: less than or equal to 150 characters, begin and end with a Regex word character (i.e., letter, number, or underscore), contain only word characters, dashes or dots, and do not contain more than one dot in a row
+  Note that Custom Release Tags follow a specific format: less than or equal to
+  150 characters, begin and end with a Regex word character (i.e., letter,
+  number, or underscore), contain only word characters, dashes or dots, and do
+  not contain more than one dot in a row
 </Callout>
 
-### 2. Use Static Release Tags
+### 3. Use Static Release Tags
 
-Every time you create a new [Prompt Deployment](/help-center/deployments/prompt-lifecycle-management#changing-prompts-in-production) or update an existing one, Vellum creates a unique Static Release Tag specific to that version.
+Every time you create a new Deployment or [update an existing one](/help-center/deployments/prompt-lifecycle-management#changing-prompts-in-production), Vellum creates a unique Static Release Tag tied to that version.
 
-When using Static Release Tags to manage your releases, you can control version increments through code. This ensures a structured and controlled release process. 
+When using Static Release Tags to manage your releases, you can control version increments through code to ensure a structured and controlled release process.
 
 This method is ideal if your organization prioritizes strict version management and you want to avoid accidental updates or changes to prompts.
 
@@ -47,27 +60,26 @@ This method is ideal if your organization prioritizes strict version management 
 
 Release tags can be created:
 
-1. Within the Create New or Update Existing tabs of the Deploy Prompt modal in a Prompt Sandbox
-![Creating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-on-deploy%20.png)
+1. Within the Create New or Update Existing tabs of the Deploy Prompt modal in a Prompt Sandbox or Deploy Workflow modal in a Workflow Sandbox
+   ![Creating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-on-deploy.png)
 
-2. By opening the release tags modal from the Releases tab of the Deployment Details page
-
+2. By opening the Assign Release Tags modal from the Releases tab of the Deployment Details page
 
 ## Updating a Custom Release Tag
 
 Release tags can be updated:
 
-1. Within the Update Existing tab of the Deploy Prompt modal in a Prompt Sandbox
-![Updating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-update-on-deploy.png)
+1. Within the Update Existing tab of the Deploy Prompt modal in a Prompt Sandbox or Deploy Workflow modal in a Workflow Sandbox
+   ![Updating Release Tags from Deploy Modal](https://storage.googleapis.com/vellum-public/help-docs/release-tags-update-on-deploy.png)
 
 2. By opening the Assign Release Tags modal from the Releases tab of the Deployment Details page
-![Creating Release Tags Post Deployment](https://storage.googleapis.com/vellum-public/help-docs/release-tags-post-deploy.png)
+   ![Creating Release Tags Post Deployment](https://storage.googleapis.com/vellum-public/help-docs/release-tags-post-deploy.png)
 
-### Pinning to a Deployment Release Tag in Code
+### Pinning to a Release Tag in Code
 
-Both the Vellum `execute_prompt` and `execute_workflow` API’s accept an optional `release_tag` parameter to pin your request to a specific release tag. When these release tags are updated via the Vellum Playground to point to new versions of a prompt or workflow, these changes will reflect in these requests.
+Both the Vellum `execute_prompt` and `execute_workflow` API’s accept an optional `release_tag` parameter to pin your request to a specific release tag. When release tags are updated via the Vellum app to point to new versions of a prompt or workflow, these changes will automatically reflect in these requests.
 
-If no `release_tag` parameter is provided, the request will default to the latest version of that Prompt Deployment.
+If no `release_tag` parameter is provided, the request will default to the latest version of that Deployment.
 
 More details on how to do this: [Vellum API Docs](https://docs.vellum.ai/api-reference/api-reference/execute-prompt)
 
@@ -76,7 +88,7 @@ More details on how to do this: [Vellum API Docs](https://docs.vellum.ai/api-ref
 curl -X POST \
 --url "https://predict.vellum.ai/v1/execute-prompt" \
 --header "Content-Type: application/json" \
---header "X_API_KEY: <apiKey>" \
+--header "X_API_KEY: $VELLUM_API_KEY" \
 --header "Accept: application/json" \
 --data '
 {
@@ -87,10 +99,10 @@ curl -X POST \
       "value": "string"
     }
   ],
-  “release_tag”: “my-awesome-tag”
+  “release_tag”: “staging”
 }
   '
 
-
 ```
 </CodeBlock>
+```
