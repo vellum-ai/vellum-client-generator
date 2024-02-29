@@ -501,6 +501,34 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/folders/{folder_id}/add-entity:
+    post:
+      operationId: add_entity_to_folder
+      description: |-
+        Add an entity to a specific folder or root directory.
+
+        Adding an entity to a folder will remove it from any other folders it might have been a member of.
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: string
+        description: The ID of the folder to which the entity should be added. This
+          can be a UUID of a folder, or the name of a root directory (e.g. "PROMPT_SANDBOX").
+        required: true
+      tags:
+      - folder-entities
+      - folder-path-info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddEntityToFolderRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+      x-fern-availability: beta
   /v1/generate:
     post:
       operationId: generate
@@ -1048,6 +1076,15 @@ paths:
           description: ''
 components:
   schemas:
+    AddEntityToFolderRequest:
+      type: object
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          description: The ID of the entity you would like to move.
+      required:
+      - entity_id
     ApiNodeResult:
       type: object
       description: A Node Result Event emitted from an API Node.
