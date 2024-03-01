@@ -1188,6 +1188,29 @@ components:
       required:
       - type
       - value
+    ArrayEnum:
+      type: string
+      enum:
+      - ARRAY
+    ArrayVariableValueItem:
+      oneOf:
+      - $ref: '#/components/schemas/StringVariableValue'
+      - $ref: '#/components/schemas/NumberVariableValue'
+      - $ref: '#/components/schemas/JsonVariableValue'
+      - $ref: '#/components/schemas/ChatHistoryVariableValue'
+      - $ref: '#/components/schemas/SearchResultsVariableValue'
+      - $ref: '#/components/schemas/ErrorVariableValue'
+      - $ref: '#/components/schemas/FunctionCallVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVariableValue'
+          NUMBER: '#/components/schemas/NumberVariableValue'
+          JSON: '#/components/schemas/JsonVariableValue'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
+          ERROR: '#/components/schemas/ErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1220,6 +1243,19 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
+      - type
+      - value
+    ChatHistoryVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
       - type
       - value
     ChatMessage:
@@ -3027,6 +3063,24 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+    NodeInputCompiledArrayValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledChatHistoryValue:
       type: object
       properties:
@@ -3144,6 +3198,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
+      - $ref: '#/components/schemas/NodeInputCompiledArrayValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3153,6 +3208,22 @@ components:
           CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
+          ARRAY: '#/components/schemas/NodeInputCompiledArrayValue'
+    NodeOutputCompiledArrayValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+      required:
+      - node_output_id
+      - type
+      - value
     NodeOutputCompiledChatHistoryValue:
       type: object
       properties:
@@ -3179,6 +3250,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledFunctionValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - node_output_id
@@ -3252,6 +3338,8 @@ components:
       - $ref: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeOutputCompiledErrorValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledArrayValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledFunctionValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3261,6 +3349,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeOutputCompiledErrorValue'
+          ARRAY: '#/components/schemas/NodeOutputCompiledArrayValue'
+          FUNCTION_CALL: '#/components/schemas/NodeOutputCompiledFunctionValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -3301,6 +3391,18 @@ components:
       type: string
       enum:
       - NUMBER
+    NumberVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
@@ -3479,6 +3581,9 @@ components:
       properties:
         output_id:
           type: string
+        array_output_id:
+          type: string
+          nullable: true
         text:
           type: string
           nullable: true
@@ -4315,6 +4420,19 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
+    SearchResultsVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - type
+      - value
     SearchWeightsRequest:
       type: object
       properties:
