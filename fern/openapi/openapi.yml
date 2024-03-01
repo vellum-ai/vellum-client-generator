@@ -59,14 +59,15 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - in: query
-        name: status
+      - name: status
+        required: false
+        in: query
+        description: status
         schema:
           type: string
           enum:
           - ACTIVE
           - ARCHIVED
-        description: The current status of the deployment
       tags:
       - deployments
       security:
@@ -1051,18 +1052,15 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - in: query
-        name: status
+      - name: status
+        required: false
+        in: query
+        description: status
         schema:
           type: string
           enum:
           - ACTIVE
           - ARCHIVED
-        description: |-
-          The current status of the workflow deployment
-
-          * `ACTIVE` - Active
-          * `ARCHIVED` - Archived
       tags:
       - workflow-deployments
       security:
@@ -1074,6 +1072,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimWorkflowDeploymentList'
           description: ''
+  /v1/workflow-deployments/{id}:
+    get:
+      operationId: workflow_deployments_retrieve
+      description: Used to retrieve a workflow deployment given its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Workflow Deployment's ID or its unique name
+        required: true
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDeploymentRead'
+          description: ''
+      x-fern-availability: beta
 components:
   schemas:
     AddEntityToFolderRequest:
@@ -1167,6 +1188,29 @@ components:
       required:
       - type
       - value
+    ArrayEnum:
+      type: string
+      enum:
+      - ARRAY
+    ArrayVariableValueItem:
+      oneOf:
+      - $ref: '#/components/schemas/StringVariableValue'
+      - $ref: '#/components/schemas/NumberVariableValue'
+      - $ref: '#/components/schemas/JsonVariableValue'
+      - $ref: '#/components/schemas/ChatHistoryVariableValue'
+      - $ref: '#/components/schemas/SearchResultsVariableValue'
+      - $ref: '#/components/schemas/ErrorVariableValue'
+      - $ref: '#/components/schemas/FunctionCallVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVariableValue'
+          NUMBER: '#/components/schemas/NumberVariableValue'
+          JSON: '#/components/schemas/JsonVariableValue'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
+          ERROR: '#/components/schemas/ErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1199,6 +1243,19 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
+      - type
+      - value
+    ChatHistoryVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
       - type
       - value
     ChatMessage:
@@ -1819,6 +1876,8 @@ components:
           type: string
           nullable: true
           minLength: 1
+          description: '"Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given prompt deployment.'
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
@@ -1882,6 +1941,8 @@ components:
           type: string
           nullable: true
           minLength: 1
+          description: '"Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given prompt deployment.'
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
@@ -1945,6 +2006,7 @@ components:
           nullable: true
           minLength: 1
           description: Optionally include a unique identifier for monitoring purposes.
+            Must be unique for a given workflow deployment.
       required:
       - inputs
     ExecuteWorkflowResponse:
@@ -2004,6 +2066,7 @@ components:
           nullable: true
           minLength: 1
           description: Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given workflow deployment.
         event_types:
           type: array
           items:
@@ -3000,6 +3063,24 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+    NodeInputCompiledArrayValue:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledChatHistoryValue:
       type: object
       properties:
@@ -3117,6 +3198,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
+      - $ref: '#/components/schemas/NodeInputCompiledArrayValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3126,6 +3208,22 @@ components:
           CHAT_HISTORY: '#/components/schemas/NodeInputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
+          ARRAY: '#/components/schemas/NodeInputCompiledArrayValue'
+    NodeOutputCompiledArrayValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+      required:
+      - node_output_id
+      - type
+      - value
     NodeOutputCompiledChatHistoryValue:
       type: object
       properties:
@@ -3152,6 +3250,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - node_output_id
+      - type
+      - value
+    NodeOutputCompiledFunctionValue:
+      type: object
+      properties:
+        node_output_id:
+          type: string
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - node_output_id
@@ -3225,6 +3338,8 @@ components:
       - $ref: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
       - $ref: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeOutputCompiledErrorValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledArrayValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledFunctionValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3234,6 +3349,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/NodeOutputCompiledChatHistoryValue'
           SEARCH_RESULTS: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeOutputCompiledErrorValue'
+          ARRAY: '#/components/schemas/NodeOutputCompiledArrayValue'
+          FUNCTION_CALL: '#/components/schemas/NodeOutputCompiledFunctionValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -3274,6 +3391,18 @@ components:
       type: string
       enum:
       - NUMBER
+    NumberVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
@@ -3452,6 +3581,9 @@ components:
       properties:
         output_id:
           type: string
+        array_output_id:
+          type: string
+          nullable: true
         text:
           type: string
           nullable: true
@@ -4288,6 +4420,19 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
+    SearchResultsVariableValue:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - type
+      - value
     SearchWeightsRequest:
       type: object
       properties:
@@ -5307,6 +5452,66 @@ components:
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
         * `IMAGE` - IMAGE
+    WorkflowDeploymentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: A name that uniquely identifies this workflow deployment within
+            its workspace
+          maxLength: 150
+        label:
+          type: string
+          description: A human-readable label for the workflow deployment
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the workflow deployment
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this workflow deployment is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        last_deployed_on:
+          type: string
+          format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The input variables this Workflow Deployment expects to receive
+            values for when it is executed.
+        output_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The output variables this Workflow Deployment produces values
+            for when it's executed.
+      required:
+      - created
+      - id
+      - input_variables
+      - label
+      - last_deployed_on
+      - name
+      - output_variables
     WorkflowEventError:
       type: object
       properties:
@@ -5727,6 +5932,7 @@ components:
       - value
     WorkflowRequestChatHistoryInputRequest:
       type: object
+      description: The input for a chat history variable in a Workflow.
       properties:
         name:
           type: string
@@ -5757,6 +5963,7 @@ components:
           NUMBER: '#/components/schemas/WorkflowRequestNumberInputRequest'
     WorkflowRequestJSONInputRequest:
       type: object
+      description: The input for a JSON variable in a Workflow.
       properties:
         name:
           type: string
@@ -5773,6 +5980,7 @@ components:
       - value
     WorkflowRequestNumberInputRequest:
       type: object
+      description: The input for a number variable in a Workflow.
       properties:
         name:
           type: string
@@ -5789,6 +5997,7 @@ components:
       - value
     WorkflowRequestStringInputRequest:
       type: object
+      description: The input for a string variable in a Workflow.
       properties:
         name:
           type: string
