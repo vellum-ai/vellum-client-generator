@@ -1840,6 +1840,8 @@ components:
           type: string
           nullable: true
           minLength: 1
+          description: '"Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given prompt deployment.'
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
@@ -1903,6 +1905,8 @@ components:
           type: string
           nullable: true
           minLength: 1
+          description: '"Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given prompt deployment.'
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
@@ -1966,6 +1970,7 @@ components:
           nullable: true
           minLength: 1
           description: Optionally include a unique identifier for monitoring purposes.
+            Must be unique for a given workflow deployment.
       required:
       - inputs
     ExecuteWorkflowResponse:
@@ -2025,6 +2030,7 @@ components:
           nullable: true
           minLength: 1
           description: Optionally include a unique identifier for tracking purposes.
+            Must be unique for a given workflow deployment.
         event_types:
           type: array
           items:
@@ -5808,6 +5814,7 @@ components:
       - value
     WorkflowRequestChatHistoryInputRequest:
       type: object
+      description: The input for a chat history variable in a Workflow.
       properties:
         name:
           type: string
@@ -5838,6 +5845,7 @@ components:
           NUMBER: '#/components/schemas/WorkflowRequestNumberInputRequest'
     WorkflowRequestJSONInputRequest:
       type: object
+      description: The input for a JSON variable in a Workflow.
       properties:
         name:
           type: string
@@ -5854,6 +5862,7 @@ components:
       - value
     WorkflowRequestNumberInputRequest:
       type: object
+      description: The input for a number variable in a Workflow.
       properties:
         name:
           type: string
@@ -5870,6 +5879,7 @@ components:
       - value
     WorkflowRequestStringInputRequest:
       type: object
+      description: The input for a string variable in a Workflow.
       properties:
         name:
           type: string
