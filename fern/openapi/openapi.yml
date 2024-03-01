@@ -1072,6 +1072,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimWorkflowDeploymentList'
           description: ''
+  /v1/workflow-deployments/{id}:
+    get:
+      operationId: workflow_deployments_retrieve
+      description: Used to retrieve a workflow deployment given its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Workflow Deployment's ID or its unique name
+        required: true
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDeploymentRead'
+          description: ''
+      x-fern-availability: beta
 components:
   schemas:
     AddEntityToFolderRequest:
@@ -5305,6 +5328,66 @@ components:
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
         * `IMAGE` - IMAGE
+    WorkflowDeploymentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: A name that uniquely identifies this workflow deployment within
+            its workspace
+          maxLength: 150
+        label:
+          type: string
+          description: A human-readable label for the workflow deployment
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the workflow deployment
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this workflow deployment is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        last_deployed_on:
+          type: string
+          format: date-time
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The input variables this Workflow Deployment expects to receive
+            values for when it is executed.
+        output_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          description: The output variables this Workflow Deployment produces values
+            for when it's executed.
+      required:
+      - created
+      - id
+      - input_variables
+      - label
+      - last_deployed_on
+      - name
+      - output_variables
     WorkflowEventError:
       type: object
       properties:
