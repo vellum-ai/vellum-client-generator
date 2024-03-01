@@ -59,14 +59,15 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - in: query
-        name: status
+      - name: status
+        required: false
+        in: query
+        description: status
         schema:
           type: string
           enum:
           - ACTIVE
           - ARCHIVED
-        description: The current status of the deployment
       tags:
       - deployments
       security:
@@ -1051,18 +1052,15 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
-      - in: query
-        name: status
+      - name: status
+        required: false
+        in: query
+        description: status
         schema:
           type: string
           enum:
           - ACTIVE
           - ARCHIVED
-        description: |-
-          The current status of the workflow deployment
-
-          * `ACTIVE` - Active
-          * `ARCHIVED` - Archived
       tags:
       - workflow-deployments
       security:
