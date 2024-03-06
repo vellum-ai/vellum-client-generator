@@ -526,6 +526,8 @@ paths:
             schema:
               $ref: '#/components/schemas/AddEntityToFolderRequest'
         required: true
+      security:
+      - apiKeyAuth: []
       responses:
         '200':
           description: No response body
@@ -1399,6 +1401,9 @@ components:
       properties:
         output:
           $ref: '#/components/schemas/CodeExecutionNodeResultOutput'
+        log_output_id:
+          type: string
+          nullable: true
       required:
       - output
     CodeExecutionNodeResultOutput:
@@ -3076,6 +3081,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
       required:
       - key
       - node_input_id
@@ -3220,6 +3226,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
       required:
       - node_output_id
       - type
@@ -4849,6 +4856,18 @@ components:
             Must provide either this or execution_id.
       required:
       - actuals
+    SubworkflowEnum:
+      type: string
+      enum:
+      - SUBWORKFLOW
+    SubworkflowNodeResult:
+      type: object
+      description: A Node Result Event emitted from a Subworkflow Node.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubworkflowEnum'
+      required:
+      - type
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -4975,6 +4994,28 @@ components:
       - id
       - type
       - value
+    TerminalNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
     TerminalNodeChatHistoryResult:
       type: object
       properties:
@@ -5013,6 +5054,27 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+    TerminalNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+          description: The unique name given to the terminal node that produced this
+            output.
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - name
@@ -5085,6 +5147,8 @@ components:
       - $ref: '#/components/schemas/TerminalNodeJsonResult'
       - $ref: '#/components/schemas/TerminalNodeChatHistoryResult'
       - $ref: '#/components/schemas/TerminalNodeSearchResultsResult'
+      - $ref: '#/components/schemas/TerminalNodeArrayResult'
+      - $ref: '#/components/schemas/TerminalNodeFunctionCallResult'
       - $ref: '#/components/schemas/TerminalNodeErrorResult'
       discriminator:
         propertyName: type
@@ -5094,6 +5158,8 @@ components:
           JSON: '#/components/schemas/TerminalNodeJsonResult'
           CHAT_HISTORY: '#/components/schemas/TerminalNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TerminalNodeSearchResultsResult'
+          ARRAY: '#/components/schemas/TerminalNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/TerminalNodeFunctionCallResult'
           ERROR: '#/components/schemas/TerminalNodeErrorResult'
     TerminalNodeSearchResultsResult:
       type: object
@@ -5378,11 +5444,13 @@ components:
       - INVALID_REQUEST
       - PROVIDER_ERROR
       - INTERNAL_SERVER_ERROR
+      - USER_DEFINED_ERROR
       type: string
       description: |-
         * `INVALID_REQUEST` - INVALID_REQUEST
         * `PROVIDER_ERROR` - PROVIDER_ERROR
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+        * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     VellumErrorRequest:
       type: object
       properties:
@@ -5650,6 +5718,7 @@ components:
       - NODE_EXECUTION
       - LLM_PROVIDER
       - INVALID_TEMPLATE
+      - USER_DEFINED_ERROR
       type: string
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
@@ -5658,6 +5727,7 @@ components:
         * `NODE_EXECUTION` - NODE_EXECUTION
         * `LLM_PROVIDER` - LLM_PROVIDER
         * `INVALID_TEMPLATE` - INVALID_TEMPLATE
+        * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     WorkflowExecutionEventType:
       enum:
       - NODE
@@ -5716,6 +5786,7 @@ components:
       - $ref: '#/components/schemas/ConditionalNodeResult'
       - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
+      - $ref: '#/components/schemas/SubworkflowNodeResult'
       discriminator:
         propertyName: type
         mapping:
@@ -5726,6 +5797,7 @@ components:
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
+          SUBWORKFLOW: '#/components/schemas/SubworkflowNodeResult'
     WorkflowNodeResultEvent:
       oneOf:
       - $ref: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
@@ -5758,6 +5830,7 @@ components:
       - $ref: '#/components/schemas/WorkflowOutputJSON'
       - $ref: '#/components/schemas/WorkflowOutputChatHistory'
       - $ref: '#/components/schemas/WorkflowOutputSearchResults'
+      - $ref: '#/components/schemas/WorkflowOutputArray'
       - $ref: '#/components/schemas/WorkflowOutputError'
       - $ref: '#/components/schemas/WorkflowOutputFunctionCall'
       - $ref: '#/components/schemas/WorkflowOutputImage'
@@ -5769,9 +5842,31 @@ components:
           JSON: '#/components/schemas/WorkflowOutputJSON'
           CHAT_HISTORY: '#/components/schemas/WorkflowOutputChatHistory'
           SEARCH_RESULTS: '#/components/schemas/WorkflowOutputSearchResults'
+          ARRAY: '#/components/schemas/WorkflowOutputArray'
           ERROR: '#/components/schemas/WorkflowOutputError'
           FUNCTION_CALL: '#/components/schemas/WorkflowOutputFunctionCall'
           IMAGE: '#/components/schemas/WorkflowOutputImage'
+    WorkflowOutputArray:
+      type: object
+      description: An array output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+      required:
+      - id
+      - name
+      - type
+      - value
     WorkflowOutputChatHistory:
       type: object
       description: A chat history output from a Workflow execution.
@@ -6046,6 +6141,8 @@ components:
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataJSON'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataArray'
+      - $ref: '#/components/schemas/WorkflowResultEventOutputDataFunctionCall'
       - $ref: '#/components/schemas/WorkflowResultEventOutputDataError'
       discriminator:
         propertyName: type
@@ -6055,7 +6152,43 @@ components:
           JSON: '#/components/schemas/WorkflowResultEventOutputDataJSON'
           CHAT_HISTORY: '#/components/schemas/WorkflowResultEventOutputDataChatHistory'
           SEARCH_RESULTS: '#/components/schemas/WorkflowResultEventOutputDataSearchResults'
+          ARRAY: '#/components/schemas/WorkflowResultEventOutputDataArray'
+          FUNCTION_CALL: '#/components/schemas/WorkflowResultEventOutputDataFunctionCall'
           ERROR: '#/components/schemas/WorkflowResultEventOutputDataError'
+    WorkflowResultEventOutputDataArray:
+      type: object
+      description: An Array output returned from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - delta
+      - name
+      - node_id
+      - state
+      - type
+      - value
     WorkflowResultEventOutputDataChatHistory:
       type: object
       description: A Chat History output streamed from a Workflow execution.
@@ -6115,6 +6248,39 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - delta
+      - name
+      - node_id
+      - state
+      - type
+      - value
+    WorkflowResultEventOutputDataFunctionCall:
+      type: object
+      description: A Function Call output returned from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
+        node_id:
+          type: string
+        delta:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The newly output string value. Only relevant for string outputs
+            with a state of STREAMING.
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - delta

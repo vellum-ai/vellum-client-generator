@@ -15,3 +15,26 @@ We have also introduced a few smaller improvements:
 - Line numbers in the code editor will no longer be squished together
 
 ![Code Execution Improvements](https://storage.googleapis.com/vellum-public/help-docs/code-execution-improvements.png)
+
+## Claude 3
+
+_March 5th, 2024_
+
+Anthropic's two newest models, Claude 3 Opus and Claude 3 Sonnet, are now both available in Vellum! These models have been added to all workspaces so they should be selectable from prompt sandboxes upon refresh.
+
+![Claude 3](https://storage.googleapis.com/vellum-public/help-docs/claude-3-models.png)
+
+## Workflow Error Nodes
+
+_March 4th, 2024_
+
+It's now possible to terminal a Workflow and raise an error through the use of Error Nodes. You can either re-raise an error from an upstream node, or construct and raise a custom error message.
+
+---
+
+## Retrieve Workflow Deployment API
+
+_March 1st, 2024_
+
+We've exposed a new API endpoint to retrieve details of a Workflow Deployment. This is useful if you want to do things like programmatically detect if a Workflow Deployment with a specific name exists, or has the inputs/outputs you expect.
+You can find the details of the API [here](https://docs.vellum.ai/api-reference/api-reference/workflow-deployments/retrieve).
