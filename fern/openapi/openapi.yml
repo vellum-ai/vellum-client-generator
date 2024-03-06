@@ -4849,6 +4849,18 @@ components:
             Must provide either this or execution_id.
       required:
       - actuals
+    SubworkflowEnum:
+      type: string
+      enum:
+      - SUBWORKFLOW
+    SubworkflowNodeResult:
+      type: object
+      description: A Node Result Event emitted from a Terminal Node.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubworkflowEnum'
+      required:
+      - type
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -5716,6 +5728,7 @@ components:
       - $ref: '#/components/schemas/ConditionalNodeResult'
       - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
+      - $ref: '#/components/schemas/SubworkflowNodeResult'
       discriminator:
         propertyName: type
         mapping:
@@ -5726,6 +5739,7 @@ components:
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
+          SUBWORKFLOW: '#/components/schemas/SubworkflowNodeResult'
     WorkflowNodeResultEvent:
       oneOf:
       - $ref: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
