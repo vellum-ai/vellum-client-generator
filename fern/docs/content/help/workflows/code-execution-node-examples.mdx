@@ -8,7 +8,7 @@ The Code Execution Node supports running arbitrary Python code to perform data t
 <CodeBlock title="Code">
     ```python
     def main(
-        arg1: int, 
+        arg1: int,
         arg2: int,
     ) -> int:
         # this function returns the multiple if arg1 is a multiple of arg2
@@ -39,3 +39,21 @@ The Code Execution Node supports running arbitrary Python code to perform data t
 
 </CodeBlock>
 {/* prettier-ignore-end */}
+
+# Code Packages
+You can add both pip packages for Python code and npm packages for TypeScript code. You must provide exact package versions and add the import to your code yourself.
+
+Note that whenever you update your packages list, the first execution after doing so may be slow due to our system creating and caching the custom runtime.
+
+```typescript
+import * as _ from "lodash";
+
+async function main(inputs: {
+  test: string,
+}): Promise<number> {
+  return inputs.test.length + _.floor(5.452);
+}
+```
+
+![Code Package example](https://storage.googleapis.com/vellum-public/help-docs/workflow-node-packages.png)
+

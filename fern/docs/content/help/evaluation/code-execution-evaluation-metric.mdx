@@ -47,3 +47,24 @@ def main(
         "score": 1.0 if is_equal else 0.0,
     }
 ```
+
+### Code Packages
+You can add both pip packages for Python code and npm packages for TypeScript code. You must provide exact package versions and add the import to your code yourself.
+
+Note that whenever you update your packages list, the first execution after doing so may be slow due to our system creating and caching the custom runtime.
+```typescript
+import * as _ from "lodash"
+
+async function main(variables: {
+  completion: string,
+  target: string,
+}): Promise<{ score: number }> {
+  return {
+    score: variables.target.length + _.floor(7.55),
+  }
+}
+```
+
+![Code Package example](https://storage.googleapis.com/vellum-public/help-docs/help-code-package-eval.png)
+
+
