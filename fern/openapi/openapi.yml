@@ -125,6 +125,7 @@ paths:
   /v1/document-indexes:
     get:
       operationId: document_indexes_list
+      description: Used to retrieve a list of Document Indexes.
       parameters:
       - name: limit
         required: false
@@ -167,6 +168,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedDocumentIndexReadList'
           description: ''
+      x-fern-availability: beta
     post:
       operationId: document_indexes_create
       description: Creates a new document index.
