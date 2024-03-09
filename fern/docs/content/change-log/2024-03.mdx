@@ -6,11 +6,11 @@ title: Changelog | March, 2024
 
 _March 9th, 2024_
 
-We had previously supported "error outputs" for all output generating Workflow Nodes, which enabled you to add error handling natively to your Workflows. However, this made debugging downstream nodes more difficult to debug if you weren't already handling the node. We now include a new `Reject on Error` toggle on each of these data generating nodes to solve this issue:
+We had previously supported "error outputs" for all output generating Workflow Nodes, which enabled you to add error handling natively to your Workflows. However, this made debugging downstream nodes more difficult if you weren't already handling this new error output. We now include a new `Reject on Error` toggle on each of these data generating nodes to solve this issue:
 
 ![Workflow Node Reject on Error](https://storage.googleapis.com/vellum-public/help-docs/node-error-toggle.png)
 
-When enabled, you are opting out of handling the error in the workflow and the workflow will reject immediately with the relevant error.
+When enabled, you are opting out of handling the error in the workflow and the workflow will reject immediately with the relevant error. This will be the default behavior for new Workflow Nodes going forward.
 
 ## Workflow Code Execution Node Debugging
 
