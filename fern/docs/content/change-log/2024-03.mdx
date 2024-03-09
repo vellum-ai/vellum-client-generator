@@ -2,6 +2,18 @@
 title: Changelog | March, 2024
 ---
 
+## Workflow Node 'Reject on Error' Toggle
+
+_March 9th, 2024_
+
+Previously, if a Node in a Workflow errored, the Workflow would proceed to execute until another downstream Node tried to use the output of the Node that errored and would only then terminate. This made Workflows hard to debug and put the onus on you to implement error handling.
+
+Going forward, by default, Workflows will immediately terminate if a Node errors. There are still cases in which you might want to continue despite a Node error (e.g. implementing your own error handling or retry logic). In this cases, you can disable the new "Reject on Error" toggle.
+
+![Workflow Node Reject on Error](https://storage.googleapis.com/vellum-public/help-docs/node-error-toggle.png)
+
+Historical Workflow Nodes have this toggle disabled so that there's no change in behavior. New Nodes going forward will have this toggle enabled by default.
+
 ## Workflow Code Execution Node Debugging
 
 _March 8th, 2024_
@@ -63,7 +75,6 @@ Anthropic's two newest models, Claude 3 Opus and Claude 3 Sonnet, are now both a
 
 ![Claude 3](https://storage.googleapis.com/vellum-public/help-docs/claude-3-models.png)
 
-
 ## In-App Support Now Accessed via "Get Help" Button
 
 _March 5th, 2024_
@@ -72,9 +83,7 @@ It used to be that the In-App Support Widget we showed in the bottom right corne
 Now, that widget is hidden by default and you can open it by clicking the "Get Help" button in the side navigation. Once opened, we
 also now display bookmarked links to useful resources like the Vellum Help Docs.
 
-
 ![Get Help Button Opens Chat Widget](https://storage.googleapis.com/vellum-public/help-docs/hide-chat-widget-by-default.gif)
-
 
 ## Workflow Error Nodes
 
