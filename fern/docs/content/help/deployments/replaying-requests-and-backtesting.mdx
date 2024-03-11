@@ -1,3 +1,8 @@
+---
+title: Best Practices for Replaying Requests & Backtesting Prompts
+description: Learn how to replay requests and backtest prompts to ensure your LLM outputs are reliable before updating deployments.
+---
+
 Despite how well you test your Prompts before promoting them to production, edge cases you didn't expect will likely appear.
 The Prompt Lifecycle Management page described how to update a Deployed Prompt. Before doing so, however, it’s best practice
 to replay recent requests seen in prod to the new prompt and spot check to confirm that outputs look reasonable.

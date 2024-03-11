@@ -123,6 +123,52 @@ paths:
                 $ref: '#/components/schemas/DeploymentProviderPayloadResponse'
           description: ''
   /v1/document-indexes:
+    get:
+      operationId: document_indexes_list
+      description: Used to retrieve a list of Document Indexes.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+        description: |-
+          The current status of the document index
+
+          * `ACTIVE` - Active
+          * `ARCHIVED` - Archived
+      tags:
+      - document-indexes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentIndexReadList'
+          description: ''
+      x-fern-availability: beta
     post:
       operationId: document_indexes_create
       description: Creates a new document index.
@@ -3410,6 +3456,26 @@ components:
       required:
       - type
       - value
+    PaginatedDocumentIndexReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentIndexRead'
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
