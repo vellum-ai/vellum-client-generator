@@ -122,6 +122,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentProviderPayloadResponse'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
   /v1/document-indexes:
     get:
       operationId: document_indexes_list
@@ -1317,6 +1341,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ChatMessageContent'
           nullable: true
+        external_id:
+          type: string
+          nullable: true
+          description: An optional identifier representing the user or invocation
+            that generated the message.
       required:
       - role
     ChatMessageContent:
@@ -1356,6 +1385,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ChatMessageContentRequest'
           nullable: true
+        external_id:
+          type: string
+          nullable: true
+          description: An optional identifier representing the user or invocation
+            that generated the message.
       required:
       - role
     ChatMessageRole:
@@ -1535,6 +1569,12 @@ components:
             $ref: '#/components/schemas/PromptDeploymentInputRequest'
           description: The list of inputs defined in the Prompt's deployment with
             their corresponding values.
+        release_tag:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally specify a release tag if you want to pin to a specific
+            release of the Workflow Deployment
       required:
       - inputs
     DeploymentProviderPayloadResponse:
@@ -2027,7 +2067,14 @@ components:
       - detail
     ExecuteWorkflowRequest:
       type: object
+      description: The request to invoke a Workflow Deployment execution.
       properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowRequestInputRequest'
+          description: The list of inputs defined in the Workflow's Deployment with
+            their corresponding values.
         workflow_deployment_id:
           type: string
           format: uuid
@@ -2046,17 +2093,11 @@ components:
           minLength: 1
           description: Optionally specify a release tag if you want to pin to a specific
             release of the Workflow Deployment
-        inputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkflowRequestInputRequest'
-          description: The list of inputs defined in the Workflow's Deployment with
-            their corresponding values.
         external_id:
           type: string
           nullable: true
           minLength: 1
-          description: Optionally include a unique identifier for monitoring purposes.
+          description: Optionally include a unique identifier for tracking purposes.
             Must be unique for a given workflow deployment.
       required:
       - inputs
@@ -2087,7 +2128,14 @@ components:
       - detail
     ExecuteWorkflowStreamRequest:
       type: object
+      description: The request to stream a Workflow Deployment execution.
       properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowRequestInputRequest'
+          description: The list of inputs defined in the Workflow's Deployment with
+            their corresponding values.
         workflow_deployment_id:
           type: string
           format: uuid
@@ -2106,12 +2154,6 @@ components:
           minLength: 1
           description: Optionally specify a release tag if you want to pin to a specific
             release of the Workflow Deployment
-        inputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkflowRequestInputRequest'
-          description: The list of inputs defined in the Workflow's deployment with
-            their corresponding values.
         external_id:
           type: string
           nullable: true
@@ -3725,6 +3767,9 @@ components:
         chat_message_unterminated:
           type: boolean
           default: false
+        chat_external_id:
+          type: string
+          nullable: true
         template:
           type: string
           nullable: true
@@ -3760,6 +3805,10 @@ components:
         chat_message_unterminated:
           type: boolean
           default: false
+        chat_external_id:
+          type: string
+          nullable: true
+          minLength: 1
         template:
           type: string
           nullable: true
@@ -5800,8 +5849,8 @@ components:
       - WORKFLOW
       type: string
       description: |-
-        * `NODE` - Node
-        * `WORKFLOW` - Workflow
+        * `NODE` - NODE
+        * `WORKFLOW` - WORKFLOW
     WorkflowExecutionNodeResultEvent:
       type: object
       description: A NODE-level event emitted from the workflow's execution.
