@@ -35,6 +35,9 @@ navigation:
           - page: Adding Custom Models to your Workspace
             path: ./docs/content/help/prompts/adding-custom-models-to-your-workspace.mdx
             slug: custom-models
+          - page: Working with Images in Vellum
+            path: ./docs/content/help/prompts/working-with-images-in-vellum.mdx
+            slug: images
       - section: Evaluation
         contents:
           - page: Quantitatively Evaluating Outputs

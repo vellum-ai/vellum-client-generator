@@ -1,0 +1,128 @@
+---
+title: Leverage Images in Your Vellum Prompts and Workflows
+description: Learn how to send images to multimodal models like GPT-4 Turbo with Vision from within Vellum’s UI
+---
+
+Leverage the power of multimodal models to process both natural language and visual inputs within your LLM-applications using Vellum.
+
+Vellum supports images for OpenAI’s vision models like GPT-4 Turbo with Vision - both via [API](https://docs.vellum.ai/api-reference/) and in the Vellum UI.
+
+![Images in Vellum UI](https://storage.googleapis.com/vellum-public/help-docs/images-in-prompts-walkthrough.gif)
+
+Read on to learn how to get started using images in Vellum!
+
+## Using Images in the UI
+
+Vellum supports images as inputs to both your Prompts and Workflows. In either Sandbox, you can add images inside of scenario Chat History messages.
+
+Begin by selecting the correct model, `GPT-4 Turbo with vision`, in your Prompt. In Workflows, you can set the model within a Prompt Node. Before you do, you'll want to add a Chat History block as an input to your Workflow first.
+
+![Vision Model Selection](https://storage.googleapis.com/vellum-public/help-docs/images-model-selection.png)
+
+Next, add a Chat History block and some messages to your template so you can drag images within them.
+
+Here's how to do it:
+
+- In the Prompt Sandbox, add a Chat History block by typing in `$chat_history`. This is a special Prompt Variable name that will add an empty Chat History block component in each scenario
+  ![Prompt Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-prompt-steps.png)
+
+- In the Workflow Sandbox, a Chat History block can be added directly from the "Add" dropdown on the bottom left of the Input Variables modal. After adding this block, configure your Prompt Node to use Chat History as an input
+  ![Workflow Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-workflow-steps.png)
+
+Now you're ready to add images! Drag and drop a valid image into a Chat History message that's being used as an input to define a Prompt or Workflow scenario. This converts the Chat Message into a draggable array that can be easily re-ordered and can contain multiple image and/or text items.
+
+<Callout intent="info">
+  Valid image URLs: Images must have their absolute path including the image
+  filetype in their URL and must be publicly visible (example:
+  https://storage.googleapis.com/vellum-public/help-docs/release-tags-on-deploy.png)
+</Callout>
+
+Here’s what images look like in the **Prompt Sandbox**:
+
+![Images in Prompt Scenarios](https://storage.googleapis.com/vellum-public/help-docs/images-in-prompts.png)
+
+And images in the **Workflow Sandbox**:
+
+![Images in Workflow Scenarios](https://storage.googleapis.com/vellum-public/help-docs/images-in-workflows.png)
+
+Once you’ve added in your image, you can configure its settings by clicking the small gear icon to the right of the image. Here you'll be able to adjust things like the `Image Detail` which can have a big impact on token usage (more on that below).
+
+![Image Configuration Steps](https://storage.googleapis.com/vellum-public/help-docs/images-config.png)
+
+You can also switch out an image you’ve dragged in for a new one by updating the image URL in the settings.
+
+![Image Configuration Modal](https://storage.googleapis.com/vellum-public/help-docs/images-config-modal.png)
+
+## Image Specifications
+
+Here are some important model specifications for GPT-4 Turbo with Vision to keep in mind as you’re incorporating images into your Prompts and Workflows:
+
+- **Number of Images:** No set limit
+
+  There is no fixed number here but token and image size restrictions still apply to determine the number of images that can be sent
+
+- **Image Size:** Less than 20MB
+
+  For prompts and workflows with multiple images, the combined image size should not exceed this limit
+
+- **Supported Image Formats:**
+
+  - JPEG (.jpeg / .jpg)
+  - PNG (.png)
+  - Non-animated GIF (.gif)
+  - WEBP (.webp)
+
+- **Other Notes:**
+
+  - GPT-4 Turbo with Vision does not currently support tool calls so be sure there are no function blocks in your `$chat_history` messages
+  - The Vellum UI currently supports only publicly hosted image urls. To send a base64 image file, you can use Vellum's API instead.
+
+    Here's a short example on how to send an image to the model, using Vellum's Python SDK:
+
+    ```python
+    image_link = "https://storage.googleapis.com/vellum-public/help-docs/add_prompt_block_button.png"
+    response = client.execute_prompt(
+        prompt_deployment_name="github-loom-demo",
+        inputs=[
+            PromptDeploymentInputRequest_ChatHistory(
+                name="$chat_history",
+                value=[
+                    ChatMessageRequest(
+                        role=ChatMessageRole.USER,
+                        content={
+                            "type": "ARRAY",
+                            "value": [
+                                {"type": "STRING", "value": "What's in this image?"},
+                                {"type": "IMAGE", "value": {"src": image_link}},
+                            ],
+                        },
+                    )
+                ],
+                type=VellumVariableType.CHAT_HISTORY,
+            ),
+        ],
+    )
+    print(response.outputs[0].value)
+    ```
+
+## Image Detail and Token Usage
+
+When working with image models, token usage is an important factor to consider. For GPT-4 Turbo with Vision, the two main factors for token count are the image’s size and it’s detail setting.
+
+There are three possible settings for the image detail: `low`, `high`, or `auto`
+
+In Vellum, we default the detail to be `low` to prevent unintended token usage. OpenAI's default setting is `auto` where the model decides whether to use low or high detail based on the size of the input image.
+
+![Image Details](https://storage.googleapis.com/vellum-public/help-docs/images-config-detail.png)
+
+The `low` setting processes a lower resolution `512x512` version of the image. With `low`, the response time is faster and there’s a fixed token consumption per image. At the time of this writing, that amount is `85 tokens`. The low setting is great when the fine details of the image are not required.
+
+The `high` setting on the other hand is the high resolution mode. In this mode, the input image is tiled and a detailed segment is created from it. Token usage is calculated based on the number of these segments which correlates to the image size. High resolution allows for a more comprehensive interpretation of your image.
+
+You can learn more about the image detail setting and OpenAI Vision models on [their site](https://platform.openai.com/docs/guides/vision)
+
+<Callout intent="info">
+  Are you looking for greater multimodal model support in Vellum beyond
+  `gpt-4-vision-preview`? Please don't hesitate to let us know at
+  support@vellum.ai!
+</Callout>
