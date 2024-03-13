@@ -5,37 +5,43 @@ description: Learn how to send images to multimodal models like GPT-4 Turbo with
 
 Leverage the power of multimodal models to process both natural language and visual inputs within your LLM-applications using Vellum.
 
-Vellum supports images for OpenAI’s vision models like GPT-4 Turbo with Vision, or `gpt-4-vision-preview` - both via [API](https://docs.vellum.ai/api-reference/) and in the Vellum UI.
-
-Here’s how to get started using images in Vellum!
+Vellum supports images for OpenAI’s vision models like GPT-4 Turbo with Vision - both via [API](https://docs.vellum.ai/api-reference/) and in the Vellum UI.
 
 ![Images in Vellum UI](https://storage.googleapis.com/vellum-public/help-docs/images-in-prompts-walkthrough.gif)
 
+Read on to learn how to get started using images in Vellum!
+
 ## Using Images in the UI
 
-Vellum supports images as inputs to both your Prompts and Workflows. In either Sandbox, you can add images inside of a scenario Chat History message.
+Vellum supports images as inputs to both your Prompts and Workflows. In either Sandbox, you can add images inside of scenario Chat History messages.
 
-Begin by selecting the correct model, `GPT-4 Turbo with vision`, in your Prompt or in a Workflow sandbox Prompt Node.
+Begin by selecting the correct model, `GPT-4 Turbo with vision`, in your Prompt. In Workflows, you can set the model within a Prompt Node. Before you do, you'll want to add a Chat History block as an input to your Workflow first.
 
 ![Vision Model Selection](https://storage.googleapis.com/vellum-public/help-docs/images-model-selection.png)
 
-Next, to add an image, drag and drop a valid image into a scenario Chat History message. This converts the Chat Message into an array that can contain multiple image and/or text items.
+Next, add a Chat History block and some messages to your template so you can drag images within them.
+
+Here's how to do it:
+
+- In the Prompt Sandbox, add a Chat History block by typing in `$chat_history`. This is a special Prompt Variable name that will add an empty Chat History block component in each scenario
+  ![Prompt Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-prompt-steps.png)
+
+- In the Workflow Sandbox, a Chat History block can be added directly from the "Add" dropdown on the bottom left of the Input Variables modal. After adding this block, configure your Prompt Node to use Chat History as an input
+  ![Workflow Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-workflow-steps.png)
+
+Now you're ready to add images! Drag and drop a valid image into a Chat History message that's being used as an input to define a Prompt or Workflow scenario. This converts the Chat Message into a draggable array that can be easily re-ordered and can contain multiple image and/or text items.
 
 <Callout intent="info">
   Valid image URLs: Images must have their absolute path including the image
-  filetype in their URL (example:
+  filetype in their URL and must be publicly visible (example:
   https://storage.googleapis.com/vellum-public/help-docs/release-tags-on-deploy.png)
 </Callout>
 
-Here’s what this looks like in the **Prompt Sandbox**:
-
-![Prompt Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-prompt-steps.png)
+Here’s what images look like in the **Prompt Sandbox**:
 
 ![Images in Prompt Scenarios](https://storage.googleapis.com/vellum-public/help-docs/images-in-prompts.png)
 
-And in the **Workflow Sandbox**:
-
-![Workflow Sandbox Steps](https://storage.googleapis.com/vellum-public/help-docs/images-workflow-steps.png)
+And images in the **Workflow Sandbox**:
 
 ![Images in Workflow Scenarios](https://storage.googleapis.com/vellum-public/help-docs/images-in-workflows.png)
 
@@ -47,7 +53,7 @@ You can also switch out an image you’ve dragged in for a new one by updating t
 
 ![Image Configuration Modal](https://storage.googleapis.com/vellum-public/help-docs/images-config-modal.png)
 
-##Image Specifications
+## Image Specifications
 
 Here are some important model specifications for GPT-4 Turbo with Vision to keep in mind as you’re incorporating images into your Prompts and Workflows:
 
