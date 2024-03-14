@@ -1341,11 +1341,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ChatMessageContent'
           nullable: true
-        external_id:
+        source:
           type: string
           nullable: true
-          description: An optional identifier representing the user or invocation
-            that generated the message.
+          description: An optional identifier representing who or what generated this
+            message.
       required:
       - role
     ChatMessageContent:
@@ -1385,11 +1385,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ChatMessageContentRequest'
           nullable: true
-        external_id:
+        source:
           type: string
           nullable: true
-          description: An optional identifier representing the user or invocation
-            that generated the message.
+          description: An optional identifier representing who or what generated this
+            message.
       required:
       - role
     ChatMessageRole:
@@ -2178,6 +2178,181 @@ components:
         mapping:
           FULFILLED: '#/components/schemas/FulfilledExecuteWorkflowWorkflowResultEvent'
           REJECTED: '#/components/schemas/RejectedExecuteWorkflowWorkflowResultEvent'
+    ExecutionArrayVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionChatHistoryVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionErrorVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionFunctionCallVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionJsonVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionNumberVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionSearchResultsVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionStringVellumValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The variable's uniquely identifying internal id.
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    ExecutionVellumValue:
+      oneOf:
+      - $ref: '#/components/schemas/ExecutionStringVellumValue'
+      - $ref: '#/components/schemas/ExecutionNumberVellumValue'
+      - $ref: '#/components/schemas/ExecutionJsonVellumValue'
+      - $ref: '#/components/schemas/ExecutionChatHistoryVellumValue'
+      - $ref: '#/components/schemas/ExecutionSearchResultsVellumValue'
+      - $ref: '#/components/schemas/ExecutionErrorVellumValue'
+      - $ref: '#/components/schemas/ExecutionArrayVellumValue'
+      - $ref: '#/components/schemas/ExecutionFunctionCallVellumValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/ExecutionStringVellumValue'
+          NUMBER: '#/components/schemas/ExecutionNumberVellumValue'
+          JSON: '#/components/schemas/ExecutionJsonVellumValue'
+          CHAT_HISTORY: '#/components/schemas/ExecutionChatHistoryVellumValue'
+          SEARCH_RESULTS: '#/components/schemas/ExecutionSearchResultsVellumValue'
+          ERROR: '#/components/schemas/ExecutionErrorVellumValue'
+          ARRAY: '#/components/schemas/ExecutionArrayVellumValue'
+          FUNCTION_CALL: '#/components/schemas/ExecutionFunctionCallVellumValue'
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -3767,7 +3942,7 @@ components:
         chat_message_unterminated:
           type: boolean
           default: false
-        chat_external_id:
+        chat_source:
           type: string
           nullable: true
         template:
@@ -3805,7 +3980,7 @@ components:
         chat_message_unterminated:
           type: boolean
           default: false
-        chat_external_id:
+        chat_source:
           type: string
           nullable: true
           minLength: 1
@@ -6243,6 +6418,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkflowOutput'
+          nullable: true
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExecutionVellumValue'
           nullable: true
       required:
       - id
