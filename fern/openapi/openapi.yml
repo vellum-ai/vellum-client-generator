@@ -2629,7 +2629,7 @@ components:
           items:
             $ref: '#/components/schemas/ChatMessageRequest'
           description: Optionally provide a list of chat messages that'll be used
-            in place of the special {$chat_history} variable, if included in the prompt.
+            in place of the special chat_history variable, if included in the prompt.
         external_ids:
           type: array
           items:
