@@ -2629,7 +2629,7 @@ components:
           items:
             $ref: '#/components/schemas/ChatMessageRequest'
           description: Optionally provide a list of chat messages that'll be used
-            in place of the special {$chat_history} variable, if included in the prompt.
+            in place of the special chat_history variable, if included in the prompt.
         external_ids:
           type: array
           items:
@@ -6003,6 +6003,7 @@ components:
     WorkflowExecutionEventErrorCode:
       enum:
       - WORKFLOW_INITIALIZATION
+      - WORKFLOW_CANCELLED
       - NODE_EXECUTION_COUNT_LIMIT_REACHED
       - INTERNAL_SERVER_ERROR
       - NODE_EXECUTION
@@ -6012,6 +6013,7 @@ components:
       type: string
       description: |-
         * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+        * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
         * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
         * `NODE_EXECUTION` - NODE_EXECUTION
