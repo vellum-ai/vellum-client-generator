@@ -25,7 +25,6 @@ Upon creating a Prompt Node you’ll be asked to import a prompt from an existin
 
 ![Prompt Node](https://storage.googleapis.com/vellum-public/help-docs/prompt_node.png)
 
-
 ### Templating Nodes
 
 The Templating Node allows you to perform custom data transformations on a set of defined inputs to create a new output. You can use this to define constants, manipulate data before feeding into a prompt, or massage a response to a format to your liking.
@@ -44,13 +43,14 @@ The index in a Search Node can be fixed for the Workflow or chosen dynamically b
 
 ### API Node
 
-The API Node invokes an API endpoint and returns back the status code, raw output, and JSON output if applicable. These APIs can be either publicly accessible or privately defined within your backend through the help of Authorization headers and Workspace Secrets. Simply define a URL, HTTP Method, and the body that you would like to send to the desired endpoint.
+The API Node invokes an API endpoint and returns back the status code, raw output, and JSON output if applicable. These APIs can be either publicly accessible or privately defined within your backend through the help of Authorization headers and Workspace Secrets. Simply define a URL, HTTP Method, relevant additional headers, and the body that you would like to send to the desired endpoint.
 
 ![API Node](https://storage.googleapis.com/vellum-public/help-docs/api-node.png)
 
 ### Code Execution Nodes
 
 The Code Execution Node empowers you to include custom logic defined directly in the workflow. You can even import custom public packages within the node's logic. We support the following languages:
+
 - Python
 - TypeScript
 
@@ -93,6 +93,7 @@ A name for the output and an output type must be configured here because the res
 ### Error Node
 
 The Error Node enables you to reject the full workflow, terminating execution with an error event wherever you define it in your execution flow. There are two types of errors you could raise with this node:
+
 - Pass-through - Use an `Error` output from an upstream node and pass it through to this node.
 - Custom - Define your own `String` output that this node will use as an error message
 
