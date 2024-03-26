@@ -2,7 +2,23 @@
 title: Changelog | March, 2024
 ---
 
+## Workflow Node Mocking
+
+_March 26th, 2024_
+
+While iteratively developing a Workflow in Vellum, you often want to focus on improving a specific branch or node. It can be cumbersome to re-run the entire Workflow just to test the part you're iterating on, especially if you already know what the upstream nodes are going to output.
+
+To help address this, Vellum now supports _node mocking_. You can now mock out a Prompt or Subworkflow Node such that its execution is skipped and a hard-coded value is returned.
+
+This can help you dramatically speed up your Workflow development since you no longer have to wait for early Prompt Nodes to complete. This has the added benefit of saving the expense of tokens with LLM providers!
+
+For more information on Workflow Node Mocking, visit our new [help center page](/help-center/workflows/experimentation#node-mocking).
+
+![Workflow Node Mocking](https://storage.googleapis.com/vellum-public/help-docs/workflow-node-mocking.png)
+
 ## Claude 3 and Mistral on Bedrock
+
+_March 23rd, 2024_
 
 We now support both of the Claude 3 and both of the Mistral models on AWS Bedrock. Add these models to your workspace by heading to the [models](https://app.vellum.ai/models) page and searching for the one you need from the search bar.
 
