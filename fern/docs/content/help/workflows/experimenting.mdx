@@ -125,15 +125,15 @@ Here’s an example of a workflow that’s executed successfully:
 
 ## Node Mocking
 
-Workflow development is best done iteratively. However, this could become prohibitively expensive both due to token consumption and runtime if there are Prompt Nodes defined early in the Workflow. To help speed up Workflow development, you could define _mock_ executions for a given node. This will use the output you define for this node instead of running the node itself.
+Workflow development is best done iteratively. However, this can become prohibitively expensive both in terms of token consumption and runtime if there are Prompt Nodes defined early in the Workflow that you have to frequently re-run just to get to the part of the Workflow that you _actually_ want to test. To help speed up Workflow development, you can _mock out the execution_ of a given node. This will skip the node's execution and return the hard-coded output(s) you define rather than running the node itself.
 
 ![Workflow Node Mocking](https://storage.googleapis.com/vellum-public/help-docs/workflow-node-mocking.png)
 
-Once defined, you could easily toggle the mock on and off to go back and forth between mocking the node and running the real Prompt to see your Workflow work end-to-end. This also allows you to save your mocks without needing to delete them when running the real node. During a workflow run, nodes that are marked will be outlined it's own color to differentiate itself from nodes that are actually executed.
+Once defined, you can easily toggle the mock on and off to go back and forth between mocking the node and actually executing the Prompt to see your Workflow work end-to-end. This also allows you to save your mocks without needing to delete them when you'd like to actually execute the node. During a workflow run, nodes that are mocked will be outlined in yellow to differentiate from nodes that are actually executed.
 
 ![Workflow Node Mocking](https://storage.googleapis.com/vellum-public/help-docs/node-mocking-result.png)
 
-These mocks are _only_ defined within the context of Workflow Sandboxes, and are defined per scenario. They do not get deployed with your Workflow Deployments.
+These mocks are _only_ defined within the context of Workflow Sandboxes, and are defined per Scenario. They do not get deployed with your Workflow Deployments and do not affect behavior when invoking Workflow Deployment APIs.
 
 The following nodes support mocking:
 - Prompt Nodes
@@ -142,7 +142,7 @@ The following nodes support mocking:
 Check out the video below for a full demo of Workflow Node Mocking.
 
 <iframe
-  src="https://www.loom.com/embed/"
+  src="https://www.loom.com/embed/42e5acabd39b4604a8753a2d0b7566ba"
   width="100%"
   height="450px"
 ></iframe>
