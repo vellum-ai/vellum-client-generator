@@ -1,749 +1,111 @@
 paths:
   /v1/deployments:
     get:
-      x-fern-sdk-group-name:
-        - deployments
-      x-fern-sdk-method-name: list
       x-fern-audiences:
         - default
   /v1/deployments/{id}:
     get:
-      x-fern-sdk-group-name:
-        - deployments
-      x-fern-sdk-method-name: retrieve
       x-fern-audiences:
         - default
   /v1/deployments/provider-payload:
     post:
-      x-fern-sdk-group-name:
-        - deployments
-      x-fern-sdk-method-name: retrieve_provider_payload
       x-fern-audiences:
         - default
   /v1/document-indexes:
     get:
-      x-fern-sdk-group-name:
-        - documentIndexes
-      x-fern-sdk-method-name: list
       x-fern-audiences:
         - default
     post:
-      x-fern-sdk-group-name:
-        - documentIndexes
-      x-fern-sdk-method-name: create
       x-fern-audiences:
         - default
   /v1/document-indexes/{id}:
     get:
-      x-fern-sdk-group-name:
-        - documentIndexes
-      x-fern-sdk-method-name: retrieve
       x-fern-audiences:
         - default
   /v1/documents:
     get:
-      x-fern-sdk-group-name:
-        - documents
-      x-fern-sdk-method-name: list
       x-fern-audiences:
         - default
   /v1/documents/{id}:
     delete:
-      x-fern-sdk-group-name:
-        - documents
-      x-fern-sdk-method-name: destroy
       x-fern-audiences:
         - default
     patch:
-      x-fern-sdk-group-name:
-        - documents
-      x-fern-sdk-method-name: partialUpdate
       x-fern-audiences:
         - default
   /v1/execute-prompt:
     post:
-      x-fern-sdk-method-name: execute-prompt
       x-fern-audiences:
         - predict
   /v1/execute-prompt-stream:
     post:
-      x-fern-sdk-method-name: execute-prompt-stream
       x-fern-audiences:
         - predict
   /v1/execute-workflow:
     post:
-      x-fern-sdk-method-name: execute-workflow
       x-fern-audiences:
         - predict
   /v1/execute-workflow-stream:
     post:
-      x-fern-sdk-method-name: execute-workflow-stream
       x-fern-audiences:
         - predict
   /v1/folders/{folder_id}/add-entity:
     post:
-      x-fern-sdk-group-name:
-        - folderEntities
-      x-fern-sdk-method-name: add_entity_to_folder
       x-fern-audiences:
         - default
   /v1/generate:
     post:
-      x-fern-sdk-method-name: generate
       x-fern-audiences:
         - predict
   /v1/generate-stream:
     post:
-      x-fern-sdk-method-name: generate-stream
       x-fern-audiences:
         - predict
   /v1/model-versions/{id}:
     get:
-      x-fern-sdk-group-name:
-        - modelVersions
-      x-fern-sdk-method-name: retrieve
       x-fern-audiences:
         - default
   /v1/registered-prompts/register:
     post:
-      x-fern-sdk-group-name:
-        - registeredPrompts
-      x-fern-sdk-method-name: register_prompt
       x-fern-audiences:
         - default
   /v1/sandboxes/{id}/scenarios:
     post:
-      x-fern-sdk-group-name:
-        - sandboxes
-      x-fern-sdk-method-name: upsert_sandbox_scenario
       x-fern-audiences:
         - default
   /v1/sandboxes/{id}/scenarios/{scenario_id}:
     delete:
-      x-fern-sdk-group-name:
-        - sandboxes
-      x-fern-sdk-method-name: delete_sandbox_scenario
       x-fern-audiences:
         - default
   /v1/search:
     post:
-      x-fern-sdk-method-name: search
       x-fern-audiences:
         - predict
   /v1/submit-completion-actuals:
     post:
-      x-fern-sdk-method-name: submit-completion-actuals
       x-fern-audiences:
         - predict
   /v1/submit-workflow-execution-actuals:
     post:
-      x-fern-sdk-method-name: submit-workflow-execution-actuals
       x-fern-audiences:
         - predict
   /v1/test-suites/{id}/test-cases:
     post:
-      x-fern-sdk-group-name:
-        - testSuites
-      x-fern-sdk-method-name: upsert_test_suite_test_case
       x-fern-audiences:
         - default
   /v1/test-suites/{id}/test-cases/{test_case_id}:
     delete:
-      x-fern-sdk-group-name:
-        - testSuites
-      x-fern-sdk-method-name: delete_test_suite_test_case
       x-fern-audiences:
         - default
   /v1/upload-document:
     post:
-      x-fern-sdk-group-name:
-        - documents
-      x-fern-sdk-method-name: upload
       x-fern-audiences:
         - documents
   /v1/workflow-deployments:
     get:
-      x-fern-sdk-group-name:
-        - workflowDeployments
-      x-fern-sdk-method-name: list
       x-fern-audiences:
         - default
   /v1/workflow-deployments/{id}:
     get:
-      x-fern-sdk-group-name:
-        - workflowDeployments
-      x-fern-sdk-method-name: retrieve
       x-fern-audiences:
         - default
-components:
-  schemas:
-    AddEntityToFolderRequest:
-      x-fern-type-name: AddEntityToFolderRequest
-    ApiNodeResult:
-      x-fern-type-name: ApiNodeResult
-    ApiNodeResultData:
-      x-fern-type-name: ApiNodeResultData
-    ArrayChatMessageContent:
-      x-fern-type-name: ArrayChatMessageContent
-    ArrayChatMessageContentItem:
-      x-fern-type-name: ArrayChatMessageContentItem
-    ArrayChatMessageContentItemRequest:
-      x-fern-type-name: ArrayChatMessageContentItemRequest
-    ArrayChatMessageContentRequest:
-      x-fern-type-name: ArrayChatMessageContentRequest
-    ArrayEnum:
-      x-fern-type-name: ArrayEnum
-    ArrayVariableValueItem:
-      x-fern-type-name: ArrayVariableValueItem
-    BlockTypeEnum:
-      x-fern-type-name: BlockTypeEnum
-    ChatHistoryEnum:
-      x-fern-type-name: ChatHistoryEnum
-    ChatHistoryInputRequest:
-      x-fern-type-name: ChatHistoryInputRequest
-    ChatHistoryVariableValue:
-      x-fern-type-name: ChatHistoryVariableValue
-    ChatMessage:
-      x-fern-type-name: ChatMessage
-    ChatMessageContent:
-      x-fern-type-name: ChatMessageContent
-    ChatMessageContentRequest:
-      x-fern-type-name: ChatMessageContentRequest
-    ChatMessageRequest:
-      x-fern-type-name: ChatMessageRequest
-    ChatMessageRole:
-      x-fern-type-name: ChatMessageRole
-    CodeExecutionNodeChatHistoryResult:
-      x-fern-type-name: CodeExecutionNodeChatHistoryResult
-    CodeExecutionNodeErrorResult:
-      x-fern-type-name: CodeExecutionNodeErrorResult
-    CodeExecutionNodeJsonResult:
-      x-fern-type-name: CodeExecutionNodeJsonResult
-    CodeExecutionNodeNumberResult:
-      x-fern-type-name: CodeExecutionNodeNumberResult
-    CodeExecutionNodeResult:
-      x-fern-type-name: CodeExecutionNodeResult
-    CodeExecutionNodeResultData:
-      x-fern-type-name: CodeExecutionNodeResultData
-    CodeExecutionNodeResultOutput:
-      x-fern-type-name: CodeExecutionNodeResultOutput
-    CodeExecutionNodeSearchResultsResult:
-      x-fern-type-name: CodeExecutionNodeSearchResultsResult
-    CodeExecutionNodeStringResult:
-      x-fern-type-name: CodeExecutionNodeStringResult
-    ConditionalNodeResult:
-      x-fern-type-name: ConditionalNodeResult
-    ConditionalNodeResultData:
-      x-fern-type-name: ConditionalNodeResultData
-    DeploymentProviderPayloadRequest:
-      x-fern-type-name: DeploymentProviderPayloadRequest
-    DeploymentProviderPayloadResponse:
-      x-fern-type-name: DeploymentProviderPayloadResponse
-    DeploymentRead:
-      x-fern-type-name: DeploymentRead
-    DocumentDocumentToDocumentIndex:
-      x-fern-type-name: DocumentDocumentToDocumentIndex
-    DocumentIndexCreateRequest:
-      x-fern-type-name: DocumentIndexCreateRequest
-    DocumentIndexRead:
-      x-fern-type-name: DocumentIndexRead
-    DocumentRead:
-      x-fern-type-name: DocumentRead
-    DocumentStatus:
-      x-fern-type-name: DocumentStatus
-    EnrichedNormalizedCompletion:
-      x-fern-type-name: EnrichedNormalizedCompletion
-    EntityStatus:
-      x-fern-type-name: EntityStatus
-    EnvironmentEnum:
-      x-fern-type-name: EnvironmentEnum
-    ErrorEnum:
-      x-fern-type-name: ErrorEnum
-    ErrorVariableValue:
-      x-fern-type-name: ErrorVariableValue
-    ExecutePromptApiErrorResponse:
-      x-fern-type-name: ExecutePromptApiErrorResponse
-    ExecutePromptEvent:
-      x-fern-type-name: ExecutePromptEvent
-    ExecutePromptRequest:
-      x-fern-type-name: ExecutePromptRequest
-    ExecutePromptResponse:
-      x-fern-type-name: ExecutePromptResponse
-    ExecutePromptStreamRequest:
-      x-fern-type-name: ExecutePromptStreamRequest
-    ExecuteWorkflowErrorResponse:
-      x-fern-type-name: ExecuteWorkflowErrorResponse
-    ExecuteWorkflowRequest:
-      x-fern-type-name: ExecuteWorkflowRequest
-    ExecuteWorkflowResponse:
-      x-fern-type-name: ExecuteWorkflowResponse
-    ExecuteWorkflowStreamErrorResponse:
-      x-fern-type-name: ExecuteWorkflowStreamErrorResponse
-    ExecuteWorkflowStreamRequest:
-      x-fern-type-name: ExecuteWorkflowStreamRequest
-    ExecuteWorkflowWorkflowResultEvent:
-      x-fern-type-name: ExecuteWorkflowWorkflowResultEvent
-    FinishReasonEnum:
-      x-fern-type-name: FinishReasonEnum
-    FulfilledEnum:
-      x-fern-type-name: FulfilledEnum
-    FulfilledExecutePromptEvent:
-      x-fern-type-name: FulfilledExecutePromptEvent
-    FulfilledExecutePromptResponse:
-      x-fern-type-name: FulfilledExecutePromptResponse
-    FulfilledExecuteWorkflowWorkflowResultEvent:
-      x-fern-type-name: FulfilledExecuteWorkflowWorkflowResultEvent
-    FulfilledFunctionCall:
-      x-fern-type-name: FulfilledFunctionCall
-    FulfilledPromptExecutionMeta:
-      x-fern-type-name: FulfilledPromptExecutionMeta
-    FulfilledWorkflowNodeResultEvent:
-      x-fern-type-name: FulfilledWorkflowNodeResultEvent
-    FunctionCall:
-      x-fern-type-name: FunctionCall
-    FunctionCallChatMessageContent:
-      x-fern-type-name: FunctionCallChatMessageContent
-    FunctionCallChatMessageContentRequest:
-      x-fern-type-name: FunctionCallChatMessageContentRequest
-    FunctionCallChatMessageContentValue:
-      x-fern-type-name: FunctionCallChatMessageContentValue
-    FunctionCallChatMessageContentValueRequest:
-      x-fern-type-name: FunctionCallChatMessageContentValueRequest
-    FunctionCallEnum:
-      x-fern-type-name: FunctionCallEnum
-    FunctionCallVariableValue:
-      x-fern-type-name: FunctionCallVariableValue
-    GenerateBodyRequest:
-      x-fern-type-name: GenerateBodyRequest
-    GenerateErrorResponse:
-      x-fern-type-name: GenerateErrorResponse
-    GenerateOptionsRequest:
-      x-fern-type-name: GenerateOptionsRequest
-    GenerateRequest:
-      x-fern-type-name: GenerateRequest
-    GenerateResponse:
-      x-fern-type-name: GenerateResponse
-    GenerateResult:
-      x-fern-type-name: GenerateResult
-    GenerateResultData:
-      x-fern-type-name: GenerateResultData
-    GenerateResultError:
-      x-fern-type-name: GenerateResultError
-    GenerateStreamBodyRequest:
-      x-fern-type-name: GenerateStreamBodyRequest
-    GenerateStreamResponse:
-      x-fern-type-name: GenerateStreamResponse
-    GenerateStreamResult:
-      x-fern-type-name: GenerateStreamResult
-    GenerateStreamResultData:
-      x-fern-type-name: GenerateStreamResultData
-    ImageChatMessageContent:
-      x-fern-type-name: ImageChatMessageContent
-    ImageChatMessageContentRequest:
-      x-fern-type-name: ImageChatMessageContentRequest
-    ImageEnum:
-      x-fern-type-name: ImageEnum
-    IndexingStateEnum:
-      x-fern-type-name: IndexingStateEnum
-    InitiatedEnum:
-      x-fern-type-name: InitiatedEnum
-    InitiatedExecutePromptEvent:
-      x-fern-type-name: InitiatedExecutePromptEvent
-    InitiatedPromptExecutionMeta:
-      x-fern-type-name: InitiatedPromptExecutionMeta
-    InitiatedWorkflowNodeResultEvent:
-      x-fern-type-name: InitiatedWorkflowNodeResultEvent
-    JSONInputRequest:
-      x-fern-type-name: JSONInputRequest
-    JsonEnum:
-      x-fern-type-name: JsonEnum
-    JsonVariableValue:
-      x-fern-type-name: JsonVariableValue
-    LogicalOperator:
-      x-fern-type-name: LogicalOperator
-    LogprobsEnum:
-      x-fern-type-name: LogprobsEnum
-    MetadataFilterConfigRequest:
-      x-fern-type-name: MetadataFilterConfigRequest
-    MetadataFilterRuleCombinator:
-      x-fern-type-name: MetadataFilterRuleCombinator
-    MetadataFilterRuleRequest:
-      x-fern-type-name: MetadataFilterRuleRequest
-    ModelVersionBuildConfig:
-      x-fern-type-name: ModelVersionBuildConfig
-    ModelVersionExecConfig:
-      x-fern-type-name: ModelVersionExecConfig
-    ModelVersionExecConfigParameters:
-      x-fern-type-name: ModelVersionExecConfigParameters
-    ModelVersionRead:
-      x-fern-type-name: ModelVersionRead
-    ModelVersionReadStatusEnum:
-      x-fern-type-name: ModelVersionReadStatusEnum
-    ModelVersionSandboxSnapshot:
-      x-fern-type-name: ModelVersionSandboxSnapshot
-    NamedTestCaseChatHistoryVariableValueRequest:
-      x-fern-type-name: NamedTestCaseChatHistoryVariableValueRequest
-    NamedTestCaseErrorVariableValueRequest:
-      x-fern-type-name: NamedTestCaseErrorVariableValueRequest
-    NamedTestCaseJsonVariableValueRequest:
-      x-fern-type-name: NamedTestCaseJsonVariableValueRequest
-    NamedTestCaseNumberVariableValueRequest:
-      x-fern-type-name: NamedTestCaseNumberVariableValueRequest
-    NamedTestCaseSearchResultsVariableValueRequest:
-      x-fern-type-name: NamedTestCaseSearchResultsVariableValueRequest
-    NamedTestCaseStringVariableValueRequest:
-      x-fern-type-name: NamedTestCaseStringVariableValueRequest
-    NamedTestCaseVariableValueRequest:
-      x-fern-type-name: NamedTestCaseVariableValueRequest
-    NodeInputCompiledArrayValue:
-      x-fern-type-name: NodeInputCompiledArrayValue
-    NodeInputCompiledChatHistoryValue:
-      x-fern-type-name: NodeInputCompiledChatHistoryValue
-    NodeInputCompiledErrorValue:
-      x-fern-type-name: NodeInputCompiledErrorValue
-    NodeInputCompiledJsonValue:
-      x-fern-type-name: NodeInputCompiledJsonValue
-    NodeInputCompiledNumberValue:
-      x-fern-type-name: NodeInputCompiledNumberValue
-    NodeInputCompiledSearchResultsValue:
-      x-fern-type-name: NodeInputCompiledSearchResultsValue
-    NodeInputCompiledStringValue:
-      x-fern-type-name: NodeInputCompiledStringValue
-    NodeInputVariableCompiledValue:
-      x-fern-type-name: NodeInputVariableCompiledValue
-    NodeOutputCompiledArrayValue:
-      x-fern-type-name: NodeOutputCompiledArrayValue
-    NodeOutputCompiledChatHistoryValue:
-      x-fern-type-name: NodeOutputCompiledChatHistoryValue
-    NodeOutputCompiledErrorValue:
-      x-fern-type-name: NodeOutputCompiledErrorValue
-    NodeOutputCompiledFunctionValue:
-      x-fern-type-name: NodeOutputCompiledFunctionValue
-    NodeOutputCompiledJsonValue:
-      x-fern-type-name: NodeOutputCompiledJsonValue
-    NodeOutputCompiledNumberValue:
-      x-fern-type-name: NodeOutputCompiledNumberValue
-    NodeOutputCompiledSearchResultsValue:
-      x-fern-type-name: NodeOutputCompiledSearchResultsValue
-    NodeOutputCompiledStringValue:
-      x-fern-type-name: NodeOutputCompiledStringValue
-    NodeOutputCompiledValue:
-      x-fern-type-name: NodeOutputCompiledValue
-    NormalizedLogProbs:
-      x-fern-type-name: NormalizedLogProbs
-    NormalizedTokenLogProbs:
-      x-fern-type-name: NormalizedTokenLogProbs
-    NumberEnum:
-      x-fern-type-name: NumberEnum
-    NumberVariableValue:
-      x-fern-type-name: NumberVariableValue
-    PaginatedDocumentIndexReadList:
-      x-fern-type-name: PaginatedDocumentIndexReadList
-    PaginatedSlimDeploymentReadList:
-      x-fern-type-name: PaginatedSlimDeploymentReadList
-    PaginatedSlimDocumentList:
-      x-fern-type-name: PaginatedSlimDocumentList
-    PaginatedSlimWorkflowDeploymentList:
-      x-fern-type-name: PaginatedSlimWorkflowDeploymentList
-    PatchedDocumentUpdateRequest:
-      x-fern-type-name: PatchedDocumentUpdateRequest
-    ProcessingFailureReasonEnum:
-      x-fern-type-name: ProcessingFailureReasonEnum
-    ProcessingStateEnum:
-      x-fern-type-name: ProcessingStateEnum
-    PromptDeploymentExpandMetaRequestRequest:
-      x-fern-type-name: PromptDeploymentExpandMetaRequestRequest
-    PromptDeploymentInputRequest:
-      x-fern-type-name: PromptDeploymentInputRequest
-    PromptExecutionMeta:
-      x-fern-type-name: PromptExecutionMeta
-    PromptNodeResult:
-      x-fern-type-name: PromptNodeResult
-    PromptNodeResultData:
-      x-fern-type-name: PromptNodeResultData
-    PromptOutput:
-      x-fern-type-name: PromptOutput
-    PromptTemplateBlock:
-      x-fern-type-name: PromptTemplateBlock
-    PromptTemplateBlockData:
-      x-fern-type-name: PromptTemplateBlockData
-    PromptTemplateBlockDataRequest:
-      x-fern-type-name: PromptTemplateBlockDataRequest
-    PromptTemplateBlockProperties:
-      x-fern-type-name: PromptTemplateBlockProperties
-    PromptTemplateBlockPropertiesRequest:
-      x-fern-type-name: PromptTemplateBlockPropertiesRequest
-    PromptTemplateBlockRequest:
-      x-fern-type-name: PromptTemplateBlockRequest
-    ProviderEnum:
-      x-fern-type-name: ProviderEnum
-    RawPromptExecutionOverridesRequest:
-      x-fern-type-name: RawPromptExecutionOverridesRequest
-    RegisterPromptErrorResponse:
-      x-fern-type-name: RegisterPromptErrorResponse
-    RegisterPromptModelParametersRequest:
-      x-fern-type-name: RegisterPromptModelParametersRequest
-    RegisterPromptPrompt:
-      x-fern-type-name: RegisterPromptPrompt
-    RegisterPromptPromptInfoRequest:
-      x-fern-type-name: RegisterPromptPromptInfoRequest
-    RegisterPromptRequestRequest:
-      x-fern-type-name: RegisterPromptRequestRequest
-    RegisterPromptResponse:
-      x-fern-type-name: RegisterPromptResponse
-    RegisteredPromptDeployment:
-      x-fern-type-name: RegisteredPromptDeployment
-    RegisteredPromptInputVariableRequest:
-      x-fern-type-name: RegisteredPromptInputVariableRequest
-    RegisteredPromptModelVersion:
-      x-fern-type-name: RegisteredPromptModelVersion
-    RegisteredPromptSandbox:
-      x-fern-type-name: RegisteredPromptSandbox
-    RegisteredPromptSandboxSnapshot:
-      x-fern-type-name: RegisteredPromptSandboxSnapshot
-    RejectedEnum:
-      x-fern-type-name: RejectedEnum
-    RejectedExecutePromptEvent:
-      x-fern-type-name: RejectedExecutePromptEvent
-    RejectedExecutePromptResponse:
-      x-fern-type-name: RejectedExecutePromptResponse
-    RejectedExecuteWorkflowWorkflowResultEvent:
-      x-fern-type-name: RejectedExecuteWorkflowWorkflowResultEvent
-    RejectedFunctionCall:
-      x-fern-type-name: RejectedFunctionCall
-    RejectedPromptExecutionMeta:
-      x-fern-type-name: RejectedPromptExecutionMeta
-    RejectedWorkflowNodeResultEvent:
-      x-fern-type-name: RejectedWorkflowNodeResultEvent
-    SandboxScenario:
-      x-fern-type-name: SandboxScenario
-    ScenarioInput:
-      x-fern-type-name: ScenarioInput
-    ScenarioInputRequest:
-      x-fern-type-name: ScenarioInputRequest
-    ScenarioInputTypeEnum:
-      x-fern-type-name: ScenarioInputTypeEnum
-    SearchErrorResponse:
-      x-fern-type-name: SearchErrorResponse
-    SearchFiltersRequest:
-      x-fern-type-name: SearchFiltersRequest
-    SearchNodeResult:
-      x-fern-type-name: SearchNodeResult
-    SearchNodeResultData:
-      x-fern-type-name: SearchNodeResultData
-    SearchRequestBodyRequest:
-      x-fern-type-name: SearchRequestBodyRequest
-    SearchRequestOptionsRequest:
-      x-fern-type-name: SearchRequestOptionsRequest
-    SearchResponse:
-      x-fern-type-name: SearchResponse
-    SearchResult:
-      x-fern-type-name: SearchResult
-    SearchResultDocument:
-      x-fern-type-name: SearchResultDocument
-    SearchResultDocumentRequest:
-      x-fern-type-name: SearchResultDocumentRequest
-    SearchResultMergingRequest:
-      x-fern-type-name: SearchResultMergingRequest
-    SearchResultRequest:
-      x-fern-type-name: SearchResultRequest
-    SearchResultsEnum:
-      x-fern-type-name: SearchResultsEnum
-    SearchResultsVariableValue:
-      x-fern-type-name: SearchResultsVariableValue
-    SearchWeightsRequest:
-      x-fern-type-name: SearchWeightsRequest
-    SlimDeploymentRead:
-      x-fern-type-name: SlimDeploymentRead
-    SlimDocument:
-      x-fern-type-name: SlimDocument
-    SlimWorkflowDeployment:
-      x-fern-type-name: SlimWorkflowDeployment
-    StreamingEnum:
-      x-fern-type-name: StreamingEnum
-    StreamingExecutePromptEvent:
-      x-fern-type-name: StreamingExecutePromptEvent
-    StreamingPromptExecutionMeta:
-      x-fern-type-name: StreamingPromptExecutionMeta
-    StreamingWorkflowNodeResultEvent:
-      x-fern-type-name: StreamingWorkflowNodeResultEvent
-    StringChatMessageContent:
-      x-fern-type-name: StringChatMessageContent
-    StringChatMessageContentRequest:
-      x-fern-type-name: StringChatMessageContentRequest
-    StringEnum:
-      x-fern-type-name: StringEnum
-    StringInputRequest:
-      x-fern-type-name: StringInputRequest
-    StringVariableValue:
-      x-fern-type-name: StringVariableValue
-    SubmitCompletionActualRequest:
-      x-fern-type-name: SubmitCompletionActualRequest
-    SubmitCompletionActualsErrorResponse:
-      x-fern-type-name: SubmitCompletionActualsErrorResponse
-    SubmitCompletionActualsRequest:
-      x-fern-type-name: SubmitCompletionActualsRequest
-    SubmitWorkflowExecutionActualRequest:
-      x-fern-type-name: SubmitWorkflowExecutionActualRequest
-    SubmitWorkflowExecutionActualsRequest:
-      x-fern-type-name: SubmitWorkflowExecutionActualsRequest
-    SubworkflowEnum:
-      x-fern-type-name: SubworkflowEnum
-    SubworkflowNodeResult:
-      x-fern-type-name: SubworkflowNodeResult
-    TemplatingNodeChatHistoryResult:
-      x-fern-type-name: TemplatingNodeChatHistoryResult
-    TemplatingNodeErrorResult:
-      x-fern-type-name: TemplatingNodeErrorResult
-    TemplatingNodeJsonResult:
-      x-fern-type-name: TemplatingNodeJsonResult
-    TemplatingNodeNumberResult:
-      x-fern-type-name: TemplatingNodeNumberResult
-    TemplatingNodeResult:
-      x-fern-type-name: TemplatingNodeResult
-    TemplatingNodeResultData:
-      x-fern-type-name: TemplatingNodeResultData
-    TemplatingNodeResultOutput:
-      x-fern-type-name: TemplatingNodeResultOutput
-    TemplatingNodeSearchResultsResult:
-      x-fern-type-name: TemplatingNodeSearchResultsResult
-    TemplatingNodeStringResult:
-      x-fern-type-name: TemplatingNodeStringResult
-    TerminalNodeArrayResult:
-      x-fern-type-name: TerminalNodeArrayResult
-    TerminalNodeChatHistoryResult:
-      x-fern-type-name: TerminalNodeChatHistoryResult
-    TerminalNodeErrorResult:
-      x-fern-type-name: TerminalNodeErrorResult
-    TerminalNodeFunctionCallResult:
-      x-fern-type-name: TerminalNodeFunctionCallResult
-    TerminalNodeJsonResult:
-      x-fern-type-name: TerminalNodeJsonResult
-    TerminalNodeNumberResult:
-      x-fern-type-name: TerminalNodeNumberResult
-    TerminalNodeResult:
-      x-fern-type-name: TerminalNodeResult
-    TerminalNodeResultData:
-      x-fern-type-name: TerminalNodeResultData
-    TerminalNodeResultOutput:
-      x-fern-type-name: TerminalNodeResultOutput
-    TerminalNodeSearchResultsResult:
-      x-fern-type-name: TerminalNodeSearchResultsResult
-    TerminalNodeStringResult:
-      x-fern-type-name: TerminalNodeStringResult
-    TestCaseChatHistoryVariableValue:
-      x-fern-type-name: TestCaseChatHistoryVariableValue
-    TestCaseErrorVariableValue:
-      x-fern-type-name: TestCaseErrorVariableValue
-    TestCaseJsonVariableValue:
-      x-fern-type-name: TestCaseJsonVariableValue
-    TestCaseNumberVariableValue:
-      x-fern-type-name: TestCaseNumberVariableValue
-    TestCaseSearchResultsVariableValue:
-      x-fern-type-name: TestCaseSearchResultsVariableValue
-    TestCaseStringVariableValue:
-      x-fern-type-name: TestCaseStringVariableValue
-    TestCaseVariableValue:
-      x-fern-type-name: TestCaseVariableValue
-    TestSuiteTestCase:
-      x-fern-type-name: TestSuiteTestCase
-    UploadDocumentBodyRequest:
-      x-fern-type-name: UploadDocumentBodyRequest
-    UploadDocumentErrorResponse:
-      x-fern-type-name: UploadDocumentErrorResponse
-    UploadDocumentResponse:
-      x-fern-type-name: UploadDocumentResponse
-    UpsertSandboxScenarioRequestRequest:
-      x-fern-type-name: UpsertSandboxScenarioRequestRequest
-    UpsertTestSuiteTestCaseRequest:
-      x-fern-type-name: UpsertTestSuiteTestCaseRequest
-    VellumError:
-      x-fern-type-name: VellumError
-    VellumErrorCodeEnum:
-      x-fern-type-name: VellumErrorCodeEnum
-    VellumErrorRequest:
-      x-fern-type-name: VellumErrorRequest
-    VellumImage:
-      x-fern-type-name: VellumImage
-    VellumImageRequest:
-      x-fern-type-name: VellumImageRequest
-    VellumVariable:
-      x-fern-type-name: VellumVariable
-    VellumVariableType:
-      x-fern-type-name: VellumVariableType
-    WorkflowDeploymentRead:
-      x-fern-type-name: WorkflowDeploymentRead
-    WorkflowEventError:
-      x-fern-type-name: WorkflowEventError
-    WorkflowExecutionActualChatHistoryRequest:
-      x-fern-type-name: WorkflowExecutionActualChatHistoryRequest
-    WorkflowExecutionActualJsonRequest:
-      x-fern-type-name: WorkflowExecutionActualJsonRequest
-    WorkflowExecutionActualStringRequest:
-      x-fern-type-name: WorkflowExecutionActualStringRequest
-    WorkflowExecutionEventErrorCode:
-      x-fern-type-name: WorkflowExecutionEventErrorCode
-    WorkflowExecutionEventType:
-      x-fern-type-name: WorkflowExecutionEventType
-    WorkflowExecutionNodeResultEvent:
-      x-fern-type-name: WorkflowExecutionNodeResultEvent
-    WorkflowExecutionWorkflowResultEvent:
-      x-fern-type-name: WorkflowExecutionWorkflowResultEvent
-    WorkflowNodeResultData:
-      x-fern-type-name: WorkflowNodeResultData
-    WorkflowNodeResultEvent:
-      x-fern-type-name: WorkflowNodeResultEvent
-    WorkflowNodeResultEventState:
-      x-fern-type-name: WorkflowNodeResultEventState
-    WorkflowOutput:
-      x-fern-type-name: WorkflowOutput
-    WorkflowOutputArray:
-      x-fern-type-name: WorkflowOutputArray
-    WorkflowOutputChatHistory:
-      x-fern-type-name: WorkflowOutputChatHistory
-    WorkflowOutputError:
-      x-fern-type-name: WorkflowOutputError
-    WorkflowOutputFunctionCall:
-      x-fern-type-name: WorkflowOutputFunctionCall
-    WorkflowOutputImage:
-      x-fern-type-name: WorkflowOutputImage
-    WorkflowOutputJSON:
-      x-fern-type-name: WorkflowOutputJSON
-    WorkflowOutputNumber:
-      x-fern-type-name: WorkflowOutputNumber
-    WorkflowOutputSearchResults:
-      x-fern-type-name: WorkflowOutputSearchResults
-    WorkflowOutputString:
-      x-fern-type-name: WorkflowOutputString
-    WorkflowRequestChatHistoryInputRequest:
-      x-fern-type-name: WorkflowRequestChatHistoryInputRequest
-    WorkflowRequestInputRequest:
-      x-fern-type-name: WorkflowRequestInputRequest
-    WorkflowRequestJSONInputRequest:
-      x-fern-type-name: WorkflowRequestJSONInputRequest
-    WorkflowRequestNumberInputRequest:
-      x-fern-type-name: WorkflowRequestNumberInputRequest
-    WorkflowRequestStringInputRequest:
-      x-fern-type-name: WorkflowRequestStringInputRequest
-    WorkflowResultEvent:
-      x-fern-type-name: WorkflowResultEvent
-    WorkflowResultEventOutputData:
-      x-fern-type-name: WorkflowResultEventOutputData
-    WorkflowResultEventOutputDataArray:
-      x-fern-type-name: WorkflowResultEventOutputDataArray
-    WorkflowResultEventOutputDataChatHistory:
-      x-fern-type-name: WorkflowResultEventOutputDataChatHistory
-    WorkflowResultEventOutputDataError:
-      x-fern-type-name: WorkflowResultEventOutputDataError
-    WorkflowResultEventOutputDataFunctionCall:
-      x-fern-type-name: WorkflowResultEventOutputDataFunctionCall
-    WorkflowResultEventOutputDataJSON:
-      x-fern-type-name: WorkflowResultEventOutputDataJSON
-    WorkflowResultEventOutputDataNumber:
-      x-fern-type-name: WorkflowResultEventOutputDataNumber
-    WorkflowResultEventOutputDataSearchResults:
-      x-fern-type-name: WorkflowResultEventOutputDataSearchResults
-    WorkflowResultEventOutputDataString:
-      x-fern-type-name: WorkflowResultEventOutputDataString
-    WorkflowStreamEvent:
-      x-fern-type-name: WorkflowStreamEvent
