@@ -112,21 +112,18 @@ navigation:
           - page: Getting started
             path: ./docs/content/api/intro.mdx
       - api: Vellum API
-        slug: api
         snippets:
           python: vellum-ai
           typescript: "vellum-ai"
         audiences:
           - default
       - api: Predict API
-        slug: predict
         audiences:
           - predict
         snippets:
           python: vellum-ai
           typescript: "vellum-ai"
       - api: Documents API
-        slug: documents
         audiences:
           - documents
         snippets:
