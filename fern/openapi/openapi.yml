@@ -294,6 +294,82 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
       x-fern-availability: beta
+    put:
+      operationId: document_indexes_update
+      description: Used to fully update a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      - folder-entities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentIndexUpdateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
+    patch:
+      operationId: document_indexes_partial_update
+      description: Used to partial update a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      - folder-entities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentIndexUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
+    delete:
+      operationId: document_indexes_destroy
+      description: Used to delete a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
+      x-fern-availability: beta
   /v1/documents:
     get:
       operationId: documents_list
@@ -1273,6 +1349,7 @@ components:
       - $ref: '#/components/schemas/SearchResultsVariableValue'
       - $ref: '#/components/schemas/ErrorVariableValue'
       - $ref: '#/components/schemas/FunctionCallVariableValue'
+      - $ref: '#/components/schemas/ImageVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -1283,6 +1360,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
+          IMAGE: '#/components/schemas/ImageVariableValue'
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1763,6 +1841,33 @@ components:
       - indexing_config
       - label
       - name
+    DocumentIndexUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+      required:
+      - label
     DocumentRead:
       type: object
       properties:
@@ -2482,11 +2587,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
+        source_execution_id:
+          type: string
+          nullable: true
         output_values:
           type: array
           items:
             $ref: '#/components/schemas/NodeOutputCompiledValue'
           nullable: true
+        mocked:
+          type: boolean
       required:
       - data
       - id
@@ -2764,6 +2874,19 @@ components:
       type: string
       enum:
       - IMAGE
+    ImageVariableValue:
+      type: object
+      description: A base Vellum primitive value representing an image.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumImage'
+          nullable: true
+      required:
+      - type
+      - value
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -2832,6 +2955,9 @@ components:
         data:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        source_execution_id:
+          type: string
           nullable: true
         input_values:
           type: array
@@ -3753,6 +3879,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimWorkflowDeployment'
+    PatchedDocumentIndexUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
     PatchedDocumentUpdateRequest:
       type: object
       properties:
@@ -4413,6 +4564,9 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
+        source_execution_id:
+          type: string
+          nullable: true
         error:
           $ref: '#/components/schemas/WorkflowEventError'
       required:
@@ -4983,6 +5137,9 @@ components:
         data:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        source_execution_id:
+          type: string
           nullable: true
         output:
           allOf:
