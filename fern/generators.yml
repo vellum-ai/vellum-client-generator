@@ -1,3 +1,7 @@
+api:
+  path: openapi/openapi.yml
+  overrides: openapi/openapi-overrides.yml
+
 groups:
   branch-python:
     generators:
@@ -11,7 +15,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           client_class_name: Vellum
@@ -28,7 +32,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: package.json
         config:
           namespaceExport: Vellum
@@ -45,7 +49,7 @@ groups:
         # keywords: ["vellum", "ai", "llm"]
         # description: "A Go Library to interact with the Vellum API"
         # authors: ["devops@vellum.ai", "fern[bot]"]
-        # location: 
+        # location:
         #   output: go.mod
   branch-ruby:
     generators:
@@ -74,7 +78,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: package.json
       - name: fernapi/fern-python-sdk
         version: 0.6.5
@@ -85,7 +89,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           client_class_name: Vellum
@@ -99,7 +103,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: go.mod
       - name: fernapi/fern-ruby-sdk
         version: 0.0.4-1-2059079
@@ -125,7 +129,7 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
-          # location: 
+          # location:
           #   output: package.json
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
@@ -144,7 +148,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           client_class_name: Vellum
@@ -158,7 +162,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: go.mod
       - name: fernapi/fern-ruby-sdk
         version: 0.0.4-1-2059079
