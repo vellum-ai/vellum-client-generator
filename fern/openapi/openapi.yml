@@ -1058,6 +1058,50 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/test-suite-runs:
+    post:
+      operationId: test_suite_runs_create
+      description: Trigger a Test Suite and create a new Test Suite Run
+      tags:
+      - test-suite-runs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestSuiteRunCreateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteRunRead'
+          description: ''
+  /v1/test-suite-runs/{id}:
+    get:
+      operationId: test_suite_runs_retrieve
+      description: Retrieve a specific Test Suite Run by ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite run.
+        required: true
+      tags:
+      - test-suite-runs
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteRunRead'
+          description: ''
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -5758,6 +5802,245 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
+    TestSuiteRunCreateRequest:
+      type: object
+      properties:
+        test_suite_id:
+          type: string
+          format: uuid
+          description: The ID of the Test Suite to run
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunExecConfigRequest'
+          description: Configuration that defines how the Test Suite should be run
+      required:
+      - exec_config
+    TestSuiteRunDeploymentReleaseTagExecConfig:
+      type: object
+      description: Execution configuration for running a Test Suite against a Prompt
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunDeploymentReleaseTagExecConfigData:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Prompt Deployment to run the Test Suite against.
+        tag:
+          type: string
+          default: LATEST
+          description: A tag identifying which release of the Prompt Deployment to
+            run the Test Suite against. Useful for testing past versions of the Prompt
+            Deployment
+      required:
+      - deployment_id
+    TestSuiteRunDeploymentReleaseTagExecConfigDataRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Prompt Deployment to run the Test Suite against.
+        tag:
+          type: string
+          minLength: 1
+          default: LATEST
+          description: A tag identifying which release of the Prompt Deployment to
+            run the Test Suite against. Useful for testing past versions of the Prompt
+            Deployment
+      required:
+      - deployment_id
+    TestSuiteRunDeploymentReleaseTagExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Test Suite against a Prompt
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum:
+      enum:
+      - DEPLOYMENT_RELEASE_TAG
+      type: string
+      description: '* `DEPLOYMENT_RELEASE_TAG` - DEPLOYMENT_RELEASE_TAG'
+    TestSuiteRunExecConfig:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
+      - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+      discriminator:
+        propertyName: type
+        mapping:
+          DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
+          WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+    TestSuiteRunExecConfigRequest:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
+      - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
+          WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+    TestSuiteRunRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        test_suite:
+          $ref: '#/components/schemas/TestSuiteRunTestSuite'
+        state:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunState'
+          description: |-
+            The current state of this run
+
+            * `QUEUED` - Queued
+            * `RUNNING` - Running
+            * `COMPLETE` - Complete
+            * `FAILED` - Failed
+            * `CANCELLED` - Cancelled
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunExecConfig'
+          nullable: true
+          description: Configuration that defines how the Test Suite should be run
+      required:
+      - created
+      - id
+      - test_suite
+    TestSuiteRunState:
+      enum:
+      - QUEUED
+      - RUNNING
+      - COMPLETE
+      - FAILED
+      - CANCELLED
+      type: string
+      description: |-
+        * `QUEUED` - Queued
+        * `RUNNING` - Running
+        * `COMPLETE` - Complete
+        * `FAILED` - Failed
+        * `CANCELLED` - Cancelled
+    TestSuiteRunTestSuite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        history_item_id:
+          type: string
+          format: uuid
+        label:
+          type: string
+      required:
+      - history_item_id
+      - id
+      - label
+    TestSuiteRunWorkflowReleaseTagExecConfig:
+      type: object
+      description: Execution configuration for running a Test Suite against a Workflow
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunWorkflowReleaseTagExecConfigData:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment to run the Test Suite against.
+        tag:
+          type: string
+          default: LATEST
+          description: A tag identifying which release of the Workflow Deployment
+            to run the Test Suite against. Useful for testing past versions of the
+            Workflow Deployment
+      required:
+      - workflow_deployment_id
+    TestSuiteRunWorkflowReleaseTagExecConfigDataRequest:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment to run the Test Suite against.
+        tag:
+          type: string
+          minLength: 1
+          default: LATEST
+          description: A tag identifying which release of the Workflow Deployment
+            to run the Test Suite against. Useful for testing past versions of the
+            Workflow Deployment
+      required:
+      - workflow_deployment_id
+    TestSuiteRunWorkflowReleaseTagExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Test Suite against a Workflow
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum:
+      enum:
+      - WORKFLOW_RELEASE_TAG
+      type: string
+      description: '* `WORKFLOW_RELEASE_TAG` - WORKFLOW_RELEASE_TAG'
     TestSuiteTestCase:
       type: object
       properties:
