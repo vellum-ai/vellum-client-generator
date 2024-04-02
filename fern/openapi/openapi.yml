@@ -1079,6 +1079,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteRunRead'
           description: ''
+      x-fern-availability: beta
   /v1/test-suite-runs/{id}:
     get:
       operationId: test_suite_runs_retrieve
@@ -1102,6 +1103,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteRunRead'
           description: ''
+      x-fern-availability: beta
   /v1/test-suite-runs/{id}/executions:
     get:
       operationId: list_test_suite_run_executions
@@ -1125,12 +1127,6 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
-        schema:
-          type: string
       tags:
       - test-suite-runs
       security:
@@ -1142,6 +1138,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedTestSuiteRunExecutionList'
           description: ''
+      x-fern-availability: beta
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -5969,6 +5966,11 @@ components:
     TestSuiteRunExecution:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+        test_case_id:
+          type: string
         outputs:
           type: array
           items:
@@ -5977,17 +5979,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestSuiteRunExecutionMetricResult'
-        id:
-          type: string
-          format: uuid
-        test_case_id:
-          type: string
-        entity_execution_id:
-          type: string
-          nullable: true
-        entity_version_id:
-          type: string
-          nullable: true
       required:
       - id
       - metric_results
