@@ -1102,6 +1102,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/TestSuiteRunRead'
           description: ''
+  /v1/test-suite-runs/{id}/executions:
+    get:
+      operationId: list_test_suite_run_executions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite run.
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - test-suite-runs
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestSuiteRunExecutionList'
+          description: ''
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -3923,6 +3963,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimWorkflowDeployment'
+    PaginatedTestSuiteRunExecutionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecution'
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -5906,6 +5966,206 @@ components:
         mapping:
           DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
           WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+    TestSuiteRunExecution:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecutionOutput'
+        metric_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecutionMetricResult'
+        id:
+          type: string
+          format: uuid
+        test_case_id:
+          type: string
+        entity_execution_id:
+          type: string
+          nullable: true
+        entity_version_id:
+          type: string
+          nullable: true
+      required:
+      - id
+      - metric_results
+      - outputs
+      - test_case_id
+    TestSuiteRunExecutionChatHistoryOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionErrorOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionJsonOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionMetricResult:
+      type: object
+      properties:
+        metric_id:
+          type: string
+          format: uuid
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunMetricOutput'
+      required:
+      - metric_id
+      - outputs
+    TestSuiteRunExecutionNumberOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionOutput:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunExecutionStringOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionNumberOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionJsonOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/TestSuiteRunExecutionStringOutput'
+          NUMBER: '#/components/schemas/TestSuiteRunExecutionNumberOutput'
+          JSON: '#/components/schemas/TestSuiteRunExecutionJsonOutput'
+          CHAT_HISTORY: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
+          SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
+          ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+    TestSuiteRunExecutionSearchResultsOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionStringOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunMetricErrorOutput:
+      type: object
+      description: Output for a test suite run metric that is of type ERROR
+      properties:
+        value:
+          $ref: '#/components/schemas/VellumError'
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricErrorOutputTypeEnum'
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricErrorOutputTypeEnum:
+      enum:
+      - ERROR
+      type: string
+      description: '* `ERROR` - ERROR'
+    TestSuiteRunMetricNumberOutput:
+      type: object
+      description: Output for a test suite run metric that is of type NUMBER
+      properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricNumberOutputTypeEnum'
+        value:
+          type: number
+          format: double
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricNumberOutputTypeEnum:
+      enum:
+      - NUMBER
+      type: string
+      description: '* `NUMBER` - NUMBER'
+    TestSuiteRunMetricOutput:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunMetricNumberOutput'
+      - $ref: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+      discriminator:
+        propertyName: type
+        mapping:
+          NUMBER: '#/components/schemas/TestSuiteRunMetricNumberOutput'
+          ERROR: '#/components/schemas/TestSuiteRunMetricErrorOutput'
     TestSuiteRunRead:
       type: object
       properties:
@@ -6594,6 +6854,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
       required:
       - id
       - name
@@ -6615,6 +6876,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
       required:
       - id
       - name
@@ -6633,7 +6895,9 @@ components:
         type:
           $ref: '#/components/schemas/ErrorEnum'
         value:
-          $ref: '#/components/schemas/VellumError'
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
       required:
       - id
       - name
@@ -6652,7 +6916,9 @@ components:
         type:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
-          $ref: '#/components/schemas/FunctionCall'
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
       required:
       - id
       - name
@@ -6671,7 +6937,9 @@ components:
         type:
           $ref: '#/components/schemas/ImageEnum'
         value:
-          $ref: '#/components/schemas/VellumImage'
+          allOf:
+          - $ref: '#/components/schemas/VellumImage'
+          nullable: true
       required:
       - id
       - name
@@ -6692,6 +6960,7 @@ components:
         value:
           type: object
           additionalProperties: {}
+          nullable: true
       required:
       - id
       - name
@@ -6712,6 +6981,7 @@ components:
         value:
           type: number
           format: double
+          nullable: true
       required:
       - id
       - name
@@ -6733,6 +7003,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SearchResult'
+          nullable: true
       required:
       - id
       - name
@@ -6752,6 +7023,7 @@ components:
           $ref: '#/components/schemas/StringEnum'
         value:
           type: string
+          nullable: true
       required:
       - id
       - name
