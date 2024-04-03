@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "cdktf": "ts-node ./scripts/cdktf.ts"
+  },
+  "devDependencies": {
+    "@cdktf/provider-generator": "^0.20.6",
+    "ts-node": "^10.9.2"
+  }
+}
