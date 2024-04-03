@@ -1106,7 +1106,7 @@ paths:
       x-fern-availability: beta
   /v1/test-suite-runs/{id}/executions:
     get:
-      operationId: list_test_suite_run_executions
+      operationId: test_suite_runs_list_executions
       parameters:
       - in: path
         name: id
@@ -3980,6 +3980,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestSuiteRunExecution'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -5872,6 +5877,7 @@ components:
           description: Configuration that defines how the Test Suite should be run
       required:
       - exec_config
+      - test_suite_id
     TestSuiteRunDeploymentReleaseTagExecConfig:
       type: object
       description: Execution configuration for running a Test Suite against a Prompt
@@ -6189,6 +6195,7 @@ components:
       required:
       - created
       - id
+      - state
       - test_suite
     TestSuiteRunState:
       enum:

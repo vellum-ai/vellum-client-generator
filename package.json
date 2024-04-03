@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "cdktf": "ts-node ./scripts/cdktf.ts"
+    "cdktf": "ts-node ./scripts/cdktf.ts",
+    "swagger": "cp ../vellum/django/schema_api_client_v1.yaml fern/openapi/openapi.yml"
   },
   "devDependencies": {
     "@cdktf/provider-generator": "^0.20.6",
