@@ -1106,7 +1106,7 @@ paths:
       x-fern-availability: beta
   /v1/test-suite-runs/{id}/executions:
     get:
-      operationId: list_test_suite_run_executions
+      operationId: test_suite_runs_list_executions
       parameters:
       - in: path
         name: id
@@ -1563,6 +1563,22 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
+    CodeExecutionNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     CodeExecutionNodeChatHistoryResult:
       type: object
       properties:
@@ -1589,6 +1605,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -1653,6 +1684,8 @@ components:
       - $ref: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
       - $ref: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
       - $ref: '#/components/schemas/CodeExecutionNodeErrorResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeArrayResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -1662,6 +1695,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
           ERROR: '#/components/schemas/CodeExecutionNodeErrorResult'
+          ARRAY: '#/components/schemas/CodeExecutionNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
     CodeExecutionNodeSearchResultsResult:
       type: object
       properties:
@@ -3594,6 +3629,24 @@ components:
       - node_input_id
       - type
       - value
+    NodeInputCompiledFunctionCall:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledJsonValue:
       type: object
       properties:
@@ -3675,6 +3728,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
       - $ref: '#/components/schemas/NodeInputCompiledArrayValue'
+      - $ref: '#/components/schemas/NodeInputCompiledFunctionCall'
       discriminator:
         propertyName: type
         mapping:
@@ -3685,6 +3739,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
           ARRAY: '#/components/schemas/NodeInputCompiledArrayValue'
+          FUNCTION_CALL: '#/components/schemas/NodeInputCompiledFunctionCall'
     NodeOutputCompiledArrayValue:
       type: object
       properties:
@@ -3980,6 +4035,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestSuiteRunExecution'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -5416,6 +5476,22 @@ components:
           $ref: '#/components/schemas/SubworkflowEnum'
       required:
       - type
+    TemplatingNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -5442,6 +5518,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -5503,6 +5594,8 @@ components:
       - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
       - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
       - $ref: '#/components/schemas/TemplatingNodeErrorResult'
+      - $ref: '#/components/schemas/TemplatingNodeArrayResult'
+      - $ref: '#/components/schemas/TemplatingNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -5512,6 +5605,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
           ERROR: '#/components/schemas/TemplatingNodeErrorResult'
+          ARRAY: '#/components/schemas/TemplatingNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/TemplatingNodeFunctionCallResult'
     TemplatingNodeSearchResultsResult:
       type: object
       properties:
@@ -5872,6 +5967,7 @@ components:
           description: Configuration that defines how the Test Suite should be run
       required:
       - exec_config
+      - test_suite_id
     TestSuiteRunDeploymentReleaseTagExecConfig:
       type: object
       description: Execution configuration for running a Test Suite against a Prompt
@@ -6189,6 +6285,7 @@ components:
       required:
       - created
       - id
+      - state
       - test_suite
     TestSuiteRunState:
       enum:
