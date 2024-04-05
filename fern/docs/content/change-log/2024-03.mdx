@@ -2,21 +2,85 @@
 title: Changelog | March, 2024
 ---
 
+## Configurable Chunk Settings for Document Indexes
+
+_March 26th, 2024_
+
+We've added the ability to configure the chunk size and the overlap between consecutive chunks for Document Indexes.
+You can find it under the "Advanced" section when creating or cloning a Document Index.
+
+![Document Index Chunk Settings](https://storage.googleapis.com/vellum-public/help-docs/document-index-chunk-settings.png)
+
+## Workflow Template Node Debugging
+
+_March 26th, 2024_
+
+There's a new debugging feature for iterating on Workflow Template Nodes. You can click the new "Test" button in the full-screen editor and test your template without having to run the whole Workflow. Then you can further iterate on your template by modifying your test data in the "Test Data" tab.
+
+![Workflow Template Debugger](https://storage.googleapis.com/vellum-public/help-docs/template-node-debugger-arrows.png)
+
+## Workflow Node Search
+
+_March 26th, 2024_
+
+We have added a new Workflow node search feature to help you find your way in large and complex Workflows. Click the new search icon in the top right to quickly find the node you are looking for, or use the `⌘ + shift + F` shortcut (`ctrl + shift + F` on windows).
+
+![Workflow Node Search](https://storage.googleapis.com/vellum-public/help-docs/workflow-search-for-node.png)
+
+## Workflow Node Mocking
+
+_March 26th, 2024_
+
+While iteratively developing a Workflow in Vellum, you often want to focus on improving a specific branch or node. It can be cumbersome to re-run the entire Workflow just to test the part you're iterating on, especially if you already know what the upstream nodes are going to output.
+
+To help address this, Vellum now supports _node mocking_. You can now mock out a Prompt or Subworkflow Node such that its execution is skipped and a hard-coded value is returned.
+
+This can help you dramatically speed up your Workflow development since you no longer have to wait for early Prompt Nodes to complete. This has the added benefit of saving the expense of tokens with LLM providers!
+
+For more information on Workflow Node Mocking, visit our new [help center page](/help-center/workflows/experimentation#node-mocking).
+
+![Workflow Node Mocking](https://storage.googleapis.com/vellum-public/help-docs/workflow-node-mocking.png)
+
+## Claude 3 and Mistral on Bedrock
+
+_March 23rd, 2024_
+
+We now support both of the Claude 3 and both of the Mistral models on AWS Bedrock. Add these models to your workspace by heading to the [models](https://app.vellum.ai/models) page and searching for the one you need from the search bar.
+
+![Bedrock Models](https://storage.googleapis.com/vellum-public/help-docs/claude3-mistral-bedrock.png)
+
+## Navigation Updates
+
+_March 22nd, 2024_
+
+We've made some significant changes to Vellum's navigation UI.
+
+The app sidebar has been reorganized with the goal of making it easier to navigate between a Prompt/Workflow's Sandbox,
+Evaluations, and Deployments. You'll find that after you've clicked on a "Prompt" or "Workflow," there's an integrated
+submenu within the navigation sidebar that shows "Sandbox," "Evaluations," and "Deployments."
+
+Additionally, you'll find that some nav items, such as "Deployments", "Models," "API Keys," "Organization," and
+"Profile" have been grouped into the new "More" and "Settings" nav items.
+
+![Navigation Updates](https://storage.googleapis.com/vellum-public/help-docs/nav-updates.png)
+
+## Read-only Workflow Diagrams
+
+_March 22th, 2024_
+
+You can now see a read-only view of workflow diagrams for Workflow Deployment Executions, Workflow Test Case Executions, and Workflow Releases. You can access the diagram by clicking the "Graph View" icon tab on the top right.
+
+This is particularly helpful if you want to visualize what your Workflow looked like at that time, as well as visualize the execution path your Workflow took.
+
+![Workflow Deployment Execution](https://storage.googleapis.com/vellum-public/help-docs/workflow-deployment-execution-diagram.png)
+
 ## Test Suite Table Updates
 
 _March 21th, 2024_
 
-The Test Cases Table on the Test Suites page has been updated to use the same new styling and functionality as the Test Cases Table that you'll find on Evaluation Reports!
+The Test Cases table on the Test Suites page has been updated to use the same new styling and functionality as the Test Cases table that you'll find when viewing a Prompt/Workflow Evaluation Report. With this, adding, editing, and deleting Test Cases is generally more reliable. Additionally, special variables types, like Chat History, have an improved display are are no longer displayed as raw JSON.
 
 ![Test Suite Table Updates](https://storage.googleapis.com/vellum-public/help-docs/test_suite_table.png)
-
-## Additional Headers on API Nodes
-
-_March 20th, 2024_
-
-Previously, API Nodes only accepted one configurable header, defined on the `Authorization` section on the node. You can now configure additional headers in the new advanced `Settings` section. Header values could be regular `STRING` values or Secrets, and any headers defined here would override the Authorization header.
-
-![API Node Headers](https://storage.googleapis.com/vellum-public/help-docs/api-node-headers.png)
 
 ## Additional Headers on API Nodes
 

@@ -2,7 +2,7 @@ groups:
   branch-python:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 0.6.5
+        version: 0.13.4
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
@@ -16,10 +16,13 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+          # Blocked on Fern
+          # extraDependencies: 
+          #   cdktf: '^0.20.5'
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.11.5
+        version: 0.12.9
         github:
           repository: vellum-ai/vellum-client-node-staging
           mode: pull-request
@@ -33,6 +36,8 @@ groups:
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
+          extraDependencies: 
+            cdktf: '^0.20.5'
   branch-go:
     generators:
       - name: fernapi/fern-go-sdk
@@ -63,10 +68,12 @@ groups:
   staging:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.11.5
+        version: 0.12.9
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
+          extraDependencies: 
+            cdktf: '^0.20.5'
         github:
           repository: vellum-ai/vellum-client-node-staging
           license: MIT
@@ -77,7 +84,7 @@ groups:
           # location: 
           #   output: package.json
       - name: fernapi/fern-python-sdk
-        version: 0.6.5
+        version: 0.13.4
         github:
           repository: vellum-ai/vellum-client-python-staging
           license: MIT
@@ -90,6 +97,9 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+          # Blocked on Fern
+          # extraDependencies: 
+          #   cdktf: '^0.20.5'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:
@@ -114,7 +124,7 @@ groups:
   production:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.11.5
+        version: 0.12.9
         output:
           location: npm
           package-name: vellum-ai
@@ -122,6 +132,8 @@ groups:
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
+          extraDependencies: 
+            cdktf: '^0.20.5'
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
@@ -132,7 +144,7 @@ groups:
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
       - name: fernapi/fern-python-sdk
-        version: 0.6.5
+        version: 0.13.4
         output:
           location: pypi
           package-name: vellum-ai
@@ -149,6 +161,9 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
+          # Blocked on Fern
+          # extraDependencies: 
+          #   cdktf: '^0.20.5'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:

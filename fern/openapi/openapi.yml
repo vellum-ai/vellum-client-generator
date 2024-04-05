@@ -294,6 +294,82 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
       x-fern-availability: beta
+    put:
+      operationId: document_indexes_update
+      description: Used to fully update a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      - folder-entities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentIndexUpdateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
+    patch:
+      operationId: document_indexes_partial_update
+      description: Used to partial update a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      - folder-entities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentIndexUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIndexRead'
+          description: ''
+    delete:
+      operationId: document_indexes_destroy
+      description: Used to delete a Document Index given its ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document index.
+        required: true
+      tags:
+      - document-indexes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
+      x-fern-availability: beta
   /v1/documents:
     get:
       operationId: documents_list
@@ -982,6 +1058,87 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/test-suite-runs:
+    post:
+      operationId: test_suite_runs_create
+      description: Trigger a Test Suite and create a new Test Suite Run
+      tags:
+      - test-suite-runs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestSuiteRunCreateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteRunRead'
+          description: ''
+      x-fern-availability: beta
+  /v1/test-suite-runs/{id}:
+    get:
+      operationId: test_suite_runs_retrieve
+      description: Retrieve a specific Test Suite Run by ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite run.
+        required: true
+      tags:
+      - test-suite-runs
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteRunRead'
+          description: ''
+      x-fern-availability: beta
+  /v1/test-suite-runs/{id}/executions:
+    get:
+      operationId: test_suite_runs_list_executions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite run.
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - test-suite-runs
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestSuiteRunExecutionList'
+          description: ''
+      x-fern-availability: beta
   /v1/test-suites/{id}/test-cases:
     post:
       operationId: upsert_test_suite_test_case
@@ -1273,6 +1430,7 @@ components:
       - $ref: '#/components/schemas/SearchResultsVariableValue'
       - $ref: '#/components/schemas/ErrorVariableValue'
       - $ref: '#/components/schemas/FunctionCallVariableValue'
+      - $ref: '#/components/schemas/ImageVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -1283,6 +1441,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
+          IMAGE: '#/components/schemas/ImageVariableValue'
     BlockTypeEnum:
       enum:
       - CHAT_MESSAGE
@@ -1404,6 +1563,22 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
+    CodeExecutionNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     CodeExecutionNodeChatHistoryResult:
       type: object
       properties:
@@ -1430,6 +1605,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -1494,6 +1684,8 @@ components:
       - $ref: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
       - $ref: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
       - $ref: '#/components/schemas/CodeExecutionNodeErrorResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeArrayResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -1503,6 +1695,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
           ERROR: '#/components/schemas/CodeExecutionNodeErrorResult'
+          ARRAY: '#/components/schemas/CodeExecutionNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
     CodeExecutionNodeSearchResultsResult:
       type: object
       properties:
@@ -1763,6 +1957,33 @@ components:
       - indexing_config
       - label
       - name
+    DocumentIndexUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
+      required:
+      - label
     DocumentRead:
       type: object
       properties:
@@ -2482,11 +2703,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
+        source_execution_id:
+          type: string
+          nullable: true
         output_values:
           type: array
           items:
             $ref: '#/components/schemas/NodeOutputCompiledValue'
           nullable: true
+        mocked:
+          type: boolean
       required:
       - data
       - id
@@ -2764,6 +2990,19 @@ components:
       type: string
       enum:
       - IMAGE
+    ImageVariableValue:
+      type: object
+      description: A base Vellum primitive value representing an image.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumImage'
+          nullable: true
+      required:
+      - type
+      - value
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -2832,6 +3071,9 @@ components:
         data:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
+          nullable: true
+        source_execution_id:
+          type: string
           nullable: true
         input_values:
           type: array
@@ -3387,6 +3629,24 @@ components:
       - node_input_id
       - type
       - value
+    NodeInputCompiledFunctionCall:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledJsonValue:
       type: object
       properties:
@@ -3468,6 +3728,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
       - $ref: '#/components/schemas/NodeInputCompiledArrayValue'
+      - $ref: '#/components/schemas/NodeInputCompiledFunctionCall'
       discriminator:
         propertyName: type
         mapping:
@@ -3478,6 +3739,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
           ARRAY: '#/components/schemas/NodeInputCompiledArrayValue'
+          FUNCTION_CALL: '#/components/schemas/NodeInputCompiledFunctionCall'
     NodeOutputCompiledArrayValue:
       type: object
       properties:
@@ -3753,6 +4015,56 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SlimWorkflowDeployment'
+    PaginatedTestSuiteRunExecutionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecution'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PatchedDocumentIndexUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+          description: A human-readable label for the document index
+          maxLength: 150
+        status:
+          allOf:
+          - $ref: '#/components/schemas/EntityStatus'
+          description: |-
+            The current status of the document index
+
+            * `ACTIVE` - Active
+            * `ARCHIVED` - Archived
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentEnum'
+          description: |-
+            The environment this document index is used in
+
+            * `DEVELOPMENT` - Development
+            * `STAGING` - Staging
+            * `PRODUCTION` - Production
     PatchedDocumentUpdateRequest:
       type: object
       properties:
@@ -4413,6 +4725,9 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
+        source_execution_id:
+          type: string
+          nullable: true
         error:
           $ref: '#/components/schemas/WorkflowEventError'
       required:
@@ -4984,6 +5299,9 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowNodeResultData'
           nullable: true
+        source_execution_id:
+          type: string
+          nullable: true
         output:
           allOf:
           - $ref: '#/components/schemas/NodeOutputCompiledValue'
@@ -5158,6 +5476,22 @@ components:
           $ref: '#/components/schemas/SubworkflowEnum'
       required:
       - type
+    TemplatingNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -5184,6 +5518,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -5245,6 +5594,8 @@ components:
       - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
       - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
       - $ref: '#/components/schemas/TemplatingNodeErrorResult'
+      - $ref: '#/components/schemas/TemplatingNodeArrayResult'
+      - $ref: '#/components/schemas/TemplatingNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -5254,6 +5605,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
           ERROR: '#/components/schemas/TemplatingNodeErrorResult'
+          ARRAY: '#/components/schemas/TemplatingNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/TemplatingNodeFunctionCallResult'
     TemplatingNodeSearchResultsResult:
       type: object
       properties:
@@ -5601,6 +5954,441 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
+    TestSuiteRunCreateRequest:
+      type: object
+      properties:
+        test_suite_id:
+          type: string
+          format: uuid
+          description: The ID of the Test Suite to run
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunExecConfigRequest'
+          description: Configuration that defines how the Test Suite should be run
+      required:
+      - exec_config
+      - test_suite_id
+    TestSuiteRunDeploymentReleaseTagExecConfig:
+      type: object
+      description: Execution configuration for running a Test Suite against a Prompt
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunDeploymentReleaseTagExecConfigData:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Prompt Deployment to run the Test Suite against.
+        tag:
+          type: string
+          default: LATEST
+          description: A tag identifying which release of the Prompt Deployment to
+            run the Test Suite against. Useful for testing past versions of the Prompt
+            Deployment
+      required:
+      - deployment_id
+    TestSuiteRunDeploymentReleaseTagExecConfigDataRequest:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Prompt Deployment to run the Test Suite against.
+        tag:
+          type: string
+          minLength: 1
+          default: LATEST
+          description: A tag identifying which release of the Prompt Deployment to
+            run the Test Suite against. Useful for testing past versions of the Prompt
+            Deployment
+      required:
+      - deployment_id
+    TestSuiteRunDeploymentReleaseTagExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Test Suite against a Prompt
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum:
+      enum:
+      - DEPLOYMENT_RELEASE_TAG
+      type: string
+      description: '* `DEPLOYMENT_RELEASE_TAG` - DEPLOYMENT_RELEASE_TAG'
+    TestSuiteRunExecConfig:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
+      - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+      discriminator:
+        propertyName: type
+        mapping:
+          DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
+          WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+    TestSuiteRunExecConfigRequest:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
+      - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
+          WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+    TestSuiteRunExecution:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        test_case_id:
+          type: string
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecutionOutput'
+        metric_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunExecutionMetricResult'
+      required:
+      - id
+      - metric_results
+      - outputs
+      - test_case_id
+    TestSuiteRunExecutionChatHistoryOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionErrorOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionJsonOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionMetricResult:
+      type: object
+      properties:
+        metric_id:
+          type: string
+          format: uuid
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunMetricOutput'
+      required:
+      - metric_id
+      - outputs
+    TestSuiteRunExecutionNumberOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionOutput:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunExecutionStringOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionNumberOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionJsonOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/TestSuiteRunExecutionStringOutput'
+          NUMBER: '#/components/schemas/TestSuiteRunExecutionNumberOutput'
+          JSON: '#/components/schemas/TestSuiteRunExecutionJsonOutput'
+          CHAT_HISTORY: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
+          SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
+          ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+    TestSuiteRunExecutionSearchResultsOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunExecutionStringOutput:
+      type: object
+      properties:
+        output_variable_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - output_variable_id
+      - type
+      - value
+    TestSuiteRunMetricErrorOutput:
+      type: object
+      description: Output for a test suite run metric that is of type ERROR
+      properties:
+        value:
+          $ref: '#/components/schemas/VellumError'
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricErrorOutputTypeEnum'
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricErrorOutputTypeEnum:
+      enum:
+      - ERROR
+      type: string
+      description: '* `ERROR` - ERROR'
+    TestSuiteRunMetricNumberOutput:
+      type: object
+      description: Output for a test suite run metric that is of type NUMBER
+      properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricNumberOutputTypeEnum'
+        value:
+          type: number
+          format: double
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricNumberOutputTypeEnum:
+      enum:
+      - NUMBER
+      type: string
+      description: '* `NUMBER` - NUMBER'
+    TestSuiteRunMetricOutput:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunMetricNumberOutput'
+      - $ref: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+      discriminator:
+        propertyName: type
+        mapping:
+          NUMBER: '#/components/schemas/TestSuiteRunMetricNumberOutput'
+          ERROR: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+    TestSuiteRunRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        test_suite:
+          $ref: '#/components/schemas/TestSuiteRunTestSuite'
+        state:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunState'
+          description: |-
+            The current state of this run
+
+            * `QUEUED` - Queued
+            * `RUNNING` - Running
+            * `COMPLETE` - Complete
+            * `FAILED` - Failed
+            * `CANCELLED` - Cancelled
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteRunExecConfig'
+          nullable: true
+          description: Configuration that defines how the Test Suite should be run
+      required:
+      - created
+      - id
+      - state
+      - test_suite
+    TestSuiteRunState:
+      enum:
+      - QUEUED
+      - RUNNING
+      - COMPLETE
+      - FAILED
+      - CANCELLED
+      type: string
+      description: |-
+        * `QUEUED` - Queued
+        * `RUNNING` - Running
+        * `COMPLETE` - Complete
+        * `FAILED` - Failed
+        * `CANCELLED` - Cancelled
+    TestSuiteRunTestSuite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        history_item_id:
+          type: string
+          format: uuid
+        label:
+          type: string
+      required:
+      - history_item_id
+      - id
+      - label
+    TestSuiteRunWorkflowReleaseTagExecConfig:
+      type: object
+      description: Execution configuration for running a Test Suite against a Workflow
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunWorkflowReleaseTagExecConfigData:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment to run the Test Suite against.
+        tag:
+          type: string
+          default: LATEST
+          description: A tag identifying which release of the Workflow Deployment
+            to run the Test Suite against. Useful for testing past versions of the
+            Workflow Deployment
+      required:
+      - workflow_deployment_id
+    TestSuiteRunWorkflowReleaseTagExecConfigDataRequest:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment to run the Test Suite against.
+        tag:
+          type: string
+          minLength: 1
+          default: LATEST
+          description: A tag identifying which release of the Workflow Deployment
+            to run the Test Suite against. Useful for testing past versions of the
+            Workflow Deployment
+      required:
+      - workflow_deployment_id
+    TestSuiteRunWorkflowReleaseTagExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Test Suite against a Workflow
+        Deployment
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum:
+      enum:
+      - WORKFLOW_RELEASE_TAG
+      type: string
+      description: '* `WORKFLOW_RELEASE_TAG` - WORKFLOW_RELEASE_TAG'
     TestSuiteTestCase:
       type: object
       properties:
@@ -6154,6 +6942,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
       required:
       - id
       - name
@@ -6175,6 +6964,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
       required:
       - id
       - name
@@ -6193,7 +6983,9 @@ components:
         type:
           $ref: '#/components/schemas/ErrorEnum'
         value:
-          $ref: '#/components/schemas/VellumError'
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
       required:
       - id
       - name
@@ -6212,7 +7004,9 @@ components:
         type:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
-          $ref: '#/components/schemas/FunctionCall'
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
       required:
       - id
       - name
@@ -6231,7 +7025,9 @@ components:
         type:
           $ref: '#/components/schemas/ImageEnum'
         value:
-          $ref: '#/components/schemas/VellumImage'
+          allOf:
+          - $ref: '#/components/schemas/VellumImage'
+          nullable: true
       required:
       - id
       - name
@@ -6252,6 +7048,7 @@ components:
         value:
           type: object
           additionalProperties: {}
+          nullable: true
       required:
       - id
       - name
@@ -6272,6 +7069,7 @@ components:
         value:
           type: number
           format: double
+          nullable: true
       required:
       - id
       - name
@@ -6293,6 +7091,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SearchResult'
+          nullable: true
       required:
       - id
       - name
@@ -6312,6 +7111,7 @@ components:
           $ref: '#/components/schemas/StringEnum'
         value:
           type: string
+          nullable: true
       required:
       - id
       - name
