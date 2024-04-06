@@ -38,8 +38,8 @@ jobs:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
           RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+        # fern generate --group branch-ruby --log-level debug
         run: |
           fern generate --group branch-node --log-level debug
           fern generate --group branch-python --log-level debug
           fern generate --group branch-go --log-level debug
-          fern generate --group branch-ruby --log-level debug
