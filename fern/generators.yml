@@ -16,9 +16,8 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          # Blocked on Fern
-          # extraDependencies: 
-          #   cdktf: '^0.20.5'
+          extra_dependencies: 
+            cdktf: '^0.20.5'
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
@@ -97,9 +96,8 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          # Blocked on Fern
-          # extraDependencies: 
-          #   cdktf: '^0.20.5'
+          extra_dependencies: 
+            cdktf: '^0.20.5'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:
@@ -161,9 +159,8 @@ groups:
         config:
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          # Blocked on Fern
-          # extraDependencies: 
-          #   cdktf: '^0.20.5'
+          extra_dependencies: 
+            cdktf: '^0.20.5'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:
