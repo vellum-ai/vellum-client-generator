@@ -18,6 +18,7 @@ groups:
           timeout_in_seconds: infinity
           extra_dependencies: 
             cdktf: '^0.20.5'
+            publication: '0.0.3'
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
@@ -37,6 +38,7 @@ groups:
           timeoutInSeconds: infinity
           extraDependencies: 
             cdktf: '^0.20.5'
+            constructs: '^10.3.0'
   branch-go:
     generators:
       - name: fernapi/fern-go-sdk
@@ -74,6 +76,7 @@ groups:
           timeoutInSeconds: infinity
           extraDependencies: 
             cdktf: '^0.20.5'
+            constructs: '^10.3.0'
         github:
           repository: vellum-ai/vellum-client-node-staging
           license: MIT
@@ -99,6 +102,7 @@ groups:
           timeout_in_seconds: infinity
           extra_dependencies: 
             cdktf: '^0.20.5'
+            publication: '0.0.3'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:
@@ -134,6 +138,7 @@ groups:
           timeoutInSeconds: infinity
           extraDependencies: 
             cdktf: '^0.20.5'
+            constructs: '^10.3.0'
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
@@ -163,6 +168,7 @@ groups:
           timeout_in_seconds: infinity
           extra_dependencies: 
             cdktf: '^0.20.5'
+            publication: '0.0.3'
       - name: fernapi/fern-go-sdk
         version: 0.9.0
         github:
