@@ -34,9 +34,11 @@ Useful if you want to ensure that you’re not providing too much context to a p
 
 # JSON Manipulation
 
-### Checking LLM Output for Valid
+### Checking LLM Output for Valid JSON
 
 If you’re trying to extract structured JSON from unstructed text using a prompt, or if you want to use OpenAI’s function-calling functionality, it’s likely you’ll need to check whether an LLM’s response is valid JSON and if so, convert the output string as proper JSON.
+
+You can also extract specific properties from valid JSON strings.
 
 Here’s how to do it:
 
@@ -46,6 +48,9 @@ Here’s how to do it:
     ```jinja2
     {% if maybe_json|is_valid_json_string %}
         {{ maybe_json }}
+        
+        ## to extract specific properties from the JSON
+        {{ json.loads(maybe_json).property }}
     {% else %}
         {{ {} }}
     {% endif %}
@@ -90,7 +95,7 @@ Once simple solution is to only ever include the most recent `n` messages from t
 
 <CodeBlock title="Template">
     ```jinja2
-    {{ chat_history[-2:]|to_json }}
+    {{ chat_history[-2:] }}
     ```
 </CodeBlock>
 
