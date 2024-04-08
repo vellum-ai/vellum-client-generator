@@ -6306,13 +6306,33 @@ components:
       description: '* `NUMBER` - NUMBER'
     TestSuiteRunMetricOutput:
       oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunMetricStringOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricNumberOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricErrorOutput'
       discriminator:
         propertyName: type
         mapping:
+          STRING: '#/components/schemas/TestSuiteRunMetricStringOutput'
           NUMBER: '#/components/schemas/TestSuiteRunMetricNumberOutput'
           ERROR: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+    TestSuiteRunMetricStringOutput:
+      type: object
+      description: Output for a test suite run metric that is of type STRING
+      properties:
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricStringOutputTypeEnum'
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricStringOutputTypeEnum:
+      enum:
+      - STRING
+      type: string
+      description: '* `STRING` - STRING'
     TestSuiteRunRead:
       type: object
       properties:
