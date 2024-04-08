@@ -1106,7 +1106,7 @@ paths:
       x-fern-availability: beta
   /v1/test-suite-runs/{id}/executions:
     get:
-      operationId: list_test_suite_run_executions
+      operationId: test_suite_runs_list_executions
       parameters:
       - in: path
         name: id
@@ -1140,6 +1140,41 @@ paths:
           description: ''
       x-fern-availability: beta
   /v1/test-suites/{id}/test-cases:
+    get:
+      operationId: list_test_suite_test_cases
+      description: List the Test Cases associated with a Test Suite
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite.
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - test-suites
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestSuiteTestCaseList'
+          description: ''
+      x-fern-availability: beta
     post:
       operationId: upsert_test_suite_test_case
       description: |-
@@ -1563,6 +1598,22 @@ components:
         * `ASSISTANT` - Assistant
         * `USER` - User
         * `FUNCTION` - Function
+    CodeExecutionNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     CodeExecutionNodeChatHistoryResult:
       type: object
       properties:
@@ -1589,6 +1640,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    CodeExecutionNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -1653,6 +1719,8 @@ components:
       - $ref: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
       - $ref: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
       - $ref: '#/components/schemas/CodeExecutionNodeErrorResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeArrayResult'
+      - $ref: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -1662,6 +1730,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/CodeExecutionNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/CodeExecutionNodeSearchResultsResult'
           ERROR: '#/components/schemas/CodeExecutionNodeErrorResult'
+          ARRAY: '#/components/schemas/CodeExecutionNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/CodeExecutionNodeFunctionCallResult'
     CodeExecutionNodeSearchResultsResult:
       type: object
       properties:
@@ -3594,6 +3664,24 @@ components:
       - node_input_id
       - type
       - value
+    NodeInputCompiledFunctionCall:
+      type: object
+      properties:
+        node_input_id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
+      required:
+      - key
+      - node_input_id
+      - type
+      - value
     NodeInputCompiledJsonValue:
       type: object
       properties:
@@ -3675,6 +3763,7 @@ components:
       - $ref: '#/components/schemas/NodeInputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeInputCompiledErrorValue'
       - $ref: '#/components/schemas/NodeInputCompiledArrayValue'
+      - $ref: '#/components/schemas/NodeInputCompiledFunctionCall'
       discriminator:
         propertyName: type
         mapping:
@@ -3685,6 +3774,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NodeInputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeInputCompiledErrorValue'
           ARRAY: '#/components/schemas/NodeInputCompiledArrayValue'
+          FUNCTION_CALL: '#/components/schemas/NodeInputCompiledFunctionCall'
     NodeOutputCompiledArrayValue:
       type: object
       properties:
@@ -3980,6 +4070,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestSuiteRunExecution'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedTestSuiteTestCaseList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteTestCase'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -5416,6 +5536,22 @@ components:
           $ref: '#/components/schemas/SubworkflowEnum'
       required:
       - type
+    TemplatingNodeArrayResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVariableValueItem'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
     TemplatingNodeChatHistoryResult:
       type: object
       properties:
@@ -5442,6 +5578,21 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - id
+      - type
+      - value
+    TemplatingNodeFunctionCallResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - id
@@ -5503,6 +5654,8 @@ components:
       - $ref: '#/components/schemas/TemplatingNodeChatHistoryResult'
       - $ref: '#/components/schemas/TemplatingNodeSearchResultsResult'
       - $ref: '#/components/schemas/TemplatingNodeErrorResult'
+      - $ref: '#/components/schemas/TemplatingNodeArrayResult'
+      - $ref: '#/components/schemas/TemplatingNodeFunctionCallResult'
       discriminator:
         propertyName: type
         mapping:
@@ -5512,6 +5665,8 @@ components:
           CHAT_HISTORY: '#/components/schemas/TemplatingNodeChatHistoryResult'
           SEARCH_RESULTS: '#/components/schemas/TemplatingNodeSearchResultsResult'
           ERROR: '#/components/schemas/TemplatingNodeErrorResult'
+          ARRAY: '#/components/schemas/TemplatingNodeArrayResult'
+          FUNCTION_CALL: '#/components/schemas/TemplatingNodeFunctionCallResult'
     TemplatingNodeSearchResultsResult:
       type: object
       properties:
@@ -5872,6 +6027,7 @@ components:
           description: Configuration that defines how the Test Suite should be run
       required:
       - exec_config
+      - test_suite_id
     TestSuiteRunDeploymentReleaseTagExecConfig:
       type: object
       description: Execution configuration for running a Test Suite against a Prompt
@@ -6150,13 +6306,33 @@ components:
       description: '* `NUMBER` - NUMBER'
     TestSuiteRunMetricOutput:
       oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunMetricStringOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricNumberOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricErrorOutput'
       discriminator:
         propertyName: type
         mapping:
+          STRING: '#/components/schemas/TestSuiteRunMetricStringOutput'
           NUMBER: '#/components/schemas/TestSuiteRunMetricNumberOutput'
           ERROR: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+    TestSuiteRunMetricStringOutput:
+      type: object
+      description: Output for a test suite run metric that is of type STRING
+      properties:
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricStringOutputTypeEnum'
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricStringOutputTypeEnum:
+      enum:
+      - STRING
+      type: string
+      description: '* `STRING` - STRING'
     TestSuiteRunRead:
       type: object
       properties:
@@ -6189,6 +6365,7 @@ components:
       required:
       - created
       - id
+      - state
       - test_suite
     TestSuiteRunState:
       enum:

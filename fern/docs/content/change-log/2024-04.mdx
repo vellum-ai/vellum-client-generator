@@ -4,7 +4,7 @@ title: Changelog | April, 2024
 
 ## Test Suite Improvements
 
-_April 4th, 2024_
+_April 8th, 2024_
 
 We've made some changes to our Test Suite UX. Here's what's new:
 
@@ -13,3 +13,34 @@ We've made some changes to our Test Suite UX. Here's what's new:
 - **Enhanced Error Messaging**: We've revamped our error messages to be clearer and more actionable. You'll now receive specific feedback that pinpoints exactly where things went wrong.
 
 ![Test Suite Improvements](https://storage.googleapis.com/vellum-public/help-docs/test-suite-error.png)
+
+## Prompt Editor
+
+_April 5th, 2024_
+
+Prompt Sandboxes have an entirely new view mode: Prompt Editor. It's a dedicated space for iterating on a single Variant and Scenario. All of the features you need to work quickly are easily accessible, and collapsible sections make it simple to free up screen space. There are even more improved experiences and exciting coming down the pike for Prompt Editor, and many of those improvements will make their way into Comparison and Chat Modes, as well.
+
+<iframe
+  src='https://www.loom.com/embed/352759341cd24bc0bfb58eee7b6d0d9c?sid=e596448c-9c0f-436c-bc66-3bbce9a522e7'
+  width='100%'
+  height='450px'
+></iframe>
+
+## Copy and Paste Logit Bias
+
+_April 5th, 2024_
+
+You can now copy logit bias parameters from one Prompt Variant and paste them into another Prompt. This works in both Prompt Sandboxes and Prompt Nodes within Workflows.
+
+![Logit Bias Copy](https://storage.googleapis.com/vellum-public/help-docs/logit-bias-copy.png)
+
+## New APIs for Accessing Test Suite Runs
+
+_April 3rd, 2024_
+
+We have two new [APIs](/api-reference/api-reference/test-suite-runs/retrieve) available in beta for accessing your Test Suite Runs:
+
+- A Retrieve endpoint to fetch metadata about the test suite run like it's current state at `GET /v1/test_suite_runs/{id}`
+- A List executions endpoint to fetch the results of the test suite run at `GET /v1/test_suite_runs/{id}/executions`
+
+These APIs are available on version `0.3.15` of our SDKs.
