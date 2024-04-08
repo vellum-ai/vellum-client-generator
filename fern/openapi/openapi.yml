@@ -1140,6 +1140,41 @@ paths:
           description: ''
       x-fern-availability: beta
   /v1/test-suites/{id}/test-cases:
+    get:
+      operationId: list_test_suite_test_cases
+      description: List the Test Cases associated with a Test Suite
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite.
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - test-suites
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTestSuiteTestCaseList'
+          description: ''
+      x-fern-availability: beta
     post:
       operationId: upsert_test_suite_test_case
       description: |-
@@ -4040,6 +4075,31 @@ components:
       - next
       - previous
       - results
+    PaginatedTestSuiteTestCaseList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteTestCase'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -6246,13 +6306,33 @@ components:
       description: '* `NUMBER` - NUMBER'
     TestSuiteRunMetricOutput:
       oneOf:
+      - $ref: '#/components/schemas/TestSuiteRunMetricStringOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricNumberOutput'
       - $ref: '#/components/schemas/TestSuiteRunMetricErrorOutput'
       discriminator:
         propertyName: type
         mapping:
+          STRING: '#/components/schemas/TestSuiteRunMetricStringOutput'
           NUMBER: '#/components/schemas/TestSuiteRunMetricNumberOutput'
           ERROR: '#/components/schemas/TestSuiteRunMetricErrorOutput'
+    TestSuiteRunMetricStringOutput:
+      type: object
+      description: Output for a test suite run metric that is of type STRING
+      properties:
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/TestSuiteRunMetricStringOutputTypeEnum'
+        name:
+          type: string
+      required:
+      - name
+      - value
+    TestSuiteRunMetricStringOutputTypeEnum:
+      enum:
+      - STRING
+      type: string
+      description: '* `STRING` - STRING'
     TestSuiteRunRead:
       type: object
       properties:
