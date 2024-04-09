@@ -2718,6 +2718,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
+        usage:
+          allOf:
+          - $ref: '#/components/schemas/MLModelUsage'
+          nullable: true
     FulfilledWorkflowNodeResultEvent:
       type: object
       description: An event that indicates that the node has fulfilled its execution.
@@ -3257,6 +3261,24 @@ components:
       description: |-
         * `ALL` - ALL
         * `NONE` - NONE
+    MLModelUsage:
+      type: object
+      properties:
+        output_token_count:
+          type: integer
+          nullable: true
+        input_token_count:
+          type: integer
+          nullable: true
+        input_char_count:
+          type: integer
+          nullable: true
+        output_char_count:
+          type: integer
+          nullable: true
+        compute_nanos:
+          type: integer
+          nullable: true
     MetadataFilterConfigRequest:
       type: object
       properties:
@@ -4195,6 +4217,11 @@ components:
           nullable: true
           description: If enabled, the response will include the reason provided by
             the model for why the execution finished.
+        usage:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include model host usage tracking.
+            This may increase latency for some model hosts.
     PromptDeploymentInputRequest:
       oneOf:
       - $ref: '#/components/schemas/StringInputRequest'
@@ -4211,6 +4238,10 @@ components:
       description: The subset of the metadata tracked by Vellum during prompt execution
         that the request opted into with `expand_meta`.
       properties:
+        usage:
+          allOf:
+          - $ref: '#/components/schemas/MLModelUsage'
+          nullable: true
         model_name:
           type: string
           nullable: true
