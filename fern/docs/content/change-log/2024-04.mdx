@@ -2,17 +2,40 @@
 title: Changelog | April, 2024
 ---
 
-## Test Suite Improvements
+## Max Tokens Warning
+
+_April 10th, 2024_
+
+When iterating on a Prompt in Vellum's Prompt Sandbox, you may find that its output stops mid-sentence. This is often
+because the "Max Tokens" parameter is set too low, or the prompt itself is too long. To help you identify when this is
+the case, we've added a warning that will appear when this max is hit.
+
+![Max Tokens Warning](https://storage.googleapis.com/vellum-public/help-docs/max-tokens-warning.png)
+
+
+## GPT-4 Turbo 04/09/2024 Model
+
+_April 9th, 2024_
+
+OpenAI's newest GPT-4 Turbo model `gpt-4-turbo-2024-04-09` is now available in Vellum!
+
+## Usage Tracking in Prompt Sandbox and Prompt API
+
+_April 9th, 2024_
+
+We have added the ability for you to track model host usage from the `execute-prompt` [API](/api-reference/api-reference/execute-prompt#request.body.expand_meta.usage). This API update is available on version `0.3.21` of our SDKs.
+
+You can also now view model host usage in the Prompt Sandbox by enabling the "Track Usage" toggle in your Prompt Sandbox's settings.
+
+![Usage Tracking Sandbox](https://storage.googleapis.com/vellum-public/help-docs/usage-tracking-sandbox.png)
+
+## New API for Listing a Test Suite's Test Cases
 
 _April 8th, 2024_
 
-We've made some changes to our Test Suite UX. Here's what's new:
+We have a new [API](/api-reference/api-reference/test-suites/list-test-suite-test-cases) available in beta for listing the Test Cases belonging to a Test Suite at `GET /v1/test-suites/{id}/test-cases`.
 
-- **Simplified Creation Process**: We've broken down the test suite creation into clear, manageable steps, ensuring a more guided and less overwhelming setup.
-- **In-Context Editing**: You can now edit test suites directly from the Prompt or Workflow evaluations page via a new, sleek modal.
-- **Enhanced Error Messaging**: We've revamped our error messages to be clearer and more actionable. You'll now receive specific feedback that pinpoints exactly where things went wrong.
-
-![Test Suite Improvements](https://storage.googleapis.com/vellum-public/help-docs/test-suite-error.png)
+This API is available on version `0.3.20` of our SDKs.
 
 ## Prompt Editor
 
@@ -33,6 +56,18 @@ _April 5th, 2024_
 You can now copy logit bias parameters from one Prompt Variant and paste them into another Prompt. This works in both Prompt Sandboxes and Prompt Nodes within Workflows.
 
 ![Logit Bias Copy](https://storage.googleapis.com/vellum-public/help-docs/logit-bias-copy.png)
+
+## Test Suite Improvements
+
+_April 4th, 2024_
+
+We've made some changes to our Test Suite UX. Here's what's new:
+
+- **Simplified Creation Process**: We've broken down the test suite creation into clear, manageable steps, ensuring a more guided and less overwhelming setup.
+- **In-Context Editing**: You can now edit test suites directly from the Prompt or Workflow evaluations page via a new, sleek modal.
+- **Enhanced Error Messaging**: We've revamped our error messages to be clearer and more actionable. You'll now receive specific feedback that pinpoints exactly where things went wrong.
+
+![Test Suite Improvements](https://storage.googleapis.com/vellum-public/help-docs/test-suite-error.png)
 
 ## New APIs for Accessing Test Suite Runs
 
