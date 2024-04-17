@@ -1108,6 +1108,17 @@ paths:
     get:
       operationId: test_suite_runs_list_executions
       parameters:
+      - in: query
+        name: expand
+        schema:
+          type: array
+          items:
+            type: string
+        description: |-
+          The response fields to expand for more information.
+          - 'results.metric_results.metric_label' expands the metric label for each metric result.
+          - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
+          - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
       - in: path
         name: id
         schema:
@@ -2749,7 +2760,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NodeOutputCompiledValue'
-          nullable: true
         mocked:
           type: boolean
       required:
@@ -2757,6 +2767,7 @@ components:
       - id
       - node_id
       - node_result_id
+      - output_values
       - state
     FunctionCall:
       oneOf:
@@ -3518,97 +3529,103 @@ components:
       - sandbox_id
     NamedTestCaseChatHistoryVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type CHAT_HISTORY
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessageRequest'
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
       - value
     NamedTestCaseErrorVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type ERROR
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/ErrorEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/VellumErrorRequest'
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
       - value
     NamedTestCaseJsonVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type JSON
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
       - value
     NamedTestCaseNumberVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type NUMBER
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
       - value
     NamedTestCaseSearchResultsVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type SEARCH_RESULTS
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/SearchResultsEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/SearchResultRequest'
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
       - value
     NamedTestCaseStringVariableValueRequest:
       type: object
+      description: Named Test Case value that is of type STRING
       properties:
-        name:
-          type: string
-          minLength: 1
         type:
-          type: string
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
+        name:
+          type: string
+          minLength: 1
       required:
       - name
       - type
@@ -4307,6 +4324,8 @@ components:
           $ref: '#/components/schemas/BlockTypeEnum'
         properties:
           $ref: '#/components/schemas/PromptTemplateBlockProperties'
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
       required:
       - block_type
       - id
@@ -4423,10 +4442,20 @@ components:
           $ref: '#/components/schemas/BlockTypeEnum'
         properties:
           $ref: '#/components/schemas/PromptTemplateBlockPropertiesRequest'
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
       required:
       - block_type
       - id
       - properties
+    PromptTemplateBlockState:
+      enum:
+      - ENABLED
+      - DISABLED
+      type: string
+      description: |-
+        * `ENABLED` - ENABLED
+        * `DISABLED` - DISABLED
     ProviderEnum:
       enum:
       - ANTHROPIC
@@ -6173,53 +6202,77 @@ components:
       - test_case_id
     TestSuiteRunExecutionChatHistoryOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type CHAT_HISTORY
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
     TestSuiteRunExecutionErrorOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type ERROR
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/ErrorEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
     TestSuiteRunExecutionJsonOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type JSON
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
+    TestSuiteRunExecutionMetricDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        name:
+          type: string
     TestSuiteRunExecutionMetricResult:
       type: object
       properties:
@@ -6230,22 +6283,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestSuiteRunMetricOutput'
+        metric_label:
+          type: string
+        metric_definition:
+          $ref: '#/components/schemas/TestSuiteRunExecutionMetricDefinition'
       required:
       - metric_id
       - outputs
     TestSuiteRunExecutionNumberOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type NUMBER
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
@@ -6268,33 +6330,43 @@ components:
           ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
     TestSuiteRunExecutionSearchResultsOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type SEARCH_RESULTS
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/SearchResultsEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/SearchResult'
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
     TestSuiteRunExecutionStringOutput:
       type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type STRING
       properties:
-        output_variable_id:
+        name:
           type: string
-          format: uuid
         type:
-          type: string
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
       required:
+      - name
       - output_variable_id
       - type
       - value
