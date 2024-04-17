@@ -19,6 +19,7 @@ groups:
           extra_dependencies: 
             cdktf: '^0.20.5'
             publication: '0.0.3'
+            requests_mock: '^1.11.0'
   branch-node:
     generators:
       - name: fernapi/fern-typescript-node-sdk
