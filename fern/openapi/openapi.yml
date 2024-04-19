@@ -2620,6 +2620,35 @@ components:
           ERROR: '#/components/schemas/ExecutionErrorVellumValue'
           ARRAY: '#/components/schemas/ExecutionArrayVellumValue'
           FUNCTION_CALL: '#/components/schemas/ExecutionFunctionCallVellumValue'
+    ExternalTestCaseExecution:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValue'
+          description: The output values of a callable that was executed against a
+            Test Case outside of Vellum
+        test_case_id:
+          type: string
+      required:
+      - outputs
+      - test_case_id
+    ExternalTestCaseExecutionRequest:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: The output values of a callable that was executed against a
+            Test Case outside of Vellum
+        test_case_id:
+          type: string
+          minLength: 1
+      required:
+      - outputs
+      - test_case_id
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -3527,6 +3556,23 @@ components:
       required:
       - id
       - sandbox_id
+    NamedTestCaseChatHistoryVariableValue:
+      type: object
+      description: Named Test Case value that is of type CHAT_HISTORY
+      properties:
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseChatHistoryVariableValueRequest:
       type: object
       description: Named Test Case value that is of type CHAT_HISTORY
@@ -3541,6 +3587,22 @@ components:
         name:
           type: string
           minLength: 1
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseErrorVariableValue:
+      type: object
+      description: Named Test Case value that is of type ERROR
+      properties:
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+        name:
+          type: string
       required:
       - name
       - type
@@ -3562,6 +3624,22 @@ components:
       - name
       - type
       - value
+    NamedTestCaseJsonVariableValue:
+      type: object
+      description: Named Test Case value that is of type JSON
+      properties:
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseJsonVariableValueRequest:
       type: object
       description: Named Test Case value that is of type JSON
@@ -3579,6 +3657,22 @@ components:
       - name
       - type
       - value
+    NamedTestCaseNumberVariableValue:
+      type: object
+      description: Named Test Case value that is of type NUMBER
+      properties:
+        type:
+          $ref: '#/components/schemas/NumberEnum'
+        value:
+          type: number
+          format: double
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseNumberVariableValueRequest:
       type: object
       description: Named Test Case value that is of type NUMBER
@@ -3592,6 +3686,23 @@ components:
         name:
           type: string
           minLength: 1
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseSearchResultsVariableValue:
+      type: object
+      description: Named Test Case value that is of type SEARCH_RESULTS
+      properties:
+        type:
+          $ref: '#/components/schemas/SearchResultsEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          nullable: true
+        name:
+          type: string
       required:
       - name
       - type
@@ -3614,6 +3725,21 @@ components:
       - name
       - type
       - value
+    NamedTestCaseStringVariableValue:
+      type: object
+      description: Named Test Case value that is of type STRING
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseStringVariableValueRequest:
       type: object
       description: Named Test Case value that is of type STRING
@@ -3630,6 +3756,23 @@ components:
       - name
       - type
       - value
+    NamedTestCaseVariableValue:
+      oneOf:
+      - $ref: '#/components/schemas/NamedTestCaseStringVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseNumberVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseJsonVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseErrorVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NamedTestCaseStringVariableValue'
+          NUMBER: '#/components/schemas/NamedTestCaseNumberVariableValue'
+          JSON: '#/components/schemas/NamedTestCaseJsonVariableValue'
+          CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
+          SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
+          ERROR: '#/components/schemas/NamedTestCaseErrorVariableValue'
     NamedTestCaseVariableValueRequest:
       oneOf:
       - $ref: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
@@ -4859,6 +5002,7 @@ components:
       - state
     SandboxScenario:
       type: object
+      description: Sandbox Scenario
       properties:
         label:
           type: string
@@ -5968,92 +6112,122 @@ components:
       - value
     TestCaseChatHistoryVariableValue:
       type: object
+      description: A chat history value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
     TestCaseErrorVariableValue:
       type: object
+      description: An error value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
     TestCaseJsonVariableValue:
       type: object
+      description: A JSON value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
     TestCaseNumberVariableValue:
       type: object
+      description: A numerical value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
     TestCaseSearchResultsVariableValue:
       type: object
+      description: A search results value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/SearchResultsEnum'
         value:
           type: array
           items:
             $ref: '#/components/schemas/SearchResult'
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
     TestCaseStringVariableValue:
       type: object
+      description: A string value for a variable in a Test Case.
       properties:
         variable_id:
           type: string
-        type:
+        name:
           type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
       required:
+      - name
       - type
       - value
       - variable_id
@@ -6165,20 +6339,24 @@ components:
       oneOf:
       - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
       - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+      - $ref: '#/components/schemas/TestSuiteRunExternalExecConfig'
       discriminator:
         propertyName: type
         mapping:
           DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
           WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+          EXTERNAL: '#/components/schemas/TestSuiteRunExternalExecConfig'
     TestSuiteRunExecConfigRequest:
       oneOf:
       - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
       - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+      - $ref: '#/components/schemas/TestSuiteRunExternalExecConfigRequest'
       discriminator:
         propertyName: type
         mapping:
           DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
           WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+          EXTERNAL: '#/components/schemas/TestSuiteRunExternalExecConfigRequest'
     TestSuiteRunExecution:
       type: object
       properties:
@@ -6370,6 +6548,70 @@ components:
       - output_variable_id
       - type
       - value
+    TestSuiteRunExternalExecConfig:
+      type: object
+      description: Execution configuration for running a Vellum Test Suite against
+        an external callable
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunExternalExecConfigData:
+      type: object
+      properties:
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalTestCaseExecution'
+          description: The executions of some callable external to Vellum whose outputs
+            you would like to evaluate.
+      required:
+      - executions
+    TestSuiteRunExternalExecConfigDataRequest:
+      type: object
+      properties:
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalTestCaseExecutionRequest'
+          description: The executions of some callable external to Vellum whose outputs
+            you would like to evaluate.
+      required:
+      - executions
+    TestSuiteRunExternalExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Vellum Test Suite against
+        an external callable
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunExternalExecConfigTypeEnum:
+      enum:
+      - EXTERNAL
+      type: string
+      description: '* `EXTERNAL` - EXTERNAL'
     TestSuiteRunMetricErrorOutput:
       type: object
       description: Output for a test suite run metric that is of type ERROR
