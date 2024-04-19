@@ -2620,6 +2620,35 @@ components:
           ERROR: '#/components/schemas/ExecutionErrorVellumValue'
           ARRAY: '#/components/schemas/ExecutionArrayVellumValue'
           FUNCTION_CALL: '#/components/schemas/ExecutionFunctionCallVellumValue'
+    ExternalTestCaseExecution:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValue'
+          description: The output values of a callable that was executed against a
+            Test Case outside of Vellum
+        test_case_id:
+          type: string
+      required:
+      - outputs
+      - test_case_id
+    ExternalTestCaseExecutionRequest:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: The output values of a callable that was executed against a
+            Test Case outside of Vellum
+        test_case_id:
+          type: string
+          minLength: 1
+      required:
+      - outputs
+      - test_case_id
     FinishReasonEnum:
       enum:
       - LENGTH
@@ -6310,20 +6339,24 @@ components:
       oneOf:
       - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
       - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+      - $ref: '#/components/schemas/TestSuiteRunExternalExecConfig'
       discriminator:
         propertyName: type
         mapping:
           DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfig'
           WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfig'
+          EXTERNAL: '#/components/schemas/TestSuiteRunExternalExecConfig'
     TestSuiteRunExecConfigRequest:
       oneOf:
       - $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
       - $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+      - $ref: '#/components/schemas/TestSuiteRunExternalExecConfigRequest'
       discriminator:
         propertyName: type
         mapping:
           DEPLOYMENT_RELEASE_TAG: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigRequest'
           WORKFLOW_RELEASE_TAG: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigRequest'
+          EXTERNAL: '#/components/schemas/TestSuiteRunExternalExecConfigRequest'
     TestSuiteRunExecution:
       type: object
       properties:
@@ -6515,6 +6548,70 @@ components:
       - output_variable_id
       - type
       - value
+    TestSuiteRunExternalExecConfig:
+      type: object
+      description: Execution configuration for running a Vellum Test Suite against
+        an external callable
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigData'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunExternalExecConfigData:
+      type: object
+      properties:
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalTestCaseExecution'
+          description: The executions of some callable external to Vellum whose outputs
+            you would like to evaluate.
+      required:
+      - executions
+    TestSuiteRunExternalExecConfigDataRequest:
+      type: object
+      properties:
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalTestCaseExecutionRequest'
+          description: The executions of some callable external to Vellum whose outputs
+            you would like to evaluate.
+      required:
+      - executions
+    TestSuiteRunExternalExecConfigRequest:
+      type: object
+      description: Execution configuration for running a Vellum Test Suite against
+        an external callable
+      properties:
+        data:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigDataRequest'
+        test_case_ids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+          description: Optionally specify a subset of test case ids to run. If not
+            provided, all test cases within the test suite will be run by default.
+        type:
+          $ref: '#/components/schemas/TestSuiteRunExternalExecConfigTypeEnum'
+      required:
+      - data
+    TestSuiteRunExternalExecConfigTypeEnum:
+      enum:
+      - EXTERNAL
+      type: string
+      description: '* `EXTERNAL` - EXTERNAL'
     TestSuiteRunMetricErrorOutput:
       type: object
       description: Output for a test suite run metric that is of type ERROR
