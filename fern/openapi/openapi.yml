@@ -4973,6 +4973,7 @@ components:
       - state
     SandboxScenario:
       type: object
+      description: Sandbox Scenario
       properties:
         label:
           type: string
