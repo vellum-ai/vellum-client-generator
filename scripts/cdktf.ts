@@ -31,6 +31,9 @@ SDKS.forEach(async ({ repo, targetLanguage, folder, postProcessFrom }) => {
   }
 
   const codeMakerOutput = path.join(repoRoot, folder, "terraform");
+  if (fs.existsSync(codeMakerOutput)) {
+    fs.rmSync(codeMakerOutput, { recursive: true });
+  }
 
   const constructsMaker = new ConstructsMaker({
     codeMakerOutput,
