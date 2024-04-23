@@ -7331,6 +7331,7 @@ components:
       - ARRAY
       - FUNCTION_CALL
       - IMAGE
+      - 'NULL'
       type: string
       description: |-
         * `STRING` - STRING
@@ -7342,6 +7343,7 @@ components:
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
         * `IMAGE` - IMAGE
+        * `NULL` - NULL
     WorkflowDeploymentRead:
       type: object
       properties:
