@@ -2769,6 +2769,26 @@ components:
       - arguments
       - name
       - state
+    FulfilledFunctionCallRequest:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+      required:
+      - arguments
+      - name
+      - state
     FulfilledPromptExecutionMeta:
       type: object
       description: The subset of the metadata tracked by Vellum during prompt execution
@@ -3690,6 +3710,39 @@ components:
       - name
       - type
       - value
+    NamedTestCaseFunctionCallVariableValue:
+      type: object
+      description: Named Test Case value that is of type FUNCTION_CALL
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseFunctionCallVariableValueRequest:
+      type: object
+      description: Named Test Case value that is of type FUNCTION_CALL
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCallRequest'
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseJsonVariableValue:
       type: object
       description: Named Test Case value that is of type JSON
@@ -3830,6 +3883,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3839,6 +3893,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
     NamedTestCaseVariableValueRequest:
       oneOf:
       - $ref: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
@@ -3847,6 +3902,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -3856,6 +3912,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+          FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
     NodeInputCompiledArrayValue:
       type: object
       properties:
@@ -6209,6 +6266,26 @@ components:
       - type
       - value
       - variable_id
+    TestCaseFunctionCallVariableValue:
+      type: object
+      description: A function call value for a variable in a Test Case.
+      properties:
+        variable_id:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+      - variable_id
     TestCaseJsonVariableValue:
       type: object
       description: A JSON value for a variable in a Test Case.
@@ -6297,6 +6374,7 @@ components:
       - $ref: '#/components/schemas/TestCaseChatHistoryVariableValue'
       - $ref: '#/components/schemas/TestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/TestCaseErrorVariableValue'
+      - $ref: '#/components/schemas/TestCaseFunctionCallVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -6306,6 +6384,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/TestCaseFunctionCallVariableValue'
     TestSuiteRunCreateRequest:
       type: object
       properties:
@@ -6479,6 +6558,27 @@ components:
       - output_variable_id
       - type
       - value
+    TestSuiteRunExecutionFunctionCallOutput:
+      type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type FUNCTION_CALL
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
+      required:
+      - name
+      - output_variable_id
+      - type
+      - value
     TestSuiteRunExecutionJsonOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -6555,6 +6655,7 @@ components:
       - $ref: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
       discriminator:
         propertyName: type
         mapping:
@@ -6564,6 +6665,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
           SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
           ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+          FUNCTION_CALL: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
     TestSuiteRunExecutionSearchResultsOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
