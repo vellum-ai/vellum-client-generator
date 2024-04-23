@@ -1511,18 +1511,6 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
           IMAGE: '#/components/schemas/ImageVariableValue'
-    BlockTypeEnum:
-      enum:
-      - CHAT_MESSAGE
-      - CHAT_HISTORY
-      - JINJA
-      - FUNCTION_DEFINITION
-      type: string
-      description: |-
-        * `CHAT_MESSAGE` - CHAT_MESSAGE
-        * `CHAT_HISTORY` - CHAT_HISTORY
-        * `JINJA` - JINJA
-        * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     ChatHistoryEnum:
       type: string
       enum:
@@ -1545,6 +1533,43 @@ components:
       - name
       - type
       - value
+    ChatHistoryPromptTemplateBlock:
+      type: object
+      description: A block of that represents a chat history variable in a prompt
+        template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        properties:
+          type: object
+          additionalProperties: false
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
+    ChatHistoryPromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a chat history variable in a prompt
+        template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        properties:
+          type: object
+          additionalProperties: false
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
     ChatHistoryVariableValue:
       type: object
       properties:
@@ -1602,6 +1627,84 @@ components:
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
           ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
           IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+    ChatMessageEnum:
+      type: string
+      enum:
+      - CHAT_MESSAGE
+    ChatMessagePromptTemplateBlock:
+      type: object
+      description: A block of that represents a chat message in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptTemplateBlockProperties'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
+    ChatMessagePromptTemplateBlockProperties:
+      type: object
+      description: The properties of a ChatMessagePromptTemplateBlock
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlock'
+        chat_role:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
+        chat_source:
+          type: string
+          nullable: true
+        chat_message_unterminated:
+          type: boolean
+          default: false
+      required:
+      - blocks
+    ChatMessagePromptTemplateBlockPropertiesRequest:
+      type: object
+      description: The properties of a ChatMessagePromptTemplateBlock
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlockRequest'
+        chat_role:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
+        chat_source:
+          type: string
+          nullable: true
+          minLength: 1
+        chat_message_unterminated:
+          type: boolean
+          default: false
+      required:
+      - blocks
+    ChatMessagePromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a chat message in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptTemplateBlockPropertiesRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
     ChatMessageRequest:
       type: object
       properties:
@@ -2918,6 +3021,88 @@ components:
       required:
       - type
       - value
+    FunctionDefinitionEnum:
+      type: string
+      enum:
+      - FUNCTION_DEFINITION
+    FunctionDefinitionPromptTemplateBlock:
+      type: object
+      description: A block of that represents a function definition in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockProperties'
+      required:
+      - block_type
+      - id
+      - properties
+    FunctionDefinitionPromptTemplateBlockProperties:
+      type: object
+      properties:
+        function_name:
+          type: string
+          nullable: true
+          description: The name identifying the function.
+        function_description:
+          type: string
+          nullable: true
+          description: A description to help guide the model when to invoke this function.
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: An OpenAPI specification of parameters that are supported by
+            this function.
+        function_forced:
+          type: boolean
+          nullable: true
+          description: Set this option to true to force the model to return a function
+            call of this function.
+    FunctionDefinitionPromptTemplateBlockPropertiesRequest:
+      type: object
+      properties:
+        function_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name identifying the function.
+        function_description:
+          type: string
+          nullable: true
+          description: A description to help guide the model when to invoke this function.
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: An OpenAPI specification of parameters that are supported by
+            this function.
+        function_forced:
+          type: boolean
+          nullable: true
+          description: Set this option to true to force the model to return a function
+            call of this function.
+    FunctionDefinitionPromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a function definition in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockPropertiesRequest'
+      required:
+      - block_type
+      - id
+      - properties
     GenerateBodyRequest:
       type: object
       properties:
@@ -3225,6 +3410,63 @@ components:
       - name
       - type
       - value
+    JinjaEnum:
+      type: string
+      enum:
+      - JINJA
+    JinjaPromptTemplateBlock:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptTemplateBlockProperties'
+      required:
+      - block_type
+      - id
+      - properties
+    JinjaPromptTemplateBlockProperties:
+      type: object
+      properties:
+        template:
+          type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableType'
+          nullable: true
+    JinjaPromptTemplateBlockPropertiesRequest:
+      type: object
+      properties:
+        template:
+          type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableType'
+          nullable: true
+    JinjaPromptTemplateBlockRequest:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptTemplateBlockPropertiesRequest'
+      required:
+      - block_type
+      - id
+      - properties
     JsonEnum:
       type: string
       enum:
@@ -4582,138 +4824,55 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     PromptTemplateBlock:
-      type: object
-      properties:
-        id:
-          type: string
-        block_type:
-          $ref: '#/components/schemas/BlockTypeEnum'
-        properties:
-          $ref: '#/components/schemas/PromptTemplateBlockProperties'
-        state:
-          $ref: '#/components/schemas/PromptTemplateBlockState'
-      required:
-      - block_type
-      - id
-      - properties
+      oneOf:
+      - $ref: '#/components/schemas/JinjaPromptTemplateBlock'
+      - $ref: '#/components/schemas/ChatHistoryPromptTemplateBlock'
+      - $ref: '#/components/schemas/ChatMessagePromptTemplateBlock'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlock'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          JINJA: '#/components/schemas/JinjaPromptTemplateBlock'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryPromptTemplateBlock'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptTemplateBlock'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptTemplateBlock'
     PromptTemplateBlockData:
       type: object
       properties:
-        version:
-          type: integer
         blocks:
           type: array
           items:
             $ref: '#/components/schemas/PromptTemplateBlock'
+        version:
+          type: integer
       required:
       - blocks
       - version
     PromptTemplateBlockDataRequest:
       type: object
       properties:
-        version:
-          type: integer
         blocks:
           type: array
           items:
             $ref: '#/components/schemas/PromptTemplateBlockRequest'
+        version:
+          type: integer
       required:
       - blocks
       - version
-    PromptTemplateBlockProperties:
-      type: object
-      properties:
-        chat_role:
-          allOf:
-          - $ref: '#/components/schemas/ChatMessageRole'
-          nullable: true
-        chat_message_unterminated:
-          type: boolean
-          default: false
-        chat_source:
-          type: string
-          nullable: true
-        template:
-          type: string
-          nullable: true
-        template_type:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableType'
-          nullable: true
-        function_name:
-          type: string
-          nullable: true
-        function_description:
-          type: string
-          nullable: true
-        function_parameters:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        function_forced:
-          type: boolean
-          nullable: true
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptTemplateBlock'
-          nullable: true
-    PromptTemplateBlockPropertiesRequest:
-      type: object
-      properties:
-        chat_role:
-          allOf:
-          - $ref: '#/components/schemas/ChatMessageRole'
-          nullable: true
-        chat_message_unterminated:
-          type: boolean
-          default: false
-        chat_source:
-          type: string
-          nullable: true
-          minLength: 1
-        template:
-          type: string
-          nullable: true
-        template_type:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableType'
-          nullable: true
-        function_name:
-          type: string
-          nullable: true
-          minLength: 1
-        function_description:
-          type: string
-          nullable: true
-        function_parameters:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        function_forced:
-          type: boolean
-          nullable: true
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptTemplateBlockRequest'
-          nullable: true
     PromptTemplateBlockRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          minLength: 1
-        block_type:
-          $ref: '#/components/schemas/BlockTypeEnum'
-        properties:
-          $ref: '#/components/schemas/PromptTemplateBlockPropertiesRequest'
-        state:
-          $ref: '#/components/schemas/PromptTemplateBlockState'
-      required:
-      - block_type
-      - id
-      - properties
+      oneOf:
+      - $ref: '#/components/schemas/JinjaPromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/ChatHistoryPromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/ChatMessagePromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockRequest'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          JINJA: '#/components/schemas/JinjaPromptTemplateBlockRequest'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryPromptTemplateBlockRequest'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptTemplateBlockRequest'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptTemplateBlockRequest'
     PromptTemplateBlockState:
       enum:
       - ENABLED
