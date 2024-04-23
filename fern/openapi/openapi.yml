@@ -908,12 +908,12 @@ paths:
                   id: 3ee58bf2-1e5c-415e-8b6c-02ca8b77f29d
                   label: Scenario 1
                   inputs:
-                  - key: var_1
+                  - name: var_1
                     value: Hello, world!
-                    type: TEXT
-                  - key: var_2
+                    type: STRING
+                  - name: var_2
                     value: Why hello, there!
-                    type: TEXT
+                    type: STRING
                 summary: Basic Example
                 description: This example shows how to specify a scenario with two
                   variables, var_1 and var_2.
@@ -922,9 +922,9 @@ paths:
                   id: 50c55d1d-4c37-4c83-afc1-9d895f286320
                   label: Scenario 2
                   inputs:
-                  - key: $chat_history
+                  - name: $chat_history
                     type: CHAT_HISTORY
-                    chat_history:
+                    value:
                     - role: USER
                       text: What's your favorite color?
                     - role: ASSISTANT
@@ -3579,6 +3579,49 @@ components:
       required:
       - id
       - sandbox_id
+    NamedScenarioInputChatHistoryVariableValueRequest:
+      type: object
+      description: Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+      properties:
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
+    NamedScenarioInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+      - $ref: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+          CHAT_HISTORY: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
+    NamedScenarioInputStringVariableValueRequest:
+      type: object
+      description: Named Prompt Sandbox Scenario input value that is of type STRING
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseChatHistoryVariableValue:
       type: object
       description: Named Test Case value that is of type CHAT_HISTORY
@@ -5042,54 +5085,46 @@ components:
       - id
       - inputs
     ScenarioInput:
+      oneOf:
+      - $ref: '#/components/schemas/ScenarioInputStringVariableValue'
+      - $ref: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/ScenarioInputStringVariableValue'
+          CHAT_HISTORY: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
+    ScenarioInputChatHistoryVariableValue:
       type: object
+      description: Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
       properties:
-        key:
-          type: string
         type:
-          allOf:
-          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
-          nullable: true
-          default: TEXT
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
-          type: string
-          nullable: true
-        chat_history:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
-      required:
-      - key
-    ScenarioInputRequest:
-      type: object
-      properties:
-        key:
+        input_variable_id:
           type: string
-          minLength: 1
+      required:
+      - input_variable_id
+      - type
+      - value
+    ScenarioInputStringVariableValue:
+      type: object
+      description: Prompt Sandbox Scenario input value that is of type STRING
+      properties:
         type:
-          allOf:
-          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
-          nullable: true
-          default: TEXT
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
-        chat_history:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessageRequest'
-          nullable: true
+        input_variable_id:
+          type: string
       required:
-      - key
-    ScenarioInputTypeEnum:
-      enum:
-      - TEXT
-      - CHAT_HISTORY
-      type: string
-      description: |-
-        * `TEXT` - TEXT
-        * `CHAT_HISTORY` - CHAT_HISTORY
+      - input_variable_id
+      - type
+      - value
     SearchErrorResponse:
       type: object
       properties:
@@ -6926,7 +6961,7 @@ components:
         inputs:
           type: array
           items:
-            $ref: '#/components/schemas/ScenarioInputRequest'
+            $ref: '#/components/schemas/NamedScenarioInputRequest'
           description: The inputs for the scenario
         scenario_id:
           type: string
