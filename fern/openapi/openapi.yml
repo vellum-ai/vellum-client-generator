@@ -414,6 +414,29 @@ paths:
           description: ''
       x-fern-availability: ga
   /v1/documents/{id}:
+    get:
+      operationId: documents_retrieve
+      description: Retrieve a Document via its Vellum-generated ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      tags:
+      - documents
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentRead'
+          description: ''
+      x-fern-availability: beta
     patch:
       operationId: documents_partial_update
       description: Update a Document, keying off of its Vellum-generated ID. Particularly
