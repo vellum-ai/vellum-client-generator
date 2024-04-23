@@ -414,6 +414,29 @@ paths:
           description: ''
       x-fern-availability: ga
   /v1/documents/{id}:
+    get:
+      operationId: documents_retrieve
+      description: Retrieve a Document via its Vellum-generated ID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      tags:
+      - documents
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentRead'
+          description: ''
+      x-fern-availability: beta
     patch:
       operationId: documents_partial_update
       description: Update a Document, keying off of its Vellum-generated ID. Particularly
@@ -885,12 +908,12 @@ paths:
                   id: 3ee58bf2-1e5c-415e-8b6c-02ca8b77f29d
                   label: Scenario 1
                   inputs:
-                  - key: var_1
+                  - name: var_1
                     value: Hello, world!
-                    type: TEXT
-                  - key: var_2
+                    type: STRING
+                  - name: var_2
                     value: Why hello, there!
-                    type: TEXT
+                    type: STRING
                 summary: Basic Example
                 description: This example shows how to specify a scenario with two
                   variables, var_1 and var_2.
@@ -899,9 +922,9 @@ paths:
                   id: 50c55d1d-4c37-4c83-afc1-9d895f286320
                   label: Scenario 2
                   inputs:
-                  - key: $chat_history
+                  - name: $chat_history
                     type: CHAT_HISTORY
-                    chat_history:
+                    value:
                     - role: USER
                       text: What's your favorite color?
                     - role: ASSISTANT
@@ -1488,18 +1511,6 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
           IMAGE: '#/components/schemas/ImageVariableValue'
-    BlockTypeEnum:
-      enum:
-      - CHAT_MESSAGE
-      - CHAT_HISTORY
-      - JINJA
-      - FUNCTION_DEFINITION
-      type: string
-      description: |-
-        * `CHAT_MESSAGE` - CHAT_MESSAGE
-        * `CHAT_HISTORY` - CHAT_HISTORY
-        * `JINJA` - JINJA
-        * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     ChatHistoryEnum:
       type: string
       enum:
@@ -1522,6 +1533,43 @@ components:
       - name
       - type
       - value
+    ChatHistoryPromptTemplateBlock:
+      type: object
+      description: A block of that represents a chat history variable in a prompt
+        template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        properties:
+          type: object
+          additionalProperties: false
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
+    ChatHistoryPromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a chat history variable in a prompt
+        template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        properties:
+          type: object
+          additionalProperties: false
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
     ChatHistoryVariableValue:
       type: object
       properties:
@@ -1579,6 +1627,84 @@ components:
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
           ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
           IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+    ChatMessageEnum:
+      type: string
+      enum:
+      - CHAT_MESSAGE
+    ChatMessagePromptTemplateBlock:
+      type: object
+      description: A block of that represents a chat message in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptTemplateBlockProperties'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
+    ChatMessagePromptTemplateBlockProperties:
+      type: object
+      description: The properties of a ChatMessagePromptTemplateBlock
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlock'
+        chat_role:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
+        chat_source:
+          type: string
+          nullable: true
+        chat_message_unterminated:
+          type: boolean
+          default: false
+      required:
+      - blocks
+    ChatMessagePromptTemplateBlockPropertiesRequest:
+      type: object
+      description: The properties of a ChatMessagePromptTemplateBlock
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplateBlockRequest'
+        chat_role:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
+        chat_source:
+          type: string
+          nullable: true
+          minLength: 1
+        chat_message_unterminated:
+          type: boolean
+          default: false
+      required:
+      - blocks
+    ChatMessagePromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a chat message in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptTemplateBlockPropertiesRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+      required:
+      - block_type
+      - id
+      - properties
     ChatMessageRequest:
       type: object
       properties:
@@ -2746,6 +2872,26 @@ components:
       - arguments
       - name
       - state
+    FulfilledFunctionCallRequest:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+      required:
+      - arguments
+      - name
+      - state
     FulfilledPromptExecutionMeta:
       type: object
       description: The subset of the metadata tracked by Vellum during prompt execution
@@ -2875,6 +3021,88 @@ components:
       required:
       - type
       - value
+    FunctionDefinitionEnum:
+      type: string
+      enum:
+      - FUNCTION_DEFINITION
+    FunctionDefinitionPromptTemplateBlock:
+      type: object
+      description: A block of that represents a function definition in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockProperties'
+      required:
+      - block_type
+      - id
+      - properties
+    FunctionDefinitionPromptTemplateBlockProperties:
+      type: object
+      properties:
+        function_name:
+          type: string
+          nullable: true
+          description: The name identifying the function.
+        function_description:
+          type: string
+          nullable: true
+          description: A description to help guide the model when to invoke this function.
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: An OpenAPI specification of parameters that are supported by
+            this function.
+        function_forced:
+          type: boolean
+          nullable: true
+          description: Set this option to true to force the model to return a function
+            call of this function.
+    FunctionDefinitionPromptTemplateBlockPropertiesRequest:
+      type: object
+      properties:
+        function_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name identifying the function.
+        function_description:
+          type: string
+          nullable: true
+          description: A description to help guide the model when to invoke this function.
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: An OpenAPI specification of parameters that are supported by
+            this function.
+        function_forced:
+          type: boolean
+          nullable: true
+          description: Set this option to true to force the model to return a function
+            call of this function.
+    FunctionDefinitionPromptTemplateBlockRequest:
+      type: object
+      description: A block of that represents a function definition in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockPropertiesRequest'
+      required:
+      - block_type
+      - id
+      - properties
     GenerateBodyRequest:
       type: object
       properties:
@@ -3182,6 +3410,63 @@ components:
       - name
       - type
       - value
+    JinjaEnum:
+      type: string
+      enum:
+      - JINJA
+    JinjaPromptTemplateBlock:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptTemplateBlockProperties'
+      required:
+      - block_type
+      - id
+      - properties
+    JinjaPromptTemplateBlockProperties:
+      type: object
+      properties:
+        template:
+          type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableType'
+          nullable: true
+    JinjaPromptTemplateBlockPropertiesRequest:
+      type: object
+      properties:
+        template:
+          type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableType'
+          nullable: true
+    JinjaPromptTemplateBlockRequest:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptTemplateBlockState'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptTemplateBlockPropertiesRequest'
+      required:
+      - block_type
+      - id
+      - properties
     JsonEnum:
       type: string
       enum:
@@ -3556,6 +3841,49 @@ components:
       required:
       - id
       - sandbox_id
+    NamedScenarioInputChatHistoryVariableValueRequest:
+      type: object
+      description: Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+      properties:
+        type:
+          $ref: '#/components/schemas/ChatHistoryEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
+    NamedScenarioInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+      - $ref: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+          CHAT_HISTORY: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
+    NamedScenarioInputStringVariableValueRequest:
+      type: object
+      description: Named Prompt Sandbox Scenario input value that is of type STRING
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseChatHistoryVariableValue:
       type: object
       description: Named Test Case value that is of type CHAT_HISTORY
@@ -3616,6 +3944,39 @@ components:
         value:
           allOf:
           - $ref: '#/components/schemas/VellumErrorRequest'
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseFunctionCallVariableValue:
+      type: object
+      description: Named Test Case value that is of type FUNCTION_CALL
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseFunctionCallVariableValueRequest:
+      type: object
+      description: Named Test Case value that is of type FUNCTION_CALL
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCallRequest'
           nullable: true
         name:
           type: string
@@ -3764,6 +4125,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3773,6 +4135,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
     NamedTestCaseVariableValueRequest:
       oneOf:
       - $ref: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
@@ -3781,6 +4144,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -3790,6 +4154,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/NamedTestCaseChatHistoryVariableValueRequest'
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
+          FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
     NodeInputCompiledArrayValue:
       type: object
       properties:
@@ -4459,138 +4824,55 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
     PromptTemplateBlock:
-      type: object
-      properties:
-        id:
-          type: string
-        block_type:
-          $ref: '#/components/schemas/BlockTypeEnum'
-        properties:
-          $ref: '#/components/schemas/PromptTemplateBlockProperties'
-        state:
-          $ref: '#/components/schemas/PromptTemplateBlockState'
-      required:
-      - block_type
-      - id
-      - properties
+      oneOf:
+      - $ref: '#/components/schemas/JinjaPromptTemplateBlock'
+      - $ref: '#/components/schemas/ChatHistoryPromptTemplateBlock'
+      - $ref: '#/components/schemas/ChatMessagePromptTemplateBlock'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlock'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          JINJA: '#/components/schemas/JinjaPromptTemplateBlock'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryPromptTemplateBlock'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptTemplateBlock'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptTemplateBlock'
     PromptTemplateBlockData:
       type: object
       properties:
-        version:
-          type: integer
         blocks:
           type: array
           items:
             $ref: '#/components/schemas/PromptTemplateBlock'
+        version:
+          type: integer
       required:
       - blocks
       - version
     PromptTemplateBlockDataRequest:
       type: object
       properties:
-        version:
-          type: integer
         blocks:
           type: array
           items:
             $ref: '#/components/schemas/PromptTemplateBlockRequest'
+        version:
+          type: integer
       required:
       - blocks
       - version
-    PromptTemplateBlockProperties:
-      type: object
-      properties:
-        chat_role:
-          allOf:
-          - $ref: '#/components/schemas/ChatMessageRole'
-          nullable: true
-        chat_message_unterminated:
-          type: boolean
-          default: false
-        chat_source:
-          type: string
-          nullable: true
-        template:
-          type: string
-          nullable: true
-        template_type:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableType'
-          nullable: true
-        function_name:
-          type: string
-          nullable: true
-        function_description:
-          type: string
-          nullable: true
-        function_parameters:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        function_forced:
-          type: boolean
-          nullable: true
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptTemplateBlock'
-          nullable: true
-    PromptTemplateBlockPropertiesRequest:
-      type: object
-      properties:
-        chat_role:
-          allOf:
-          - $ref: '#/components/schemas/ChatMessageRole'
-          nullable: true
-        chat_message_unterminated:
-          type: boolean
-          default: false
-        chat_source:
-          type: string
-          nullable: true
-          minLength: 1
-        template:
-          type: string
-          nullable: true
-        template_type:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableType'
-          nullable: true
-        function_name:
-          type: string
-          nullable: true
-          minLength: 1
-        function_description:
-          type: string
-          nullable: true
-        function_parameters:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        function_forced:
-          type: boolean
-          nullable: true
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptTemplateBlockRequest'
-          nullable: true
     PromptTemplateBlockRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          minLength: 1
-        block_type:
-          $ref: '#/components/schemas/BlockTypeEnum'
-        properties:
-          $ref: '#/components/schemas/PromptTemplateBlockPropertiesRequest'
-        state:
-          $ref: '#/components/schemas/PromptTemplateBlockState'
-      required:
-      - block_type
-      - id
-      - properties
+      oneOf:
+      - $ref: '#/components/schemas/JinjaPromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/ChatHistoryPromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/ChatMessagePromptTemplateBlockRequest'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptTemplateBlockRequest'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          JINJA: '#/components/schemas/JinjaPromptTemplateBlockRequest'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryPromptTemplateBlockRequest'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptTemplateBlockRequest'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptTemplateBlockRequest'
     PromptTemplateBlockState:
       enum:
       - ENABLED
@@ -5019,54 +5301,46 @@ components:
       - id
       - inputs
     ScenarioInput:
+      oneOf:
+      - $ref: '#/components/schemas/ScenarioInputStringVariableValue'
+      - $ref: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/ScenarioInputStringVariableValue'
+          CHAT_HISTORY: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
+    ScenarioInputChatHistoryVariableValue:
       type: object
+      description: Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
       properties:
-        key:
-          type: string
         type:
-          allOf:
-          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
-          nullable: true
-          default: TEXT
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
-          type: string
-          nullable: true
-        chat_history:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
-      required:
-      - key
-    ScenarioInputRequest:
-      type: object
-      properties:
-        key:
+        input_variable_id:
           type: string
-          minLength: 1
+      required:
+      - input_variable_id
+      - type
+      - value
+    ScenarioInputStringVariableValue:
+      type: object
+      description: Prompt Sandbox Scenario input value that is of type STRING
+      properties:
         type:
-          allOf:
-          - $ref: '#/components/schemas/ScenarioInputTypeEnum'
-          nullable: true
-          default: TEXT
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
-        chat_history:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessageRequest'
-          nullable: true
+        input_variable_id:
+          type: string
       required:
-      - key
-    ScenarioInputTypeEnum:
-      enum:
-      - TEXT
-      - CHAT_HISTORY
-      type: string
-      description: |-
-        * `TEXT` - TEXT
-        * `CHAT_HISTORY` - CHAT_HISTORY
+      - input_variable_id
+      - type
+      - value
     SearchErrorResponse:
       type: object
       properties:
@@ -6151,6 +6425,26 @@ components:
       - type
       - value
       - variable_id
+    TestCaseFunctionCallVariableValue:
+      type: object
+      description: A function call value for a variable in a Test Case.
+      properties:
+        variable_id:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+      - variable_id
     TestCaseJsonVariableValue:
       type: object
       description: A JSON value for a variable in a Test Case.
@@ -6239,6 +6533,7 @@ components:
       - $ref: '#/components/schemas/TestCaseChatHistoryVariableValue'
       - $ref: '#/components/schemas/TestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/TestCaseErrorVariableValue'
+      - $ref: '#/components/schemas/TestCaseFunctionCallVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -6248,6 +6543,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestCaseChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
+          FUNCTION_CALL: '#/components/schemas/TestCaseFunctionCallVariableValue'
     TestSuiteRunCreateRequest:
       type: object
       properties:
@@ -6421,6 +6717,27 @@ components:
       - output_variable_id
       - type
       - value
+    TestSuiteRunExecutionFunctionCallOutput:
+      type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type FUNCTION_CALL
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
+      required:
+      - name
+      - output_variable_id
+      - type
+      - value
     TestSuiteRunExecutionJsonOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -6497,6 +6814,7 @@ components:
       - $ref: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
       discriminator:
         propertyName: type
         mapping:
@@ -6506,6 +6824,7 @@ components:
           CHAT_HISTORY: '#/components/schemas/TestSuiteRunExecutionChatHistoryOutput'
           SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
           ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
+          FUNCTION_CALL: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
     TestSuiteRunExecutionSearchResultsOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -6903,7 +7222,7 @@ components:
         inputs:
           type: array
           items:
-            $ref: '#/components/schemas/ScenarioInputRequest'
+            $ref: '#/components/schemas/NamedScenarioInputRequest'
           description: The inputs for the scenario
         scenario_id:
           type: string
@@ -7012,6 +7331,7 @@ components:
       - ARRAY
       - FUNCTION_CALL
       - IMAGE
+      - 'NULL'
       type: string
       description: |-
         * `STRING` - STRING
@@ -7023,6 +7343,7 @@ components:
         * `ARRAY` - ARRAY
         * `FUNCTION_CALL` - FUNCTION_CALL
         * `IMAGE` - IMAGE
+        * `NULL` - NULL
     WorkflowDeploymentRead:
       type: object
       properties:
