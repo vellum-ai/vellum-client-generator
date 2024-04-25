@@ -14,6 +14,7 @@ groups:
           # location: 
           #   output: pypi
         config:
+          improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
           extra_dependencies: 
@@ -100,6 +101,7 @@ groups:
           # location: 
           #   output: pypi
         config:
+          improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
           extra_dependencies: 
@@ -168,6 +170,7 @@ groups:
           # location: 
           #   output: pypi
         config:
+          improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
           extra_dependencies: 
