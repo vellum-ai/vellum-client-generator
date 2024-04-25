@@ -2,7 +2,7 @@ groups:
   branch-python:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 0.13.4
+        version: 1.4.0-rc3
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
