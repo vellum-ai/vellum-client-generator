@@ -43,9 +43,6 @@ navigation:
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
-          - page: Webhook Evaluation Metric
-            path: ./docs/content/help/evaluation/webhook-evaluation-metric.mdx
-            slug: webhook-evaluation-metric
           - page: Workflow Evaluation Metric
             path: ./docs/content/help/evaluation/workflow-evaluation-metric.mdx
             slug: workflow-evaluation-metric
