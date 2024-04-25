@@ -81,17 +81,16 @@ We also support viewing your Test Suite Run results via the API. Check out our d
 
 ![Test Suite Runs via API](https://storage.googleapis.com/vellum-public/help-docs/tsr-via-api.png)
 
-# Advanced usage
 
-## Evaluation Metrics
+# Evaluation Metrics
 
-### Exact Match
+## Exact Match
 
 Check that the output is exactly equal to the target.
 
 Returns a score of 1 if the output is an exact match, and 0 otherwise.
 
-### Regex Match
+## Regex Match
 
 Check that the specified regular expression can be found in the output.
 
@@ -99,7 +98,7 @@ Returns a score of 1 if the regular expression matches, and 0 otherwise.
 
 Note that unless the regular expression is explicitly anchored, it can match anywhere in the output.
 
-### Semantic Similarity
+## Semantic Similarity
 
 Check that the output is semantically similar to the target.
 
@@ -107,31 +106,31 @@ Returns a score between 0 and 1, where 1 is a perfect match.
 
 Uses a [cross encoder](https://huggingface.co/cross-encoder/stsb-roberta-large) to compute the similarity.
 
-### Webhook
+## Webhook
 
 Use an external endpoint to evaluate the output.
 
 See [Webhook Evaluation Metric](/help-center/evaluation/webhook-evaluation-metric) for more details.
 
-### JSON Validity
+## JSON Validity
 
 Check that the output is valid JSON.
 
 Returns a score of 1 if the output is valid JSON, and 0 otherwise.
 
-### JSON Schema Match
+## JSON Schema Match
 
 Check that the output matches a specified JSON schema.
 
 Returns a score of 1 if the output matches the schema, and 0 otherwise.
 
-### Workflow
+## Workflow
 
 Run a Workflow to evaluate the output.
 
 See [Workflow Evaluation Metric](/help-center/evaluation/workflow-evaluation-metric) for more details.
 
-### Code
+## Code
 
 Run custom Python code to evaluate the output.
 
@@ -147,6 +146,7 @@ def main(input_1, input_2, target, completion):
 ```
 </CodeBlock>
 
+# Advanced Usage
 ## Multiple Evaluators
 
 It's possible for a Test Suite to have multiple evaluators run simultaneously.
@@ -160,7 +160,7 @@ under the "Test Cases" tab.
 
 When running the Test Suite, a dropdown is available at the top to select the metric for which you want to see the results.
 
-## Upload Test Cases
+## Uploading Test Cases
 
 To help you migrate your Test Cases into Vellum, we provide two methods for bulk Test Case uploads.
 
@@ -171,7 +171,7 @@ Clicking that button will open a modal that allows you to bulk upload test cases
 
 ### Via API
 
-To upload test cases via API, please consult a team member at Vellum.
+To upload test cases via API, check out the [Test Cases API](/api-reference/api-reference/test-suites/upsert-test-suite-test-case) documentation.
 
 ## Testing Workflows
 
@@ -194,3 +194,14 @@ to a Workflow where the output variable is something else. You will receive a wa
 To help you diagnose issues with workflows you can click on the "View Workflow Details" button located within a test case's value cell to view the details.
 
 ![Workflow Executions2](https://storage.googleapis.com/vellum-public/help-docs/workflow-evaluation-details2.png)
+
+## Testing Functions External to Vellum
+Not only can Vellum's evaluation framework be used to test Prompts & Workflows hosted in Vellum, it can also be used
+to evaluate the outputs of functions hosted externally to Vellum.
+
+For example, you might test a prompt chain defined as code by using another third party library. This can be
+particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure that the outputs
+remain consistent.
+
+For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
+[python example here](https://github.com/vellum-ai/vellum-client-python/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
