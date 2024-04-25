@@ -19,6 +19,8 @@ groups:
           extra_dependencies: 
             cdktf: '^0.20.5'
             publication: '0.0.3'
+            # Context: https://github.com/python/mypy/issues/17166
+            mypy: '1.9.0'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
   branch-node:
@@ -105,6 +107,8 @@ groups:
           extra_dependencies: 
             cdktf: '^0.20.5'
             publication: '0.0.3'
+            # Context: https://github.com/python/mypy/issues/17166
+            mypy: '1.9.0'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
       - name: fernapi/fern-go-sdk
@@ -173,6 +177,8 @@ groups:
           extra_dependencies: 
             cdktf: '^0.20.5'
             publication: '0.0.3'
+            # Context: https://github.com/python/mypy/issues/17166
+            mypy: '1.9.0'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
       - name: fernapi/fern-go-sdk
