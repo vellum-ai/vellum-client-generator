@@ -191,11 +191,11 @@ To help you diagnose issues with workflows you can click on the "View Workflow D
 
 ## Testing Functions External to Vellum
 Not only can Vellum's evaluation framework be used to test Prompts & Workflows hosted in Vellum, it can also be used
-to evaluate the outputs of functions hosted externally to Vellum.
+to evaluate the outputs of arbitrary functions hosted externally to Vellum.
 
-For example, you might test a prompt chain defined as code by using another third party library. This can be
-particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure that the outputs
-remain consistent.
+For example, you might test a prompt chain that lives in your codebase and that's defined using another third party
+library. This can be particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure
+that the outputs remain consistent.
 
 For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
-[python example here](https://github.com/vellum-ai/vellum-client-python/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
+[python example here](https://github.com/vellum-ai/vellum-client-python/blob/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
