@@ -2,7 +2,7 @@ groups:
   branch-python:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 0.13.4
+        version: 1.4.0-rc4
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
@@ -89,7 +89,7 @@ groups:
           # location: 
           #   output: package.json
       - name: fernapi/fern-python-sdk
-        version: 0.13.4
+        version: 1.4.0-rc4
         github:
           repository: vellum-ai/vellum-client-python-staging
           license: MIT
@@ -153,7 +153,7 @@ groups:
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
       - name: fernapi/fern-python-sdk
-        version: 0.13.4
+        version: 1.4.0-rc4
         output:
           location: pypi
           package-name: vellum-ai
