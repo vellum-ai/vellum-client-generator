@@ -2,6 +2,20 @@
 title: Changelog | April, 2024
 ---
 
+## Support for Evaluating External Functions
+
+_April 25th, 2024_
+
+Vellum's Evaluation framework can now be used to test arbitrary functions defined in your codebase – not just
+Prompts and Workflows managed by Vellum.
+
+For example, you might test a prompt chain that lives in your codebase and that's defined using another third party
+library. This can be particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure
+that the outputs remain consistent.
+
+For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
+[python example here](https://github.com/vellum-ai/vellum-client-python/blob/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
+
 ## Fireworks Finetuned Models
 
 _April 24th, 2024_
