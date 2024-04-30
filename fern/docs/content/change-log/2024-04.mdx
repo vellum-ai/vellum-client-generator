@@ -2,25 +2,26 @@
 title: Changelog | April, 2024
 ---
 
+## Filtering Executions on Release Tags
+
+_April 29th, 2024_
+
+It's now possible to filter workflow deployment executions by the release tag used when executing the workflow.
+
+This can be very useful for monitoring differences between releases of a deployment. Are you still using an older
+release in production? Are executions of your new release behaving as expected?
+
+![Execution Release Tags](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-04/execution-release-tags.png)
+
 ## Faster Queries on Workflow Deployment Executions
+
+_April 26th, 2024_
 
 The executions tab of the workflow deployments page now fetches historical executions much faster. This tab is a
 great way to see how your customers are actually using your deployments.
 
 In our test for deployments with over 200k executions, data now loads in under 4 seconds instead of the
 previous 15+ seconds - a 4x speed improvement.
-
-_April 25th, 2024_
-
-Vellum's Evaluation framework can now be used to test arbitrary functions defined in your codebase – not just
-Prompts and Workflows managed by Vellum.
-
-For example, you might test a prompt chain that lives in your codebase and that's defined using another third party
-library. This can be particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure
-that the outputs remain consistent.
-
-For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
-[python example here](https://github.com/vellum-ai/vellum-client-python/blob/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
 
 ## Prompt Blocks
 
