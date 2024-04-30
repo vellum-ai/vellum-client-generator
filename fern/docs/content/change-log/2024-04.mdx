@@ -2,6 +2,28 @@
 title: Changelog | April, 2024
 ---
 
+## Faster Queries on Workflow Deployment Executions
+
+The executions tab of the workflow deployments page now fetches historical executions much faster. This tab is a
+great way to see how your customers are actually using your deployments.
+
+In our test for deployments with over 200k executions, data now loads in under 4 seconds instead of the
+previous 15+ seconds - a 4x speed improvement.
+
+Previously
+
+_April 25th, 2024_
+
+Vellum's Evaluation framework can now be used to test arbitrary functions defined in your codebase – not just
+Prompts and Workflows managed by Vellum.
+
+For example, you might test a prompt chain that lives in your codebase and that's defined using another third party
+library. This can be particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure
+that the outputs remain consistent.
+
+For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
+[python example here](https://github.com/vellum-ai/vellum-client-python/blob/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
+
 ## Prompt Blocks
 
 _April 25th, 2024_
@@ -13,9 +35,9 @@ Splitting your Prompt into multiple blocks can make it easier to navigate comple
 on iterating on specific sections. Check out the demo below to see how it works!
 
 <iframe
-  src='https://www.loom.com/embed/a0999bc1643b425aad90743d552c973f'
-  width='100%'
-  height='450px'
+  src="https://www.loom.com/embed/a0999bc1643b425aad90743d552c973f"
+  width="100%"
+  height="450px"
 ></iframe>
 
 ## Support for Evaluating External Functions
@@ -92,12 +114,14 @@ from how you would prompt GPT-4. We have some helpful [tips in our guide](https:
 but as of today, you can convert your prompts even faster...
 
 ### GPT-4 to Claude 3 Opus Prompts
+
 We've released a free tool for that allows you to paste your GPT-4 prompt and get an adapted Claude 3 Opus prompt
 with suggestions for dynamic variables. You can [try the tool here](https://tools.vellum.ai/gpt4-to-claude-opus).
 
 ![GPT-4 to Claude 3 Opus](https://storage.googleapis.com/vellum-public/help-docs/gpt-4-to-claude-3-opus-prompt-converter-tool.png)
 
 ### Claude 3 Opus Prompt Generator
+
 If you don't have a working GPT-4 prompt but need to create a prompt for Claude 3 Opus from scratch, you can use our
 second new free tool – "Claude Prompt Generator."
 
@@ -145,9 +169,9 @@ _April 5th, 2024_
 Prompt Sandboxes have an entirely new view mode: Prompt Editor. It's a dedicated space for iterating on a single Variant and Scenario. All of the features you need to work quickly are easily accessible, and collapsible sections make it simple to free up screen space. There are even more improved experiences and exciting coming down the pike for Prompt Editor, and many of those improvements will make their way into Comparison and Chat Modes, as well.
 
 <iframe
-  src='https://www.loom.com/embed/352759341cd24bc0bfb58eee7b6d0d9c'
-  width='100%'
-  height='450px'
+  src="https://www.loom.com/embed/352759341cd24bc0bfb58eee7b6d0d9c"
+  width="100%"
+  height="450px"
 ></iframe>
 
 ## Copy and Paste Logit Bias
