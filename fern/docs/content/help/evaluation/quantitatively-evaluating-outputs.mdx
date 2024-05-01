@@ -5,20 +5,21 @@ description: Discover how Vellum's Evaluations feature quantitatively evaluates 
 
 Ensuring model quality is challenging, because prompts need to work effectively and
 consistently over a wide range of potential inputs.
-When modifying a prompt, adjusting parameters, or switching models, the likelihood of regression is high.
+When modifying a Prompt, adjusting parameters, or switching models, the likelihood of regression is high.
 This is where [quantitative evaluation](https://www.vellum.ai/blog/how-to-evaluate-the-quality-of-large-language-models-for-production-use-cases) comes in.
 
-Vellum's answer to quantitative evaluation is our Test Suites feature. Unlike Comparison Mode and Chat Mode,
-where the output of each scenario is qualitatively evaluated by visual inspection,
-Test Suites use scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
+Vellum's answer to quantitative evaluation are Test Suites and Evaluation Metrics. Unlike Comparison Mode and Chat Mode,
+where the output of each Scenario is qualitatively evaluated by visual inspection,
+Test Suites use Evaluation Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
 This is especially important when your prompt's coverage needs scale and visual inspection is no longer feasible,
 which typically happens when you have 10+ scenarios.
 
 Test Suites cover common use cases in LLM development:
 
-1. Test Driven Development of Prompts in Playground
-2. Performance testing on large numbers of scenarios
-3. Regression testing before deploying a change to a prompt
+1. Test Driven Development of Prompts/Workflows in a Sandbox
+2. Performance testing on large numbers of Scenarios
+3. Regression testing before deploying a change to a Prompt or Workflow
+4. Evaluating [external entities](#testing-functions-external-to-vellum)
 
 If you're looking to improve the velocity or quality of your LLM development, Test Suites could be your answer.
 
@@ -26,52 +27,64 @@ If you're looking to improve the velocity or quality of your LLM development, Te
 
 ## Create your first Test Suite
 
-1. Visit the [Test Suites tab](https://app.vellum.ai/test-suites) in Vellum to open the Test Suites page
-2. Click the blue Create Test Suite button at the top-right of the page to open the Create Test Suite page.
-3. In the "Label" field at the top left, enter "My First Test Suite"
-4. In the "Input Variables" list within the "Execution Interface" section, replace "Variable 1" with the name of the input variable used in your prompt.
-5. If your prompt has additional input variables, you can click "+ Add" below your existing variables to add them.
-   Note that the input variables you configure here must exactly match the input variables to your prompt.
-6. Leave the remaining fields as their default values, and click the blue "Create" button at the bottom right.
+You can create standalone Test Suites through the Test Suites page in the [Evaluations tab](https://app.vellum.ai/evaluations).
+You can also create Test Suites starting from a Prompt or Workflow Sandbox.
+Here, we'll begin by creating a Test Suite from a Prompt Sandbox.
 
-Well done! You've now created a test suite that can test any prompt with the input variables you specified.
+1. From your Prompt Sandbox, click on Evaluations sub-tab
+2. Click "Create New Test Suite" if you haven't set up a Test Suite for this Prompt Sandbox yet or click the gray "Add Test Suite" button on the right of the page
+3. The "label" and "name" fields are autopopulated with the name of your Sandbox
+4. Open the "Interface Configuration" to see the expected inputs/outputs for this Test Suite. This is also autopopulated from your Sandbox.
+5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Evaluation Metrics.
+6. Click the "Add Metric" button to select one or more Evaluation Metrics to evaluate your output against
+7. Select "Exact Match" from the list of available Evaluation Metrics. To learn how to create custom metrics that appear in this list, see Vellum's [Evaluation Metrics](#evaluation-metrics)
+8. Press "Confirm" to start mapping the metric to this Test Suite
+9. First, select "Completion" to map the input to the output of your Prompt
+10. Next, select "Target" and then "Add New" in the dropdown to create a new expected output variable that's mapped to this input
+11. Press "Next" in the bottom right
 
-![Test Suite Details Overview](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-details-overview.png)
+Well done! You've now created a Test Suite with the Exact Match evaluator to check for whether the output is desirable.
 
-By default, your test suite will utilize the Exact Match evaluator to check for whether the output is desirable.
-To learn how to use evaluators other than Exact Match, see Vellum's [Evaluation Metrics](#evaluation-metrics).
+![Test Suite Creation - Metric Configuration](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-metrics.png)
 
 ## Create your first Test Case
 
-Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input variable
-in your prompt, and a target variable. When a Test Suite is run, Vellum will iterate over every Test Case it contains.
-For each Test Case, it will feed the provided inputs into the prompt. The output of the prompt will be compared against
-the target column, and a score will be provided based on the evaluator being used.
+Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input and output variable expected by your Test Suite,
+as well as columns for any expected output variables required by your selected Evaluation Metric.
+When a Test Suite is run, Vellum will iterate over every Test Case it contains.
+For each Test Case, it will feed the provided inputs into the Prompt, Workflow, or entity being tested.
+The output will be passed to the Evaluation Metric based on your mapping in the previous step, and a score will be provided based on the evaluator being used.
 
-With your first Test Suite created, you should be on the "Test Suite Details" page.
-Let's create your first test case now.
+With your first Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
 
-1. Navigate to the "Test Cases" tab.
-2. Click the blue "+ Add Test Case" button just below the tab to add a new Test Case row.
-3. You can leave the "Label" field alone for now - it's used to help you visually identify your Test Cases.
-4. Enter a value for each of your input variables. For example, if you have an input variable `user_age`, you may enter "28".
-5. In the `target` field, enter "This is the expected output of my prompt."
-6. Click outside of your Test Case row to save. You should get a notification that it was successful.
+Select "Start from Scenarios" which will autopopulate test cases for you from Scenarios in your Sandbox.
 
-Almost there! Now that you have your first Test Case, you're ready to run it against a prompt.
+To create additional Test Cases, follow these steps:
 
-![Test Suite Details Test Cases](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-details-test-cases.png)
+1. Click the blue "+ Add Test Case" button just below the tab to add a new Test Case row
+2. You can leave the "Label" field alone for now - it's used to help you visually identify your Test Cases
+3. Enter a value for each of your input variables. For example, if you have an input variable `user_age`, you may enter "28".
+4. Enter a value for each of your expected output variables
+5. Click outside of your Test Case row to save. You should get a notification that it was successful.
+6. Click "Finish" to exit the Test Suite creation wizard
+
+Almost there! Now that you have your Test Cases added, you're ready to run it against your Prompt.
+
+![Test Suite Creation - Test Cases](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-test-cases.png)
 
 ## Run your first Test Suite
 
-Test Suites can be run on any prompt that uses the same input variables you configured earlier. Let's try it.
+This Test Suite is automatically added to the current Prompt Sandbox you are in.
+To evaluate your Prompt, simply click the blue Run button.
 
-1. Navigate to any prompt sandbox in the "Prompts" tab.
-2. Scroll to Add Test Suite at the bottom of the page.
-3. Attach a Test Suite by clicking the "+ Include" button.
+The Test Suite can also be run by any Prompt or Workflow that uses the same input variables you configured earlier. Let's try it.
+
+1. Navigate to any Prompt Sandbox in the "Prompts" tab
+2. Click the gray "Add Test Suite" at the top right of the page
+3. Attach a Test Suite by clicking on "Use Existing Test Suite" and selecting your Test Suite from the dropdown
 4. Press the blue "Run" to execute the Test Suite
 
-![Add Test Suite to Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/add-prompt-test-suite.png)
+![Link Test Suite to Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/link-test-suite.png)
 
 ![Run Test Suite on Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/run-prompt-test-suite.png)
 
@@ -81,8 +94,11 @@ We also support viewing your Test Suite Run results via the API. Check out our d
 
 ![Test Suite Runs via API](https://storage.googleapis.com/vellum-public/help-docs/tsr-via-api.png)
 
-
 # Evaluation Metrics
+
+Vellum comes with a set of evaluators that you can use right away within your Test Suites. We are continually adding new Evaluation Metrics based on the needs of Vellum users.
+
+Here are the default Evaluation Metrics currently available within Vellum:
 
 ## Exact Match
 
@@ -112,19 +128,43 @@ Check that the output is valid JSON.
 
 Returns a score of 1 if the output is valid JSON, and 0 otherwise.
 
-## JSON Schema Match
+# Advanced Usage
+
+## Create Custom Reusable Evaluation Metric
+
+In addition to the default metrics, Vellum makes it easy to define custom Reusable Evaluation Metrics tailored to your specific business logic and use-case.
+This saves you time and ensures standardized evaluation criteria for your Prompts, Workflows, or external entities you'd like to test.
+
+Let's create your first Reusable Evaluation Metric
+
+1. Visit the [Evaluations tab](https://app.vellum.ai/evaluations) in Vellum and open the Metrics page
+2. Click the blue Create Metric button at the top-right of the page to open the Create Metric modal
+3. From the select metric type dropdown, select JSON Schema Match. To learn about metric types other than JSON Schema Match, see Vellum's [Available Metric Types](#available-metric-types).
+4. In the "Label" field at the top left, enter "My First Metric". The name should autopopulate. This is a unique name that you can use to programmatically identify this metric.
+5. In the "Description" field, type in "My first metric description"
+6. Click next to configure your metric and define what the expected output should match
+7. Add "name" and "email" properties to the JSON schema
+8. Click Finish to exit the modal and see your newly added metric card on the Metrics page
+
+Congrats! You've now created a Reusable Evaluation Metric that will be visible when selecting and configuring Evaluation Metrics within any Test suite.
+
+![Create New Reusable Evaluation Metric](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/metric-creation.png)
+
+## Available Metric Types
+
+### JSON Schema Match
 
 Check that the output matches a specified JSON schema.
 
 Returns a score of 1 if the output matches the schema, and 0 otherwise.
 
-## Workflow
+### Workflow
 
 Run a Workflow to evaluate the output.
 
 See [Workflow Evaluation Metric](/help-center/evaluation/workflow-evaluation-metric) for more details.
 
-## Code
+### Code
 
 Run custom Python code to evaluate the output.
 
@@ -140,7 +180,6 @@ def main(input_1, input_2, target, completion):
 ```
 </CodeBlock>
 
-# Advanced Usage
 ## Multiple Evaluators
 
 It's possible for a Test Suite to have multiple evaluators run simultaneously.
@@ -148,11 +187,11 @@ This is often desirable when the output is complex and must meet multiple criter
 For example, you may want to validate that an output semantically means "I'm very happy",
 but must contain the word "ecstatic".
 
-Additional evaluators can be configured on an existing Test Suite under the "Evaluation Metrics" section
+Additional evaluators can be configured on an existing Test Suite under the "Metric Setup" section
 of the "Test Suite Details" page. Any additional columns needed by that evaluator will be editable
 under the "Test Cases" tab.
 
-When running the Test Suite, a dropdown is available at the top to select the metric for which you want to see the results.
+When running the Test Suite, you'll see columns displaying the results for each metric that's been added to the Test Suite.
 
 ## Uploading Test Cases
 
@@ -190,6 +229,7 @@ To help you diagnose issues with workflows you can click on the "View Workflow D
 ![Workflow Executions2](https://storage.googleapis.com/vellum-public/help-docs/workflow-evaluation-details2.png)
 
 ## Testing Functions External to Vellum
+
 Not only can Vellum's evaluation framework be used to test Prompts & Workflows hosted in Vellum, it can also be used
 to evaluate the outputs of arbitrary functions hosted externally to Vellum.
 
