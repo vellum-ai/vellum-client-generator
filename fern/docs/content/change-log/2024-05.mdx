@@ -6,7 +6,11 @@ title: Changelog | May, 2024
 
 _May 7th, 2024_
 
-Subworkflow Nodes can now properly stream its output. This allows users to get a much faster time to first token when the last node before the Terminal Node is a Subworkflow Node, without sacrificing the modularity benefits of Subworkflows.
+Subworkflow Nodes can now stream their output(s) to parent workflows.
+
+This allows you to compose workflows using modular subworkflows without sacrificing the ability to delivery incremental results to your end user.
+
+Note that only nodes immediately prior to Final Output Nodes can have their output(s) streamed.
 
 ![Subworkflow Streaming](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/subworkflow-streaming.gif)
 
