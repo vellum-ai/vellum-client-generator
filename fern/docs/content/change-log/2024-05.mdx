@@ -2,6 +2,18 @@
 title: Changelog | May, 2024
 ---
 
+## Subworkflow Node Streaming
+
+_May 7th, 2024_
+
+Subworkflow Nodes can now stream their output(s) to parent workflows.
+
+This allows you to compose workflows using modular subworkflows without sacrificing the ability to delivery incremental results to your end user.
+
+Note that only nodes immediately prior to Final Output Nodes can have their output(s) streamed.
+
+![Subworkflow Streaming](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/subworkflow-streaming.gif)
+
 ## Default Test Case Concurrency in Evaluations
 
 _May 4th, 2024_
