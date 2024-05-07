@@ -2,6 +2,14 @@
 title: Changelog | May, 2024
 ---
 
+## Subworkflow Node Streaming
+
+_May 7th, 2024_
+
+Subworkflow Nodes can now properly stream its output. This allows users to get a much faster time to first token when the last node before the Terminal Node is a Subworkflow Node, without sacrificing the modularity benefits of Subworkflows.
+
+![Subworkflow Streaming](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/subworkflow-streaming.gif)
+
 ## Default Test Case Concurrency in Evaluations
 
 _May 4th, 2024_
