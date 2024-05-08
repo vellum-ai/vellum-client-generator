@@ -3923,7 +3923,7 @@ components:
       description: An output returned by a node that is of type FUNCTION_CALL.
       properties:
         type:
-          type: string
+          $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/FunctionCall'
