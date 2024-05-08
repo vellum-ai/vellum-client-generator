@@ -206,6 +206,22 @@ Clicking that button will open a modal that allows you to bulk upload test cases
 
 To upload test cases via API, check out the [Test Cases API](/api-reference/api-reference/test-suites/upsert-test-suite-test-case) documentation.
 
+## Function Calling
+
+Prompts can output different modalities, which at Vellum we call input and output types. One increasingly popular output type for models if function/tool calling. You can use Vellum Test Suites to ensure that your model is producing the correct function call based on any given combination of inputs.
+
+First, you will want to edit the Output Variable type of the test suite to the "Function Call" type:
+
+![Output Function Type](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/output-function-type.png)
+
+Next, define the Expected Output type to be of type "Function Call" too:
+
+![Expected Function Type](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/expected-function-type.png)
+
+You can then use any metric to help ensure that your prompt is outputting function calls that perform well across your test cases! Here's an example of a test suite using Exact Match as the metric:
+
+![Function Call Tests](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/function-call-tests.png)
+
 ## Testing Workflows
 
 Just like Prompts, Workflows can be tested too.
