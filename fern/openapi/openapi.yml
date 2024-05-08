@@ -2123,6 +2123,19 @@ components:
       required:
       - type
       - value
+    ErrorVellumValue:
+      type: object
+      description: A value representing an Error.
+      properties:
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumError'
+          nullable: true
+      required:
+      - type
+      - value
     ExecutePromptApiErrorResponse:
       type: object
       properties:
@@ -2832,6 +2845,19 @@ components:
         type:
           type: string
         value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
+      required:
+      - type
+      - value
+    FunctionCallVellumValue:
+      type: object
+      description: A value representing a Function Call.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
           $ref: '#/components/schemas/FunctionCall'
       required:
       - type
@@ -3152,6 +3178,19 @@ components:
       properties:
         type:
           type: string
+        value:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - type
+      - value
+    JsonVellumValue:
+      type: object
+      description: A value representing a JSON object.
+      properties:
+        type:
+          $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
@@ -3825,9 +3864,8 @@ components:
           FUNCTION_CALL: '#/components/schemas/NodeInputCompiledFunctionCall'
     NodeOutputCompiledArrayValue:
       type: object
+      description: An output returned by a node that is of type ARRAY.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/ArrayEnum'
         value:
@@ -3835,15 +3873,18 @@ components:
           items:
             $ref: '#/components/schemas/ArrayVariableValueItem'
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledChatHistoryValue:
       type: object
+      description: An output returned by a node that is of type CHAT_HISTORY.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/ChatHistoryEnum'
         value:
@@ -3851,75 +3892,90 @@ components:
           items:
             $ref: '#/components/schemas/ChatMessage'
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledErrorValue:
       type: object
+      description: An output returned by a node that is of type ERROR.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/ErrorEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
-    NodeOutputCompiledFunctionValue:
+    NodeOutputCompiledFunctionCallValue:
       type: object
+      description: An output returned by a node that is of type FUNCTION_CALL.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/FunctionCall'
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledJsonValue:
       type: object
+      description: An output returned by a node that is of type JSON.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledNumberValue:
       type: object
+      description: An output returned by a node that is of type NUMBER.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledSearchResultsValue:
       type: object
+      description: An output returned by a node that is of type SEARCH_RESULTS.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/SearchResultsEnum'
         value:
@@ -3927,20 +3983,27 @@ components:
           items:
             $ref: '#/components/schemas/SearchResult'
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
       - value
     NodeOutputCompiledStringValue:
       type: object
+      description: An output returned by a node that is of type STRING.
       properties:
-        node_output_id:
-          type: string
         type:
           $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
+        node_output_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/WorkflowNodeResultEventState'
       required:
       - node_output_id
       - type
@@ -3954,7 +4017,7 @@ components:
       - $ref: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
       - $ref: '#/components/schemas/NodeOutputCompiledErrorValue'
       - $ref: '#/components/schemas/NodeOutputCompiledArrayValue'
-      - $ref: '#/components/schemas/NodeOutputCompiledFunctionValue'
+      - $ref: '#/components/schemas/NodeOutputCompiledFunctionCallValue'
       discriminator:
         propertyName: type
         mapping:
@@ -3965,7 +4028,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NodeOutputCompiledSearchResultsValue'
           ERROR: '#/components/schemas/NodeOutputCompiledErrorValue'
           ARRAY: '#/components/schemas/NodeOutputCompiledArrayValue'
-          FUNCTION_CALL: '#/components/schemas/NodeOutputCompiledFunctionValue'
+          FUNCTION_CALL: '#/components/schemas/NodeOutputCompiledFunctionCallValue'
     NormalizedLogProbs:
       type: object
       properties:
@@ -4313,17 +4376,17 @@ components:
       - output_id
     PromptOutput:
       oneOf:
-      - $ref: '#/components/schemas/StringVariableValue'
-      - $ref: '#/components/schemas/JsonVariableValue'
-      - $ref: '#/components/schemas/ErrorVariableValue'
-      - $ref: '#/components/schemas/FunctionCallVariableValue'
+      - $ref: '#/components/schemas/StringVellumValue'
+      - $ref: '#/components/schemas/JsonVellumValue'
+      - $ref: '#/components/schemas/ErrorVellumValue'
+      - $ref: '#/components/schemas/FunctionCallVellumValue'
       discriminator:
         propertyName: type
         mapping:
-          STRING: '#/components/schemas/StringVariableValue'
-          JSON: '#/components/schemas/JsonVariableValue'
-          ERROR: '#/components/schemas/ErrorVariableValue'
-          FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
+          STRING: '#/components/schemas/StringVellumValue'
+          JSON: '#/components/schemas/JsonVellumValue'
+          ERROR: '#/components/schemas/ErrorVellumValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
     RawPromptExecutionOverridesRequest:
       type: object
       properties:
@@ -5085,6 +5148,18 @@ components:
       properties:
         type:
           type: string
+        value:
+          type: string
+          nullable: true
+      required:
+      - type
+      - value
+    StringVellumValue:
+      type: object
+      description: A value representing a string.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
