@@ -35,16 +35,16 @@ Once your RAG pipeline runs and passes visual inspection, it's time to set up yo
 
 ## Set up your Test Suite
 
-- Step 1: Create a Test Suite for this Workflow (follow this article for more info: [Quantitatively Evaluating Outputs](/help-center/evaluation/quantitatively-evaluating-outputs))
+- Step 1: Create a Test Suite for this Workflow (follow this article for more info: [Quantitatively Evaluating Outputs](/help-center/evaluation/quantitatively-evaluating-outputs)
 - Step 2: Add the following Ragas metrics: Ragas - Faithfulness, Ragas - Answer Relevance, Ragas - Context Relevancy
 - Step 3: Map the Test Suite variables to the Metric Inputs
 - Step 4: Add your Test Cases and hit Run!
 
+![Ragas Metrics](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/ragas-metric-mapping.png)
+
 Now you can see how well your RAG pipeline performs across a bank of test cases!
 
 Depending on your results, you can adjust the appropriate component in your RAG system.
-
-![Ragas Metrics](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/ragas-metric-mapping.png)
 
 ![Ragas Test Suite Results](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/ragas-test-suite-results.png)
 
@@ -58,17 +58,24 @@ Try adjusting the Prompt itself, tweak Model parameters, or try a different Mode
 
 Read more about Prompt Engineering best practices from the Vellum team:
 
-- ![For Claude](https://www.vellum.ai/blog/prompt-engineering-tips-for-claude)
-- ![For GPT](https://www.vellum.ai/blog/prompt-engineering-tips-to-boost-gpt-3-5-to-gpt-4-level)
+- [Prompt Engineering Tips for Claude](https://www.vellum.ai/blog/prompt-engineering-tips-for-claude)
+- [Prompt Engineering Tips for GPT](https://www.vellum.ai/blog/prompt-engineering-tips-to-boost-gpt-3-5-to-gpt-4-level)
 
 ### Retrieval
 
 Context Relevancy is a Retrieval eval. If you see low performance here, you can optimize your Document Indexes.
 
 Try different embedding strategies, chunking sizes, and add metadata filtering so the context returned is precise and relevant to the question being asked.
-If these methods don't improve performance enough, you can try more sophisticated Workflow methods such as splitting your knowledge base into separate Document Indexes and dynamically selecting the right Document Index to use in your Search Node.
 
-This method often involves an additional LLM call from a simpler model (think GPT-3.5 turbo) that is used to categorize and select the correct Document Index base on the question being asked.
+If these methods don't improve performance enough, make sure the documents you've uploaded are clean from any noise or extraneous elements that can negatively impact their vector representation and your results.
+
+This includes:
+- Header / footer info
+- Extra or special characters
+- New Lines
+- Inconsistent formatting (including capitalizations) 
+
+Once the documents are processed, you can also try more sophisticated Workflow methods such as splitting your knowledge base into separate Document Indexes and dynamically selecting the right Document Index to use in your Search Node. This method often involves an additional LLM call from a simpler model (think GPT-3.5 turbo) that is used to categorize and select the correct Document Index base on the question being asked.
 
 <Callout intent="info">
   To learn more about Retrieval Augmented Generation and the most effective
