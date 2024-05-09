@@ -2,6 +2,14 @@
 title: Changelog | May, 2024
 ---
 
+## Groq Support
+
+Vellum now has a native integration with the LPU Inference Engine, [Groq](https://groq.com/). All public models on Groq are now available to add to your workspace. Be sure to add your API key as a Secret named `GROQ_API_KEY` on the [API Keys page](https://app.vellum.ai/api-keys).
+
+Groq is an LLM hosting provider that offers incredible inference speed for open source LLMs, including the recently released (and very hyped!) [Llama 3](https://llama.meta.com/llama3/) model.
+
+![Groq Support](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/groq-support.png)
+
 ## Function Calling in Prompt Evaluation
 
 Prompts that output function calls can now be evaluated via Test Suites. This allows you to define Test Cases consisting of the inputs to the prompt, and the expected function call, then assert that there's a match. For more, check out our [docs](/help-center/evaluation/quantitative-evaluation#function-calling).
