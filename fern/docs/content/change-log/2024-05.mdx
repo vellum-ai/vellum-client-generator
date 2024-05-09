@@ -2,6 +2,16 @@
 title: Changelog | May, 2024
 ---
 
+## Prompt Node Monitoring
+
+Vellum is now capturing monitoring data for deployed Prompt Nodes. Whenever a deployed Workflow invokes a Prompt Node, it will now show a link displaying the Prompt Deployment label:
+
+![Prompt Node Monitoring](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/prompt-node-monitoring.png)
+
+Clicking on the link will take you to the _Prompt's executions_ page, where you can then see all metadata captured for the prompt, including the raw request data sent to the model:
+
+![Prompt Node Execution](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/prompt-node-execution.png)
+
 ## Groq Support
 
 Vellum now has a native integration with the LPU Inference Engine, [Groq](https://groq.com/). All public models on Groq are now available to add to your workspace. Be sure to add your API key as a Secret named `GROQ_API_KEY` on the [API Keys page](https://app.vellum.ai/api-keys).
