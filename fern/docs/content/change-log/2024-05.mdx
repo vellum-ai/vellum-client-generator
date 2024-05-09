@@ -2,7 +2,21 @@
 title: Changelog | May, 2024
 ---
 
+## Prompt Node Monitoring
+
+_May 9th, 2024_
+
+Vellum is now capturing monitoring data for deployed Prompt Nodes. Whenever a deployed Workflow invokes a Prompt Node, it will now show a link displaying the Prompt Deployment label:
+
+![Prompt Node Monitoring](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/prompt-node-monitoring.png)
+
+Clicking on the link will take you to the _Prompt's executions_ page, where you can then see all metadata captured for the execution, including the raw request data sent to the model:
+
+![Prompt Node Execution](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/prompt-node-execution.png)
+
 ## Groq Support
+
+_May 9th, 2024_
 
 Vellum now has a native integration with the LPU Inference Engine, [Groq](https://groq.com/). All public models on Groq are now available to add to your workspace. Be sure to add your API key as a Secret named `GROQ_API_KEY` on the [API Keys page](https://app.vellum.ai/api-keys).
 
@@ -11,6 +25,8 @@ Groq is an LLM hosting provider that offers incredible inference speed for open 
 ![Groq Support](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/groq-support.png)
 
 ## Function Calling in Prompt Evaluation
+
+_May 8th, 2024_
 
 Prompts that output function calls can now be evaluated via Test Suites. This allows you to define Test Cases consisting of the inputs to the prompt, and the expected function call, then assert that there's a match. For more, check out our [docs](/help-center/evaluation/quantitative-evaluation#function-calling).
 
