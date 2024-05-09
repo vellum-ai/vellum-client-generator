@@ -9,6 +9,7 @@ In Vellum, setting up your RAG pipeline is straightforward using our Documents f
 For more details on how to set up a RAG pipeline in Vellum, [click here](/help-center/workflows/common-architectures).
 
 Once you have your RAG set up, a challenging but important and often overlooked aspect is evaluating quality. When it comes to RAG, you're not only interested in the quality of your LLM response (the Generation), but also the context being returned from your vector database (the Retrieval).
+
 Essentially, you're checking how effectively your system retrieves relevant information from a knowledge base and then uses it to produce reliable and precise responses or content.
 
 RAG evaluation is a continuous process - running these evaluations gives confidence when initially deploying your RAG into production but the benefits continue post-deployment.
@@ -70,12 +71,14 @@ Try different embedding strategies, chunking sizes, and add metadata filtering s
 If these methods don't improve performance enough, make sure the documents you've uploaded are clean from any noise or extraneous elements that can negatively impact their vector representation and your results.
 
 This includes:
+
 - Header / footer info
 - Extra or special characters
 - New Lines
-- Inconsistent formatting (including capitalizations) 
+- Inconsistent formatting (including capitalizations)
 
-Once the documents are processed, you can also try more sophisticated Workflow methods such as splitting your knowledge base into separate Document Indexes and dynamically selecting the right Document Index to use in your Search Node. This method often involves an additional LLM call from a simpler model (think GPT-3.5 turbo) that is used to categorize and select the correct Document Index base on the question being asked.
+Once the documents are processed, you can also try more sophisticated Workflow methods such as splitting your knowledge base into separate Document Indexes and dynamically selecting the right Document Index to use in your Search Node.
+This method often involves an additional LLM call from a simpler model (think GPT-3.5 turbo) that is used to categorize and select the correct Document Index base on the question being asked.
 
 <Callout intent="info">
   To learn more about Retrieval Augmented Generation and the most effective
