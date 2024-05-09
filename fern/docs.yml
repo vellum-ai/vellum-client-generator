@@ -49,6 +49,9 @@ navigation:
           - page: Code Execution Evaluation Metric
             path: ./docs/content/help/evaluation/code-execution-evaluation-metric.mdx
             slug: code-execution-evaluation-metric
+          - page: Evaluating RAG Pipelines
+            path: ./docs/content/help/evaluation/evaluating-rag-pipelines.mdx
+            slug: evaluating-rag-pipelines
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
