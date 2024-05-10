@@ -128,6 +128,32 @@ Check that the output is valid JSON.
 
 Returns a score of 1 if the output is valid JSON, and 0 otherwise.
 
+<Callout intent="info">
+  The metrics below are [Ragas
+  metrics](https://docs.ragas.io/en/latest/index.html) designed to evaluate your
+  Retrieval Augmented Generation (RAG) systems. For tips on evaluating your RAG
+  pipeline in Vellum, check out [this help center
+  article](/help-center/evaluation/evaluating-rag-pipelines)
+</Callout>
+
+## Ragas - Faithfulness
+
+Faithfulness measures the factual consistency of the generated answer against the given context. It is calculated from answer and retrieved context. The answer is scaled to (0,1) range. Higher the better.
+
+For details, see: https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html
+
+## Ragas - Answer Relevance
+
+The evaluation metric, Answer Relevancy, focuses on assessing how pertinent the generated answer is to the given prompt. A lower score is assigned to answers that are incomplete or contain redundant information and higher scores indicate better relevancy.
+
+For details, see: https://docs.ragas.io/en/latest/concepts/metrics/answer_relevance.html
+
+## Ragas – Context Relevancy
+
+This metric gauges the relevancy of the retrieved context, calculated based on both the question and contexts. The values fall within the range of (0, 1), with higher values indicating better relevancy.
+
+For details, see: https://docs.ragas.io/en/latest/concepts/metrics/context_relevancy.html
+
 # Advanced Usage
 
 ## Create Custom Reusable Evaluation Metric
