@@ -7,7 +7,7 @@ Function calling (aka “tool calling”) helps you get consistent structured da
 
 But, don't be misled by the name—this feature doesn't _actually_ call functions for you.
 
-Instead, it creates a JSON object with the name of the function to call and the arguments to pass it, which you can use to trigger functions in your code. OpenAI models generate this JSON based on the tools you define with the [tools parameter](https://platform.openai.com/docs/api-reference/chat/create#chat/create-functions) in the API.
+Instead, it creates a JSON object with the name of the function to call and the arguments to pass, which you can use to trigger functions in your code. OpenAI models generate this JSON based on the tools you define with the [tools parameter](https://platform.openai.com/docs/api-reference/chat/create#chat/create-functions) in the API.
 
 So now that we’ve cleared that part, let’s learn _how you can use function calling with Chat Models in Vellum._
 
@@ -76,9 +76,9 @@ Here’s how the Prompt Node looks like once we added the System and the User me
 
 To use function calling with Chat Models, you first need to set up three things in the Prompt Node:
 
-1. $chat_history variable: Simply click on “Add Variable’ and write `$chat_history`;
-2. Chat generation model: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`;
-3. $chat_history block: Click on the “Add” dropdown on the right, and select “Add Chat History”;
+1. **$chat_history variable**: Simply click on `Add Variable` and write `$chat_history`
+2. **Chat generation model**: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`
+3. **$chat_history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”
 
 Here’s how the final setup should look like:
 
