@@ -33,9 +33,9 @@ By the end of this tutorial, you'll learn to do four tasks in Vellum:
 For this tutorial, we’ll create an AI-powered customer chatbot for a smartphone outlet, that will have two tools (or functions) defined:
 
 - `delivery_data`
-  - This function will require three parameters: `_Phone_`, which returns the phone's name, `_Location_`, which returns the user's location, and `_Condition_`, which returns the phone's condition.
+  - This function will require three parameters: `Phone`, which returns the phone's name, `Location`, which returns the user's location, and `Condition`, which returns the phone's condition.
 - `call_agent`
-  - This one accepts one parameter: `_Question_` which is the user's query.
+  - This one accepts one parameter: `Question` which is the user's query.
 
 <Callout intent="info">
   💡 This tutorial demonstrates how to define function calling messages in
@@ -76,9 +76,9 @@ Here’s how the Prompt Node looks like once we added the System and the User me
 
 To use function calling with Chat Models, you first need to set up three things in the Prompt Node:
 
-1. **$chat_history variable**: Simply click on “Add Variable’ and write `$chat_history`;
-2. **Chat generation model**: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`;
-3. **$chat_history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”;
+1. $chat_history variable: Simply click on “Add Variable’ and write `$chat_history`;
+2. Chat generation model: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`;
+3. $chat_history block: Click on the “Add” dropdown on the right, and select “Add Chat History”;
 
 Here’s how the final setup should look like:
 
