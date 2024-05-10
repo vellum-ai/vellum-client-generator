@@ -22,26 +22,26 @@ By the end of this tutorial, you'll learn to do four tasks in Vellum:
 - Pass `Function Call outputs` from a Workflow to your code;
 - `Run functions` with the provided arguments.
 
-<aside>
+<Callout intent="info">
   💡 Keep in mind that although we’ll run *some arbitrary functions* to close
   the response loop, we won't go into much detail on how to call external APIs
   using the generated arguments.
-</aside>
+</Callout>
 
 ## Outline
 
-For this tutorial, we’ll create an AI-powered customer chatbot for a smartphone outlet, that will have two tools (`function calling` messages) defined:
+For this tutorial, we’ll create an AI-powered customer chatbot for a smartphone outlet, that will have two tools (or functions) defined:
 
 - `delivery_data`
-  - This function will require three parameters: "_Phone_," which returns the phone's name, "_Location_," which returns the user's location, and "_Condition_," which returns the phone's condition.
+  - This function will require three parameters: `_Phone_`, which returns the phone's name, `_Location_`, which returns the user's location, and `_Condition_`, which returns the phone's condition.
 - `call_agent`
-  - This one accepts one parameter: "_Question_" which is the user's query.
+  - This one accepts one parameter: `_Question_` which is the user's query.
 
-<aside>
+<Callout intent="info">
   💡 This tutorial demonstrates how to define function calling messages in
   Prompt Nodes within Workflows. However, they can also be configured in your
   Prompt Variants in your Prompt Sandbox.
-</aside>
+</Callout>
 
 ## Step 1: Setting up Messages and Conversation History
 
@@ -57,12 +57,12 @@ Now let’s set up the messages.
 
 ### System Message
 
-First we’ll start by adding a `system message`that tells the model to classify user intents. These models can hallucinate, so we’ll explicitly tell the model to ask for clarification if there's incomplete information. Here’s the system message we used:
+First we’ll start by adding a `system message` that tells the model to classify user intents. These models can hallucinate, so we’ll explicitly tell the model to ask for clarification if there's incomplete information. Here’s the system message we used:
 
-<aside>
+<Callout intent="info">
   💬 You're great at classifying user intents. Don't assume which values to use
   in functions—ask for clarification if needed.
-</aside>
+</Callout>
 
 ### User Message
 
@@ -76,7 +76,7 @@ Here’s how the Prompt Node looks like once we added the System and the User me
 
 To use function calling with Chat Models, you first need to set up three things in the Prompt Node:
 
-1. **$chat_history variable**: Simply click on “Add Variable’ and write _$chat_history_;
+1. **$chat_history variable**: Simply click on “Add Variable’ and write `$chat_history`;
 2. **Chat generation model**: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`;
 3. **$chat_history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”;
 
@@ -96,7 +96,7 @@ When you click that box, you can change the function's name and add custom descr
 
 ![Edit Function](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/edit-function.png)
 
-You'll notice there are two options available to define these functions: "`Form`" and "`Upload`". The "Form" option allows you to define your function calling message using the UI, while the "Upload" option enables you to upload a JSON or YAML file. The uploaded file will automatically map its values to the fields.
+You'll notice there are two options available to define these functions: `Form` and `Upload`. The `Form` option allows you to define your function calling message using the UI, while the `Upload` option enables you to upload a JSON or YAML file. The uploaded file will automatically map its values to the fields.
 
 In this tutorial, we’ll upload this JSON file for the `delivery_data` function that has three properties (condition, phone, location):
 
@@ -137,7 +137,7 @@ Have in mind that you can also check the "`Forced`" box to ensure the model alwa
 
 ![Toggle Forced Function](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/forced-function.png)
 
-Now let’s create the other Function block `call_agent`.Using the same process as earlier, we add this function as well, which has one required parameter, "question" which is the user's query:
+Now let’s create the other Function block `call_agent`. Using the same process as earlier, we add this function as well, which has one required parameter, "question" which is the user's query:
 
 ![Call Agent Function](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/edit-function-3.png)
 
@@ -145,10 +145,10 @@ Now that we defined everything, our setup looks like this:
 
 ![Prompt Node With Functions](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/prompt-node-finished.png)
 
-<aside>
-💡 With this setup, our OpenAI API calls will take into account the system and user message, the chat_history, and two function calling messages to generate responses to a given user query.
+<Callout intent="info">
+💡 With this setup, our OpenAI API calls will take into account the system and user message, the chat history, and two function calling messages to generate responses to a given user query.
 
-</aside>
+</Callout>
 
 ## Step 3: Testing the API call
 
@@ -221,13 +221,13 @@ You can now deploy your Workflow in your code.
 
 Once deployed, you’ll need to invoke it using two input variables:
 
-- chat_history – CHAT_HISTORY
-- user – STRING
+- `chat_history` – `CHAT_HISTORY`
+- `user` – `STRING`
 
 And the API call will return, two output variables:
 
-- function_call – FUNCTION_CALL
-- answer – STRING
+- `function_call` – `FUNCTION_CALL`
+- `answer` – `STRING`
 
 ## Step 5: Adding arbitrary functions
 
@@ -235,17 +235,19 @@ To showcase how this Workflow works, in our code, we wrote arbitrary functions t
 
 For the `delivery_data` function we’ll retrieve static message:
 
-<aside>
+<Callout intent="info">
   💬 For delivery options in San Diego: You can get same-day delivery if you
   order before noon, with deliveries happening between 1:00 PM and 8:00 PM. If
   you miss the deadline, don't worry! You can still get your order the next day
   if you place it after noon, with deliveries scheduled between 10:00 AM and
   6:00 PM.
-</aside>
+</Callout>
 
 For the `call_agent` function we send another static message:
 
-<aside>💬 Please wait until I connect you with an agent…</aside>
+<Callout intent="info">
+  💬 Please wait until I connect you with an agent…
+</Callout>
 
 This is how our code looks like:
 
@@ -271,7 +273,7 @@ Now, let’s see how this works!
 
 ### **Case 1: Ask incomplete delivery questions**
 
-Works as intended, the model asks about the other required parameter: _location_.
+Works as intended, the model asks about the other required parameter: `_location_`.
 
 ![Test Case 1](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/test-chat-1.png)
 
