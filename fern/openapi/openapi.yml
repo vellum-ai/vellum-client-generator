@@ -416,7 +416,8 @@ paths:
   /v1/documents/{id}:
     get:
       operationId: documents_retrieve
-      description: Retrieve a Document via its Vellum-generated ID.
+      description: Retrieve a Document, keying off of either its Vellum-generated
+        ID or its external ID.
       parameters:
       - in: path
         name: id
@@ -439,8 +440,8 @@ paths:
       x-fern-availability: beta
     patch:
       operationId: documents_partial_update
-      description: Update a Document, keying off of its Vellum-generated ID. Particularly
-        useful for updating its metadata.
+      description: Update a Document, keying off of either its Vellum-generated ID
+        or its external ID. Particularly useful for updating its metadata.
       parameters:
       - in: path
         name: id
@@ -451,6 +452,7 @@ paths:
         required: true
       tags:
       - documents
+      - document-indexes
       requestBody:
         content:
           multipart/form-data:
@@ -471,6 +473,8 @@ paths:
       x-fern-availability: beta
     delete:
       operationId: documents_destroy
+      description: Delete a Document, keying off of either its Vellum-generated ID
+        or its external ID.
       parameters:
       - in: path
         name: id
@@ -481,6 +485,7 @@ paths:
         required: true
       tags:
       - documents
+      - document-indexes
       security:
       - apiKeyAuth: []
       responses:
