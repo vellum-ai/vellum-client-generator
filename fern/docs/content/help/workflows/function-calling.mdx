@@ -39,8 +39,8 @@ For this tutorial, we’ll create an AI-powered customer chatbot for a smartphon
 
 <Callout intent="info">
   💡 This tutorial demonstrates how to define function calling messages in
-  Prompt Nodes within Workflows. However, they can also be configured in your
-  Prompt Variants in your Prompt Sandbox.
+  Prompt Nodes within Workflows. However, they can also be configured in 
+  Prompt Variants within a Prompt Sandbox.
 </Callout>
 
 ## Step 1: Setting up Messages and Conversation History
@@ -68,7 +68,7 @@ First we’ll start by adding a `system message` that tells the model to classif
 
 Next, we'll create a dynamic variable `msg` , and add it in the `user message` to ensure it automatically updates with the variable's content.
 
-Here’s how the Prompt Node looks like once we added the System and the User message:
+Here’s what the Prompt Node looks like once we've added the System and the User message:
 
 ![Prompt Node Setup](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/prompt-node-setup.png)
 
@@ -80,7 +80,7 @@ To use function calling with Chat Models, you first need to set up three things 
 2. **Chat generation model**: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`
 3. **$chat_history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”
 
-Here’s how the final setup should look like:
+Here’s what the prompt should look like after you've completed the final step:
 
 ![Prompt Node With Chat History](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/prompt-node-chat-history.png)
 
@@ -92,11 +92,13 @@ To include a `Function` block, simply select it from the "Add" dropdown menu. On
 
 ![Add Function](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/add-function.png)
 
-When you click that box, you can change the function's name and add custom description and parameters:
+When you click that box, you can change the function's name and add a custom description and parameters:
 
 ![Edit Function](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/edit-function.png)
 
 You'll notice there are two options available to define these functions: `Form` and `Upload`. The `Form` option allows you to define your function calling message using the UI, while the `Upload` option enables you to upload a JSON or YAML file. The uploaded file will automatically map its values to the fields.
+
+You might upload a file if you already have your functions defined in in your codebase and want to track their source of truth there.
 
 In this tutorial, we’ll upload this JSON file for the `delivery_data` function that has three properties (condition, phone, location):
 
@@ -181,7 +183,7 @@ In our case, we add a Templating Node, where we extract the Prompt Node’s outp
 
 Finally, you can add a `Final Output` node to pass the function call into your code.
 
-Here’s how the final Workflow looks like:
+Here’s what the final Workflow looks like:
 
 ![Final Workflow](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/final-workflow.png)
 
@@ -203,7 +205,7 @@ To branch out the model's responses, you’ll first need to add a **`Templating 
 
 Next, you’ll add a Conditional Node, where you’ll verify if the output type is a `FUNCTION_CALL`. If it is, you can divert to the function calling flow; otherwise, proceed with the alternative path.
 
-Here’s how the setup should look like:
+Here’s what the setup should look like:
 
 ![Conditional Node Branching](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/conditional-node.png)
 
@@ -249,7 +251,7 @@ For the `call_agent` function we send another static message:
   💬 Please wait until I connect you with an agent…
 </Callout>
 
-This is how our code looks like:
+This is what our code looks like:
 
 ```jsx
 import json
