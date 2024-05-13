@@ -39,8 +39,8 @@ For this tutorial, we’ll create an AI-powered customer chatbot for a smartphon
 
 <Callout intent="info">
   💡 This tutorial demonstrates how to define function calling messages in
-  Prompt Nodes within Workflows. However, they can also be configured in 
-  Prompt Variants within a Prompt Sandbox.
+  Prompt Nodes within Workflows. However, they can also be configured in Prompt
+  Variants within a Prompt Sandbox.
 </Callout>
 
 ## Step 1: Setting up Messages and Conversation History
@@ -76,9 +76,9 @@ Here’s what the Prompt Node looks like once we've added the System and the Use
 
 To use function calling with Chat Models, you first need to set up three things in the Prompt Node:
 
-1. **$chat_history variable**: Simply click on `Add Variable` and write `$chat_history`
+1. **Chat history variable**: Simply click on `Add Variable` and write `$chat_history`
 2. **Chat generation model**: Click on the model dropdown and select the latest GPT-4 turbo model, or `GPT-4 Turbo 04/09/2024`
-3. **$chat_history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”
+3. **Chat history block**: Click on the “Add” dropdown on the right, and select “Add Chat History”
 
 Here’s what the prompt should look like after you've completed the final step:
 
@@ -296,3 +296,8 @@ The model accurately follows the instructions and asks the user if they want to 
 The model successfully runs the `call_agent` function and outputs the arbitrary answer we defined:
 
 ![Test Case 4](https://storage.googleapis.com/vellum-public/help-docs/function-calling-in-workflows/test-chat-4.png)
+
+## Conclusion
+
+Hopefully, through this guide, you've learned how to effectively set up and utilize function calling with Chat Models in Vellum Workflows.
+By following the steps outlined, you can define functions or tools, enable models to auto-select or enforce function execution, pass function call outputs to your code, and run functions with the provided arguments. This powerful feature allows you to create sophisticated, AI-powered workflows that can handle complex user interactions and seamlessly integrate with your existing systems.
