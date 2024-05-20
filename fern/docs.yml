@@ -63,9 +63,6 @@ navigation:
           - page: Monitoring Production Trends
             path: ./docs/content/help/deployments/monitoring-production-trends.mdx
             slug: monitoring
-          - page: Replaying Requests & Backtesting
-            path: ./docs/content/help/deployments/replaying-requests-and-backtesting.mdx
-            slug: replaying-requests
           - page: Managing Releases
             path: ./docs/content/help/deployments/managing-releases.mdx
             slug: managing-releases
