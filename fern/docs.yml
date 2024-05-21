@@ -106,9 +106,6 @@ navigation:
           - page: Function Calling with Chat Models
             path: ./docs/content/help/workflows/function-calling.mdx
             slug: function-calling-with-chat-models
-          - page: Examples
-            path: ./docs/content/help/workflows/examples.mdx
-            slug: examples
       - section: Security
         contents:
           - page: HMAC Authentication
