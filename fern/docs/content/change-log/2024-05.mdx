@@ -8,11 +8,31 @@ _May 22th, 2024_
 
 You can now double-click on resizable row and column edges in both Comparison and Chat modes to auto-expand that row/column to its maximum size. If already at maximum size, double-clicking will reset them to their default size. Additionally, in Comparison mode, double-clicking on cell corners will auto-resize both dimensions simultaneously.
 
+## Improved Image Support in Chat History Fields
+
+_May 22th, 2024_
+
+We've made several changes to enhance the UX of working with images. Chat History messages now include an explicit content-type selector, making it easier to work with image content using supported models. You can now add publicly-hosted images in multiple ways: by pasting an image URL, pasting a copied image, or dragging and dropping an image from another window.
+
+Additionally, we've added limited support for embedded images. You can embed an image directly into the prompt by copy/pasting or dragging/dropping an image file from your computer's file browser. This method has a 1MB size limit and is an interim solution as we continue to explore image upload and hosting options.
+
+<div style="display: grid; grid-template-areas: 'a b' 'c c'; gap: 12px">
+  <div style='grid-area: a'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/improved-image-support.png' />
+  </div>
+  <div style='grid-area: b'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/content-type-select.png' />
+  </div>
+  <div style='grid-area: c'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/image-config-modal.png' />
+  </div>
+</div>
+
 ## Gemini 1.5 Flash
 
 _May 20th, 2024_
 
-Google's Gemini 1.5 Flash model is now available on Vellum. You can add it to your workspace from the [models page](https://app.vellum.ai/models).
+Google's [Gemini 1.5 Flash model](https://deepmind.google/technologies/gemini/flash/) is now available in Vellum. You can add it to your workspace from the [models page](https://app.vellum.ai/models).
 
 ## Llama 3 Models on Bedrock
 
