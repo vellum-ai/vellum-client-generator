@@ -1440,8 +1440,6 @@ components:
       - $ref: '#/components/schemas/StringVariableValue'
       - $ref: '#/components/schemas/NumberVariableValue'
       - $ref: '#/components/schemas/JsonVariableValue'
-      - $ref: '#/components/schemas/ChatHistoryVariableValue'
-      - $ref: '#/components/schemas/SearchResultsVariableValue'
       - $ref: '#/components/schemas/ErrorVariableValue'
       - $ref: '#/components/schemas/FunctionCallVariableValue'
       - $ref: '#/components/schemas/ImageVariableValue'
@@ -1451,11 +1449,26 @@ components:
           STRING: '#/components/schemas/StringVariableValue'
           NUMBER: '#/components/schemas/NumberVariableValue'
           JSON: '#/components/schemas/JsonVariableValue'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
-          SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
           IMAGE: '#/components/schemas/ImageVariableValue'
+    ArrayVellumValueItem:
+      oneOf:
+      - $ref: '#/components/schemas/StringVellumValue'
+      - $ref: '#/components/schemas/NumberVellumValue'
+      - $ref: '#/components/schemas/JsonVellumValue'
+      - $ref: '#/components/schemas/ImageVellumValue'
+      - $ref: '#/components/schemas/FunctionCallVellumValue'
+      - $ref: '#/components/schemas/ErrorVellumValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVellumValue'
+          NUMBER: '#/components/schemas/NumberVellumValue'
+          JSON: '#/components/schemas/JsonVellumValue'
+          IMAGE: '#/components/schemas/ImageVellumValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
+          ERROR: '#/components/schemas/ErrorVellumValue'
     BasicVectorizerIntfloatMultilingualE5Large:
       type: object
       description: Basic vectorizer for intfloat/multilingual-e5-large.
@@ -1548,19 +1561,6 @@ components:
             $ref: '#/components/schemas/ChatMessageRequest'
       required:
       - name
-      - type
-      - value
-    ChatHistoryVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          nullable: true
-      required:
       - type
       - value
     ChatMessage:
@@ -2819,44 +2819,6 @@ components:
       - outputs
       - state
       - ts
-    FulfilledFunctionCall:
-      type: object
-      description: The final resolved function call value.
-      properties:
-        state:
-          $ref: '#/components/schemas/FulfilledEnum'
-        arguments:
-          type: object
-          additionalProperties: {}
-        id:
-          type: string
-          nullable: true
-        name:
-          type: string
-      required:
-      - arguments
-      - name
-      - state
-    FulfilledFunctionCallRequest:
-      type: object
-      description: The final resolved function call value.
-      properties:
-        state:
-          $ref: '#/components/schemas/FulfilledEnum'
-        arguments:
-          type: object
-          additionalProperties: {}
-        id:
-          type: string
-          nullable: true
-          minLength: 1
-        name:
-          type: string
-          minLength: 1
-      required:
-      - arguments
-      - name
-      - state
     FulfilledPromptExecutionMeta:
       type: object
       description: The subset of the metadata tracked by Vellum during prompt execution
@@ -2910,14 +2872,22 @@ components:
       - output_values
       - state
     FunctionCall:
-      oneOf:
-      - $ref: '#/components/schemas/FulfilledFunctionCall'
-      - $ref: '#/components/schemas/RejectedFunctionCall'
-      discriminator:
-        propertyName: state
-        mapping:
-          FULFILLED: '#/components/schemas/FulfilledFunctionCall'
-          REJECTED: '#/components/schemas/RejectedFunctionCall'
+      type: object
+      description: The final resolved function call value.
+      properties:
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+      required:
+      - arguments
+      - name
     FunctionCallChatMessageContent:
       type: object
       description: A function call value that is used in a chat message.
@@ -2976,6 +2946,25 @@ components:
       type: string
       enum:
       - FUNCTION_CALL
+    FunctionCallRequest:
+      type: object
+      description: The final resolved function call value.
+      properties:
+        arguments:
+          type: object
+          additionalProperties: {}
+        id:
+          type: string
+          nullable: true
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+      required:
+      - arguments
+      - name
     FunctionCallVariableValue:
       type: object
       properties:
@@ -2995,7 +2984,9 @@ components:
         type:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
-          $ref: '#/components/schemas/FunctionCall'
+          allOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          nullable: true
       required:
       - type
       - value
@@ -3216,6 +3207,19 @@ components:
       enum:
       - IMAGE
     ImageVariableValue:
+      type: object
+      description: A base Vellum primitive value representing an image.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumImage'
+          nullable: true
+      required:
+      - type
+      - value
+    ImageVellumValue:
       type: object
       description: A base Vellum primitive value representing an image.
       properties:
@@ -3739,7 +3743,7 @@ components:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
-          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
         name:
           type: string
@@ -3755,7 +3759,7 @@ components:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
-          - $ref: '#/components/schemas/FulfilledFunctionCallRequest'
+          - $ref: '#/components/schemas/FunctionCallRequest'
           nullable: true
         name:
           type: string
@@ -4110,7 +4114,7 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/ArrayVariableValueItem'
+            $ref: '#/components/schemas/ArrayVellumValueItem'
           nullable: true
         node_output_id:
           type: string
@@ -4313,6 +4317,19 @@ components:
       properties:
         type:
           type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
+    NumberVellumValue:
+      type: object
+      description: A value representing a number.
+      properties:
+        type:
+          $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
@@ -4832,23 +4849,6 @@ components:
       - id
       - state
       - ts
-    RejectedFunctionCall:
-      type: object
-      description: Returned if the function call failed to parse for some reason.
-      properties:
-        state:
-          $ref: '#/components/schemas/RejectedEnum'
-        error:
-          $ref: '#/components/schemas/VellumError'
-        id:
-          type: string
-          nullable: true
-        name:
-          type: string
-      required:
-      - error
-      - name
-      - state
     RejectedPromptExecutionMeta:
       type: object
       description: The subset of the metadata tracked by Vellum during prompt execution
@@ -5181,19 +5181,6 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
-    SearchResultsVariableValue:
-      type: object
-      properties:
-        type:
-          type: string
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResult'
-          nullable: true
-      required:
-      - type
-      - value
     SearchWeightsRequest:
       type: object
       properties:
@@ -6117,7 +6104,7 @@ components:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
-          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
       required:
       - name
@@ -6407,7 +6394,7 @@ components:
           $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
-          - $ref: '#/components/schemas/FulfilledFunctionCall'
+          - $ref: '#/components/schemas/FunctionCall'
           nullable: true
         output_variable_id:
           type: string
@@ -7439,7 +7426,7 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/ArrayVariableValueItem'
+            $ref: '#/components/schemas/ArrayVellumValueItem'
           nullable: true
       required:
       - id
