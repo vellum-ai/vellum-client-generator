@@ -3608,6 +3608,18 @@ components:
           type: string
           nullable: true
           minLength: 1
+    MetricEnum:
+      type: string
+      enum:
+      - METRIC
+    MetricNodeResult:
+      type: object
+      description: A Node Result Event emitted from a Metric Node.
+      properties:
+        type:
+          $ref: '#/components/schemas/MetricEnum'
+      required:
+      - type
     NamedScenarioInputChatHistoryVariableValueRequest:
       type: object
       description: Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
@@ -7336,6 +7348,7 @@ components:
       - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
       - $ref: '#/components/schemas/SubworkflowNodeResult'
+      - $ref: '#/components/schemas/MetricNodeResult'
       discriminator:
         propertyName: type
         mapping:
@@ -7347,6 +7360,7 @@ components:
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
           SUBWORKFLOW: '#/components/schemas/SubworkflowNodeResult'
+          METRIC: '#/components/schemas/MetricNodeResult'
     WorkflowNodeResultEvent:
       oneOf:
       - $ref: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
