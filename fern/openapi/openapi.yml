@@ -1344,6 +1344,11 @@ components:
           description: The ID of the entity you would like to move.
       required:
       - entity_id
+    AddOpenaiApiKeyEnum:
+      enum:
+      - true
+      type: boolean
+      description: '* `True` - True'
     ApiNodeResult:
       type: object
       description: A Node Result Event emitted from an API Node.
@@ -1451,6 +1456,78 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
           IMAGE: '#/components/schemas/ImageVariableValue'
+    BasicVectorizerIntfloatMultilingualE5Large:
+      type: object
+      description: Basic vectorizer for intfloat/multilingual-e5-large.
+      properties:
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        model_name:
+          $ref: '#/components/schemas/intfloat-multilingual-e5-largeEnum'
+      required:
+      - model_name
+    BasicVectorizerIntfloatMultilingualE5LargeRequest:
+      type: object
+      description: Basic vectorizer for intfloat/multilingual-e5-large.
+      properties:
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        model_name:
+          $ref: '#/components/schemas/intfloat-multilingual-e5-largeEnum'
+      required:
+      - model_name
+    BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1:
+      type: object
+      description: Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+      properties:
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        model_name:
+          $ref: '#/components/schemas/sentence-transformers-multi-qa-mpnet-base-cos-v1Enum'
+      required:
+      - model_name
+    BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request:
+      type: object
+      description: Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+      properties:
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        model_name:
+          $ref: '#/components/schemas/sentence-transformers-multi-qa-mpnet-base-cos-v1Enum'
+      required:
+      - model_name
+    BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1:
+      type: object
+      description: Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+      properties:
+        model_name:
+          $ref: '#/components/schemas/sentence-transformers-multi-qa-mpnet-base-dot-v1Enum'
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - model_name
+    BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request:
+      type: object
+      description: Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+      properties:
+        model_name:
+          $ref: '#/components/schemas/sentence-transformers-multi-qa-mpnet-base-dot-v1Enum'
+        config:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - model_name
     ChatHistoryEnum:
       type: string
       enum:
@@ -1865,6 +1942,28 @@ components:
       required:
       - document_index_id
       - id
+    DocumentIndexChunking:
+      oneOf:
+      - $ref: '#/components/schemas/ReductoChunking'
+      - $ref: '#/components/schemas/SentenceChunking'
+      - $ref: '#/components/schemas/TokenOverlappingWindowChunking'
+      discriminator:
+        propertyName: chunker_name
+        mapping:
+          reducto-chunker: '#/components/schemas/ReductoChunking'
+          sentence-chunker: '#/components/schemas/SentenceChunking'
+          token-overlapping-window-chunker: '#/components/schemas/TokenOverlappingWindowChunking'
+    DocumentIndexChunkingRequest:
+      oneOf:
+      - $ref: '#/components/schemas/ReductoChunkingRequest'
+      - $ref: '#/components/schemas/SentenceChunkingRequest'
+      - $ref: '#/components/schemas/TokenOverlappingWindowChunkingRequest'
+      discriminator:
+        propertyName: chunker_name
+        mapping:
+          reducto-chunker: '#/components/schemas/ReductoChunkingRequest'
+          sentence-chunker: '#/components/schemas/SentenceChunkingRequest'
+          token-overlapping-window-chunker: '#/components/schemas/TokenOverlappingWindowChunkingRequest'
     DocumentIndexCreateRequest:
       type: object
       properties:
@@ -1896,9 +1995,7 @@ components:
             * `STAGING` - Staging
             * `PRODUCTION` - Production
         indexing_config:
-          type: object
-          additionalProperties: {}
-          description: Configuration representing how documents should be indexed
+          $ref: '#/components/schemas/DocumentIndexIndexingConfigRequest'
         copy_documents_from_index_id:
           type: string
           format: uuid
@@ -1908,6 +2005,38 @@ components:
       - indexing_config
       - label
       - name
+    DocumentIndexIndexingConfig:
+      type: object
+      properties:
+        vectorizer:
+          $ref: '#/components/schemas/IndexingConfigVectorizer'
+        chunking:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexChunking'
+          nullable: true
+          default:
+            chunker_name: sentence-chunker
+            chunker_config:
+              character_limit: 1000
+              min_overlap_ratio: 0.5
+      required:
+      - vectorizer
+    DocumentIndexIndexingConfigRequest:
+      type: object
+      properties:
+        vectorizer:
+          $ref: '#/components/schemas/IndexingConfigVectorizerRequest'
+        chunking:
+          allOf:
+          - $ref: '#/components/schemas/DocumentIndexChunkingRequest'
+          nullable: true
+          default:
+            chunker_name: sentence-chunker
+            chunker_config:
+              character_limit: 1000
+              min_overlap_ratio: 0.5
+      required:
+      - vectorizer
     DocumentIndexRead:
       type: object
       properties:
@@ -1945,9 +2074,7 @@ components:
             * `STAGING` - Staging
             * `PRODUCTION` - Production
         indexing_config:
-          type: object
-          additionalProperties: {}
-          description: Configuration representing how documents should be indexed
+          $ref: '#/components/schemas/DocumentIndexIndexingConfig'
       required:
       - created
       - id
@@ -3040,6 +3167,28 @@ components:
       required:
       - completion
       - completion_index
+    HkunlpInstructorXlVectorizer:
+      type: object
+      description: Vectorizer for hkunlp/instructor-xl.
+      properties:
+        model_name:
+          $ref: '#/components/schemas/hkunlp-instructor-xlEnum'
+        config:
+          $ref: '#/components/schemas/InstructorVectorizerConfig'
+      required:
+      - config
+      - model_name
+    HkunlpInstructorXlVectorizerRequest:
+      type: object
+      description: Vectorizer for hkunlp/instructor-xl.
+      properties:
+        model_name:
+          $ref: '#/components/schemas/hkunlp-instructor-xlEnum'
+        config:
+          $ref: '#/components/schemas/InstructorVectorizerConfigRequest'
+      required:
+      - config
+      - model_name
     ImageChatMessageContent:
       type: object
       description: An image value that is used in a chat message.
@@ -3079,6 +3228,44 @@ components:
       required:
       - type
       - value
+    IndexingConfigVectorizer:
+      oneOf:
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3Small'
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3Large'
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbeddingAda002'
+      - $ref: '#/components/schemas/BasicVectorizerIntfloatMultilingualE5Large'
+      - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1'
+      - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1'
+      - $ref: '#/components/schemas/HkunlpInstructorXlVectorizer'
+      discriminator:
+        propertyName: model_name
+        mapping:
+          text-embedding-3-small: '#/components/schemas/OpenAIVectorizerTextEmbedding3Small'
+          text-embedding-3-large: '#/components/schemas/OpenAIVectorizerTextEmbedding3Large'
+          text-embedding-ada-002: '#/components/schemas/OpenAIVectorizerTextEmbeddingAda002'
+          intfloat/multilingual-e5-large: '#/components/schemas/BasicVectorizerIntfloatMultilingualE5Large'
+          sentence-transformers/multi-qa-mpnet-base-cos-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1'
+          sentence-transformers/multi-qa-mpnet-base-dot-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1'
+          hkunlp/instructor-xl: '#/components/schemas/HkunlpInstructorXlVectorizer'
+    IndexingConfigVectorizerRequest:
+      oneOf:
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3SmallRequest'
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3LargeRequest'
+      - $ref: '#/components/schemas/OpenAIVectorizerTextEmbeddingAda002Request'
+      - $ref: '#/components/schemas/BasicVectorizerIntfloatMultilingualE5LargeRequest'
+      - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request'
+      - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request'
+      - $ref: '#/components/schemas/HkunlpInstructorXlVectorizerRequest'
+      discriminator:
+        propertyName: model_name
+        mapping:
+          text-embedding-3-small: '#/components/schemas/OpenAIVectorizerTextEmbedding3SmallRequest'
+          text-embedding-3-large: '#/components/schemas/OpenAIVectorizerTextEmbedding3LargeRequest'
+          text-embedding-ada-002: '#/components/schemas/OpenAIVectorizerTextEmbeddingAda002Request'
+          intfloat/multilingual-e5-large: '#/components/schemas/BasicVectorizerIntfloatMultilingualE5LargeRequest'
+          sentence-transformers/multi-qa-mpnet-base-cos-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request'
+          sentence-transformers/multi-qa-mpnet-base-dot-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request'
+          hkunlp/instructor-xl: '#/components/schemas/HkunlpInstructorXlVectorizerRequest'
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -3162,6 +3349,36 @@ components:
       - node_id
       - node_result_id
       - state
+    InstructorVectorizerConfig:
+      type: object
+      description: Configuration for using an Instructor vectorizer.
+      properties:
+        instruction_domain:
+          type: string
+        instruction_query_text_type:
+          type: string
+        instruction_document_text_type:
+          type: string
+      required:
+      - instruction_document_text_type
+      - instruction_domain
+      - instruction_query_text_type
+    InstructorVectorizerConfigRequest:
+      type: object
+      description: Configuration for using an Instructor vectorizer.
+      properties:
+        instruction_domain:
+          type: string
+        instruction_query_text_type:
+          type: string
+          minLength: 1
+        instruction_document_text_type:
+          type: string
+          minLength: 1
+      required:
+      - instruction_document_text_type
+      - instruction_domain
+      - instruction_query_text_type
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object
@@ -4091,6 +4308,88 @@ components:
       required:
       - type
       - value
+    OpenAIVectorizerConfig:
+      type: object
+      description: Configuration for using an OpenAI vectorizer.
+      properties:
+        add_openai_api_key:
+          allOf:
+          - $ref: '#/components/schemas/AddOpenaiApiKeyEnum'
+          default: true
+    OpenAIVectorizerConfigRequest:
+      type: object
+      description: Configuration for using an OpenAI vectorizer.
+      properties:
+        add_openai_api_key:
+          allOf:
+          - $ref: '#/components/schemas/AddOpenaiApiKeyEnum'
+          default: true
+    OpenAIVectorizerTextEmbedding3Large:
+      type: object
+      description: OpenAI vectorizer for text-embedding-3-large.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfig'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-3-largeEnum'
+      required:
+      - config
+      - model_name
+    OpenAIVectorizerTextEmbedding3LargeRequest:
+      type: object
+      description: OpenAI vectorizer for text-embedding-3-large.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfigRequest'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-3-largeEnum'
+      required:
+      - config
+      - model_name
+    OpenAIVectorizerTextEmbedding3Small:
+      type: object
+      description: OpenAI vectorizer for text-embedding-3-small.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfig'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-3-smallEnum'
+      required:
+      - config
+      - model_name
+    OpenAIVectorizerTextEmbedding3SmallRequest:
+      type: object
+      description: OpenAI vectorizer for text-embedding-3-small.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfigRequest'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-3-smallEnum'
+      required:
+      - config
+      - model_name
+    OpenAIVectorizerTextEmbeddingAda002:
+      type: object
+      description: OpenAI vectorizer for text-embedding-ada-002.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfig'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-ada-002Enum'
+      required:
+      - config
+      - model_name
+    OpenAIVectorizerTextEmbeddingAda002Request:
+      type: object
+      description: OpenAI vectorizer for text-embedding-ada-002.
+      properties:
+        config:
+          $ref: '#/components/schemas/OpenAIVectorizerConfigRequest'
+        model_name:
+          $ref: '#/components/schemas/text-embedding-ada-002Enum'
+      required:
+      - config
+      - model_name
     PaginatedDocumentIndexReadList:
       type: object
       properties:
@@ -4416,6 +4715,48 @@ components:
           nullable: true
           minLength: 1
           description: The raw URL to send to the model host.
+    ReductoChunkerConfig:
+      type: object
+      description: Configuration for Reducto chunking
+      properties:
+        character_limit:
+          type: integer
+          minimum: 0.0
+          default: 1000
+    ReductoChunkerConfigRequest:
+      type: object
+      description: Configuration for Reducto chunking
+      properties:
+        character_limit:
+          type: integer
+          minimum: 0.0
+          default: 1000
+    ReductoChunking:
+      type: object
+      description: Reducto chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/reducto-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/ReductoChunkerConfig'
+          default:
+            character_limit: 1000
+      required:
+      - chunker_name
+    ReductoChunkingRequest:
+      type: object
+      description: Reducto chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/reducto-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/ReductoChunkerConfigRequest'
+          default:
+            character_limit: 1000
+      required:
+      - chunker_name
     RejectedEnum:
       type: string
       enum:
@@ -4858,6 +5199,62 @@ components:
           minimum: 0.0
           default: 0.2
           description: The relative weight to give to keywords
+    SentenceChunkerConfig:
+      type: object
+      description: Configuration for sentence chunking
+      properties:
+        character_limit:
+          type: integer
+          minimum: 0.0
+          default: 1000
+        min_overlap_ratio:
+          type: number
+          format: double
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.5
+    SentenceChunkerConfigRequest:
+      type: object
+      description: Configuration for sentence chunking
+      properties:
+        character_limit:
+          type: integer
+          minimum: 0.0
+          default: 1000
+        min_overlap_ratio:
+          type: number
+          format: double
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.5
+    SentenceChunking:
+      type: object
+      description: Sentence chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/sentence-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/SentenceChunkerConfig'
+          default:
+            character_limit: 1000
+            min_overlap_ratio: 0.5
+      required:
+      - chunker_name
+    SentenceChunkingRequest:
+      type: object
+      description: Sentence chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/sentence-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/SentenceChunkerConfigRequest'
+          default:
+            character_limit: 1000
+            min_overlap_ratio: 0.5
+      required:
+      - chunker_name
     SlimDeploymentRead:
       type: object
       properties:
@@ -6422,6 +6819,62 @@ components:
       required:
       - evaluation_values
       - input_values
+    TokenOverlappingWindowChunkerConfig:
+      type: object
+      description: Configuration for token overlapping window chunking
+      properties:
+        token_limit:
+          type: integer
+          minimum: 0.0
+          default: 250
+        overlap_ratio:
+          type: number
+          format: double
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.5
+    TokenOverlappingWindowChunkerConfigRequest:
+      type: object
+      description: Configuration for token overlapping window chunking
+      properties:
+        token_limit:
+          type: integer
+          minimum: 0.0
+          default: 250
+        overlap_ratio:
+          type: number
+          format: double
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.5
+    TokenOverlappingWindowChunking:
+      type: object
+      description: Token overlapping window chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/token-overlapping-window-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/TokenOverlappingWindowChunkerConfig'
+          default:
+            token_limit: 250
+            overlap_ratio: 0.5
+      required:
+      - chunker_name
+    TokenOverlappingWindowChunkingRequest:
+      type: object
+      description: Token overlapping window chunking
+      properties:
+        chunker_name:
+          $ref: '#/components/schemas/token-overlapping-window-chunkerEnum'
+        chunker_config:
+          allOf:
+          - $ref: '#/components/schemas/TokenOverlappingWindowChunkerConfigRequest'
+          default:
+            token_limit: 250
+            overlap_ratio: 0.5
+      required:
+      - chunker_name
     UploadDocumentBodyRequest:
       type: object
       properties:
@@ -7544,6 +7997,46 @@ components:
         mapping:
           WORKFLOW: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
           NODE: '#/components/schemas/WorkflowExecutionNodeResultEvent'
+    hkunlp-instructor-xlEnum:
+      type: string
+      enum:
+      - hkunlp/instructor-xl
+    intfloat-multilingual-e5-largeEnum:
+      type: string
+      enum:
+      - intfloat/multilingual-e5-large
+    reducto-chunkerEnum:
+      type: string
+      enum:
+      - reducto-chunker
+    sentence-chunkerEnum:
+      type: string
+      enum:
+      - sentence-chunker
+    sentence-transformers-multi-qa-mpnet-base-cos-v1Enum:
+      type: string
+      enum:
+      - sentence-transformers/multi-qa-mpnet-base-cos-v1
+    sentence-transformers-multi-qa-mpnet-base-dot-v1Enum:
+      type: string
+      enum:
+      - sentence-transformers/multi-qa-mpnet-base-dot-v1
+    text-embedding-3-largeEnum:
+      type: string
+      enum:
+      - text-embedding-3-large
+    text-embedding-3-smallEnum:
+      type: string
+      enum:
+      - text-embedding-3-small
+    text-embedding-ada-002Enum:
+      type: string
+      enum:
+      - text-embedding-ada-002
+    token-overlapping-window-chunkerEnum:
+      type: string
+      enum:
+      - token-overlapping-window-chunker
   securitySchemes:
     apiKeyAuth:
       type: apiKey
