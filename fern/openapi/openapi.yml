@@ -7171,6 +7171,11 @@ components:
           nullable: true
           description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
             representing the quality of the output. 0 is the worst, 1 is the best.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Optionally provide additional metadata about the feedback submission.
         timestamp:
           type: number
           format: double
@@ -7212,6 +7217,11 @@ components:
           nullable: true
           description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
             representing the quality of the output. 0 is the worst, 1 is the best.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Optionally provide additional metadata about the feedback submission.
         timestamp:
           type: number
           format: double
@@ -7252,6 +7262,11 @@ components:
           nullable: true
           description: Optionally provide a decimal number between 0.0 and 1.0 (inclusive)
             representing the quality of the output. 0 is the worst, 1 is the best.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Optionally provide additional metadata about the feedback submission.
         timestamp:
           type: number
           format: double
