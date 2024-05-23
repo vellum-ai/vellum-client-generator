@@ -61,49 +61,14 @@ Here are the steps involved in this example:
 
 Prompt nodes support two selectable outputs - one from the model in case of a valid output and one in case of a non deterministic error. Model hosts fail for all sorts of reasons that include timeouts, rate limits, or server overload. You could make your production-grade LLM features resilient to these features by adding retry logic into your Workflows!
 
-<div style={{position: "relative", height: "450px"}}>
-  <iframe
-    id="public-workflow-8c3fac0e-b991-43f5-846a-40a754234feb"
-    src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
-    width="100%"
-    height="100%"
-  />
-  <button style={{position: "absolute", top: 0, right: 0}} onClick={() => {
-    const iframe = document.getElementById("public-workflow-8c3fac0e-b991-43f5-846a-40a754234feb")?.parentElement;
-    if (!document.fullscreenElement) {
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      } else if (iframe.mozRequestFullScreen) { /* Firefox */
-        iframe.mozRequestFullScreen();
-      } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-        iframe.webkitRequestFullscreen();
-      } else if (iframe.msRequestFullscreen) { /* IE/Edge */
-        iframe.msRequestFullscreen();
-      }
-    } else if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { /* Firefox */
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { /* Chrome, Safari & Opera */
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE/Edge */
-      document.msExitFullscreen();
-    }
-  }}>
-    <span>
-      <svg viewBox="0 0 24 24" style={{
-          width: "24px",
-          height: "24px",
-          fill: "white",
-      }}>
-        <path d="M21 11V3h-8l3.29 3.29-10 10L3 13v8h8l-3.29-3.29 10-10z"/>
-      </svg>
-    </span>
-  </button>
-</div>
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
+  width="100%"
+  height="450px"
+/>
 
 Here are the steps involved in this example:
 - Step 1: Define a standard Prompt Node
 - Step 2: Define a Conditional Node (`Error Check`) that reads from the new Error output from the Prompt Node and checks to see if it's not null.
-- Step 3: Define another Conditional Node (`Retry Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
+- Step 3: Define another Conditional Node (`Count Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
 - Step 4: Loop back to the Prompt Node if it's under the limit, exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
