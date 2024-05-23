@@ -170,6 +170,11 @@ paths:
         schema:
           type: string
       - in: query
+        name: search
+        schema:
+          type: string
+        description: Search for document indices by name or label
+      - in: query
         name: status
         schema:
           type: string
@@ -177,7 +182,7 @@ paths:
           - ACTIVE
           - ARCHIVED
         description: |-
-          The current status of the document index
+          Filter down to only document indices that have a status matching the status specified
 
           * `ACTIVE` - Active
           * `ARCHIVED` - Archived
