@@ -17,11 +17,7 @@ LLM applications often require specific context from a Vector DB which is added 
 - Step 4: Link to a Final Output or other downstream node (e.g., if the Prompt Node result is a certain value branch execution based on a Conditional Node)
 - Step 5: Set up variables and hit Run!
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/090744e8-3ec0-4047-ba98-c1445068397f"
-  width="100%"
-  height="450px"
-></iframe>
+![RAG Workflow](https://storage.googleapis.com/vellum-public/help-docs/rag_workflow.png)
 
 ## 2. Route Relevant Messages Dynamically to a Human
 
@@ -32,43 +28,42 @@ If you’re building an agent that answers questions coming from users (e.g., a 
 - Step 3: Link outputs of the classification prompt to two separate Final Output Nodes
 - Step 4: Set up variables and hit Run!
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/d213be0a-65f0-407b-bafc-76077bfa3692"
-  width="100%"
-  height="450px"
-></iframe>
+![Conditional Routing Workflow](https://storage.googleapis.com/vellum-public/help-docs/message_routing_workflow.png)
 
 ## 3. Calling a Prompt for each item in an array
 
-Workflows support looping - you simply need to draw an edge from a later node back to a node that preceeded it. We recommend to always include a Conditional Node when introducing a loop to specify when that loop will exit. Here's an example of a loop that calls a prompt node for each item in an array, then exits with all of the outputs.
+Workflows support looping - you simply need to draw an edge from a later node back to a node that preceeded it. We recommend to always include a Conditional Node when introducing a loop to specify when that loop will exit. Here's an example of a loop that calls a prompt node for each item in an array, then exits with the output.
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/535a8c80-99d8-4f17-aa2b-62c56ba591a2"
-  width="100%"
-  height="450px"
-></iframe>
+![Workflow Looping Example](https://storage.googleapis.com/vellum-public/help-docs/workflow_loop_example.png)
 
 Here are the steps involved in this example:
-- Step 1: We define a `items` JSON input that has our list of items that we want to iterate over.
-- Step 2: We define a Templating Node with an empty array of outputs. This is the variable that we will be adding each prompt output to.
-- Step 3: We add a Code Execution Node that will output the current `item` and `counter` for each iteration of the loop. The Templating Node `Counter` extracts the counter.
-- Step 4: We use a Conditional Node to dictate when to exit the loop.
-- Step 5: We feed the `"item"` key from the `iterator` into the Prompt Node we care about executing on each iteration.
-- Step 6: We use a Code Execution node to append an output on each iteration.
-- Step 7: Finally, the Templating Node will return the output data returned by the previous step's Code Execution node.
+- Step 1: We define a `input_items` JSON input that has our list of items that we want to iterate over.
+- Step 2: We define a Templating Node that outputs a JSON with the current iterator (`item`) and the current output array (`output`):
+```jinja
+{% if index == 0 %}
+    {"item": "{{ input_items[index] }}", "output": [] }
+{% elif index < input_items | length %}
+    {"item": "{{ input_items[index] }}", "output": {{ json.dumps(output_items['output'] + [prompt_output]) }} }
+{% else %}
+    {"item": null, "output": {{ json.dumps(output_items['output'] + [prompt_output]) }} }
+{% endif %}
+```
+- Step 3: The templating node above takes as inputs:
+    1. The `input_items` array as a JSON input
+    2. The current `index` by using its own execution counter.
+    3. The current `output_items`, using a fallback mapped to a JSON input variable of an empty array.
+    4. The current `prompt_output`, using a fallback mapped to a Text input variable of an empty string.
+- Step 4: The templating node feeds into a conditional node, that calls a Prompt node when the prompt's execution counter is less than the length of the array. It outputs to a terminal node in the else branch.
+- Step 5: The Prompt node receives the edge from the conditional node's IF branch, and feeds back to the templating node with its output.
 
 ## 4. Retrying a Prompt Node in case of non-deterministic failure
 
 Prompt nodes support two selectable outputs - one from the model in case of a valid output and one in case of a non deterministic error. Model hosts fail for all sorts of reasons that include timeouts, rate limits, or server overload. You could make your production-grade LLM features resilient to these features by adding retry logic into your Workflows!
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
-  width="100%"
-  height="450px"
-/>
+![Workflow Retry Example](https://storage.googleapis.com/vellum-public/help-docs/workflow_retry_example.png)
 
 Here are the steps involved in this example:
 - Step 1: Define a standard Prompt Node
 - Step 2: Define a Conditional Node (`Error Check`) that reads from the new Error output from the Prompt Node and checks to see if it's not null.
-- Step 3: Define another Conditional Node (`Count Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
+- Step 3: Define another Conditional Node (`Retry Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
 - Step 4: Loop back to the Prompt Node if it's under the limit, exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
