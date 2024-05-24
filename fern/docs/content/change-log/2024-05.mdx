@@ -2,6 +2,17 @@
 title: Changelog | May, 2024
 ---
 
+
+## Guardrail Workflow Nodes
+
+_May 23rd, 2024_
+
+You can now use Evaluation Metrics inside of Workflows with the new Guardrail Node! Guardrail Nodes let you run pre-defined evaluation criteria at runtime as part of a Workflow execution so that you can drive downstream behavior based on that metric's score.
+
+For example, if building a RAG application, you might determine whether the generated response passes some threshold for [Ragas Faithfulness](https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html) and if not, loop around to try again.
+
+![Guardrail Nodes](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/guardrail-nodes.png)
+
 ## Chat Mode Revamp
 
 _May 22th, 2024_
@@ -9,6 +20,12 @@ _May 22th, 2024_
 Chat Mode in Prompt Sandboxes has received a major facelift! The left side of the new interface will be familiar to anyone using the Prompt Editor, while the rest of the interface retains its functionality with a fresh new look. We've also fixed some UX wonk and minor bugs during the restyling process.
 
 ![Chat Mode Styling Update](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/chat-mode-styling-update.png)
+
+## Double-Click to Resize Rows & Columns in Prompt Sandboxes
+
+_May 22th, 2024_
+
+You can now double-click on resizable row and column edges in both Comparison and Chat modes to auto-expand that row/column to its maximum size. If already at maximum size, double-clicking will reset them to their default size. Additionally, in Comparison mode, double-clicking on cell corners will auto-resize both dimensions simultaneously.
 
 ## Improved Image Support in Chat History Fields
 
