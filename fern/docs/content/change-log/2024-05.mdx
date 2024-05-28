@@ -6,7 +6,9 @@ title: Changelog | May, 2024
 
 _May 28rd, 2024_
 
-When submitting execution actuals for workflows, you can now optionally include a metadata field. This field can contain arbitrary data, and will be saved and shown in the executions tab of your workflow deployment.
+When submitting execution Actuals for Workflows, you can now optionally include a metadata field. This field can contain arbitrary data, and will be saved and shown in the Executions tab of your Workflow Deployment.
+
+This is particularly helpful if you want to capture feedback/quality across multiple custom dimensions.
 
 ```
 curl -X POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals \
@@ -17,9 +19,13 @@ curl -X POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals \
   "actuals": [
     {
       "output_type": "STRING",
-      "output_key": "better_prompt",
+      "output_key": "final-output",
       "quality": 0.8,
-      "metadata": { "foo": "bar" }
+      "metadata": {
+        "user_score": 1.0,
+        "internal_score": 1.0,
+        "internal_notes": "The output was not factually correct."
+      }
     }
   ]
 }'
