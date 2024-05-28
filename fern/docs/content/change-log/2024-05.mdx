@@ -2,6 +2,28 @@
 title: Changelog | May, 2024
 ---
 
+## Workflow Deployment Actuals Metadata
+
+_May 28rd, 2024_
+
+When submitting execution actuals for workflows, you can now optionally include a metadata field. This field can contain arbitrary data, and will be saved and shown in the executions tab of your workflow deployment.
+
+```
+curl -X POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals \
+     -H "X_API_KEY: "$VELLUM_API_KEY"" \
+     -H "Content-Type: application/json" \
+     -d '{
+  "execution_id": "be975a69-33c7-4ff0-b6ac-d8008198db1e",
+  "actuals": [
+    {
+      "output_type": "STRING",
+      "output_key": "better_prompt",
+      "quality": 0.8,
+      "metadata": { "foo": "bar" }
+    }
+  ]
+}'
+```
 
 ## Guardrail Workflow Nodes
 
@@ -36,14 +58,14 @@ We've made several changes to enhance the UX of working with images. Chat Histor
 Additionally, we've added limited support for embedded images. You can embed an image directly into the prompt by copy/pasting or dragging/dropping an image file from your computer's file browser. This method has a 1MB size limit and is an interim solution as we continue to explore image upload and hosting options.
 
 <div style="display: grid; grid-template-areas: 'a b' 'c c'; gap: 12px">
-  <div style='grid-area: a'>
-    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/improved-image-support.png' />
+  <div style="grid-area: a">
+    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/improved-image-support.png" />
   </div>
-  <div style='grid-area: b'>
-    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/content-type-select.png' />
+  <div style="grid-area: b">
+    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/content-type-select.png" />
   </div>
-  <div style='grid-area: c'>
-    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/image-config-modal.png' />
+  <div style="grid-area: c">
+    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/image-config-modal.png" />
   </div>
 </div>
 
