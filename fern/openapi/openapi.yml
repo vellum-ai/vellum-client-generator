@@ -5622,6 +5622,11 @@ components:
           nullable: true
           description: Optionally provide the timestamp representing when this feedback
             was collected. Used for reporting purposes.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Optionally provide additional metadata about the feedback submission.
     SubmitCompletionActualsErrorResponse:
       type: object
       properties:
