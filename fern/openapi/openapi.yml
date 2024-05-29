@@ -3550,6 +3550,18 @@ components:
         compute_nanos:
           type: integer
           nullable: true
+    MergeEnum:
+      type: string
+      enum:
+      - MERGE
+    MergeNodeResult:
+      type: object
+      description: A Node Result Event emitted from a Merge Node.
+      properties:
+        type:
+          $ref: '#/components/schemas/MergeEnum'
+      required:
+      - type
     MetadataFilterConfigRequest:
       type: object
       properties:
@@ -5099,7 +5111,7 @@ components:
         id:
           type: string
           format: uuid
-          readOnly: true
+          nullable: true
           description: The ID of the document.
         label:
           type: string
@@ -5118,11 +5130,15 @@ components:
           description: A previously supplied JSON object containing metadata that
             can be filtered on when searching.
       required:
-      - id
       - label
     SearchResultDocumentRequest:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the document.
         label:
           type: string
           minLength: 1
@@ -7349,6 +7365,7 @@ components:
       - $ref: '#/components/schemas/ConditionalNodeResult'
       - $ref: '#/components/schemas/ApiNodeResult'
       - $ref: '#/components/schemas/TerminalNodeResult'
+      - $ref: '#/components/schemas/MergeNodeResult'
       - $ref: '#/components/schemas/SubworkflowNodeResult'
       - $ref: '#/components/schemas/MetricNodeResult'
       discriminator:
@@ -7361,6 +7378,7 @@ components:
           CONDITIONAL: '#/components/schemas/ConditionalNodeResult'
           API: '#/components/schemas/ApiNodeResult'
           TERMINAL: '#/components/schemas/TerminalNodeResult'
+          MERGE: '#/components/schemas/MergeNodeResult'
           SUBWORKFLOW: '#/components/schemas/SubworkflowNodeResult'
           METRIC: '#/components/schemas/MetricNodeResult'
     WorkflowNodeResultEvent:

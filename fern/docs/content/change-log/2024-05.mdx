@@ -2,6 +2,19 @@
 title: Changelog | May, 2024
 ---
 
+## Replay Workflow from Node
+
+One of the biggest burdens in developing Workflows in Vellum is rerunning your _entire_ workflow whenever you want to make 
+a change to just a single node. You now can just run the workflow from a single node! When there's a previous execution 
+in the Workflow Sandbox, each previously executed workflow node will now have this play icon available on hover:
+
+![Replay From Node Icon](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/replay-from-node-icon.png)
+
+This will _reuse_ the node results from the previous execution from nodes upstream to the current node, allowing you to resume execution
+from there. This should save users a substantial amount of time and tokens in their Workflow development!
+
+![Replay From Node Execution](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/replay-from-node-execution.png)
+
 ## Improvements to Saving Executions as Scenarios & Test Cases
 
 _May 29th, 2024_
