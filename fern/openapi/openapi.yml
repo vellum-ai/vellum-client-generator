@@ -5699,8 +5699,17 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/SubworkflowEnum'
+        data:
+          $ref: '#/components/schemas/SubworkflowNodeResultData'
       required:
       - type
+    SubworkflowNodeResultData:
+      type: object
+      properties:
+        execution_id:
+          type: string
+          format: uuid
+          nullable: true
     TemplatingNodeArrayResult:
       type: object
       properties:
