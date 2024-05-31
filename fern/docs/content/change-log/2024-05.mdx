@@ -2,6 +2,16 @@
 title: Changelog | May, 2024
 ---
 
+## Breadcrumbs and Page Header Improvements
+
+_May 31th, 2024_
+
+We've significantly improved folder and page breadcrumbs throughout the app. Prompts, Test Suites, Workflows, and Documents now display the entire folder path of your current page, making it much easier to navigate through your folder structure. We've also updated the overflow styling for breadcrumbs: instead of an ellipsis, you'll now see a count of hidden breadcrumbs, which can be accessed via a dropdown menu.
+
+Additionally, the pages mentioned above, along with Workflow/Prompt Evaluations and Deployments, now feature the same updated header design.
+
+![Breadcrumbs and header updates](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/breadcrumbs-update.png)
+
 ## Prompt Deployment Actuals Metadata
 
 _May 29th, 2024_
@@ -17,7 +27,7 @@ This is particularly helpful if you want to capture feedback/quality across mult
 
 _May 29th, 2024_
 
-One of the biggest burdens when developing Workflows in Vellum is having to rerun your _entire_ Workflow whenever you want to make 
+One of the biggest burdens when developing Workflows in Vellum is having to rerun your _entire_ Workflow whenever you want to make
 a change to just a single node and want to see its downstream effects.
 
 You can now re-run a Workflow from a specific Node! After running a Workflow for the first time, you'll see this new play icon above each Node.
@@ -39,14 +49,17 @@ way to close the feedback loop between monitoring and experimentation. However, 
 time-consuming when you have many Executions to save.
 
 We've made a number of improvements to this process:
+
 1. You can now multi-select to bulk save Executions as Test Cases
 2. We now default to the correct Sandbox/Test Suite when saving Executions as Scenarios/Test Cases
 3. You'll now see warnings if the Sandbox/Test Suite you're saving to has required variables that are missing from the Execution
 
 Check out a full demo here:
-<iframe src="https://www.loom.com/embed/d7baaa2394bc49e28f2984521c95afc9"
-  width="100%"
-  height="450px"
+
+<iframe
+  src='https://www.loom.com/embed/d7baaa2394bc49e28f2984521c95afc9'
+  width='100%'
+  height='450px'
 ></iframe>
 
 ## Prompt Sandbox History Update
@@ -119,14 +132,14 @@ We've made several changes to enhance the UX of working with images. Chat Histor
 Additionally, we've added limited support for embedded images. You can embed an image directly into the prompt by copy/pasting or dragging/dropping an image file from your computer's file browser. This method has a 1MB size limit and is an interim solution as we continue to explore image upload and hosting options.
 
 <div style="display: grid; grid-template-areas: 'a b' 'c c'; gap: 12px">
-  <div style="grid-area: a">
-    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/improved-image-support.png" />
+  <div style='grid-area: a'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/improved-image-support.png' />
   </div>
-  <div style="grid-area: b">
-    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/content-type-select.png" />
+  <div style='grid-area: b'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/content-type-select.png' />
   </div>
-  <div style="grid-area: c">
-    <img src="https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/image-config-modal.png" />
+  <div style='grid-area: c'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/image-config-modal.png' />
   </div>
 </div>
 
