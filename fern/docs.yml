@@ -122,6 +122,9 @@ navigation:
     layout:
       - section: "2024"
         contents:
+          - page: June
+            path: ./docs/content/change-log/2024-06.mdx
+            slug: 2024-06
           - page: May
             path: ./docs/content/change-log/2024-05.mdx
             slug: 2024-05
