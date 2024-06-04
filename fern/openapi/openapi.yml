@@ -133,6 +133,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentReleaseTagRead'
           description: ''
+      x-fern-availability: beta
     patch:
       operationId: update_deployment_release_tag
       description: Updates an existing Release Tag associated with the specified Deployment.
@@ -167,6 +168,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentReleaseTagRead'
           description: ''
+      x-fern-availability: beta
   /v1/deployments/provider-payload:
     post:
       operationId: retrieve_provider_payload
@@ -900,6 +902,7 @@ paths:
         description: An ID identifying the Prompt you'd like to deploy.
         required: true
       tags:
+      - sandboxes
       - prompt-versions
       - deployments
       - deployment-release-tags
@@ -917,6 +920,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
+      x-fern-availability: beta
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
@@ -1465,6 +1469,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowReleaseTagRead'
           description: ''
+      x-fern-availability: beta
     patch:
       operationId: update_workflow_release_tag
       description: Updates an existing Release Tag associated with the specified Workflow
@@ -1500,6 +1505,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowReleaseTagRead'
           description: ''
+      x-fern-availability: beta
   /v1/workflow-sandboxes/{id}/workflows/{workflow_id}/deploy:
     post:
       operationId: deploy_workflow
@@ -1518,9 +1524,9 @@ paths:
         description: An ID identifying the Workflow you'd like to deploy.
         required: true
       tags:
+      - workflow-sandboxes
       - deployments
       - deployment-release-tags
-      - workflow-sandboxes
       - workflow-deployments
       requestBody:
         content:
@@ -1536,6 +1542,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowDeploymentRead'
           description: ''
+      x-fern-availability: beta
 components:
   schemas:
     AddEntityToFolderRequest:
