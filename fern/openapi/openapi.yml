@@ -609,6 +609,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
+      x-fern-availability: ga
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -658,6 +659,7 @@ paths:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
       x-fern-streaming: true
+      x-fern-availability: ga
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -702,6 +704,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecuteWorkflowErrorResponse'
           description: ''
+      x-fern-availability: ga
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -746,6 +749,7 @@ paths:
                 $ref: '#/components/schemas/ExecuteWorkflowStreamErrorResponse'
           description: ''
       x-fern-streaming: true
+      x-fern-availability: ga
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -785,7 +789,8 @@ paths:
       description: |-
         Generate a completion using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt](/api-reference/api-reference/execute-prompt).
       tags:
       - generate
       requestBody:
@@ -827,7 +832,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
-      x-fern-availability: ga
+      x-fern-availability: deprecated
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -837,7 +842,8 @@ paths:
       description: |-
         Generate a stream of completions using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
       tags:
       - generate-stream
       requestBody:
@@ -880,7 +886,7 @@ paths:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
       x-fern-streaming: true
-      x-fern-availability: ga
+      x-fern-availability: deprecated
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -1018,10 +1024,7 @@ paths:
   /v1/search:
     post:
       operationId: search
-      description: |-
-        Perform a search against a document index.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+      description: Perform a search against a document index.
       tags:
       - search
       requestBody:
@@ -1064,10 +1067,8 @@ paths:
   /v1/submit-completion-actuals:
     post:
       operationId: submit_completion_actuals
-      description: |-
-        Used to submit feedback regarding the quality of previously generated completions.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+      description: Used to submit feedback regarding the quality of previously generated
+        completions.
       tags:
       - submit-completion-actuals
       requestBody:
