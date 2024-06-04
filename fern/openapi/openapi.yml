@@ -102,6 +102,71 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
       x-fern-availability: beta
+  /v1/deployments/{id}/release-tags/{name}:
+    get:
+      operationId: retrieve_deployment_release_tag
+      description: Retrieve a Deployment Release Tag by tag name, associated with
+        a specified Deployment.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this deployment.
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        description: The name of the Release Tag associated with this Deployment that
+          you'd like to retrieve.
+        required: true
+      tags:
+      - deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentReleaseTagRead'
+          description: ''
+    patch:
+      operationId: update_deployment_release_tag
+      description: Updates an existing Release Tag associated with the specified Deployment.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this deployment.
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        description: The name of the Release Tag associated with this Deployment that
+          you'd like to update.
+        required: true
+      tags:
+      - deployments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeploymentReleaseTagUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentReleaseTagRead'
+          description: ''
   /v1/deployments/provider-payload:
     post:
       operationId: retrieve_provider_payload
@@ -369,6 +434,7 @@ paths:
         required: true
       tags:
       - document-indexes
+      - folder-entities
       security:
       - apiKeyAuth: []
       responses:
@@ -816,6 +882,41 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/sandboxes/{id}/prompts/{prompt_id}/deploy:
+    post:
+      operationId: deploy_prompt
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this sandbox.
+        required: true
+      - in: path
+        name: prompt_id
+        schema:
+          type: string
+        description: An ID identifying the Prompt you'd like to deploy.
+        required: true
+      tags:
+      - prompt-versions
+      - deployments
+      - deployment-release-tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeploySandboxPromptRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentRead'
+          description: ''
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
@@ -1333,6 +1434,108 @@ paths:
                 $ref: '#/components/schemas/WorkflowDeploymentRead'
           description: ''
       x-fern-availability: beta
+  /v1/workflow-deployments/{id}/release-tags/{name}:
+    get:
+      operationId: retrieve_workflow_release_tag
+      description: Retrieve a Workflow Release Tag by tag name, associated with a
+        specified Workflow Deployment.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this workflow deployment.
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        description: The name of the Release Tag associated with this Workflow Deployment
+          that you'd like to retrieve.
+        required: true
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowReleaseTagRead'
+          description: ''
+    patch:
+      operationId: update_workflow_release_tag
+      description: Updates an existing Release Tag associated with the specified Workflow
+        Deployment.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this workflow deployment.
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        description: The name of the Release Tag associated with this Workflow Deployment
+          that you'd like to update.
+        required: true
+      tags:
+      - workflow-deployments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkflowReleaseTagUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowReleaseTagRead'
+          description: ''
+  /v1/workflow-sandboxes/{id}/workflows/{workflow_id}/deploy:
+    post:
+      operationId: deploy_workflow
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this workflow sandbox.
+        required: true
+      - in: path
+        name: workflow_id
+        schema:
+          type: string
+        description: An ID identifying the Workflow you'd like to deploy.
+        required: true
+      tags:
+      - deployments
+      - deployment-release-tags
+      - workflow-sandboxes
+      - workflow-deployments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeploySandboxWorkflowRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDeploymentRead'
+          description: ''
 components:
   schemas:
     AddEntityToFolderRequest:
@@ -1818,6 +2021,73 @@ components:
         source_handle_id:
           type: string
           nullable: true
+    DeploySandboxPromptRequest:
+      type: object
+      properties:
+        prompt_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of the Prompt Deployment you'd like
+            to update. Cannot specify both this and prompt_deployment_name. Leave
+            null to create a new Prompt Deployment.
+        prompt_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The unique name of the Prompt Deployment you'd like to either
+            create or update. Cannot specify both this and prompt_deployment_id. If
+            provided and matches an existing Prompt Deployment, that Prompt Deployment
+            will be updated. Otherwise, a new Prompt Deployment will be created.
+        label:
+          type: string
+          nullable: true
+          minLength: 1
+          description: In the event that a new Prompt Deployment is created, this
+            will be the label it's given.
+        release_tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 150
+          nullable: true
+          description: Optionally provide the release tags that you'd like to be associated
+            with the latest release of the created/updated Prompt Deployment.
+    DeploySandboxWorkflowRequest:
+      type: object
+      properties:
+        workflow_deployment_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of the Workflow Deployment you'd like
+            to update. Cannot specify both this and workflow_deployment_name. Leave
+            null to create a new Workflow Deployment.
+        workflow_deployment_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The unique name of the Workflow Deployment you'd like to either
+            create or update. Cannot specify both this and workflow_deployment_id.
+            If provided and matches an existing Workflow Deployment, that Workflow
+            Deployment will be updated. Otherwise, a new Prompt Deployment will be
+            created.
+        label:
+          type: string
+          nullable: true
+          minLength: 1
+          description: In the event that a new Workflow Deployment is created, this
+            will be the label it's given.
+        release_tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 150
+          nullable: true
+          description: Optionally provide the release tags that you'd like to be associated
+            with the latest release of the created/updated Prompt Deployment.
     DeploymentProviderPayloadRequest:
       type: object
       properties:
@@ -1914,6 +2184,41 @@ components:
       - label
       - last_deployed_on
       - name
+    DeploymentReleaseTagDeploymentHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+      required:
+      - id
+      - timestamp
+    DeploymentReleaseTagRead:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Release Tag
+        source:
+          allOf:
+          - $ref: '#/components/schemas/ReleaseTagSource'
+          description: |-
+            The source of how the Release Tag was originally created
+
+            * `SYSTEM` - System
+            * `USER` - User
+        history_item:
+          allOf:
+          - $ref: '#/components/schemas/DeploymentReleaseTagDeploymentHistoryItem'
+          description: The Deployment History Item that this Release Tag is associated
+            with
+      required:
+      - history_item
+      - name
+      - source
     DocumentDocumentToDocumentIndex:
       type: object
       properties:
@@ -4561,6 +4866,13 @@ components:
       - next
       - previous
       - results
+    PatchedDeploymentReleaseTagUpdateRequest:
+      type: object
+      properties:
+        history_item_id:
+          type: string
+          format: uuid
+          description: The ID of the Deployment History Item to tag
     PatchedDocumentIndexUpdateRequest:
       type: object
       properties:
@@ -4608,6 +4920,13 @@ components:
           nullable: true
           description: A JSON object containing any metadata associated with the document
             that you'd like to filter upon later.
+    PatchedWorkflowReleaseTagUpdateRequest:
+      type: object
+      properties:
+        history_item_id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment History Item to tag
     ProcessingFailureReasonEnum:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
@@ -4905,6 +5224,14 @@ components:
       - node_id
       - node_result_id
       - state
+    ReleaseTagSource:
+      enum:
+      - SYSTEM
+      - USER
+      type: string
+      description: |-
+        * `SYSTEM` - System
+        * `USER` - User
     SandboxScenario:
       type: object
       description: Sandbox Scenario
@@ -7634,6 +7961,43 @@ components:
       - name
       - type
       - value
+    WorkflowReleaseTagRead:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Release Tag
+        source:
+          allOf:
+          - $ref: '#/components/schemas/ReleaseTagSource'
+          description: |-
+            The source of how the Release Tag was originally created
+
+            * `SYSTEM` - System
+            * `USER` - User
+        history_item:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowReleaseTagWorkflowDeploymentHistoryItem'
+          description: The Workflow Deployment History Item that this Release Tag
+            is associated with
+      required:
+      - history_item
+      - name
+      - source
+    WorkflowReleaseTagWorkflowDeploymentHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the Workflow Deployment History Item
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp representing when this History Item was created
+      required:
+      - id
+      - timestamp
     WorkflowRequestChatHistoryInputRequest:
       type: object
       description: The input for a chat history variable in a Workflow.
