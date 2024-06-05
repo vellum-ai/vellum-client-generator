@@ -1291,6 +1291,52 @@ paths:
                 $ref: '#/components/schemas/TestSuiteTestCase'
           description: ''
       x-fern-availability: beta
+  /v1/test-suites/{id}/test-cases-bulk:
+    post:
+      operationId: test_suite_test_cases_bulk
+      description: Created, replace, and delete Test Cases within the specified Test
+        Suite in bulk
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this test suite.
+        required: true
+      tags:
+      - test-suites
+      requestBody:
+        content:
+          application/x-ndjson:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TestSuiteTestCaseBulkOperationRequest'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TestSuiteTestCaseBulkOperationRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestSuiteTestCaseBulkResult'
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestSuiteTestCaseBulkResult'
+          description: ''
+      x-fern-streaming: true
+      x-fern-availability: beta
   /v1/test-suites/{id}/test-cases/{test_case_id}:
     delete:
       operationId: delete_test_suite_test_case
@@ -1752,6 +1798,51 @@ components:
           nullable: true
       required:
       - model_name
+    BulkCreateTestSuiteTestCaseDataRequest:
+      type: object
+      description: Information about the Test Case to create
+      properties:
+        label:
+          type: string
+          nullable: true
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's input variables
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's evaluation variables
+      required:
+      - evaluation_values
+      - input_values
+    BulkReplaceTestSuiteTestCaseDataRequest:
+      type: object
+      description: Information about the Test Case to replace
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the Test Case to replace.
+        label:
+          type: string
+          nullable: true
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's input variables
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's evaluation variables
+      required:
+      - evaluation_values
+      - id
+      - input_values
     ChatHistoryEnum:
       type: string
       enum:
@@ -2029,6 +2120,22 @@ components:
         source_handle_id:
           type: string
           nullable: true
+    CreateEnum:
+      type: string
+      enum:
+      - CREATE
+    CreatedEnum:
+      type: string
+      enum:
+      - CREATED
+    DeleteEnum:
+      type: string
+      enum:
+      - DELETE
+    DeletedEnum:
+      type: string
+      enum:
+      - DELETED
     DeploySandboxPromptRequest:
       type: object
       properties:
@@ -5240,6 +5347,14 @@ components:
       description: |-
         * `SYSTEM` - System
         * `USER` - User
+    ReplaceEnum:
+      type: string
+      enum:
+      - REPLACE
+    ReplacedEnum:
+      type: string
+      enum:
+      - REPLACED
     SandboxScenario:
       type: object
       description: Sandbox Scenario
@@ -7183,6 +7298,184 @@ components:
       required:
       - evaluation_values
       - input_values
+    TestSuiteTestCaseBulkOperationRequest:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteTestCaseCreateBulkOperationRequest'
+      - $ref: '#/components/schemas/TestSuiteTestCaseReplaceBulkOperationRequest'
+      - $ref: '#/components/schemas/TestSuiteTestCaseDeleteBulkOperationRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          CREATE: '#/components/schemas/TestSuiteTestCaseCreateBulkOperationRequest'
+          REPLACE: '#/components/schemas/TestSuiteTestCaseReplaceBulkOperationRequest'
+          DELETE: '#/components/schemas/TestSuiteTestCaseDeleteBulkOperationRequest'
+    TestSuiteTestCaseBulkResult:
+      oneOf:
+      - $ref: '#/components/schemas/TestSuiteTestCaseCreatedBulkResult'
+      - $ref: '#/components/schemas/TestSuiteTestCaseReplacedBulkResult'
+      - $ref: '#/components/schemas/TestSuiteTestCaseDeletedBulkResult'
+      - $ref: '#/components/schemas/TestSuiteTestCaseRejectedBulkResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          CREATED: '#/components/schemas/TestSuiteTestCaseCreatedBulkResult'
+          REPLACED: '#/components/schemas/TestSuiteTestCaseReplacedBulkResult'
+          DELETED: '#/components/schemas/TestSuiteTestCaseDeletedBulkResult'
+          REJECTED: '#/components/schemas/TestSuiteTestCaseRejectedBulkResult'
+    TestSuiteTestCaseCreateBulkOperationRequest:
+      type: object
+      description: A bulk operation that represents the creation of a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID representing this specific operation. Can later be used
+            to look up information about the operation's success in the response.
+        type:
+          $ref: '#/components/schemas/CreateEnum'
+        data:
+          $ref: '#/components/schemas/BulkCreateTestSuiteTestCaseDataRequest'
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseCreatedBulkResult:
+      type: object
+      description: The result of a bulk operation that created a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/CreatedEnum'
+        data:
+          $ref: '#/components/schemas/TestSuiteTestCaseCreatedBulkResultData'
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseCreatedBulkResultData:
+      type: object
+      description: Information about the Test Case that was created.
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    TestSuiteTestCaseDeleteBulkOperationDataRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+      required:
+      - id
+    TestSuiteTestCaseDeleteBulkOperationRequest:
+      type: object
+      description: A bulk operation that represents the deletion of a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID representing this specific operation. Can later be used
+            to look up information about the operation's success in the response.
+        type:
+          $ref: '#/components/schemas/DeleteEnum'
+        data:
+          allOf:
+          - $ref: '#/components/schemas/TestSuiteTestCaseDeleteBulkOperationDataRequest'
+          description: Information about the Test Case to delete
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseDeletedBulkResult:
+      type: object
+      description: The result of a bulk operation that deleted a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID that maps back to one of the initially supplied operations.
+            Can be used to determine the result of a given operation.
+        type:
+          $ref: '#/components/schemas/DeletedEnum'
+        data:
+          $ref: '#/components/schemas/TestSuiteTestCaseDeletedBulkResultData'
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseDeletedBulkResultData:
+      type: object
+      description: Information about the Test Case that was deleted
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    TestSuiteTestCaseRejectedBulkResult:
+      type: object
+      description: The result of a bulk operation that failed to operate on a Test
+        Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID that maps back to one of the initially supplied operations.
+            Can be used to determine the result of a given operation.
+        type:
+          $ref: '#/components/schemas/RejectedEnum'
+        data:
+          type: object
+          additionalProperties: {}
+          description: Details about the error that occurred
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseReplaceBulkOperationRequest:
+      type: object
+      description: A bulk operation that represents the replacing of a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID representing this specific operation. Can later be used
+            to look up information about the operation's success in the response.
+        type:
+          $ref: '#/components/schemas/ReplaceEnum'
+        data:
+          $ref: '#/components/schemas/BulkReplaceTestSuiteTestCaseDataRequest'
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseReplacedBulkResult:
+      type: object
+      description: The result of a bulk operation that replaced a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID that maps back to one of the initially supplied operations.
+            Can be used to determine the result of a given operation.
+        type:
+          $ref: '#/components/schemas/ReplacedEnum'
+        data:
+          $ref: '#/components/schemas/TestSuiteTestCaseReplacedBulkResultData'
+      required:
+      - data
+      - id
+      - type
+    TestSuiteTestCaseReplacedBulkResultData:
+      type: object
+      description: Information about the Test Case that was replaced
+      properties:
+        id:
+          type: string
+      required:
+      - id
     TokenOverlappingWindowChunkerConfig:
       type: object
       description: Configuration for token overlapping window chunking
@@ -7323,7 +7616,11 @@ components:
       properties:
         id:
           type: string
-          minLength: 1
+          format: uuid
+          description: The ID of the Test Case to upsert. If specified and a match
+            is found, the existing Test Case will be updated. If specified and no
+            match is found, a Test Case will be created with the provided ID. If not
+            provided, a new Test Case will be created with an auto-generated ID.
         label:
           type: string
           nullable: true
@@ -7331,10 +7628,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's input variables
         evaluation_values:
           type: array
           items:
             $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's evaluation variables
       required:
       - evaluation_values
       - input_values
