@@ -56,6 +56,20 @@ groups:
         # authors: ["devops@vellum.ai", "fern[bot]"]
         # location: 
         #   output: go.mod
+  branch-java:
+    generators:
+      - name: fernapi/fern-java-sdk
+        version: 0.9.6
+        github:
+          repository: vellum-ai/vellum-client-go-staging
+          mode: pull-request
+          license: MIT
+        # config:
+        #   namespaceExport: Vellum
+        #   timeoutInSeconds: infinity
+        #   extraDependencies: 
+        #     cdktf: '^0.20.5'
+        #     constructs: '^10.3.0'
   # Add back once we have a ruby customer
   # branch-ruby:
   #   generators:
@@ -131,6 +145,17 @@ groups:
       #     license: MIT
       #   config:
       #     clientClassName: Vellum
+      - name: fernapi/fern-java-sdk
+        version: 0.9.6
+        # config:
+        #   namespaceExport: Vellum
+        #   timeoutInSeconds: infinity
+        #   extraDependencies: 
+        #     cdktf: '^0.20.5'
+        #     constructs: '^10.3.0'
+        github:
+          repository: vellum-ai/vellum-client-java
+          license: MIT
   production:
     generators:
       - name: fernapi/fern-typescript-node-sdk
@@ -201,3 +226,8 @@ groups:
       #     license: MIT
       #   config:
       #     clientClassName: Vellum
+      - name: fernapi/fern-java-sdk
+        version: 0.9.6
+        github:
+          repository: vellum-ai/vellum-client-java
+          license: MIT

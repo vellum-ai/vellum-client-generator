@@ -43,3 +43,4 @@ jobs:
           fern generate --group branch-node --log-level debug
           fern generate --group branch-python --log-level debug
           fern generate --group branch-go --log-level debug
+          fern generate --group branch-java --log-level debug
