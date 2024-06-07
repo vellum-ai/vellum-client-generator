@@ -2291,12 +2291,18 @@ components:
           description: Deprecated. The Prompt execution endpoints return a `prompt_version_id`
             that could be used instead.
           deprecated: true
+        last_deployed_history_item_id:
+          type: string
+          format: uuid
+          description: The ID of the history item associated with this Deployment's
+            LATEST Release Tag
       required:
       - active_model_version_ids
       - created
       - id
       - input_variables
       - label
+      - last_deployed_history_item_id
       - last_deployed_on
       - name
     DeploymentReleaseTagDeploymentHistoryItem:
@@ -7770,6 +7776,11 @@ components:
         last_deployed_on:
           type: string
           format: date-time
+        last_deployed_history_item_id:
+          type: string
+          format: uuid
+          description: The ID of the history item associated with this Workflow Deployment's
+            LATEST Release Tag
         input_variables:
           type: array
           items:
@@ -7787,6 +7798,7 @@ components:
       - id
       - input_variables
       - label
+      - last_deployed_history_item_id
       - last_deployed_on
       - name
       - output_variables
