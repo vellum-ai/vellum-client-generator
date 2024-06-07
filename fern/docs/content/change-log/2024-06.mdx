@@ -2,6 +2,58 @@
 title: Changelog | June, 2024
 ---
 
+## API for Updating a Test Suite's Test Cases in Bulk
+
+_June 6th, 2024_
+
+For a while now you've been able to programmatically [upsert](/api-reference/api-reference/test-suites/upsert-test-suite-test-case)
+and [delete](/api-reference/api-reference/test-suites/delete-test-suite-test-case) Test Cases in a Test suite individually.
+
+However, this can be problematic if you want to operate on many Test Cases at once. To solve this, we've added an API to create, replace, and delete Test Cases in bulk.
+
+Check out the new Bulk Test Case Operations API in our docs [here](/api-reference/api-reference/test-suites/test-suite-test-cases-bulk).
+
+Note: this API is available in our SDKs beginning version 0.6.4.
+
+## APIs for Programmatically Moving Release Tags
+
+_June 5th, 2024_
+
+To follow up the release of APIs for programmatically deploying Prompts and Workflows, we're excited to also announce APIs for programmatically moving Release Tags.
+
+With these APIs, you can create a CI/CD pipeline that automatically moves a Release Tag for one environment from one version of a Prompt/Workflow to another.
+For example, you might run certain tests or QA processes before promoting `STAGING` to `PRODUCTION`.
+
+To move a Prompt Deployment Release Tag, check out the API docs [here](/api-reference/api-reference/deployments/update-deployment-release-tag).
+
+To move a Workflow Deployment Release Tag, see the API docs [here](/api-reference/api-reference/workflow-deployments/update-workflow-release-tag).
+
+Note: these APIs are available in our SDKs beginning version 0.6.3.
+
+## APIs for Programmatically Deploying Prompts/Workflows
+
+_June 5th, 2024_
+
+Thanks to the desires of a few very forward-thinking customers, we now have APIs to support programmatically deploying prompts and workflows.
+These APIs can be used as the basis for CI/CD pipelines for Vellum-managed entities.
+
+We're super bullish on integrating Vellum with existing release management systems (think, Github Actions) and you can expect
+to see more from us here, soon!
+
+To deploy a Prompt, you'll need the IDs of the Prompt Sandbox and the Prompt Variant shown here:
+
+![Prompt Sandbox and Variant IDs](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-06/prompt-sandbox-ids.png)
+
+And can then hit the Deploy Prompt endpoint found [here](/api-reference/api-reference/sandboxes/deploy-prompt).
+
+Similarly, to deploy a Workflow, you'll need the IDs of the Workflow Sandbox and the Workflow shown here:
+
+![Workflow Sandbox and Variant IDs](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-06/workflow-sandbox-ids.png
+
+And can then hit the Deploy Workflow endpoint found [here](/api-reference/api-reference/workflow-sandboxes/deploy-workflow).
+
+Note: these APIs are available in our SDKs beginning version 0.6.3.
+
 ## Image Support in Claude 3 and Gemini Models
 
 _June 3rd, 2024_
