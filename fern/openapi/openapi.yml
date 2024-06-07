@@ -5550,6 +5550,10 @@ components:
           - $ref: '#/components/schemas/SearchResultDocument'
           description: The document that contains the chunk that matched the search
             query.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMeta'
+          description: Additional information about the search result.
       required:
       - document
       - keywords
@@ -5616,6 +5620,38 @@ components:
           type: boolean
           default: true
           description: Whether to enable merging results
+    SearchResultMeta:
+      type: object
+      properties:
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk starts in the document.
+            Only available for supported chunking strategies and document types.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk ends in the document.
+            Only available for supported chunking strategies and document types.
+      required:
+      - end_page_num
+      - start_page_num
+    SearchResultMetaRequest:
+      type: object
+      properties:
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk starts in the document.
+            Only available for supported chunking strategies and document types.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk ends in the document.
+            Only available for supported chunking strategies and document types.
+      required:
+      - end_page_num
+      - start_page_num
     SearchResultRequest:
       type: object
       properties:
@@ -5638,6 +5674,10 @@ components:
           - $ref: '#/components/schemas/SearchResultDocumentRequest'
           description: The document that contains the chunk that matched the search
             query.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMetaRequest'
+          description: Additional information about the search result.
       required:
       - document
       - keywords
