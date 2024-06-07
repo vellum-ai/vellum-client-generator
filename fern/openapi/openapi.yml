@@ -2595,6 +2595,11 @@ components:
       - ACTIVE
       type: string
       description: '* `ACTIVE` - Active'
+    DocumentTypeEnum:
+      enum:
+      - pdf
+      type: string
+      description: '* `pdf` - pdf'
     EnrichedNormalizedCompletion:
       type: object
       properties:
@@ -5042,6 +5047,36 @@ components:
           type: string
           format: uuid
           description: The ID of the Workflow Deployment History Item to tag
+    PdfSearchResultMetaSource:
+      type: object
+      properties:
+        document_type:
+          $ref: '#/components/schemas/DocumentTypeEnum'
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The page number where the chunk starts in the document. Only
+            available for certain chunking strategies.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The page number where the chunk ends in the document. Only
+            available for certain chunking strategies.
+    PdfSearchResultMetaSourceRequest:
+      type: object
+      properties:
+        document_type:
+          $ref: '#/components/schemas/DocumentTypeEnum'
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The page number where the chunk starts in the document. Only
+            available for certain chunking strategies.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The page number where the chunk ends in the document. Only
+            available for certain chunking strategies.
     ProcessingFailureReasonEnum:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
@@ -5623,35 +5658,19 @@ components:
     SearchResultMeta:
       type: object
       properties:
-        start_page_num:
-          type: integer
+        source:
+          allOf:
+          - $ref: '#/components/schemas/PdfSearchResultMetaSource'
           nullable: true
-          description: The 1-indexed page number where the chunk starts in the document.
-            Only available for supported chunking strategies and document types.
-        end_page_num:
-          type: integer
-          nullable: true
-          description: The 1-indexed page number where the chunk ends in the document.
-            Only available for supported chunking strategies and document types.
-      required:
-      - end_page_num
-      - start_page_num
+          description: Additional information about the source of the search result.
     SearchResultMetaRequest:
       type: object
       properties:
-        start_page_num:
-          type: integer
+        source:
+          allOf:
+          - $ref: '#/components/schemas/PdfSearchResultMetaSourceRequest'
           nullable: true
-          description: The 1-indexed page number where the chunk starts in the document.
-            Only available for supported chunking strategies and document types.
-        end_page_num:
-          type: integer
-          nullable: true
-          description: The 1-indexed page number where the chunk ends in the document.
-            Only available for supported chunking strategies and document types.
-      required:
-      - end_page_num
-      - start_page_num
+          description: Additional information about the source of the search result.
     SearchResultRequest:
       type: object
       properties:
