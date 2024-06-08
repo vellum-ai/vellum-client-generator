@@ -5048,6 +5048,50 @@ components:
           type: string
           format: uuid
           description: The ID of the Workflow Deployment History Item to tag
+    PdfEnum:
+      type: string
+      enum:
+      - PDF
+    PdfSearchResultMetaSource:
+      type: object
+      description: The source of a search result from a PDF document.
+      properties:
+        document_type:
+          $ref: '#/components/schemas/PdfEnum'
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk starts in the document.
+            Only available for supported chunking strategies and document types.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk ends in the document.
+            Only available for supported chunking strategies and document types.
+      required:
+      - document_type
+      - end_page_num
+      - start_page_num
+    PdfSearchResultMetaSourceRequest:
+      type: object
+      description: The source of a search result from a PDF document.
+      properties:
+        document_type:
+          $ref: '#/components/schemas/PdfEnum'
+        start_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk starts in the document.
+            Only available for supported chunking strategies and document types.
+        end_page_num:
+          type: integer
+          nullable: true
+          description: The 1-indexed page number where the chunk ends in the document.
+            Only available for supported chunking strategies and document types.
+      required:
+      - document_type
+      - end_page_num
+      - start_page_num
     ProcessingFailureReasonEnum:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
@@ -5556,6 +5600,10 @@ components:
           - $ref: '#/components/schemas/SearchResultDocument'
           description: The document that contains the chunk that matched the search
             query.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMeta'
+          description: Additional information about the search result.
       required:
       - document
       - keywords
@@ -5622,6 +5670,34 @@ components:
           type: boolean
           default: true
           description: Whether to enable merging results
+    SearchResultMeta:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/SearchResultMetaSource'
+      required:
+      - source
+    SearchResultMetaRequest:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/SearchResultMetaSourceRequest'
+      required:
+      - source
+    SearchResultMetaSource:
+      oneOf:
+      - $ref: '#/components/schemas/PdfSearchResultMetaSource'
+      discriminator:
+        propertyName: document_type
+        mapping:
+          PDF: '#/components/schemas/PdfSearchResultMetaSource'
+    SearchResultMetaSourceRequest:
+      oneOf:
+      - $ref: '#/components/schemas/PdfSearchResultMetaSourceRequest'
+      discriminator:
+        propertyName: document_type
+        mapping:
+          PDF: '#/components/schemas/PdfSearchResultMetaSourceRequest'
     SearchResultRequest:
       type: object
       properties:
@@ -5644,6 +5720,10 @@ components:
           - $ref: '#/components/schemas/SearchResultDocumentRequest'
           description: The document that contains the chunk that matched the search
             query.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMetaRequest'
+          description: Additional information about the search result.
       required:
       - document
       - keywords
