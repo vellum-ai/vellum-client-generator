@@ -110,10 +110,13 @@ navigation:
             slug: hmac-authentication
   - tab: api
     layout:
-      - section: Introduction
+      - section: Overview
+        slug: introduction
         contents:
           - page: Getting started
             path: ./docs/content/api/intro.mdx
+          - page: Authentication
+            path: ./docs/content/api/authentication.mdx
       - api: API Reference
         snippets:
           python: vellum-ai
