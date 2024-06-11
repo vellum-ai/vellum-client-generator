@@ -7,7 +7,7 @@ With a large number of supported node types (full details here: [Experimenting w
 
 The list of architectures below is not exhaustive, we’re continuing to build it out. If you come up with an interesting architecture that you think the community might benefit from, please reach out so we can add it to the list here.
 
-## 1. Create a Retrieval Augmented Generation System
+## 1. Create a Retrieval Augmented Generation (RAG) system
 
 LLM applications often require specific context from a Vector DB which is added into the prompt. Forget signing up for multiple systems and being stuck on various micro decisions, with Vellum you can prototype a RAG system in minutes
 
@@ -24,7 +24,7 @@ LLM applications often require specific context from a Vector DB which is added 
   experimental_enableRequestFullscreen={true}
 />
 
-## 2. Route Relevant Messages Dynamically to a Human
+## 2. Route relevant messages dynamically to a Human
 
 If you’re building an agent that answers questions coming from users (e.g., a support chatbot), you may want to set up rules such that anytime the incoming message from a user is sensitive (e.g., the user is angry or in a dangerous situation) then the LLM automatically escalates it to a human. With Workflows you’d be able to build that out real quick.
 
@@ -76,3 +76,30 @@ Here are the steps involved in this example:
 - Step 2: Define a Conditional Node (`Error Check`) that reads from the new Error output from the Prompt Node and checks to see if it's not null.
 - Step 3: Define another Conditional Node (`Count Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
 - Step 4: Loop back to the Prompt Node if it's under the limit, exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
+
+## 5. Summarizing the contents of a PDF file
+
+Vellum Document Indexes are typically used to power RAG systems via Search Nodes. However, they can also be used to operate on the entirety of a single file's contents.
+In this example, we make use of Vellum Document Indexes not for the purpose of search, instead, to leverage the OCR that's performed and operate on the raw text that's extracted
+from a PDF file.
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/94f60249-8729-4c10-bb54-941621abceaa"
+  width="100%"
+  height="450px"
+  experimental_enableRequestFullscreen={true}
+/>
+
+Prerequisites:
+You need to have ....
+- Created a Document Index. Note: it doesn't matter what embedding model or chunking strategy you choose, since we're only leveraging the OCR capabilities of the Document Index.
+- Uploaded a PDF file to the Document Index and noted down its ID.
+- Generated a Vellum API Token and saved its value as a Workspace Secret.
+
+Here are the steps involved in this example:
+- Step 1: The input to the workflow is the ID of a Document that was previously uploaded to a Document INdex
+- Step 2: Use a Templating Node (`Document API URL`) to construct the url of a Vellum API we want to hit.
+- Step 3: Use an API Node (`Document API`) that hits the Vellum API to retrieve metadata about the Document.
+- Step 4: Use a Templating Node (`Processed Document URL`) to extract the url of the processed document from the API response.
+- Step 5: Use an API Node (`Processed Document Contents`) to retrieve the text contents of the Document.
+- Step 6: Pass those contents to a Prompt Node that summarizes the text.
