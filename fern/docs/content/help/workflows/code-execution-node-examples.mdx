@@ -1,28 +1,44 @@
 ---
 title: Code Execution Node Examples
-description: Discover how to use Python for data transformations in Vellum Workflows, including arithmetic and JSON manipulation.
+description: Discover how to use Python or Typescript for data transformations in Vellum Workflows, including arithmetic and JSON manipulation.
 ---
-The Code Execution Node supports running arbitrary Python code to perform data transformations in your Workflow. It can simplify your workflow, especially in cases where a combination of Conditional, Templating, and Merge nodes are used. Below are some example use cases:
+The Code Execution Node supports running arbitrary Python or Typescript code to perform data transformations in your Workflow. It can simplify your workflow, especially in cases where a combination of Conditional, Templating, and Merge nodes are used. Below are some example use cases:
 
 # Arithmetic
 
 ### Check if a number is a multiple of another
 
 {/* prettier-ignore */}
-<CodeBlock title="Code">
-    ```python
-    def main(
-        arg1: int,
-        arg2: int,
-    ) -> int:
-        # this function returns the multiple if arg1 is a multiple of arg2
-        # or the remainder otherwise
-        if arg1 % arg2 == 0:
-            return arg1 / arg2
-        else:
-            return arg1 % arg2
-    ```
-</CodeBlock>
+<CodeBlocks>
+  <CodeBlock title="Python">
+      ```python
+      def main(
+          arg1: int,
+          arg2: int,
+      ) -> int:
+          # this function returns the multiple if arg1 is a multiple of arg2
+          # or the remainder otherwise
+          if arg1 % arg2 == 0:
+              return arg1 / arg2
+          else:
+              return arg1 % arg2
+      ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+      ```python
+      def main(
+          arg1: int,
+          arg2: int,
+      ) -> int:
+          # this function returns the multiple if arg1 is a multiple of arg2
+          # or the remainder otherwise
+          if arg1 % arg2 == 0:
+              return arg1 / arg2
+          else:
+              return arg1 % arg2
+      ```
+  </CodeBlock>
+</CodeBlocks>
 {/* prettier-ignore-end */}
 
 # JSON Manipulation
