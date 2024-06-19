@@ -1,8 +1,8 @@
 ---
 title: Code Execution Node Examples
-description: Discover how to use Python or Typescript for data transformations in Vellum Workflows, including arithmetic and JSON manipulation.
+description: Discover how to use Python or TypeScript for data transformations in Vellum Workflows, including arithmetic and JSON manipulation.
 ---
-The Code Execution Node supports running arbitrary Python or Typescript code to perform data transformations in your Workflow. It can simplify your workflow, especially in cases where a combination of Conditional, Templating, and Merge nodes are used. Below are some example use cases:
+The Code Execution Node supports running arbitrary Python or TypeScript code to perform data transformations in your Workflow. It can simplify your workflow, especially in cases where a combination of Conditional, Templating, and Merge nodes are used. Below are some example use cases:
 
 # Arithmetic
 
@@ -24,18 +24,21 @@ The Code Execution Node supports running arbitrary Python or Typescript code to 
               return arg1 % arg2
       ```
   </CodeBlock>
-  <CodeBlock title="Typescript">
-      ```python
-      def main(
-          arg1: int,
-          arg2: int,
-      ) -> int:
-          # this function returns the multiple if arg1 is a multiple of arg2
-          # or the remainder otherwise
-          if arg1 % arg2 == 0:
-              return arg1 / arg2
-          else:
-              return arg1 % arg2
+  <CodeBlock title="TypeScript">
+      ```typescript
+      async function main(inputs: {
+        arg1: number,
+        arg2: number,
+      }): Promise&lt;number&gt; {
+        // this function returns the multiple if arg1 is a multiple of arg2
+        // or the remainder otherwise
+        if (inputs.arg1 % inputs.arg2 === 0) {
+          return inputs.arg1 / inputs.arg2
+        } else {
+          return inputs.arg1 % inputs.arg2
+        }
+      }
+
       ```
   </CodeBlock>
 </CodeBlocks>
@@ -46,18 +49,32 @@ The Code Execution Node supports running arbitrary Python or Typescript code to 
 ### Remap the keys
 
 {/* prettier-ignore */}
-<CodeBlock title="Code">
-    ```python
-    def main(
-        arg: dict
-    ) -> dict:
+<CodeBlocks>
+  <CodeBlock title="Code">
+      ```python
+      def main(
+          arg: dict
+      ) -> dict:
+          return {
+            "newKey": arg.get("oldKey", None)
+          }
+
+      ```
+
+  </CodeBlock>
+
+  <CodeBlock title="TypeScript">
+      ```typescript
+      async function main(inputs: {
+        arg: Record&lt;string, any&gt,
+      }): Promise&lt;Record&lt;string, any&gt&gt; {
         return {
-          "newKey": arg.get("oldKey", None)
-        }
-
-    ```
-
-</CodeBlock>
+          newKey: arg.oldKey
+        };
+      }
+      ```
+  </CodeBlock>
+</CodeBlocks>
 {/* prettier-ignore-end */}
 
 # Code Packages
