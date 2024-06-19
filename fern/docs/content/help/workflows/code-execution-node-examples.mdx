@@ -29,7 +29,7 @@ The Code Execution Node supports running arbitrary Python or TypeScript code to 
       async function main(inputs: {
         arg1: number,
         arg2: number,
-      }): Promise&lt;number&gt; {
+      }): Promise<number> {
         // this function returns the multiple if arg1 is a multiple of arg2
         // or the remainder otherwise
         if (inputs.arg1 % inputs.arg2 === 0) {
@@ -66,10 +66,10 @@ The Code Execution Node supports running arbitrary Python or TypeScript code to 
   <CodeBlock title="TypeScript">
       ```typescript
       async function main(inputs: {
-        arg: Record&lt;string, any&gt,
-      }): Promise&lt;Record&lt;string, any&gt&gt; {
+        arg: Record<string, any>,
+      }): Promise<Record<string, any>> {
         return {
-          newKey: arg.oldKey
+          newKey: inputs.arg.oldKey
         };
       }
       ```
