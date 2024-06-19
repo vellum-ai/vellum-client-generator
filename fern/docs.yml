@@ -122,7 +122,6 @@ navigation:
         snippets:
           python: vellum-ai
           typescript: "vellum-ai"
-        # flattened: true
         layout:
           - section: Completions
             contents:
