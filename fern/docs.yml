@@ -118,9 +118,87 @@ navigation:
           - page: Authentication
             path: ./docs/content/api/authentication.mdx
       - api: API Reference
+        skip-slug: true
         snippets:
           python: vellum-ai
           typescript: "vellum-ai"
+        # flattened: true
+        layout:
+          - section: Completions
+            contents:
+              - POST https://predict.vellum.ai/v1/search
+              - POST https://predict.vellum.ai/v1/execute-prompt
+              - endpoint: POST https://predict.vellum.ai/v1/execute-prompt-stream
+                title: Execute Prompt as Stream
+              - POST https://predict.vellum.ai/v1/submit-completion-actuals
+              - section: Deprecated
+                skip-slug: true
+                contents:
+                  - POST https://predict.vellum.ai/v1/generate
+                  - POST https://predict.vellum.ai/v1/generate-stream
+          - section: Workflows
+            contents:
+              - POST https://predict.vellum.ai/v1/execute-workflow
+              - endpoint: POST https://predict.vellum.ai/v1/execute-workflow-stream
+                title: Execute Workflow as Stream
+              - POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals
+          - deployments:
+              - GET https://api.vellum.ai/v1/deployments
+              - GET https://api.vellum.ai/v1/deployments/{id}
+              - GET https://api.vellum.ai/v1/deployments/{id}/release-tags/{name}
+              - PATCH https://api.vellum.ai/v1/deployments/{id}/release-tags/{name}
+              - POST https://api.vellum.ai/v1/deployments/provider-payload
+              - workflowDeployments:
+                  slug: workflow
+                  contents:
+                    - endpoint: GET https://api.vellum.ai/v1/workflow-deployments
+                      title: List Workflow Deployments
+                    - endpoint: GET https://api.vellum.ai/v1/workflow-deployments/{id}
+                      title: Retrieve Workflow Deployment
+          - documents
+          - documentIndexes
+          - folderEntities
+          - section: Sandboxes
+            referenced-packages:
+              - sandboxes
+              - workflowSandboxes
+            contents:
+              - endpoint: POST https://api.vellum.ai/v1/sandboxes/{id}/prompts/{prompt_id}/deploy
+                slug: deploy-prompt
+              - endpoint: POST https://api.vellum.ai/v1/sandboxes/{id}/scenarios
+                slug: upsert-scenario
+              - endpoint: DELETE https://api.vellum.ai/v1/sandboxes/{id}/scenarios/{scenario_id}
+                slug: delete-scenario
+              - endpoint: POST https://api.vellum.ai/v1/workflow-sandboxes/{id}/workflows/{workflow_id}/deploy
+                title: Deploy Sandbox Workflow
+          - section: Test Suites
+            contents:
+              - testSuite:
+                  title: Test Cases
+                  slug: test-cases
+                  contents:
+                    - endpoint: GET https://api.vellum.ai/v1/test-suites/{id}/test-cases
+                      title: List Test Cases
+                      slug: list
+                    - endpoint: POST https://api.vellum.ai/v1/test-suites/{id}/test-cases
+                      title: Upsert Test Cases
+                      slug: upsert
+                    - endpoint: POST https://api.vellum.ai/v1/test-suites/{id}/test-cases-bulk
+                      title: Bulk Update Test Cases
+                      slug: bulk-update
+                    - endpoint: DELETE https://api.vellum.ai/v1/test-suites/{id}/test-cases/{test_case_id}
+                      title: Delete Test Case
+                      slug: delete
+              - testSuiteRuns:
+                  title: Test Suite Runs
+                  slug: runs
+                  contents:
+                    - endpoint: POST https://api.vellum.ai/v1/test-suite-runs
+                      title: Create Test Suite Run
+                    - endpoint: GET https://api.vellum.ai/v1/test-suite-runs/{id}
+                      title: Retrieve Test Suite Run
+                    - endpoint: GET https://api.vellum.ai/v1/test-suite-runs/{id}/executions
+                      title: List Test Suite Executions
   - tab: change-log
     layout:
       - section: "2024"
