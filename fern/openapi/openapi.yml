@@ -368,14 +368,13 @@ paths:
       x-fern-availability: beta
     put:
       operationId: document_indexes_update
-      description: Used to fully update a Document Index given its ID.
+      description: Used to fully update a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
@@ -397,14 +396,13 @@ paths:
           description: ''
     patch:
       operationId: document_indexes_partial_update
-      description: Used to partial update a Document Index given its ID.
+      description: Used to partial update a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
@@ -425,18 +423,46 @@ paths:
           description: ''
     delete:
       operationId: document_indexes_destroy
-      description: Used to delete a Document Index given its ID.
+      description: Used to delete a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
       - folder-entities
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
+      x-fern-availability: beta
+  /v1/document-indexes/{id}/documents/{document_id}:
+    delete:
+      operationId: remove_document
+      description: Removes a Document from a Document Index without deleting the Document
+        itself.
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally supplied external_id
+          that uniquely identifies the Document you'd like to remove.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally specified name
+          that uniquely identifies the Document Index from which you'd like to remove
+          a Document.
+        required: true
+      tags:
+      - document-indexes
       security:
       - apiKeyAuth: []
       responses:
