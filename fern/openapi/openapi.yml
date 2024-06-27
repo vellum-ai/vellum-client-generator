@@ -3829,6 +3829,14 @@ components:
       - instruction_document_text_type
       - instruction_domain
       - instruction_query_text_type
+    IterationStateEnum:
+      enum:
+      - INITIATED
+      - FULFILLED
+      type: string
+      description: |-
+        * `INITIATED` - INITIATED
+        * `FULFILLED` - FULFILLED
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object
@@ -4018,6 +4026,10 @@ components:
           items:
             type: string
             format: uuid
+        iteration_state:
+          allOf:
+          - $ref: '#/components/schemas/IterationStateEnum'
+          nullable: true
       required:
       - execution_ids
     MergeEnum:

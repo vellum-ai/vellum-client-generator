@@ -2,7 +2,23 @@
 title: Changelog | June, 2024
 ---
 
+## Inline Subworkflow Nodes
+
+_June 26th, 2024_
+
+Subworkflow nodes are a powerful node within Vellum Workflows that allow users to create reusable units of node logic. However up until now, they necessitated
+developing the Workflow in a separate Sandbox, and for that Workflow to be deployed in order to reference it in a particular Workflow.
+
+Today, we are releasing Inline Subworkflows! They empower users to create and group together modular units of nodes directly within the context of an existing 
+Workflow. The node spawns its own editor and supports similar UX as the parent Workflow such as all existing nodes and copy/paste.
+
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-06/inline-subworkflow-editor.png)
+
+For more details, check out our [new help center doc](/help-center/workflows/experimentation#inline-subworkflow-node).
+
 ## Claude 3.5 Sonnet Support
+
+_June 20th, 2024_
 
 We now support the new [Claude 3.5 Sonnet](https://www.anthropic.com/news/claude-3-5-sonnet) model. It has already been automatically added to all workspaces.
 
