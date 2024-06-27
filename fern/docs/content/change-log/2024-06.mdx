@@ -2,6 +2,23 @@
 title: Changelog | June, 2024
 ---
 
+## Map Nodes
+_June 27th, 2024_
+
+Often times when designing a workflow you need to iterate over an array and run the same operation on each item.
+Previously this was only accomplishable by [manually creating the loop](https://docs.vellum.ai/help-center/workflows/common-architectures#3-calling-a-prompt-for-each-item-in-an-array) by connecting Nodes in a tedious layout.
+
+To make this process easier, we are now introducing Map Nodes! Map Nodes work in the same way that array map functions do in many common programming languages.
+The Nodes take a JSON array as an input and iterate over it, running a Subworkflow for each item. The Subworkflow is provided with three input variables for the iteration item, index and the array.
+The output of every Subworkflow is then combined into a single array as a Node output.
+Map Nodes also support up to 12 concurrent iterations.
+
+<iframe
+  src="https://www.loom.com/embed/59a1132879104063b3bf3641706f6128"
+  width="100%"
+  height="450px"
+></iframe>
+
 ## Inline Subworkflow Nodes
 
 _June 26th, 2024_
@@ -9,7 +26,7 @@ _June 26th, 2024_
 Subworkflow nodes are a powerful node within Vellum Workflows that allow users to create reusable units of node logic. However up until now, they necessitated
 developing the Workflow in a separate Sandbox, and for that Workflow to be deployed in order to reference it in a particular Workflow.
 
-Today, we are releasing Inline Subworkflows! They empower users to create and group together modular units of nodes directly within the context of an existing 
+Today, we are releasing Inline Subworkflows! They empower users to create and group together modular units of nodes directly within the context of an existing
 Workflow. The node spawns its own editor and supports similar UX as the parent Workflow such as all existing nodes and copy/paste.
 
 ![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-06/inline-subworkflow-editor.png)
