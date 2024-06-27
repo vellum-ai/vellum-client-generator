@@ -6,7 +6,7 @@ title: Changelog | June, 2024
 _June 27th, 2024_
 
 Often times when designing a workflow you need to iterate over an array and run the same operation on each item.
-Previously this was only accomplishable by [manually creating the loop])(https://docs.vellum.ai/help-center/workflows/common-architectures#3-calling-a-prompt-for-each-item-in-an-array) by connecting Nodes in a tedious layout.
+Previously this was only accomplishable by [manually creating the loop](https://docs.vellum.ai/help-center/workflows/common-architectures#3-calling-a-prompt-for-each-item-in-an-array) by connecting Nodes in a tedious layout.
 
 To make this process easier, we are now introducing Map Nodes! Map Nodes work in the same way that array map functions do in many common programming languages.
 The Nodes take a JSON array as an input and iterate over it, running a Subworkflow for each item. The output of every Subworkflow is then combined into a single array as a Node output.
