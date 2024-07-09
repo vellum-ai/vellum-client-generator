@@ -268,59 +268,59 @@ navigation:
                 title: Execute Workflow as Stream
               - endpoint: POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals
                 title: Submit Workflow Execution Actuals
-              - section: Workflow Sandboxes
-                slug: sandboxes
-                contents:
-                  - endpoint: POST https://api.vellum.ai/v1/workflow-sandboxes/{id}/workflows/{workflow_id}/deploy
-                    title: Deploy Workflow Sandbox
-                    slug: deploy
-              - section: Workflow Deployments
-                slug: deployments
-                contents:
-                  - endpoint: GET https://api.vellum.ai/v1/workflow-deployments
-                    title: List Workflow Deployments
-                    slug: list
-                  - endpoint: GET https://api.vellum.ai/v1/workflow-deployments/{id}
-                    title: Retrieve Workflow Deployment
-                    slug: retrieve
-                  - endpoint: GET https://api.vellum.ai/v1/workflow-deployments/{id}/release-tags/{name}
-                    title: Retrieve Workflow Deployment Release Tag
-                    slug: retrieve-release-tag
-                  - endpoint: PATCH https://api.vellum.ai/v1/workflow-deployments/{id}/release-tags/{name}
-                    title: Update Workflow Deployment Release Tag
-                    slug: update-release-tag
-          - section: Document Indexes
-            slug: document-indexes
-            contents:
-              - endpoint: POST https://predict.vellum.ai/v1/search
-                title: Search
-              - endpoint: DELETE https://api.vellum.ai/v1/document-indexes/{id}/documents/{document_id}
-                title: Remove Document
-              - endpoint: POST https://api.vellum.ai/v1/document-indexes
-                title: Create Document Index
-              - endpoint: GET https://api.vellum.ai/v1/document-indexes/{id}
-                title: Retrieve Document Index
-              - endpoint: GET https://api.vellum.ai/v1/document-indexes
-                title: List Document Indexes
-              - endpoint: PATCH https://api.vellum.ai/v1/document-indexes/{id}
-                title: Update Document Index
-              - endpoint: PUT https://api.vellum.ai/v1/document-indexes/{id}
-                title: Replace Document Index
-              - endpoint: DELETE https://api.vellum.ai/v1/document-indexes/{id}
-                title: Delete Document Index
-          - section: Documents
-            slug: documents
-            contents:
-              - endpoint: POST https://documents.vellum.ai/v1/upload-document
-                title: Upload Document
-              - endpoint: GET https://api.vellum.ai/v1/documents/{id}
-                title: Retrieve Document
-              - endpoint: GET https://api.vellum.ai/v1/documents
-                title: List Documents
-              - endpoint: PATCH https://api.vellum.ai/v1/documents/{id}
-                title: Update Document
-              - endpoint: DELETE https://api.vellum.ai/v1/documents/{id}
-                title: Delete Document
+              - workflowSandboxes:
+                  title: Workflow Sandboxes
+                  slug: sandboxes
+              - workflowDeployments:
+                  title: Workflow Deployments
+                  slug: deployments
+                  contents:
+                    - endpoint: GET https://api.vellum.ai/v1/workflow-deployments
+                      title: List Workflow Deployments
+                      slug: list
+                    - endpoint: GET https://api.vellum.ai/v1/workflow-deployments/{id}
+                      title: Retrieve Workflow Deployment
+                      slug: retrieve
+                    - endpoint: GET https://api.vellum.ai/v1/workflow-deployments/{id}/release-tags/{name}
+                      title: Retrieve Workflow Deployment Release Tag
+                      slug: retrieve-release-tag
+                    - endpoint: PATCH https://api.vellum.ai/v1/workflow-deployments/{id}/release-tags/{name}
+                      title: Update Workflow Deployment Release Tag
+                      slug: update-release-tag
+          - documentIndexes:
+              title: Document Indexes
+              slug: document-indexes
+              contents:
+                - endpoint: POST https://predict.vellum.ai/v1/search
+                  title: Search
+                - endpoint: DELETE https://api.vellum.ai/v1/document-indexes/{id}/documents/{document_id}
+                  title: Remove Document
+                - endpoint: POST https://api.vellum.ai/v1/document-indexes
+                  title: Create Document Index
+                - endpoint: GET https://api.vellum.ai/v1/document-indexes/{id}
+                  title: Retrieve Document Index
+                - endpoint: GET https://api.vellum.ai/v1/document-indexes
+                  title: List Document Indexes
+                - endpoint: PATCH https://api.vellum.ai/v1/document-indexes/{id}
+                  title: Update Document Index
+                - endpoint: PUT https://api.vellum.ai/v1/document-indexes/{id}
+                  title: Replace Document Index
+                - endpoint: DELETE https://api.vellum.ai/v1/document-indexes/{id}
+                  title: Delete Document Index
+          - documents:
+              title: Documents
+              slug: documents
+              contents:
+                - endpoint: POST https://documents.vellum.ai/v1/upload-document
+                  title: Upload Document
+                - endpoint: GET https://api.vellum.ai/v1/documents/{id}
+                  title: Retrieve Document
+                - endpoint: GET https://api.vellum.ai/v1/documents
+                  title: List Documents
+                - endpoint: PATCH https://api.vellum.ai/v1/documents/{id}
+                  title: Update Document
+                - endpoint: DELETE https://api.vellum.ai/v1/documents/{id}
+                  title: Delete Document
           - section: Test Suites
             contents:
               - testSuite:
