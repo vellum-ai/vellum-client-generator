@@ -13,6 +13,95 @@ tabs:
   change-log:
     display-name: Changelog
     icon: "fa-solid fa-bolt"
+
+redirects:
+  - source: /api-reference/introduction/getting-started
+    destination: /api-reference/overview/getting-started
+  - source: /api-reference/introduction/authentication
+    destination: /api-reference/overview/authentication
+  - source: /api-reference/api-reference/execute-prompt
+    destination: /api-reference/prompts/execute-prompt
+  - source: /api-reference/api-reference/execute-prompt-stream
+    destination: /api-reference/prompts/execute-prompt-stream
+  - source: /api-reference/api-reference/execute-workflow
+    destination: /api-reference/workflows/execute-workflow
+  - source: /api-reference/api-reference/execute-workflow-stream
+    destination: /api-reference/workflows/execute-workflow-stream
+  - source: /api-reference/api-reference/generate
+    destination: /api-reference/prompts/generate
+  - source: /api-reference/api-reference/generate-stream
+    destination: /api-reference/prompts/generate-stream
+  - source: /api-reference/api-reference/search
+    destination: /api-reference/document-indexes/search
+  - source: /api-reference/api-reference/submit-completion-actuals
+    destination: /api-reference/prompts/submit-completion-actuals
+  - source: /api-reference/api-reference/submit-workflow-execution-actuals
+    destination: /api-reference/workflows/submit-workflow-execution-actuals
+  - source: /api-reference/api-reference/deployments/list
+    destination: /api-reference/prompts/deployments/list
+  - source: /api-reference/api-reference/deployments/retrieve
+    destination: /api-reference/prompts/deployments/retrieve
+  - source: /api-reference/api-reference/deployments/retrieve-release-tag
+    destination: /api-reference/prompts/deployments/retrieve-release-tag
+  - source: /api-reference/api-reference/deployments/update-release-tag
+    destination: /api-reference/prompts/deployments/update-release-tag
+  - source: /api-reference/api-reference/deployments/retrieve-provider-payload
+    destination: /api-reference/prompts/deployments/retrieve-provider-payload
+  - source: /api-reference/api-reference/document-indexes/list
+    destination: /api-reference/document-indexes/list
+  - source: /api-reference/api-reference/document-indexes/retrieve
+    destination: /api-reference/document-indexes/retrieve
+  - source: /api-reference/api-reference/document-indexes/update
+    destination: /api-reference/document-indexes/update
+  - source: /api-reference/api-reference/document-indexes/partial-update
+    destination: /api-reference/document-indexes/partial-update
+  - source: /api-reference/api-reference/document-indexes/destroy
+    destination: /api-reference/document-indexes/destroy
+  - source: /api-reference/api-reference/document-indexes/remove-document
+    destination: /api-reference/document-indexes/remove-document
+  - source: /api-reference/api-reference/documents/list
+    destination: /api-reference/documents/list
+  - source: /api-reference/api-reference/documents/retrieve
+    destination: /api-reference/documents/retrieve
+  - source: /api-reference/api-reference/documents/partial-update
+    destination: /api-reference/documents/partial-update
+  - source: /api-reference/api-reference/documents/destroy
+    destination: /api-reference/documents/destroy
+  - source: /api-reference/api-reference/documents/upload
+    destination: /api-reference/documents/upload
+  - source: /api-reference/api-reference/folder-entities/add-entity-to-folder
+    destination: /api-reference/folder-entities/add-entity-to-folder
+  - source: /api-reference/api-reference/sandboxes/deploy-prompt
+    destination: /api-reference/prompts/sandboxes/deploy-prompt
+  - source: /api-reference/api-reference/sandboxes/upsert-scenario
+    destination: /api-reference/prompts/sandboxes/upsert-scenario
+  - source: /api-reference/api-reference/sandboxes/delete-scenario
+    destination: /api-reference/prompts/sandboxes/delete-scenario
+  - source: /api-reference/api-reference/test-suite-runs/create
+    destination: /api-reference/test-suites/runs/create
+  - source: /api-reference/api-reference/test-suite-runs/retrieve
+    destination: /api-reference/test-suites/runs/retrieve
+  - source: /api-reference/api-reference/test-suite-runs/list-executions
+    destination: /api-reference/test-suites/runs/list-executions
+  - source: /api-reference/api-reference/test-suites/list-test-suite-test-cases
+    destination: /api-reference/test-suites/test-cases/list
+  - source: /api-reference/api-reference/test-suites/upsert-test-suite-test-cases
+    destination: /api-reference/test-suites/test-cases/upsert
+  - source: /api-reference/api-reference/test-suites/bulk-update-test-suite-test-cases
+    destination: /api-reference/test-suites/test-cases/bulk-update
+  - source: /api-reference/api-reference/test-suites/delete-test-suite-test-case
+    destination: /api-reference/test-suites/test-cases/delete
+  - source: /api-reference/api-reference/workflow-deployments/list
+    destination: /api-reference/workflows/deployments/list
+  - source: /api-reference/api-reference/workflow-deployments/retrieve
+    destination: /api-reference/workflows/deployments/retrieve
+  - source: /api-reference/api-reference/workflow-deployments/retrieve-release-tag
+    destination: /api-reference/workflows/deployments/retrieve-release-tag
+  - source: /api-reference/api-reference/workflow-deployments/update-release-tag
+    destination: /api-reference/workflows/deployments/update-release-tag
+  - source: /api-reference/api-reference/workflow-sandboxes/deploy-workflow
+    destination: /api-reference/workflows/sandboxes/deploy
+
 navigation:
   - tab: help
     layout:
@@ -111,7 +200,7 @@ navigation:
   - tab: api
     layout:
       - section: Overview
-        slug: introduction
+        slug: overview
         contents:
           - page: Getting started
             path: ./docs/content/api/intro.mdx
