@@ -368,14 +368,13 @@ paths:
       x-fern-availability: beta
     put:
       operationId: document_indexes_update
-      description: Used to fully update a Document Index given its ID.
+      description: Used to fully update a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
@@ -397,14 +396,13 @@ paths:
           description: ''
     patch:
       operationId: document_indexes_partial_update
-      description: Used to partial update a Document Index given its ID.
+      description: Used to partial update a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
@@ -425,18 +423,46 @@ paths:
           description: ''
     delete:
       operationId: document_indexes_destroy
-      description: Used to delete a Document Index given its ID.
+      description: Used to delete a Document Index given its ID or name.
       parameters:
       - in: path
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this document index.
+        description: Either the Document Index's ID or its unique name
         required: true
       tags:
       - document-indexes
       - folder-entities
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
+      x-fern-availability: beta
+  /v1/document-indexes/{id}/documents/{document_id}:
+    delete:
+      operationId: remove_document
+      description: Removes a Document from a Document Index without deleting the Document
+        itself.
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally supplied external_id
+          that uniquely identifies the Document you'd like to remove.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally specified name
+          that uniquely identifies the Document Index from which you'd like to remove
+          a Document.
+        required: true
+      tags:
+      - document-indexes
       security:
       - apiKeyAuth: []
       responses:
@@ -1798,51 +1824,6 @@ components:
           nullable: true
       required:
       - model_name
-    BulkCreateTestSuiteTestCaseDataRequest:
-      type: object
-      description: Information about the Test Case to create
-      properties:
-        label:
-          type: string
-          nullable: true
-        input_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
-          description: Values for each of the Test Case's input variables
-        evaluation_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
-          description: Values for each of the Test Case's evaluation variables
-      required:
-      - evaluation_values
-      - input_values
-    BulkReplaceTestSuiteTestCaseDataRequest:
-      type: object
-      description: Information about the Test Case to replace
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the Test Case to replace.
-        label:
-          type: string
-          nullable: true
-        input_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
-          description: Values for each of the Test Case's input variables
-        evaluation_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
-          description: Values for each of the Test Case's evaluation variables
-      required:
-      - evaluation_values
-      - id
-      - input_values
     ChatHistoryEnum:
       type: string
       enum:
@@ -2124,6 +2105,35 @@ components:
       type: string
       enum:
       - CREATE
+    CreateTestSuiteTestCaseRequest:
+      type: object
+      description: Information about the Test Case to create
+      properties:
+        label:
+          type: string
+          nullable: true
+          description: A human-readable label used to convey the intention of this
+            Test Case
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's input variables
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's evaluation variables
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: Optionally provide an ID that uniquely identifies this Test
+            Case in your system. Useful for updating this Test Cases data after initial
+            creation. Cannot be changed later.
+      required:
+      - evaluation_values
+      - input_values
     CreatedEnum:
       type: string
       enum:
@@ -2234,8 +2244,10 @@ components:
       type: object
       properties:
         payload:
-          type: object
-          additionalProperties: {}
+          oneOf:
+          - type: object
+            additionalProperties: {}
+          - type: string
       required:
       - payload
     DeploymentRead:
@@ -2964,6 +2976,7 @@ components:
           REJECTED: '#/components/schemas/RejectedExecuteWorkflowWorkflowResultEvent'
     ExecutionArrayVellumValue:
       type: object
+      description: A value representing an array of Vellum variable values.
       properties:
         id:
           type: string
@@ -2971,11 +2984,11 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/ArrayEnum'
         value:
           type: array
           items:
-            $ref: '#/components/schemas/ArrayVariableValueItem'
+            $ref: '#/components/schemas/ArrayVellumValueItem'
           nullable: true
       required:
       - id
@@ -2984,6 +2997,7 @@ components:
       - value
     ExecutionChatHistoryVellumValue:
       type: object
+      description: A value representing Chat History.
       properties:
         id:
           type: string
@@ -2991,7 +3005,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/ChatHistoryEnum'
         value:
           type: array
           items:
@@ -3004,6 +3018,7 @@ components:
       - value
     ExecutionErrorVellumValue:
       type: object
+      description: A value representing an Error.
       properties:
         id:
           type: string
@@ -3011,7 +3026,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/ErrorEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/VellumError'
@@ -3023,6 +3038,7 @@ components:
       - value
     ExecutionFunctionCallVellumValue:
       type: object
+      description: A value representing a Function Call.
       properties:
         id:
           type: string
@@ -3030,7 +3046,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/FunctionCallEnum'
         value:
           allOf:
           - $ref: '#/components/schemas/FunctionCall'
@@ -3042,6 +3058,7 @@ components:
       - value
     ExecutionJsonVellumValue:
       type: object
+      description: A value representing a JSON object.
       properties:
         id:
           type: string
@@ -3049,7 +3066,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/JsonEnum'
         value:
           type: object
           additionalProperties: {}
@@ -3061,6 +3078,7 @@ components:
       - value
     ExecutionNumberVellumValue:
       type: object
+      description: A value representing a number.
       properties:
         id:
           type: string
@@ -3068,7 +3086,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/NumberEnum'
         value:
           type: number
           format: double
@@ -3080,6 +3098,7 @@ components:
       - value
     ExecutionSearchResultsVellumValue:
       type: object
+      description: A value representing Search Results.
       properties:
         id:
           type: string
@@ -3087,7 +3106,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/SearchResultsEnum'
         value:
           type: array
           items:
@@ -3100,6 +3119,7 @@ components:
       - value
     ExecutionStringVellumValue:
       type: object
+      description: A value representing a string.
       properties:
         id:
           type: string
@@ -3107,7 +3127,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          $ref: '#/components/schemas/StringEnum'
         value:
           type: string
           nullable: true
@@ -3809,6 +3829,14 @@ components:
       - instruction_document_text_type
       - instruction_domain
       - instruction_query_text_type
+    IterationStateEnum:
+      enum:
+      - INITIATED
+      - FULFILLED
+      type: string
+      description: |-
+        * `INITIATED` - INITIATED
+        * `FULFILLED` - FULFILLED
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object
@@ -3976,6 +4004,34 @@ components:
         compute_nanos:
           type: integer
           nullable: true
+    MapEnum:
+      type: string
+      enum:
+      - MAP
+    MapNodeResult:
+      type: object
+      description: A Node Result Event emitted from a Map Node.
+      properties:
+        type:
+          $ref: '#/components/schemas/MapEnum'
+        data:
+          $ref: '#/components/schemas/MapNodeResultData'
+      required:
+      - type
+    MapNodeResultData:
+      type: object
+      properties:
+        execution_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+        iteration_state:
+          allOf:
+          - $ref: '#/components/schemas/IterationStateEnum'
+          nullable: true
+      required:
+      - execution_ids
     MergeEnum:
       type: string
       enum:
@@ -5401,6 +5457,41 @@ components:
       type: string
       enum:
       - REPLACE
+    ReplaceTestSuiteTestCaseRequest:
+      type: object
+      description: Information about the Test Case to replace
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+          description: The Vellum-generated ID of the Test Case whose data you'd like
+            to replace. Must specify either this or external_id.
+        external_id:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The ID that was originally provided upon Test Case creation
+            that uniquely identifies the Test Case whose data you'd like to replace.
+            Must specify either this of id.
+        label:
+          type: string
+          nullable: true
+          description: A human-readable label used to convey the intention of this
+            Test Case
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's input variables
+        evaluation_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedTestCaseVariableValueRequest'
+          description: Values for each of the Test Case's evaluation variables
+      required:
+      - evaluation_values
+      - input_values
     ReplacedEnum:
       type: string
       enum:
@@ -5603,6 +5694,7 @@ components:
         meta:
           allOf:
           - $ref: '#/components/schemas/SearchResultMeta'
+          nullable: true
           description: Additional information about the search result.
       required:
       - document
@@ -5674,16 +5766,16 @@ components:
       type: object
       properties:
         source:
-          $ref: '#/components/schemas/SearchResultMetaSource'
-      required:
-      - source
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMetaSource'
+          nullable: true
     SearchResultMetaRequest:
       type: object
       properties:
         source:
-          $ref: '#/components/schemas/SearchResultMetaSourceRequest'
-      required:
-      - source
+          allOf:
+          - $ref: '#/components/schemas/SearchResultMetaSourceRequest'
+          nullable: true
     SearchResultMetaSource:
       oneOf:
       - $ref: '#/components/schemas/PdfSearchResultMetaSource'
@@ -5723,6 +5815,7 @@ components:
         meta:
           allOf:
           - $ref: '#/components/schemas/SearchResultMetaRequest'
+          nullable: true
           description: Additional information about the search result.
       required:
       - document
@@ -7370,6 +7463,9 @@ components:
       properties:
         id:
           type: string
+        external_id:
+          type: string
+          nullable: true
         label:
           type: string
           nullable: true
@@ -7420,7 +7516,7 @@ components:
         type:
           $ref: '#/components/schemas/CreateEnum'
         data:
-          $ref: '#/components/schemas/BulkCreateTestSuiteTestCaseDataRequest'
+          $ref: '#/components/schemas/CreateTestSuiteTestCaseRequest'
       required:
       - data
       - id
@@ -7532,7 +7628,7 @@ components:
         type:
           $ref: '#/components/schemas/ReplaceEnum'
         data:
-          $ref: '#/components/schemas/BulkReplaceTestSuiteTestCaseDataRequest'
+          $ref: '#/components/schemas/ReplaceTestSuiteTestCaseRequest'
       required:
       - data
       - id
@@ -7703,13 +7799,22 @@ components:
         id:
           type: string
           format: uuid
-          description: The ID of the Test Case to upsert. If specified and a match
-            is found, the existing Test Case will be updated. If specified and no
-            match is found, a Test Case will be created with the provided ID. If not
-            provided, a new Test Case will be created with an auto-generated ID.
+          description: The Vellum-generated ID of an existing Test Case whose data
+            you'd like to replace. If specified and no Test Case exists with this
+            ID, a 404 will be returned.
+        external_id:
+          type: string
+          minLength: 1
+          description: An ID external to Vellum that uniquely identifies the Test
+            Case that you'd like to create/update. If there's a match on a Test Case
+            that was previously created with the same external_id, it will be updated.
+            Otherwise, a new Test Case will be created with this value as its external_id.
+            If no external_id is specified, then a new Test Case will always be created.
         label:
           type: string
           nullable: true
+          description: A human-readable label used to convey the intention of this
+            Test Case
         input_values:
           type: array
           items:
@@ -8108,6 +8213,7 @@ components:
       - $ref: '#/components/schemas/MergeNodeResult'
       - $ref: '#/components/schemas/SubworkflowNodeResult'
       - $ref: '#/components/schemas/MetricNodeResult'
+      - $ref: '#/components/schemas/MapNodeResult'
       discriminator:
         propertyName: type
         mapping:
@@ -8121,6 +8227,7 @@ components:
           MERGE: '#/components/schemas/MergeNodeResult'
           SUBWORKFLOW: '#/components/schemas/SubworkflowNodeResult'
           METRIC: '#/components/schemas/MetricNodeResult'
+          MAP: '#/components/schemas/MapNodeResult'
     WorkflowNodeResultEvent:
       oneOf:
       - $ref: '#/components/schemas/InitiatedWorkflowNodeResultEvent'
