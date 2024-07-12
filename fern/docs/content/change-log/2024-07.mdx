@@ -1,0 +1,22 @@
+---
+title: Changelog | July, 2024
+---
+
+## Constant Values in Workflow Node Inputs
+_July 11th, 2024_
+
+It's often the case that a user would want to specify a constant value into a Workflow Node Input, either as the primary value or as a fallback value.
+The solution up until now was specifying a Templating Node, ensuring that this Node was in the execution path, and feeding its output into a Node's input.
+
+Today, we are releasing the ability to directly define a constant to a Workflow Node! First, start typing in the Node Input until the no options modal shows:
+
+![New Constant Link](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/new-constant-link.png)
+
+A modal will appear to specify your value:
+
+![New Constant Modal](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/new-constant-modal.png)
+
+Upon confirm, we use a constant specific icon to denote that an input is from a constant. As part of this work, we also brought inline the option icon
+for all other Node Input types:
+
+![Constant Value Display](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/constant-value-display.png)
