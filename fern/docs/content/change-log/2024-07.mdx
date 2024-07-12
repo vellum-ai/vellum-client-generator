@@ -2,6 +2,18 @@
 title: Changelog | July, 2024
 ---
 
+## Prompt Deployment Executions Table Improvements
+
+_July 12th, 2024_
+
+We've made several quality-of-life enhancements to the Prompt Deployment Executions table, simplifying the process of adding and editing 'Desired Output' values. The entire table has been updated to align with the design of our other tables, such as Evaluations, ensuring a familiar editing experience. Additionally, it is now easier than ever to expand/collapse and copy values.
+
+Moreover, we've significantly improved the consistency and usability of the 'Quality' column. You can now edit quality ratings with a single click, and the 'Desired Output' column will automatically update to reflect your rating where applicable.
+
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/executions-output-input.png)
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/executions-quality-input.png)
+
+
 ## Constant Values in Workflow Node Inputs
 _July 11th, 2024_
 
@@ -22,3 +34,27 @@ Upon confirming, Vellum will use an icon to denote that the input value represen
 
 Note that constant values will always drop to the last fallback option of a given Node input, and there can only be maximum one constant defined per input.
 This is due to the nature fallback values – fallbacks are only used if other values aren't available (i.e. the node that produced the value hadn't executed yet). In the case of constants, their values are always present.
+
+## Eval Test Case Uploads
+
+_July 9th, 2024_
+
+We’ve introduced a new feature that allows you to upload test cases directly to an Evaluations table, eliminating the need to navigate to the Test Suite configuration. Now, you'll find an "Upload Test Cases" button in the table header of every Evaluations table, for both Workflows and Prompt Sandboxes.
+
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/eval-page-test-case-upload.png)
+
+## Index Page List View
+
+_July 3rd, 2024_
+
+We’ve introduced a list-view toggle to the index/file browser pages for Prompts, Documents, Test Suites, and Workflows. Your preferred view will be saved automatically by entity type, allowing you to, for instance, default to list view for Prompts and grid view for Documents.
+
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/index-page-list-view.png)
+
+## Collapsible Index Page Sections
+
+_July 2nd, 2024_
+
+You can now collapse sections on the index/file browser pages for Prompts, Documents, Test Suites, and Workflows. Simply click the heading of any section to toggle the visibility of all folders and items within that section.
+
+![](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/index-page-collapse.png)
