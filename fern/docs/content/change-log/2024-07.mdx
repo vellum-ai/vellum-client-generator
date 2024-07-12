@@ -20,3 +20,6 @@ Upon confirm, we use a constant specific icon to denote that an input is from a 
 for all other Node Input types:
 
 ![Constant Value Display](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/constant-value-display.png)
+
+Note that constant values will always drop to the last option of a given Node input, and there could only be maximum one constant defined per input.
+This is because of the nature of how fallbacks work: if there's a constant defined, it can't be definition fallback to the next option.
