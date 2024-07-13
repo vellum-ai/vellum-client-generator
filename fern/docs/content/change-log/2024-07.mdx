@@ -5,10 +5,10 @@ title: Changelog | July, 2024
 ## Constant Values in Workflow Node Inputs
 _July 11th, 2024_
 
-It's often the case that a user would want to specify a constant value into a Workflow Node Input, either as the primary value or as a fallback value.
-The solution up until now was specifying a Templating Node, ensuring that this Node was in the execution path, and feeding its output into a Node's input.
+It's often the case that you might want to specify a constant value as a Workflow Node Input, either as the input's primary value or as its fallback value.
+The solution up until now was to specify a Templating Node, have it output a constant value, and then feed its output to the downstream Node.
 
-Today, we are releasing the ability to directly define a constant to a Workflow Node! First, start typing in the Node Input until the no options modal shows:
+Today, we are releasing the ability to inline constant values directly within Workflow Node inputs! First, start typing in the Node Input until the no options modal shows:
 
 ![New Constant Link](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/new-constant-link.png)
 
@@ -16,10 +16,9 @@ A modal will appear to specify your value:
 
 ![New Constant Modal](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/new-constant-modal.png)
 
-Upon confirm, we use a constant specific icon to denote that an input is from a constant. As part of this work, we also brought inline the option icon
-for all other Node Input types:
+Upon confirming, Vellum will use an icon to denote that the input value represents a constant. As part of this work, we also added icons for all other Node Input types:
 
 ![Constant Value Display](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/constant-value-display.png)
 
-Note that constant values will always drop to the last option of a given Node input, and there could only be maximum one constant defined per input.
-This is because of the nature of how fallbacks work: if there's a constant defined, it can't be definition fallback to the next option.
+Note that constant values will always drop to the last fallback option of a given Node input, and there can only be maximum one constant defined per input.
+This is due to the nature fallback values – fallbacks are only used if other values aren't available (i.e. the node that produced the value hadn't executed yet). In the case of constants, their values are always present.
