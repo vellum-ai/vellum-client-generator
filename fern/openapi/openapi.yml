@@ -441,6 +441,33 @@ paths:
           description: No response body
       x-fern-availability: beta
   /v1/document-indexes/{id}/documents/{document_id}:
+    post:
+      operationId: add_document
+      description: Adds a previously uploaded Document to the specified Document Index.
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally supplied external_id
+          that uniquely identifies the Document you'd like to add.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Vellum-generated ID or the originally specified name
+          that uniquely identifies the Document Index to which you'd like to add the
+          Document.
+        required: true
+      tags:
+      - document-indexes
+      security:
+      - apiKeyAuth: []
+      responses:
+        '204':
+          description: No response body
+      x-fern-availability: beta
     delete:
       operationId: remove_document
       description: Removes a Document from a Document Index without deleting the Document
