@@ -1026,7 +1026,7 @@ paths:
                   id: 50c55d1d-4c37-4c83-afc1-9d895f286320
                   label: Scenario 2
                   inputs:
-                  - name: $chat_history
+                  - name: chat_history
                     type: CHAT_HISTORY
                     value:
                     - role: USER
@@ -1034,8 +1034,8 @@ paths:
                     - role: ASSISTANT
                       text: AI's don't have a favorite color.... Yet.
                 summary: Chat History Example
-                description: This example shows how to specify a chat history for
-                  the special $chat_history variable.
+                description: This example shows how to specify a value for chat history
+                  input variables.
         required: true
       security:
       - apiKeyAuth: []

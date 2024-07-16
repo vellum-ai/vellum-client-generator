@@ -293,6 +293,8 @@ navigation:
               contents:
                 - endpoint: POST https://predict.vellum.ai/v1/search
                   title: Search
+                - endpoint: POST https://api.vellum.ai/v1/document-indexes/{id}/documents/{document_id}
+                  title: Add Document
                 - endpoint: DELETE https://api.vellum.ai/v1/document-indexes/{id}/documents/{document_id}
                   title: Remove Document
                 - endpoint: POST https://api.vellum.ai/v1/document-indexes
