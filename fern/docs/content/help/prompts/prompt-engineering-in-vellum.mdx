@@ -1,27 +1,46 @@
 ---
-title: Prompt Engineering with Vellum's Dynamic Syntax
+title: Prompt Engineering in Vellum
 description: Discover how Vellum's prompt engineering enhances LLMs with dynamic templates, jinja templating, and function calling for smarter prompts.
 image: https://storage.googleapis.com/vellum-public/help-docs/prompt_history.png
 ---
 
-When using an LLM, you input a prompt and get back a completion.
-However, in order for a prompt to be reusable, you’ll want to
-be able to specify certain parts of it dynamically.
+Prompts are the "instructions" that you give to Large Language Models (LLMs) to generate a response.
+If you've used ChatGPT, then you've actually already interacted with an LLM that was provided with a
+Prompt on how it should respond in a helpful, polite manner!
 
-That’s where prompt templates come in. Prompt templates contain
-the fixed parts of a prompt with placeholders for the parts that
-might change from run to run. When you use a prompt template,
-you pass in specific values for the placeholders to create
-the final prompt that’s sent to the LLM.
+When building your own AI-powered application, you'll very likely need to come up with your own Prompts.
+Furthermore, Prompts are rarely static strings. Instead, most Prompts are "templates" with dynamic
+sections whose contents are determined at runtime. For example, you might need to include information about
+the user that's interacting with your application, some relevant section of a knowledge base, etc.
 
-Vellum’s Prompt Syntax supports dynamically constructed
-prompts via variable substitution, [jinja templating](https://jinja.palletsprojects.com/en/3.1.x/templates/),
-and what we call “blocks.”
+Vellum encourages the development of dynamic prompts by providing a powerful
+prompt syntax that supports variable substitution, jinja templating, and function calling.
+At a high level, you define "Input Variables" and reference those variables in your Prompt.
+You can experiment with different values for these variables via "Scenarios" to determine
+what the LLM's output would be.
 
-## Jinja Templating
+You can reference input variables in your Prompt in one of two ways using different types
+of "blocks."
+- Rich Text Blocks: Great for most use-cases where a simple variable substitution is needed.
+Begin type `{{ ` or `/` to get a dropdown of available variables.
+- Jinja Blocks: Used for more complex use-cases where you need the power of Jinja templating syntax
+to perform conditional logic, loops, etc.
+
+## Rich Text Blocks
+Most of the time, you'll use Rich Text blocks for simple variable substitution.
+These blocks are easy to use and are great for most use-cases. You can reference
+variables by typing `{{ ` or `/` to get a dropdown of available variables.
+
+Here's an example of a Rich Text block:
+
+
+## Jinja Blocks
 
 Jinja is a powerful templating syntax useful for dynamic content.
-Most frequently, you’ll use it to reference Prompt Variables.
+In its most basic form, you might use it to reference Prompt Variables.
+However, if all you need is variable substitution, consider using a Rich
+Text block instead.
+
 Below are the most common things you’re likely to want to do,
 but you can find jinja’s complete documentation
 [here](https://jinja.palletsprojects.com/en/3.1.x/templates/).
