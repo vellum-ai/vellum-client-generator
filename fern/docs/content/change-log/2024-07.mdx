@@ -2,6 +2,15 @@
 title: Changelog | July, 2024
 ---
 
+## Copyable Text to Clipboard
+
+_July 18th, 2024_
+
+We’ve introduced the ability to copy Prompt Variant IDs, Document Indexes, Models, Workflow Names and IDs, Document Keys, and Prompt Names and IDs to clipboard.
+This feature comes with an enhanced UI with intuitive indicators and tooltips for copyable fields.
+
+![Copy Text to Clipboard]()
+
 ## GPT-4o Mini
 
 _July 18th, 2024_
@@ -15,6 +24,7 @@ _July 18th, 2024_
 It used to be that any time you wanted to reference a variable in a Prompt, you did so using `{{ myVariable }}` syntax.
 While powerful if you need to use more complex Jinja templating syntax, using double-curlies for simple variable substitution
 can be a bit cumbersome.
+
 1. They are harder to visually parse from the rest of your Prompt
 2. They can get confusing when dealing with json, which also uses double-curly brackets
 3. Whenever you rename a variable, you need to hunt down its usages.
@@ -28,7 +38,9 @@ change existing blocks to Rich Text by clicking the block type dropdown in the b
 to Rich Text and vice versa.
 
 Check out a full video demo here:
-<iframe src="https://www.loom.com/embed/fcfdac3f366641b2b8a4104ca73063d7"
+
+<iframe
+  src="https://www.loom.com/embed/fcfdac3f366641b2b8a4104ca73063d7"
   width="100%"
   height="450px"
 ></iframe>
@@ -49,7 +61,6 @@ We've introduced a new API for adding previously uploaded Documents to a Documen
 had previously been added to one Document Index and you want to add it to another without having to re-upload its contents altogether. It's available in our SDKs
 beginning version 0.6.10. You can find docs for this new API [here](/api-reference/document-indexes/add-document).
 
-
 ## Prompt Deployment Executions Table Improvements
 
 _July 12th, 2024_
@@ -60,8 +71,8 @@ Moreover, we've significantly improved the consistency and usability of the 'Qua
 
 ![Prompt Deployment Executions Table](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/executions-quality-input.png)
 
-
 ## Constant Values in Workflow Node Inputs
+
 _July 11th, 2024_
 
 It's often the case that you might want to specify a constant value as a Workflow Node Input, either as the input's primary value or as its fallback value.
@@ -86,7 +97,7 @@ This is due to the nature fallback values – fallbacks are only used if other v
 
 _July 9th, 2024_
 
-We’ve introduced the ability to upload Test Cases to a Test Suite directly from within the Evaluations tab of a Prompt or Workflow.  Now, you'll find an "Upload Test Cases" button in the table header of every Evaluations table, for both Workflows and Prompt Sandboxes whereas previously, you needed to first navigate to the Test Suite itself and upload from there.
+We’ve introduced the ability to upload Test Cases to a Test Suite directly from within the Evaluations tab of a Prompt or Workflow. Now, you'll find an "Upload Test Cases" button in the table header of every Evaluations table, for both Workflows and Prompt Sandboxes whereas previously, you needed to first navigate to the Test Suite itself and upload from there.
 
 ![Test Case Upload in Evaluation Reports](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-07/eval-page-test-case-upload.png)
 
