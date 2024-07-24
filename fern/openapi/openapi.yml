@@ -4085,8 +4085,18 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/MergeEnum'
+        data:
+          $ref: '#/components/schemas/MergeNodeResultData'
       required:
+      - data
       - type
+    MergeNodeResultData:
+      type: object
+      properties:
+        paused_node_data:
+          type: object
+          additionalProperties: {}
+          nullable: true
     MetadataFilterConfigRequest:
       type: object
       properties:
