@@ -4085,8 +4085,18 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/MergeEnum'
+        data:
+          $ref: '#/components/schemas/MergeNodeResultData'
       required:
+      - data
       - type
+    MergeNodeResultData:
+      type: object
+      properties:
+        paused_node_data:
+          type: object
+          additionalProperties: {}
+          nullable: true
     MetadataFilterConfigRequest:
       type: object
       properties:
@@ -7045,6 +7055,28 @@ components:
       - metric_results
       - outputs
       - test_case_id
+    TestSuiteRunExecutionArrayOutput:
+      type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type ARRAY
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItem'
+          nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
+      required:
+      - name
+      - output_variable_id
+      - type
+      - value
     TestSuiteRunExecutionChatHistoryOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -7186,6 +7218,7 @@ components:
       - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionArrayOutput'
       discriminator:
         propertyName: type
         mapping:
@@ -7196,6 +7229,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
           ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
           FUNCTION_CALL: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
+          ARRAY: '#/components/schemas/TestSuiteRunExecutionArrayOutput'
     TestSuiteRunExecutionSearchResultsOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -7532,12 +7566,14 @@ components:
       oneOf:
       - $ref: '#/components/schemas/TestSuiteTestCaseCreateBulkOperationRequest'
       - $ref: '#/components/schemas/TestSuiteTestCaseReplaceBulkOperationRequest'
+      - $ref: '#/components/schemas/TestSuiteTestCaseUpsertBulkOperationRequest'
       - $ref: '#/components/schemas/TestSuiteTestCaseDeleteBulkOperationRequest'
       discriminator:
         propertyName: type
         mapping:
           CREATE: '#/components/schemas/TestSuiteTestCaseCreateBulkOperationRequest'
           REPLACE: '#/components/schemas/TestSuiteTestCaseReplaceBulkOperationRequest'
+          UPSERT: '#/components/schemas/TestSuiteTestCaseUpsertBulkOperationRequest'
           DELETE: '#/components/schemas/TestSuiteTestCaseDeleteBulkOperationRequest'
     TestSuiteTestCaseBulkResult:
       oneOf:
@@ -7706,6 +7742,23 @@ components:
           type: string
       required:
       - id
+    TestSuiteTestCaseUpsertBulkOperationRequest:
+      type: object
+      description: A bulk operation that represents the upserting of a Test Case.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: An ID representing this specific operation. Can later be used
+            to look up information about the operation's success in the response.
+        type:
+          $ref: '#/components/schemas/UpsertEnum'
+        data:
+          $ref: '#/components/schemas/UpsertTestSuiteTestCaseRequest'
+      required:
+      - data
+      - id
+      - type
     TokenOverlappingWindowChunkerConfig:
       type: object
       description: Configuration for token overlapping window chunking
@@ -7823,6 +7876,10 @@ components:
           description: The ID of the newly created document.
       required:
       - document_id
+    UpsertEnum:
+      type: string
+      enum:
+      - UPSERT
     UpsertSandboxScenarioRequestRequest:
       type: object
       properties:
