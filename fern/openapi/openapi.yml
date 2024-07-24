@@ -7055,6 +7055,28 @@ components:
       - metric_results
       - outputs
       - test_case_id
+    TestSuiteRunExecutionArrayOutput:
+      type: object
+      description: Execution output of an entity evaluated during a Test Suite Run
+        that is of type ARRAY
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItem'
+          nullable: true
+        output_variable_id:
+          type: string
+          format: uuid
+      required:
+      - name
+      - output_variable_id
+      - type
+      - value
     TestSuiteRunExecutionChatHistoryOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
@@ -7196,6 +7218,7 @@ components:
       - $ref: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
       - $ref: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
+      - $ref: '#/components/schemas/TestSuiteRunExecutionArrayOutput'
       discriminator:
         propertyName: type
         mapping:
@@ -7206,6 +7229,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/TestSuiteRunExecutionSearchResultsOutput'
           ERROR: '#/components/schemas/TestSuiteRunExecutionErrorOutput'
           FUNCTION_CALL: '#/components/schemas/TestSuiteRunExecutionFunctionCallOutput'
+          ARRAY: '#/components/schemas/TestSuiteRunExecutionArrayOutput'
     TestSuiteRunExecutionSearchResultsOutput:
       type: object
       description: Execution output of an entity evaluated during a Test Suite Run
