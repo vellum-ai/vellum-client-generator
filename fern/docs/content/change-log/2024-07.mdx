@@ -2,6 +2,16 @@
 title: Changelog | July, 2024
 ---
 
+## Support for Bulk Upserting Test Suite Test Cases via API
+
+_July 24th, 2024_
+
+For a while now we've had [an API](/api-reference/test-suites/test-cases/bulk-update) for creating, replacing, and deleting Test Cases in a Test Suite in bulk.
+We now support a fourth operation in this API – upsert. With upsert, you can provide an `external_id` and a Test Case
+payload. If there is already a Test Case with that `external_id`, it'll be replaced. Otherwise, it'll be created.
+
+This new operation is available in our SDKs starting v0.6.12.
+
 ## Llama 3.1 on Groq
 
 _July 23rd, 2024_
