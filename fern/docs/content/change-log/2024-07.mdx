@@ -2,6 +2,50 @@
 title: Changelog | July, 2024
 ---
 
+## Prompt Node Usage in Workflows
+
+_July 25th, 2024_
+
+You can now see token counts and other usage statistics appear in Prompt Node results when invoking Workflows in the Workflow Sandbox:
+
+![Prompt Node Usage](https://storage.cloud.google.com/vellum-public/help-docs/changelogs/2024-07/prompt-node-usage.png)
+
+This setting is now on by default, but could be toggled off in the Workflow Builder Settings. This setting is also now available for _Workflow Deployments_, by passing in `True`
+to the `expand_meta.usage` parameter on either Execute Workflow endpoints.
+
+```python
+stream = client.execute_workflow_stream(
+  workflow_deployment_name="demo",
+  inputs=[
+    WorkflowRequestInputRequest_String(
+      type="STRING",
+      name="foo",
+      value="bar",
+    ),
+  ],
+  event_types=["WORKFLOW", "NODE"],
+  expand_meta={
+    "usage": True
+  }
+)
+
+for event in stream:
+  if event.type == "NODE" and event.data.state == "FULFILLED":
+    node_result_data = event.data.data
+    if node_result_data and node_result_data.type == "PROMPT":
+      print(node_result_data.data.execution_meta.usage)
+```
+
+## Enable/Disable All Mocks toggle
+
+_July 25th, 2024_
+
+Mocking Prompt Nodes helps to save token usage and time when developing the later stages of your Workflow. However, once the Workflow is in a good state, it's often useful to run
+the full Workflow end to end without mocks to make sure it all comes together. Previously, you had to enable/disable each mock individually. Now, beneath the scenario inputs there
+is a toggle that allows you to enable/disable all mocks in a workflow at once.
+
+![Enable Disable All Mocks](https://storage.cloud.google.com/vellum-public/help-docs/changelogs/2024-07/enable-disable-all-mocks.png)
+
 ## Support for Bulk Upserting Test Suite Test Cases via API
 
 _July 24th, 2024_
