@@ -24,9 +24,9 @@ stream = client.execute_workflow_stream(
     ),
   ],
   event_types=["WORKFLOW", "NODE"],
-  expand_meta={
-    "usage": True
-  }
+  expand_meta=WorkflowExpandMetaRequest(
+    usage=True
+  )
 )
 
 for event in stream:
