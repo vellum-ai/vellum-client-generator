@@ -1779,6 +1779,23 @@ components:
           IMAGE: '#/components/schemas/ImageVellumValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
           ERROR: '#/components/schemas/ErrorVellumValue'
+    ArrayVellumValueItemRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringVellumValueRequest'
+      - $ref: '#/components/schemas/NumberVellumValueRequest'
+      - $ref: '#/components/schemas/JsonVellumValueRequest'
+      - $ref: '#/components/schemas/ImageVellumValueRequest'
+      - $ref: '#/components/schemas/FunctionCallVellumValueRequest'
+      - $ref: '#/components/schemas/ErrorVellumValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVellumValueRequest'
+          NUMBER: '#/components/schemas/NumberVellumValueRequest'
+          JSON: '#/components/schemas/JsonVellumValueRequest'
+          IMAGE: '#/components/schemas/ImageVellumValueRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValueRequest'
+          ERROR: '#/components/schemas/ErrorVellumValueRequest'
     BasicVectorizerIntfloatMultilingualE5Large:
       type: object
       description: Basic vectorizer for intfloat/multilingual-e5-large.
@@ -2736,6 +2753,19 @@ components:
       required:
       - type
       - value
+    ErrorVellumValueRequest:
+      type: object
+      description: A value representing an Error.
+      properties:
+        type:
+          $ref: '#/components/schemas/ErrorEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumErrorRequest'
+          nullable: true
+      required:
+      - type
+      - value
     ExecutePromptApiErrorResponse:
       type: object
       properties:
@@ -2912,6 +2942,14 @@ components:
             $ref: '#/components/schemas/WorkflowRequestInputRequest'
           description: The list of inputs defined in the Workflow's Deployment with
             their corresponding values.
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowExpandMetaRequest'
+          nullable: true
+          description: An optionally specified configuration used to opt in to including
+            additional metadata about this workflow execution in the API response.
+            Corresponding values will be returned under the `execution_meta` key within
+            NODE events in the response stream.
         workflow_deployment_id:
           type: string
           format: uuid
@@ -2973,6 +3011,14 @@ components:
             $ref: '#/components/schemas/WorkflowRequestInputRequest'
           description: The list of inputs defined in the Workflow's Deployment with
             their corresponding values.
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/WorkflowExpandMetaRequest'
+          nullable: true
+          description: An optionally specified configuration used to opt in to including
+            additional metadata about this workflow execution in the API response.
+            Corresponding values will be returned under the `execution_meta` key within
+            NODE events in the response stream.
         workflow_deployment_id:
           type: string
           format: uuid
@@ -3475,6 +3521,19 @@ components:
       required:
       - type
       - value
+    FunctionCallVellumValueRequest:
+      type: object
+      description: A value representing a Function Call.
+      properties:
+        type:
+          $ref: '#/components/schemas/FunctionCallEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/FunctionCallRequest'
+          nullable: true
+      required:
+      - type
+      - value
     GenerateBodyRequest:
       type: object
       properties:
@@ -3717,6 +3776,19 @@ components:
       required:
       - type
       - value
+    ImageVellumValueRequest:
+      type: object
+      description: A base Vellum primitive value representing an image.
+      properties:
+        type:
+          $ref: '#/components/schemas/ImageEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumImageRequest'
+          nullable: true
+      required:
+      - type
+      - value
     IndexingConfigVectorizer:
       oneOf:
       - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3Small'
@@ -3908,6 +3980,17 @@ components:
       - type
       - value
     JsonVellumValue:
+      type: object
+      description: A value representing a JSON object.
+      properties:
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
+          nullable: true
+      required:
+      - type
+      - value
+    JsonVellumValueRequest:
       type: object
       description: A value representing a JSON object.
       properties:
@@ -4206,6 +4289,41 @@ components:
       - name
       - type
       - value
+    NamedTestCaseArrayVariableValue:
+      type: object
+      description: Named Test Case value that is of type ARRAY
+      properties:
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItem'
+          nullable: true
+        name:
+          type: string
+      required:
+      - name
+      - type
+      - value
+    NamedTestCaseArrayVariableValueRequest:
+      type: object
+      description: Named Test Case value that is of type ARRAY
+      properties:
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItemRequest'
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
     NamedTestCaseChatHistoryVariableValue:
       type: object
       description: Named Test Case value that is of type CHAT_HISTORY
@@ -4444,6 +4562,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValue'
       - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
+      - $ref: '#/components/schemas/NamedTestCaseArrayVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -4454,6 +4573,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValue'
+          ARRAY: '#/components/schemas/NamedTestCaseArrayVariableValue'
     NamedTestCaseVariableValueRequest:
       oneOf:
       - $ref: '#/components/schemas/NamedTestCaseStringVariableValueRequest'
@@ -4463,6 +4583,7 @@ components:
       - $ref: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
       - $ref: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
+      - $ref: '#/components/schemas/NamedTestCaseArrayVariableValueRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -4473,6 +4594,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/NamedTestCaseSearchResultsVariableValueRequest'
           ERROR: '#/components/schemas/NamedTestCaseErrorVariableValueRequest'
           FUNCTION_CALL: '#/components/schemas/NamedTestCaseFunctionCallVariableValueRequest'
+          ARRAY: '#/components/schemas/NamedTestCaseArrayVariableValueRequest'
     NodeInputCompiledArrayValue:
       type: object
       properties:
@@ -4868,6 +4990,19 @@ components:
       required:
       - type
       - value
+    NumberVellumValueRequest:
+      type: object
+      description: A value representing a number.
+      properties:
+        type:
+          $ref: '#/components/schemas/NumberEnum'
+        value:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - type
+      - value
     OpenAIVectorizerConfig:
       type: object
       description: Configuration for using an OpenAI vectorizer.
@@ -5212,7 +5347,17 @@ components:
           type: boolean
           nullable: true
           description: If enabled, the response will include the model identifier
-            representing the ML Model invoked by the Prompt Deployment.
+            representing the ML Model invoked by the Prompt.
+        usage:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include model host usage tracking.
+            This may increase latency for some model hosts.
+        finish_reason:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the reason provided by
+            the model for why the execution finished.
         latency:
           type: boolean
           nullable: true
@@ -5228,16 +5373,6 @@ components:
           nullable: true
           description: If enabled, the response will include the ID of the Prompt
             Version backing the deployment.
-        finish_reason:
-          type: boolean
-          nullable: true
-          description: If enabled, the response will include the reason provided by
-            the model for why the execution finished.
-        usage:
-          type: boolean
-          nullable: true
-          description: If enabled, the response will include model host usage tracking.
-            This may increase latency for some model hosts.
     PromptDeploymentInputRequest:
       oneOf:
       - $ref: '#/components/schemas/StringInputRequest'
@@ -5254,10 +5389,6 @@ components:
       description: The subset of the metadata tracked by Vellum during prompt execution
         that the request opted into with `expand_meta`.
       properties:
-        usage:
-          allOf:
-          - $ref: '#/components/schemas/MLModelUsage'
-          nullable: true
         model_name:
           type: string
           nullable: true
@@ -5274,6 +5405,19 @@ components:
           allOf:
           - $ref: '#/components/schemas/FinishReasonEnum'
           nullable: true
+        usage:
+          allOf:
+          - $ref: '#/components/schemas/MLModelUsage'
+          nullable: true
+    PromptNodeExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        usage:
+          allOf:
+          - $ref: '#/components/schemas/MLModelUsage'
+          nullable: true
     PromptNodeResult:
       type: object
       description: A Node Result Event emitted from a Prompt Node.
@@ -5288,6 +5432,10 @@ components:
     PromptNodeResultData:
       type: object
       properties:
+        execution_meta:
+          allOf:
+          - $ref: '#/components/schemas/PromptNodeExecutionMeta'
+          nullable: true
         output_id:
           type: string
         array_output_id:
@@ -6257,6 +6405,18 @@ components:
       required:
       - type
       - value
+    StringVellumValueRequest:
+      type: object
+      description: A value representing a string.
+      properties:
+        type:
+          $ref: '#/components/schemas/StringEnum'
+        value:
+          type: string
+          nullable: true
+      required:
+      - type
+      - value
     SubmitCompletionActualRequest:
       type: object
       properties:
@@ -6745,6 +6905,27 @@ components:
       - name
       - type
       - value
+    TestCaseArrayVariableValue:
+      type: object
+      description: An Array value for a variable in a Test Case.
+      properties:
+        variable_id:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/ArrayEnum'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItem'
+          nullable: true
+      required:
+      - name
+      - type
+      - value
+      - variable_id
     TestCaseChatHistoryVariableValue:
       type: object
       description: A chat history value for a variable in a Test Case.
@@ -6895,6 +7076,7 @@ components:
       - $ref: '#/components/schemas/TestCaseSearchResultsVariableValue'
       - $ref: '#/components/schemas/TestCaseErrorVariableValue'
       - $ref: '#/components/schemas/TestCaseFunctionCallVariableValue'
+      - $ref: '#/components/schemas/TestCaseArrayVariableValue'
       discriminator:
         propertyName: type
         mapping:
@@ -6905,6 +7087,7 @@ components:
           SEARCH_RESULTS: '#/components/schemas/TestCaseSearchResultsVariableValue'
           ERROR: '#/components/schemas/TestCaseErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/TestCaseFunctionCallVariableValue'
+          ARRAY: '#/components/schemas/TestCaseArrayVariableValue'
     TestSuiteRunCreateRequest:
       type: object
       properties:
@@ -8284,6 +8467,14 @@ components:
       - data
       - execution_id
       - type
+    WorkflowExpandMetaRequest:
+      type: object
+      properties:
+        usage:
+          type: boolean
+          nullable: true
+          description: If enabled, the Prompt Node FULFILLED events will include model
+            host usage tracking. This may increase latency for some model hosts.
     WorkflowNodeResultData:
       oneOf:
       - $ref: '#/components/schemas/PromptNodeResult'
