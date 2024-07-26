@@ -172,6 +172,15 @@ paths:
   /v1/deployments/provider-payload:
     post:
       operationId: retrieve_provider_payload
+      description: |
+        Given a set of input variable values, compile the exact payload that Vellum would send to the configured model provider
+        for execution if the execute-prompt endpoint had been invoked. Note that this endpoint does not actually execute the
+        prompt or make an API call to the model provider.
+
+        This endpoint is useful if you don't want to proxy LLM provider requests through Vellum and prefer to send them directly
+        to the provider yourself. Note that no guarantees are made on the format of this API's response schema, other than
+        that it will be a valid payload for the configured model provider. It's not recommended that you try to parse or
+        derive meaning from the response body and instead, should simply pass it directly to the model provider as is.
       tags:
       - deployments
       requestBody:
