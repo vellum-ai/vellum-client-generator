@@ -181,6 +181,8 @@ paths:
         to the provider yourself. Note that no guarantees are made on the format of this API's response schema, other than
         that it will be a valid payload for the configured model provider. It's not recommended that you try to parse or
         derive meaning from the response body and instead, should simply pass it directly to the model provider as is.
+
+        We encourage you to seek advise from Vellum Support before integrating with this API for production use.
       tags:
       - deployments
       requestBody:
@@ -222,6 +224,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
+      x-fern-availability: beta
   /v1/document-indexes:
     get:
       operationId: document_indexes_list
