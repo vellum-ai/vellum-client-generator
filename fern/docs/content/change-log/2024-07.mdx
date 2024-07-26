@@ -2,6 +2,17 @@
 title: Changelog | July, 2024
 ---
 
+## Expandable Meta Params in Retrieve Provider Payload Endpoint
+
+_July 26th, 2024_
+
+For a while now we've had [an API](/api-reference/prompts/retrieve-provider-payload) for compiling a Prompt and retrieving the exact payload that Vellum would send
+to a model provider on your behalf. We now support a new parameter in this API – `expand_meta`. With `expand_meta`,
+you can opt-in to return additional metadata relating to the compiled prompt payload. Learn more about which
+fields are expandable in our [API docs here](/api-reference/prompts/retrieve-provider-payload#request.body.expand_meta).
+
+This new field is available in our SDKs starting v0.7.3.
+
 ## Prompt Node Usage in Workflows
 
 _July 25th, 2024_
