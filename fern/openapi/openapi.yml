@@ -2126,6 +2126,38 @@ components:
       - id
       - type
       - value
+    CompilePromptDeploymentExpandMetaRequest:
+      type: object
+      properties:
+        model_name:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the model identifier
+            representing the ML Model invoked by the Prompt.
+        deployment_release_tag:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the release tag of the
+            Prompt Deployment.
+        prompt_version_id:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the ID of the Prompt
+            Version backing the deployment.
+    CompilePromptMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during Prompt Deployment
+        compilation that the request opted into with `expand_meta`.
+      properties:
+        model_name:
+          type: string
+          nullable: true
+        deployment_release_tag:
+          type: string
+          nullable: true
+        prompt_version_id:
+          type: string
+          nullable: true
     ConditionalNodeResult:
       type: object
       description: A Node Result Event emitted from a Conditional Node.
@@ -2280,6 +2312,10 @@ components:
           minLength: 1
           description: Optionally specify a release tag if you want to pin to a specific
             release of the Workflow Deployment
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/CompilePromptDeploymentExpandMetaRequest'
+          nullable: true
       required:
       - inputs
     DeploymentProviderPayloadResponse:
@@ -2290,7 +2326,12 @@ components:
           - type: object
             additionalProperties: {}
           - type: string
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/CompilePromptMeta'
+          nullable: true
       required:
+      - meta
       - payload
     DeploymentRead:
       type: object
