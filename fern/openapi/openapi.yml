@@ -40,6 +40,7 @@ paths:
   /v1/deployments:
     get:
       operationId: deployments_list
+      description: Used to list all Prompt Deployments.
       parameters:
       - name: limit
         required: false
@@ -79,10 +80,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimDeploymentReadList'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/deployments/{id}:
     get:
       operationId: deployments_retrieve
-      description: Used to retrieve a deployment given its ID or name.
+      description: Used to retrieve a Prompt Deployment given its ID or name.
       parameters:
       - in: path
         name: id
@@ -102,6 +106,8 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/deployments/{id}/release-tags/{name}:
     get:
       operationId: retrieve_deployment_release_tag
@@ -134,6 +140,8 @@ paths:
                 $ref: '#/components/schemas/DeploymentReleaseTagRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     patch:
       operationId: update_deployment_release_tag
       description: Updates an existing Release Tag associated with the specified Deployment.
@@ -169,6 +177,8 @@ paths:
                 $ref: '#/components/schemas/DeploymentReleaseTagRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/deployments/provider-payload:
     post:
       operationId: retrieve_provider_payload
@@ -225,6 +235,8 @@ paths:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/document-indexes:
     get:
       operationId: document_indexes_list
@@ -277,6 +289,8 @@ paths:
                 $ref: '#/components/schemas/PaginatedDocumentIndexReadList'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     post:
       operationId: document_indexes_create
       description: Creates a new document index.
@@ -355,6 +369,8 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/document-indexes/{id}:
     get:
       operationId: document_indexes_retrieve
@@ -378,6 +394,8 @@ paths:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     put:
       operationId: document_indexes_update
       description: Used to fully update a Document Index given its ID or name.
@@ -406,6 +424,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     patch:
       operationId: document_indexes_partial_update
       description: Used to partial update a Document Index given its ID or name.
@@ -433,6 +454,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentIndexRead'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     delete:
       operationId: document_indexes_destroy
       description: Used to delete a Document Index given its ID or name.
@@ -452,6 +476,8 @@ paths:
         '204':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/document-indexes/{id}/documents/{document_id}:
     post:
       operationId: add_document
@@ -480,6 +506,8 @@ paths:
         '204':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     delete:
       operationId: remove_document
       description: Removes a Document from a Document Index without deleting the Document
@@ -508,6 +536,8 @@ paths:
         '204':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/documents:
     get:
       operationId: documents_list
@@ -551,6 +581,8 @@ paths:
                 $ref: '#/components/schemas/PaginatedSlimDocumentList'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
   /v1/documents/{id}:
     get:
       operationId: documents_retrieve
@@ -576,6 +608,8 @@ paths:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     patch:
       operationId: documents_partial_update
       description: Update a Document, keying off of either its Vellum-generated ID
@@ -609,6 +643,8 @@ paths:
                 $ref: '#/components/schemas/DocumentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     delete:
       operationId: documents_destroy
       description: Delete a Document, keying off of either its Vellum-generated ID
@@ -629,6 +665,9 @@ paths:
       responses:
         '204':
           description: No response body
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
@@ -675,6 +714,8 @@ paths:
                 $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -725,6 +766,8 @@ paths:
           description: ''
       x-fern-streaming: true
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -770,6 +813,8 @@ paths:
                 $ref: '#/components/schemas/ExecuteWorkflowErrorResponse'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -815,6 +860,8 @@ paths:
           description: ''
       x-fern-streaming: true
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -848,6 +895,8 @@ paths:
         '200':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/generate:
     post:
       operationId: generate
@@ -898,6 +947,8 @@ paths:
                 $ref: '#/components/schemas/GenerateErrorResponse'
           description: ''
       x-fern-availability: deprecated
+      x-fern-audiences:
+      - deprecated
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -952,10 +1003,12 @@ paths:
           description: ''
       x-fern-streaming: true
       x-fern-availability: deprecated
+      x-fern-audiences:
+      - deprecated
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
-  /v1/sandboxes/{id}/prompts/{prompt_id}/deploy:
+  /v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy:
     post:
       operationId: deploy_prompt
       parameters:
@@ -967,7 +1020,7 @@ paths:
         description: A UUID string identifying this sandbox.
         required: true
       - in: path
-        name: prompt_id
+        name: prompt_variant_id
         schema:
           type: string
         description: An ID identifying the Prompt you'd like to deploy.
@@ -992,6 +1045,8 @@ paths:
                 $ref: '#/components/schemas/DeploymentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/sandboxes/{id}/scenarios:
     post:
       operationId: upsert_sandbox_scenario
@@ -1059,6 +1114,8 @@ paths:
                 $ref: '#/components/schemas/SandboxScenario'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/sandboxes/{id}/scenarios/{scenario_id}:
     delete:
       operationId: delete_sandbox_scenario
@@ -1086,6 +1143,8 @@ paths:
         '204':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/search:
     post:
       operationId: search
@@ -1126,6 +1185,8 @@ paths:
                 $ref: '#/components/schemas/SearchErrorResponse'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -1166,6 +1227,8 @@ paths:
                 $ref: '#/components/schemas/SubmitCompletionActualsErrorResponse'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -1189,6 +1252,8 @@ paths:
         '200':
           description: No response body
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
@@ -1214,6 +1279,8 @@ paths:
                 $ref: '#/components/schemas/TestSuiteRunRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/test-suite-runs/{id}:
     get:
       operationId: test_suite_runs_retrieve
@@ -1238,6 +1305,8 @@ paths:
                 $ref: '#/components/schemas/TestSuiteRunRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/test-suite-runs/{id}/executions:
     get:
       operationId: test_suite_runs_list_executions
@@ -1284,6 +1353,8 @@ paths:
                 $ref: '#/components/schemas/PaginatedTestSuiteRunExecutionList'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/test-suites/{id}/test-cases:
     get:
       operationId: list_test_suite_test_cases
@@ -1320,6 +1391,8 @@ paths:
                 $ref: '#/components/schemas/PaginatedTestSuiteTestCaseList'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     post:
       operationId: upsert_test_suite_test_case
       description: |-
@@ -1356,6 +1429,8 @@ paths:
                 $ref: '#/components/schemas/TestSuiteTestCase'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/test-suites/{id}/test-cases-bulk:
     post:
       operationId: test_suite_test_cases_bulk
@@ -1402,6 +1477,8 @@ paths:
           description: ''
       x-fern-streaming: true
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/test-suites/{id}/test-cases/{test_case_id}:
     delete:
       operationId: delete_test_suite_test_case
@@ -1429,6 +1506,8 @@ paths:
         '204':
           description: No response body
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/upload-document:
     post:
       operationId: documents_upload
@@ -1482,12 +1561,15 @@ paths:
                 $ref: '#/components/schemas/UploadDocumentErrorResponse'
           description: ''
       x-fern-availability: ga
+      x-fern-audiences:
+      - customers
       servers:
       - url: https://documents.vellum.ai
         x-name: Documents
   /v1/workflow-deployments:
     get:
       operationId: workflow_deployments_list
+      description: Used to list all Workflow Deployments.
       parameters:
       - name: limit
         required: false
@@ -1527,6 +1609,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSlimWorkflowDeploymentList'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/workflow-deployments/{id}:
     get:
       operationId: workflow_deployments_retrieve
@@ -1550,6 +1635,8 @@ paths:
                 $ref: '#/components/schemas/WorkflowDeploymentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/workflow-deployments/{id}/release-tags/{name}:
     get:
       operationId: retrieve_workflow_release_tag
@@ -1582,6 +1669,8 @@ paths:
                 $ref: '#/components/schemas/WorkflowReleaseTagRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
     patch:
       operationId: update_workflow_release_tag
       description: Updates an existing Release Tag associated with the specified Workflow
@@ -1618,6 +1707,8 @@ paths:
                 $ref: '#/components/schemas/WorkflowReleaseTagRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/workflow-sandboxes/{id}/workflows/{workflow_id}/deploy:
     post:
       operationId: deploy_workflow
@@ -1655,6 +1746,8 @@ paths:
                 $ref: '#/components/schemas/WorkflowDeploymentRead'
           description: ''
       x-fern-availability: beta
+      x-fern-audiences:
+      - customers
 components:
   schemas:
     AddEntityToFolderRequest:
@@ -7052,8 +7145,6 @@ components:
         type:
           $ref: '#/components/schemas/JsonEnum'
         value:
-          type: object
-          additionalProperties: {}
           nullable: true
       required:
       - name
