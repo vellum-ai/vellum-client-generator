@@ -207,6 +207,8 @@ navigation:
           - page: Authentication
             path: ./docs/content/api/authentication.mdx
       - api: API Reference
+        audiences:
+          - customers
         skip-slug: true
         snippets:
           python: vellum-ai
@@ -226,7 +228,7 @@ navigation:
               - section: Prompt Sandboxes
                 slug: sandboxes
                 contents:
-                  - endpoint: POST https://api.vellum.ai/v1/sandboxes/{id}/prompts/{prompt_id}/deploy
+                  - endpoint: POST https://api.vellum.ai/v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy
                     title: Deploy Prompt Sandbox
                     slug: deploy-prompt
                   - endpoint: POST https://api.vellum.ai/v1/sandboxes/{id}/scenarios

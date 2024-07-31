@@ -1,5 +1,9 @@
 groups:
   branch-python:
+    audiences:
+      - customers
+      - internal
+      - deprecated
     generators:
       - name: fernapi/fern-python-sdk
         version: 1.4.0-rc4
@@ -17,12 +21,16 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          extra_dependencies: 
+          extra_dependencies:
             cdktf: '^0.20.5'
             publication: '0.0.3'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
   branch-node:
+    audiences:
+      - customers
+      - internal
+      - deprecated
     generators:
       - name: fernapi/fern-typescript-node-sdk
         version: 0.33.0
@@ -39,10 +47,14 @@ groups:
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
-          extraDependencies: 
+          extraDependencies:
             cdktf: '^0.20.5'
             constructs: '^10.3.0'
   branch-go:
+    audiences:
+      - customers
+      - internal
+      - deprecated
     generators:
       - name: fernapi/fern-go-sdk
         version: 0.9.0
@@ -71,13 +83,17 @@ groups:
   #       config:
   #         clientClassName: Vellum
   staging:
+    audiences:
+      - customers
+      - internal
+      - deprecated
     generators:
       - name: fernapi/fern-typescript-node-sdk
         version: 0.33.0
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
-          extraDependencies: 
+          extraDependencies:
             cdktf: '^0.20.5'
             constructs: '^10.3.0'
         github:
@@ -104,7 +120,7 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          extra_dependencies: 
+          extra_dependencies:
             cdktf: '^0.20.5'
             publication: '0.0.3'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
@@ -132,6 +148,10 @@ groups:
       #   config:
       #     clientClassName: Vellum
   production:
+    audiences:
+      - customers
+      - internal
+      - deprecated
     generators:
       - name: fernapi/fern-typescript-node-sdk
         version: 0.33.0
@@ -142,7 +162,7 @@ groups:
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
-          extraDependencies: 
+          extraDependencies:
             cdktf: '^0.20.5'
             constructs: '^10.3.0'
         github:
@@ -173,7 +193,7 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          extra_dependencies: 
+          extra_dependencies:
             cdktf: '^0.20.5'
             publication: '0.0.3'
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
