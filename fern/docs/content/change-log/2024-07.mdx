@@ -2,6 +2,23 @@
 title: Changelog | July, 2024
 ---
 
+## Metadata Filtering in Search Nodes
+
+_July 31st, 2024_
+
+For a while now you've been able to supply structured JSON metadata alongside Documents and then filtering on that
+metadata when making an [API call](/api-reference/document-indexes/search) to search across Documents in a Document index (see [here](/help-center/documents/metadata-filtering) for more info).
+
+However, Search Nodes within Workflows didn't offer this same functionality through the UI. The workaround has been to use a
+Code Node or API Node and invoke Vellum's Search API manually.
+
+We're happy to share that the UI has reached parity with the API and you can now filter on metadata natively in Search Nodes.
+You'll be able to construct arbitrarily complex boolean logic using the new Metadata Filters section of the Search Node's
+Advanced settings.
+
+![Search Node Metadata Filtering](https://storage.cloud.google.com/vellum-public/help-docs/changelogs/2024-07/search-node-metadata-filtering.png)
+
+
 ## Test Suite Test Case External IDs
 
 _July 30th, 2024_
