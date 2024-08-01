@@ -1,6 +1,7 @@
 {
   "scripts": {
     "cdktf": "ts-node ./scripts/cdktf.ts",
+    "cdktf:local": "ts-node ./scripts/cdktf.ts --local",
     "swagger": "cp ../vellum/django/schema_api_client_v1.yaml fern/openapi/openapi.yml"
   },
   "devDependencies": {
