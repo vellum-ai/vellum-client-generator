@@ -114,7 +114,7 @@ to the Vellum org in Fern, which requires contacting the fern team in #fern-x-ve
 
 
 ## Terraform CDKTF Local Testing
-To test changes to vellum terraform providers you need to create a file at `~/dev.tfrc` with these contents:
+To test changes to the Vellum terraform provider you need to create a file at `~/dev.tfrc` with these contents:
 
 ```
 provider_installation {
