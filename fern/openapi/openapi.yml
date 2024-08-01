@@ -1008,6 +1008,162 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/ml-models:
+    get:
+      operationId: ml_models_list
+      description: |
+        List all ML Models that your Workspace has access to.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMLModelReadList'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+    post:
+      operationId: ml_models_create
+      description: |
+        Creates a new ML Model.
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MLModelCreateRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLModelRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+  /v1/ml-models/{id}:
+    get:
+      operationId: ml_models_retrieve
+      description: |
+        Retrieve an ML Model by its UUID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ml model.
+        required: true
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLModelRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+    put:
+      operationId: ml_models_update
+      description: |
+        Replace an ML Model with a new representation, keying off of its UUID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ml model.
+        required: true
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MLModelUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLModelRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+    patch:
+      operationId: ml_models_partial_update
+      description: |
+        Partially update an ML Model, keying off of its UUID.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ml model.
+        required: true
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMLModelUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLModelRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy:
     post:
       operationId: deploy_prompt
@@ -1850,6 +2006,98 @@ components:
       type: string
       enum:
       - ARRAY
+    ArrayParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'array'
+      properties:
+        type:
+          $ref: '#/components/schemas/arrayEnum'
+        min_items:
+          type: integer
+          nullable: true
+        max_items:
+          type: integer
+          nullable: true
+        unique_items:
+          type: boolean
+          nullable: true
+        items:
+          $ref: '#/components/schemas/ParameterConfig'
+        prefix_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        contains:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        min_contains:
+          type: integer
+          nullable: true
+        max_contains:
+          type: integer
+          nullable: true
+        default:
+          type: array
+          items: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - items
+      - type
+    ArrayParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'array'
+      properties:
+        type:
+          $ref: '#/components/schemas/arrayEnum'
+        min_items:
+          type: integer
+          nullable: true
+        max_items:
+          type: integer
+          nullable: true
+        unique_items:
+          type: boolean
+          nullable: true
+        items:
+          $ref: '#/components/schemas/ParameterConfigRequest'
+        prefix_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        contains:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        min_contains:
+          type: integer
+          nullable: true
+        max_contains:
+          type: integer
+          nullable: true
+        default:
+          type: array
+          items: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - items
+      - type
     ArrayVariableValueItem:
       oneOf:
       - $ref: '#/components/schemas/StringVariableValue'
@@ -1973,6 +2221,42 @@ components:
           nullable: true
       required:
       - model_name
+    BooleanParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'boolean'
+      properties:
+        type:
+          $ref: '#/components/schemas/booleanEnum'
+        default:
+          type: boolean
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    BooleanParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'boolean'
+      properties:
+        type:
+          $ref: '#/components/schemas/booleanEnum'
+        default:
+          type: boolean
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
     ChatHistoryEnum:
       type: string
       enum:
@@ -2280,6 +2564,43 @@ components:
         source_handle_id:
           type: string
           nullable: true
+    ConstParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'const'
+      properties:
+        type:
+          $ref: '#/components/schemas/constEnum'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        const:
+          type: string
+      required:
+      - const
+      - type
+    ConstParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'const'
+      properties:
+        type:
+          $ref: '#/components/schemas/constEnum'
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+        const:
+          type: string
+          minLength: 1
+      required:
+      - const
+      - type
     CreateEnum:
       type: string
       enum:
@@ -2482,6 +2803,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VellumVariable'
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the deployment
         active_model_version_ids:
           type: array
           items:
@@ -3870,6 +4195,80 @@ components:
       required:
       - config
       - model_name
+    HostedByEnum:
+      enum:
+      - ANTHROPIC
+      - AWS_BEDROCK
+      - AZURE_OPENAI
+      - COHERE
+      - CUSTOM
+      - FIREWORKS_AI
+      - GOOGLE
+      - GOOGLE_VERTEX_AI
+      - GROQ
+      - HUGGINGFACE
+      - IBM_WATSONX
+      - MOSAICML
+      - MYSTIC
+      - OPENAI
+      - OPENPIPE
+      - PYQ
+      - REPLICATE
+      type: string
+      description: |-
+        * `ANTHROPIC` - ANTHROPIC
+        * `AWS_BEDROCK` - AWS_BEDROCK
+        * `AZURE_OPENAI` - AZURE_OPENAI
+        * `COHERE` - COHERE
+        * `CUSTOM` - CUSTOM
+        * `FIREWORKS_AI` - FIREWORKS_AI
+        * `GOOGLE` - GOOGLE
+        * `GOOGLE_VERTEX_AI` - GOOGLE_VERTEX_AI
+        * `GROQ` - GROQ
+        * `HUGGINGFACE` - HUGGINGFACE
+        * `IBM_WATSONX` - IBM_WATSONX
+        * `MOSAICML` - MOSAICML
+        * `MYSTIC` - MYSTIC
+        * `OPENAI` - OPENAI
+        * `OPENPIPE` - OPENPIPE
+        * `PYQ` - PYQ
+        * `REPLICATE` - REPLICATE
+    HuggingFaceEnum:
+      type: string
+      enum:
+      - HUGGING_FACE
+    HuggingFaceTokenizerConfig:
+      type: object
+      description: Tokenizer config for Hugging Face type tokenizers.
+      properties:
+        type:
+          $ref: '#/components/schemas/HuggingFaceEnum'
+        name:
+          type: string
+        path:
+          type: string
+          nullable: true
+      required:
+      - name
+      - path
+      - type
+    HuggingFaceTokenizerConfigRequest:
+      type: object
+      description: Tokenizer config for Hugging Face type tokenizers.
+      properties:
+        type:
+          $ref: '#/components/schemas/HuggingFaceEnum'
+        name:
+          type: string
+          minLength: 1
+        path:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - name
+      - path
+      - type
     ImageChatMessageContent:
       type: object
       description: An image value that is used in a chat message.
@@ -4086,6 +4485,66 @@ components:
       - instruction_document_text_type
       - instruction_domain
       - instruction_query_text_type
+    IntegerParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'integer'
+      properties:
+        type:
+          $ref: '#/components/schemas/integerEnum'
+        minimum:
+          type: integer
+          nullable: true
+        maximum:
+          type: integer
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    IntegerParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'integer'
+      properties:
+        type:
+          $ref: '#/components/schemas/integerEnum'
+        minimum:
+          type: integer
+          nullable: true
+        maximum:
+          type: integer
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
     IterationStateEnum:
       enum:
       - INITIATED
@@ -4250,6 +4709,678 @@ components:
       description: |-
         * `ALL` - ALL
         * `NONE` - NONE
+    MLModelBuildConfig:
+      type: object
+      properties:
+        finetune_data:
+          type: object
+          additionalProperties: {}
+      required:
+      - finetune_data
+    MLModelBuildConfigRequest:
+      type: object
+      properties:
+        finetune_data:
+          type: object
+          additionalProperties: {}
+      required:
+      - finetune_data
+    MLModelCreateRequest:
+      type: object
+      description: Data representing a new ML Model that you'd like to create.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The unique name of the ML Model.
+        family:
+          allOf:
+          - $ref: '#/components/schemas/MLModelFamily'
+          description: |-
+            The family of the ML Model.
+
+            * `CAPYBARA` - Capybara
+            * `CHAT_GPT` - Chat GPT
+            * `CLAUDE` - Claude
+            * `COHERE` - Cohere
+            * `FALCON` - Falcon
+            * `GEMINI` - Gemini
+            * `GRANITE` - Granite
+            * `GPT3` - GPT-3
+            * `FIREWORKS` - Fireworks
+            * `LLAMA2` - Llama2
+            * `LLAMA3` - Llama3
+            * `MISTRAL` - Mistral
+            * `MPT` - MPT
+            * `OPENCHAT` - OpenChat
+            * `PALM` - PaLM
+            * `SOLAR` - Solar
+            * `TITAN` - Titan
+            * `WIZARD` - Wizard
+            * `YI` - Yi
+            * `ZEPHYR` - Zephyr
+        hosted_by:
+          allOf:
+          - $ref: '#/components/schemas/HostedByEnum'
+          description: |-
+            The organization hosting the ML Model.
+
+            * `ANTHROPIC` - ANTHROPIC
+            * `AWS_BEDROCK` - AWS_BEDROCK
+            * `AZURE_OPENAI` - AZURE_OPENAI
+            * `COHERE` - COHERE
+            * `CUSTOM` - CUSTOM
+            * `FIREWORKS_AI` - FIREWORKS_AI
+            * `GOOGLE` - GOOGLE
+            * `GOOGLE_VERTEX_AI` - GOOGLE_VERTEX_AI
+            * `GROQ` - GROQ
+            * `HUGGINGFACE` - HUGGINGFACE
+            * `IBM_WATSONX` - IBM_WATSONX
+            * `MOSAICML` - MOSAICML
+            * `MYSTIC` - MYSTIC
+            * `OPENAI` - OPENAI
+            * `OPENPIPE` - OPENPIPE
+            * `PYQ` - PYQ
+            * `REPLICATE` - REPLICATE
+        developed_by:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDeveloper'
+          description: |-
+            The organization that developed the ML Model.
+
+            * `01_AI` - 01_AI
+            * `AMAZON` - AMAZON
+            * `ANTHROPIC` - ANTHROPIC
+            * `COHERE` - COHERE
+            * `ELUTHERAI` - ELUTHERAI
+            * `FIREWORKS_AI` - FIREWORKS_AI
+            * `GOOGLE` - GOOGLE
+            * `HUGGINGFACE` - HUGGINGFACE
+            * `IBM` - IBM
+            * `META` - META
+            * `MISTRAL_AI` - MISTRAL_AI
+            * `MOSAICML` - MOSAICML
+            * `NOUS_RESEARCH` - NOUS_RESEARCH
+            * `OPENAI` - OPENAI
+            * `OPENCHAT` - OPENCHAT
+            * `OPENPIPE` - OPENPIPE
+            * `TII` - TII
+            * `WIZARDLM` - WIZARDLM
+        build_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelBuildConfigRequest'
+          description: Configuration for how the ML Model was built.
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelExecConfigRequest'
+          description: Configuration for how to execute the ML Model.
+        parameter_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelParameterConfigRequest'
+          description: Configuration for the ML Model's parameters.
+        display_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDisplayConfigRequest'
+          description: Configuration for how to display the ML Model.
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          description: |-
+            The visibility of the ML Model.
+
+            * `DEFAULT` - DEFAULT
+            * `PUBLIC` - PUBLIC
+            * `PRIVATE` - PRIVATE
+            * `DISABLED` - DISABLED
+      required:
+      - exec_config
+      - family
+      - name
+    MLModelDeveloper:
+      enum:
+      - 01_AI
+      - AMAZON
+      - ANTHROPIC
+      - COHERE
+      - ELUTHERAI
+      - FIREWORKS_AI
+      - GOOGLE
+      - HUGGINGFACE
+      - IBM
+      - META
+      - MISTRAL_AI
+      - MOSAICML
+      - NOUS_RESEARCH
+      - OPENAI
+      - OPENCHAT
+      - OPENPIPE
+      - TII
+      - WIZARDLM
+      type: string
+      description: |-
+        * `01_AI` - 01_AI
+        * `AMAZON` - AMAZON
+        * `ANTHROPIC` - ANTHROPIC
+        * `COHERE` - COHERE
+        * `ELUTHERAI` - ELUTHERAI
+        * `FIREWORKS_AI` - FIREWORKS_AI
+        * `GOOGLE` - GOOGLE
+        * `HUGGINGFACE` - HUGGINGFACE
+        * `IBM` - IBM
+        * `META` - META
+        * `MISTRAL_AI` - MISTRAL_AI
+        * `MOSAICML` - MOSAICML
+        * `NOUS_RESEARCH` - NOUS_RESEARCH
+        * `OPENAI` - OPENAI
+        * `OPENCHAT` - OPENCHAT
+        * `OPENPIPE` - OPENPIPE
+        * `TII` - TII
+        * `WIZARDLM` - WIZARDLM
+    MLModelDeveloperEnumValueLabel:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          $ref: '#/components/schemas/MLModelDeveloper'
+      required:
+      - label
+      - value
+    MLModelDisplayConfigLabelled:
+      type: object
+      properties:
+        label:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/MLModelDisplayTagEnumValueLabel'
+          readOnly: true
+        default_display_priority:
+          type: number
+          format: double
+      required:
+      - default_display_priority
+      - description
+      - label
+      - tags
+    MLModelDisplayConfigRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+        description:
+          type: string
+          minLength: 1
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/MLModelDisplayTag'
+        default_display_priority:
+          type: number
+          format: double
+      required:
+      - default_display_priority
+      - description
+      - label
+      - tags
+    MLModelDisplayTag:
+      enum:
+      - TEXT
+      - CHAT
+      - OPEN_SOURCE
+      - FINETUNED
+      - NEW
+      - ALPHA
+      - BETA
+      - DEPRECATED
+      type: string
+      description: |-
+        * `TEXT` - TEXT
+        * `CHAT` - CHAT
+        * `OPEN_SOURCE` - OPEN_SOURCE
+        * `FINETUNED` - FINETUNED
+        * `NEW` - NEW
+        * `ALPHA` - ALPHA
+        * `BETA` - BETA
+        * `DEPRECATED` - DEPRECATED
+    MLModelDisplayTagEnumValueLabel:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          $ref: '#/components/schemas/MLModelDisplayTag'
+      required:
+      - label
+      - value
+    MLModelExecConfig:
+      type: object
+      properties:
+        model_identifier:
+          type: string
+        base_url:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/MLModelFeature'
+        force_system_credentials:
+          type: boolean
+        tokenizer_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelTokenizerConfig'
+          nullable: true
+        request_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelRequestConfig'
+          nullable: true
+        response_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelResponseConfig'
+          nullable: true
+      required:
+      - base_url
+      - features
+      - metadata
+      - model_identifier
+    MLModelExecConfigRequest:
+      type: object
+      properties:
+        model_identifier:
+          type: string
+          minLength: 1
+        base_url:
+          type: string
+          minLength: 1
+        metadata:
+          type: object
+          additionalProperties: {}
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/MLModelFeature'
+        force_system_credentials:
+          type: boolean
+        tokenizer_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelTokenizerConfigRequest'
+          nullable: true
+        request_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelRequestConfigRequest'
+          nullable: true
+        response_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelResponseConfigRequest'
+          nullable: true
+      required:
+      - base_url
+      - features
+      - metadata
+      - model_identifier
+    MLModelFamily:
+      enum:
+      - CAPYBARA
+      - CHAT_GPT
+      - CLAUDE
+      - COHERE
+      - FALCON
+      - GEMINI
+      - GRANITE
+      - GPT3
+      - FIREWORKS
+      - LLAMA2
+      - LLAMA3
+      - MISTRAL
+      - MPT
+      - OPENCHAT
+      - PALM
+      - SOLAR
+      - TITAN
+      - WIZARD
+      - YI
+      - ZEPHYR
+      type: string
+      description: |-
+        * `CAPYBARA` - Capybara
+        * `CHAT_GPT` - Chat GPT
+        * `CLAUDE` - Claude
+        * `COHERE` - Cohere
+        * `FALCON` - Falcon
+        * `GEMINI` - Gemini
+        * `GRANITE` - Granite
+        * `GPT3` - GPT-3
+        * `FIREWORKS` - Fireworks
+        * `LLAMA2` - Llama2
+        * `LLAMA3` - Llama3
+        * `MISTRAL` - Mistral
+        * `MPT` - MPT
+        * `OPENCHAT` - OpenChat
+        * `PALM` - PaLM
+        * `SOLAR` - Solar
+        * `TITAN` - Titan
+        * `WIZARD` - Wizard
+        * `YI` - Yi
+        * `ZEPHYR` - Zephyr
+    MLModelFamilyEnumValueLabel:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          $ref: '#/components/schemas/MLModelFamily'
+      required:
+      - label
+      - value
+    MLModelFeature:
+      enum:
+      - TEXT
+      - CHAT_MESSAGE_SYSTEM
+      - CHAT_MESSAGE_USER
+      - CHAT_MESSAGE_ASSISTANT
+      - CHAT_MESSAGE_ASSISTANT_UNTERMINATED
+      - CHAT_MESSAGE_FUNCTION_CALL
+      - CHAT_MESSAGE_IMAGE
+      - FUNCTION_DEFINITION
+      - STREAMING_SUPPORT
+      type: string
+      description: |-
+        * `TEXT` - Text
+        * `CHAT_MESSAGE_SYSTEM` - Chat Message System
+        * `CHAT_MESSAGE_USER` - Chat Message User
+        * `CHAT_MESSAGE_ASSISTANT` - Chat Message Assistant
+        * `CHAT_MESSAGE_ASSISTANT_UNTERMINATED` - Chat Message Assistant Unterminated
+        * `CHAT_MESSAGE_FUNCTION_CALL` - Chat Message Function Call
+        * `CHAT_MESSAGE_IMAGE` - Chat Message Image
+        * `FUNCTION_DEFINITION` - Function Definition
+        * `STREAMING_SUPPORT` - Streaming Support
+    MLModelParameterConfig:
+      type: object
+      properties:
+        temperature:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfig'
+          nullable: true
+        max_tokens:
+          allOf:
+          - $ref: '#/components/schemas/IntegerParameterConfig'
+          nullable: true
+        stop:
+          allOf:
+          - $ref: '#/components/schemas/ArrayParameterConfig'
+          nullable: true
+        top_p:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfig'
+          nullable: true
+        top_k:
+          allOf:
+          - $ref: '#/components/schemas/IntegerParameterConfig'
+          nullable: true
+        frequency_penalty:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfig'
+          nullable: true
+        presence_penalty:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfig'
+          nullable: true
+        logit_bias:
+          allOf:
+          - $ref: '#/components/schemas/ObjectParameterConfig'
+          nullable: true
+        custom_parameters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+    MLModelParameterConfigRequest:
+      type: object
+      properties:
+        temperature:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          nullable: true
+        max_tokens:
+          allOf:
+          - $ref: '#/components/schemas/IntegerParameterConfigRequest'
+          nullable: true
+        stop:
+          allOf:
+          - $ref: '#/components/schemas/ArrayParameterConfigRequest'
+          nullable: true
+        top_p:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          nullable: true
+        top_k:
+          allOf:
+          - $ref: '#/components/schemas/IntegerParameterConfigRequest'
+          nullable: true
+        frequency_penalty:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          nullable: true
+        presence_penalty:
+          allOf:
+          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          nullable: true
+        logit_bias:
+          allOf:
+          - $ref: '#/components/schemas/ObjectParameterConfigRequest'
+          nullable: true
+        custom_parameters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+    MLModelRead:
+      type: object
+      description: An ML Model that your Workspace has access to.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: The unique name of the ML Model.
+        family:
+          allOf:
+          - $ref: '#/components/schemas/MLModelFamilyEnumValueLabel'
+          readOnly: true
+          description: The family of the ML Model.
+        hosted_by:
+          allOf:
+          - $ref: '#/components/schemas/HostedByEnum'
+          description: |-
+            The organization hosting the ML Model.
+
+            * `ANTHROPIC` - Anthropic
+            * `AWS_BEDROCK` - AWS Bedrock
+            * `AZURE_OPENAI` - Azure OpenAI
+            * `COHERE` - Cohere
+            * `CUSTOM` - Custom
+            * `FIREWORKS_AI` - Fireworks AI
+            * `GOOGLE` - Google
+            * `GOOGLE_VERTEX_AI` - Google Vertex AI
+            * `GROQ` - Groq
+            * `HUGGINGFACE` - HuggingFace
+            * `IBM_WATSONX` - IBM WatsonX
+            * `MOSAICML` - MosaicML
+            * `MYSTIC` - Mystic
+            * `OPENAI` - OpenAI
+            * `OPENPIPE` - OpenPipe
+            * `PYQ` - Pyq
+            * `REPLICATE` - Replicate
+        developed_by:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDeveloperEnumValueLabel'
+          readOnly: true
+          description: The organization that developed the ML Model.
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          description: |-
+            The visibility of the ML Model.
+
+            * `DEFAULT` - Default
+            * `PUBLIC` - Public
+            * `PRIVATE` - Private
+            * `DISABLED` - Disabled
+        build_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelBuildConfig'
+          description: Configuration for how the ML Model was built.
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelExecConfig'
+          description: Configuration for how to execute the ML Model.
+        parameter_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelParameterConfig'
+          description: Configuration for the ML Model's parameters.
+        display_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDisplayConfigLabelled'
+          description: Configuration for how to display the ML Model.
+      required:
+      - build_config
+      - developed_by
+      - display_config
+      - exec_config
+      - family
+      - hosted_by
+      - id
+      - name
+      - parameter_config
+    MLModelRequestAuthorizationConfig:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/MLModelRequestAuthorizationConfigTypeEnum'
+      required:
+      - type
+    MLModelRequestAuthorizationConfigRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/MLModelRequestAuthorizationConfigTypeEnum'
+      required:
+      - type
+    MLModelRequestAuthorizationConfigTypeEnum:
+      enum:
+      - BEARER_TOKEN
+      - API_KEY
+      type: string
+      description: |-
+        * `BEARER_TOKEN` - Bearer Token
+        * `API_KEY` - API Key
+    MLModelRequestConfig:
+      type: object
+      properties:
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        authorization:
+          allOf:
+          - $ref: '#/components/schemas/MLModelRequestAuthorizationConfig'
+          nullable: true
+        body_template:
+          type: string
+          nullable: true
+    MLModelRequestConfigRequest:
+      type: object
+      properties:
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+            minLength: 1
+          nullable: true
+        authorization:
+          allOf:
+          - $ref: '#/components/schemas/MLModelRequestAuthorizationConfigRequest'
+          nullable: true
+        body_template:
+          type: string
+          nullable: true
+          minLength: 1
+    MLModelResponseConfig:
+      type: object
+      properties:
+        result_path:
+          type: string
+          nullable: true
+        result_extraction_regex:
+          type: string
+          nullable: true
+        result_substitution_regexes:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+    MLModelResponseConfigRequest:
+      type: object
+      properties:
+        result_path:
+          type: string
+          nullable: true
+          minLength: 1
+        result_extraction_regex:
+          type: string
+          nullable: true
+          minLength: 1
+        result_substitution_regexes:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+    MLModelTokenizerConfig:
+      oneOf:
+      - $ref: '#/components/schemas/HuggingFaceTokenizerConfig'
+      - $ref: '#/components/schemas/TikTokenTokenizerConfig'
+      discriminator:
+        propertyName: type
+        mapping:
+          HUGGING_FACE: '#/components/schemas/HuggingFaceTokenizerConfig'
+          TIKTOKEN: '#/components/schemas/TikTokenTokenizerConfig'
+    MLModelTokenizerConfigRequest:
+      oneOf:
+      - $ref: '#/components/schemas/HuggingFaceTokenizerConfigRequest'
+      - $ref: '#/components/schemas/TikTokenTokenizerConfigRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          HUGGING_FACE: '#/components/schemas/HuggingFaceTokenizerConfigRequest'
+          TIKTOKEN: '#/components/schemas/TikTokenTokenizerConfigRequest'
+    MLModelUpdateRequest:
+      type: object
+      description: Information about an existing ML Model that you'd like to update.
+      properties:
+        display_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDisplayConfigRequest'
+          description: Configuration for how to display the ML Model.
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          description: |-
+            The visibility of the ML Model.
+
+            * `DEFAULT` - DEFAULT
+            * `PUBLIC` - PUBLIC
+            * `PRIVATE` - PRIVATE
+            * `DISABLED` - DISABLED
     MLModelUsage:
       type: object
       properties:
@@ -5111,6 +6242,79 @@ components:
       type: string
       enum:
       - NUMBER
+    NumberParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'number'
+      properties:
+        type:
+          $ref: '#/components/schemas/numberEnum'
+        minimum:
+          type: number
+          format: double
+          nullable: true
+        maximum:
+          type: number
+          format: double
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: number
+          format: double
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    NumberParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'number'
+      properties:
+        type:
+          $ref: '#/components/schemas/numberEnum'
+        minimum:
+          type: number
+          format: double
+          nullable: true
+        maximum:
+          type: number
+          format: double
+          nullable: true
+        format:
+          type: string
+          nullable: true
+          minLength: 1
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: number
+          format: double
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
     NumberVariableValue:
       type: object
       properties:
@@ -5149,6 +6353,143 @@ components:
       required:
       - type
       - value
+    ObjectParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'object'
+      properties:
+        type:
+          $ref: '#/components/schemas/objectEnum'
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        required:
+          type: array
+          items:
+            type: string
+          nullable: true
+        min_properties:
+          type: integer
+          nullable: true
+        max_properties:
+          type: integer
+          nullable: true
+        property_names:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        additional_properties:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        pattern_properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfig'
+          nullable: true
+        default:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    ObjectParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'object'
+      properties:
+        type:
+          $ref: '#/components/schemas/objectEnum'
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        required:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+        min_properties:
+          type: integer
+          nullable: true
+        max_properties:
+          type: integer
+          nullable: true
+        property_names:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        additional_properties:
+          allOf:
+          - $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        pattern_properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterConfigRequest'
+          nullable: true
+        default:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
+    OneOfParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'oneOf'
+      properties:
+        type:
+          $ref: '#/components/schemas/oneofEnum'
+        oneOf:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterConfig'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - oneOf
+      - type
+    OneOfParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'oneOf'
+      properties:
+        type:
+          $ref: '#/components/schemas/oneofEnum'
+        oneOf:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterConfigRequest'
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - oneOf
+      - type
     OpenAIVectorizerConfig:
       type: object
       description: Configuration for using an OpenAI vectorizer.
@@ -5251,6 +6592,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DocumentIndexRead'
+    PaginatedMLModelReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MLModelRead'
     PaginatedSlimDeploymentReadList:
       type: object
       properties:
@@ -5361,6 +6722,48 @@ components:
       - next
       - previous
       - results
+    ParameterConfig:
+      oneOf:
+      - $ref: '#/components/schemas/ArrayParameterConfig'
+      - $ref: '#/components/schemas/ObjectParameterConfig'
+      - $ref: '#/components/schemas/IntegerParameterConfig'
+      - $ref: '#/components/schemas/NumberParameterConfig'
+      - $ref: '#/components/schemas/StringParameterConfig'
+      - $ref: '#/components/schemas/BooleanParameterConfig'
+      - $ref: '#/components/schemas/OneOfParameterConfig'
+      - $ref: '#/components/schemas/ConstParameterConfig'
+      discriminator:
+        propertyName: type
+        mapping:
+          array: '#/components/schemas/ArrayParameterConfig'
+          object: '#/components/schemas/ObjectParameterConfig'
+          integer: '#/components/schemas/IntegerParameterConfig'
+          number: '#/components/schemas/NumberParameterConfig'
+          string: '#/components/schemas/StringParameterConfig'
+          boolean: '#/components/schemas/BooleanParameterConfig'
+          oneOf: '#/components/schemas/OneOfParameterConfig'
+          const: '#/components/schemas/ConstParameterConfig'
+    ParameterConfigRequest:
+      oneOf:
+      - $ref: '#/components/schemas/ArrayParameterConfigRequest'
+      - $ref: '#/components/schemas/ObjectParameterConfigRequest'
+      - $ref: '#/components/schemas/IntegerParameterConfigRequest'
+      - $ref: '#/components/schemas/NumberParameterConfigRequest'
+      - $ref: '#/components/schemas/StringParameterConfigRequest'
+      - $ref: '#/components/schemas/BooleanParameterConfigRequest'
+      - $ref: '#/components/schemas/OneOfParameterConfigRequest'
+      - $ref: '#/components/schemas/ConstParameterConfigRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          array: '#/components/schemas/ArrayParameterConfigRequest'
+          object: '#/components/schemas/ObjectParameterConfigRequest'
+          integer: '#/components/schemas/IntegerParameterConfigRequest'
+          number: '#/components/schemas/NumberParameterConfigRequest'
+          string: '#/components/schemas/StringParameterConfigRequest'
+          boolean: '#/components/schemas/BooleanParameterConfigRequest'
+          oneOf: '#/components/schemas/OneOfParameterConfigRequest'
+          const: '#/components/schemas/ConstParameterConfigRequest'
     PatchedDeploymentReleaseTagUpdateRequest:
       type: object
       properties:
@@ -5415,6 +6818,24 @@ components:
           nullable: true
           description: A JSON object containing any metadata associated with the document
             that you'd like to filter upon later.
+    PatchedMLModelUpdateRequest:
+      type: object
+      description: Information about an existing ML Model that you'd like to update.
+      properties:
+        display_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelDisplayConfigRequest'
+          description: Configuration for how to display the ML Model.
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          description: |-
+            The visibility of the ML Model.
+
+            * `DEFAULT` - DEFAULT
+            * `PUBLIC` - PUBLIC
+            * `PRIVATE` - PRIVATE
+            * `DISABLED` - DISABLED
     PatchedWorkflowReleaseTagUpdateRequest:
       type: object
       properties:
@@ -6277,6 +7698,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VellumVariable'
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the deployment
       required:
       - created
       - id
@@ -6406,6 +7831,10 @@ components:
             $ref: '#/components/schemas/VellumVariable'
           description: The output variables this Workflow Deployment will produce
             when it is executed.
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the workflow deployment
       required:
       - created
       - id
@@ -6528,6 +7957,69 @@ components:
       - name
       - type
       - value
+    StringParameterConfig:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'string'
+      properties:
+        type:
+          $ref: '#/components/schemas/stringEnum'
+        min_length:
+          type: integer
+          nullable: true
+        max_length:
+          type: integer
+          nullable: true
+        pattern:
+          type: string
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        default:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    StringParameterConfigRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'string'
+      properties:
+        type:
+          $ref: '#/components/schemas/stringEnum'
+        min_length:
+          type: integer
+          nullable: true
+        max_length:
+          type: integer
+          nullable: true
+        pattern:
+          type: string
+          nullable: true
+          minLength: 1
+        format:
+          type: string
+          nullable: true
+          minLength: 1
+        default:
+          type: string
+          nullable: true
+          minLength: 1
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
     StringVariableValue:
       type: object
       properties:
@@ -8064,6 +9556,33 @@ components:
       - data
       - id
       - type
+    TikTokenTokenizerConfig:
+      type: object
+      description: Tokenizer config for OpenAI's TikToken type tokenizers.
+      properties:
+        type:
+          $ref: '#/components/schemas/TiktokenEnum'
+        name:
+          type: string
+      required:
+      - name
+      - type
+    TikTokenTokenizerConfigRequest:
+      type: object
+      description: Tokenizer config for OpenAI's TikToken type tokenizers.
+      properties:
+        type:
+          $ref: '#/components/schemas/TiktokenEnum'
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+    TiktokenEnum:
+      type: string
+      enum:
+      - TIKTOKEN
     TokenOverlappingWindowChunkerConfig:
       type: object
       description: Configuration for token overlapping window chunking
@@ -8331,6 +9850,18 @@ components:
         * `FUNCTION_CALL` - FUNCTION_CALL
         * `IMAGE` - IMAGE
         * `NULL` - NULL
+    VisibilityEnum:
+      enum:
+      - DEFAULT
+      - PUBLIC
+      - PRIVATE
+      - DISABLED
+      type: string
+      description: |-
+        * `DEFAULT` - DEFAULT
+        * `PUBLIC` - PUBLIC
+        * `PRIVATE` - PRIVATE
+        * `DISABLED` - DISABLED
     WorkflowDeploymentRead:
       type: object
       properties:
@@ -8388,6 +9919,10 @@ components:
             $ref: '#/components/schemas/VellumVariable'
           description: The output variables this Workflow Deployment produces values
             for when it's executed.
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the workflow deployment
       required:
       - created
       - id
@@ -9327,14 +10862,42 @@ components:
         mapping:
           WORKFLOW: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
           NODE: '#/components/schemas/WorkflowExecutionNodeResultEvent'
+    arrayEnum:
+      type: string
+      enum:
+      - array
+    booleanEnum:
+      type: string
+      enum:
+      - boolean
+    constEnum:
+      type: string
+      enum:
+      - const
     hkunlp-instructor-xlEnum:
       type: string
       enum:
       - hkunlp/instructor-xl
+    integerEnum:
+      type: string
+      enum:
+      - integer
     intfloat-multilingual-e5-largeEnum:
       type: string
       enum:
       - intfloat/multilingual-e5-large
+    numberEnum:
+      type: string
+      enum:
+      - number
+    objectEnum:
+      type: string
+      enum:
+      - object
+    oneofEnum:
+      type: string
+      enum:
+      - oneOf
     reducto-chunkerEnum:
       type: string
       enum:
@@ -9351,6 +10914,10 @@ components:
       type: string
       enum:
       - sentence-transformers/multi-qa-mpnet-base-dot-v1
+    stringEnum:
+      type: string
+      enum:
+      - string
     text-embedding-3-largeEnum:
       type: string
       enum:
