@@ -8,7 +8,23 @@ import { Language } from "@cdktf/commons";
 
 const workdir = process.cwd();
 
-const constraint = new TerraformProviderConstraint("vellum-ai/vellum");
+const checkVersions = () =>
+  fetch("https://registry.terraform.io/v1/providers/vellum-ai/vellum/versions")
+    .then((r) => r.json())
+    .then((r) => {
+      const res = r as { versions: { version: string }[] };
+      const vs = res.versions.slice(0, 5);
+      console.log(
+        "Latest Versions: ",
+        vs.map((v) => v.version)
+      );
+    });
+
+const args = process.argv.slice(2);
+const resolutionItem =
+  args[0] == "--local" ? "../terraform-provider-local" : "vellum-ai/vellum";
+const constraint = new TerraformProviderConstraint(resolutionItem);
+
 const SDKS = [
   {
     targetLanguage: Language.TYPESCRIPT,
@@ -23,6 +39,8 @@ const SDKS = [
     postProcessFrom: ["vellum"],
   },
 ];
+
+// checkVersions();
 
 SDKS.forEach(async ({ repo, targetLanguage, folder, postProcessFrom }) => {
   const repoRoot = path.join(workdir, "..", repo);
