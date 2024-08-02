@@ -2006,98 +2006,6 @@ components:
       type: string
       enum:
       - ARRAY
-    ArrayParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'array'
-      properties:
-        type:
-          $ref: '#/components/schemas/arrayEnum'
-        min_items:
-          type: integer
-          nullable: true
-        max_items:
-          type: integer
-          nullable: true
-        unique_items:
-          type: boolean
-          nullable: true
-        items:
-          $ref: '#/components/schemas/ParameterConfig'
-        prefix_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        contains:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        min_contains:
-          type: integer
-          nullable: true
-        max_contains:
-          type: integer
-          nullable: true
-        default:
-          type: array
-          items: {}
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - items
-      - type
-    ArrayParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'array'
-      properties:
-        type:
-          $ref: '#/components/schemas/arrayEnum'
-        min_items:
-          type: integer
-          nullable: true
-        max_items:
-          type: integer
-          nullable: true
-        unique_items:
-          type: boolean
-          nullable: true
-        items:
-          $ref: '#/components/schemas/ParameterConfigRequest'
-        prefix_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        contains:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        min_contains:
-          type: integer
-          nullable: true
-        max_contains:
-          type: integer
-          nullable: true
-        default:
-          type: array
-          items: {}
-          nullable: true
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - items
-      - type
     ArrayVariableValueItem:
       oneOf:
       - $ref: '#/components/schemas/StringVariableValue'
@@ -2221,42 +2129,6 @@ components:
           nullable: true
       required:
       - model_name
-    BooleanParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'boolean'
-      properties:
-        type:
-          $ref: '#/components/schemas/booleanEnum'
-        default:
-          type: boolean
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - type
-    BooleanParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'boolean'
-      properties:
-        type:
-          $ref: '#/components/schemas/booleanEnum'
-        default:
-          type: boolean
-          nullable: true
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - type
     ChatHistoryEnum:
       type: string
       enum:
@@ -2564,43 +2436,6 @@ components:
         source_handle_id:
           type: string
           nullable: true
-    ConstParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'const'
-      properties:
-        type:
-          $ref: '#/components/schemas/constEnum'
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-        const:
-          type: string
-      required:
-      - const
-      - type
-    ConstParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'const'
-      properties:
-        type:
-          $ref: '#/components/schemas/constEnum'
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-        const:
-          type: string
-          minLength: 1
-      required:
-      - const
-      - type
     CreateEnum:
       type: string
       enum:
@@ -4485,66 +4320,6 @@ components:
       - instruction_document_text_type
       - instruction_domain
       - instruction_query_text_type
-    IntegerParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'integer'
-      properties:
-        type:
-          $ref: '#/components/schemas/integerEnum'
-        minimum:
-          type: integer
-          nullable: true
-        maximum:
-          type: integer
-          nullable: true
-        exclusive_minimum:
-          type: boolean
-          nullable: true
-        exclusive_maximum:
-          type: boolean
-          nullable: true
-        default:
-          type: integer
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - type
-    IntegerParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'integer'
-      properties:
-        type:
-          $ref: '#/components/schemas/integerEnum'
-        minimum:
-          type: integer
-          nullable: true
-        maximum:
-          type: integer
-          nullable: true
-        exclusive_minimum:
-          type: boolean
-          nullable: true
-        exclusive_maximum:
-          type: boolean
-          nullable: true
-        default:
-          type: integer
-          nullable: true
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - type
     IterationStateEnum:
       enum:
       - INITIATED
@@ -4709,22 +4484,6 @@ components:
       description: |-
         * `ALL` - ALL
         * `NONE` - NONE
-    MLModelBuildConfig:
-      type: object
-      properties:
-        finetune_data:
-          type: object
-          additionalProperties: {}
-      required:
-      - finetune_data
-    MLModelBuildConfigRequest:
-      type: object
-      properties:
-        finetune_data:
-          type: object
-          additionalProperties: {}
-      required:
-      - finetune_data
     MLModelCreateRequest:
       type: object
       description: Data representing a new ML Model that you'd like to create.
@@ -4806,10 +4565,6 @@ components:
             * `OPENPIPE` - OPENPIPE
             * `TII` - TII
             * `WIZARDLM` - WIZARDLM
-        build_config:
-          allOf:
-          - $ref: '#/components/schemas/MLModelBuildConfigRequest'
-          description: Configuration for how the ML Model was built.
         exec_config:
           allOf:
           - $ref: '#/components/schemas/MLModelExecConfigRequest'
@@ -4898,11 +4653,7 @@ components:
           items:
             $ref: '#/components/schemas/MLModelDisplayTagEnumValueLabel'
           readOnly: true
-        default_display_priority:
-          type: number
-          format: double
       required:
-      - default_display_priority
       - description
       - label
       - tags
@@ -4919,11 +4670,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelDisplayTag'
-        default_display_priority:
-          type: number
-          format: double
       required:
-      - default_display_priority
       - description
       - label
       - tags
@@ -5106,80 +4853,80 @@ components:
       properties:
         temperature:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfig'
+          - $ref: '#/components/schemas/OpenAPINumberProperty'
           nullable: true
         max_tokens:
           allOf:
-          - $ref: '#/components/schemas/IntegerParameterConfig'
+          - $ref: '#/components/schemas/OpenAPIIntegerProperty'
           nullable: true
         stop:
           allOf:
-          - $ref: '#/components/schemas/ArrayParameterConfig'
+          - $ref: '#/components/schemas/OpenAPIArrayProperty'
           nullable: true
         top_p:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfig'
+          - $ref: '#/components/schemas/OpenAPINumberProperty'
           nullable: true
         top_k:
           allOf:
-          - $ref: '#/components/schemas/IntegerParameterConfig'
+          - $ref: '#/components/schemas/OpenAPIIntegerProperty'
           nullable: true
         frequency_penalty:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfig'
+          - $ref: '#/components/schemas/OpenAPINumberProperty'
           nullable: true
         presence_penalty:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfig'
+          - $ref: '#/components/schemas/OpenAPINumberProperty'
           nullable: true
         logit_bias:
           allOf:
-          - $ref: '#/components/schemas/ObjectParameterConfig'
+          - $ref: '#/components/schemas/OpenAPIObjectProperty'
           nullable: true
         custom_parameters:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/ParameterConfig'
+            $ref: '#/components/schemas/OpenAPIProperty'
           nullable: true
     MLModelParameterConfigRequest:
       type: object
       properties:
         temperature:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPINumberPropertyRequest'
           nullable: true
         max_tokens:
           allOf:
-          - $ref: '#/components/schemas/IntegerParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPIIntegerPropertyRequest'
           nullable: true
         stop:
           allOf:
-          - $ref: '#/components/schemas/ArrayParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPIArrayPropertyRequest'
           nullable: true
         top_p:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPINumberPropertyRequest'
           nullable: true
         top_k:
           allOf:
-          - $ref: '#/components/schemas/IntegerParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPIIntegerPropertyRequest'
           nullable: true
         frequency_penalty:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPINumberPropertyRequest'
           nullable: true
         presence_penalty:
           allOf:
-          - $ref: '#/components/schemas/NumberParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPINumberPropertyRequest'
           nullable: true
         logit_bias:
           allOf:
-          - $ref: '#/components/schemas/ObjectParameterConfigRequest'
+          - $ref: '#/components/schemas/OpenAPIObjectPropertyRequest'
           nullable: true
         custom_parameters:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/ParameterConfigRequest'
+            $ref: '#/components/schemas/OpenAPIPropertyRequest'
           nullable: true
     MLModelRead:
       type: object
@@ -5235,10 +4982,6 @@ components:
             * `PUBLIC` - Public
             * `PRIVATE` - Private
             * `DISABLED` - Disabled
-        build_config:
-          allOf:
-          - $ref: '#/components/schemas/MLModelBuildConfig'
-          description: Configuration for how the ML Model was built.
         exec_config:
           allOf:
           - $ref: '#/components/schemas/MLModelExecConfig'
@@ -5252,7 +4995,6 @@ components:
           - $ref: '#/components/schemas/MLModelDisplayConfigLabelled'
           description: Configuration for how to display the ML Model.
       required:
-      - build_config
       - developed_by
       - display_config
       - exec_config
@@ -6242,79 +5984,6 @@ components:
       type: string
       enum:
       - NUMBER
-    NumberParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'number'
-      properties:
-        type:
-          $ref: '#/components/schemas/numberEnum'
-        minimum:
-          type: number
-          format: double
-          nullable: true
-        maximum:
-          type: number
-          format: double
-          nullable: true
-        format:
-          type: string
-          nullable: true
-        exclusive_minimum:
-          type: boolean
-          nullable: true
-        exclusive_maximum:
-          type: boolean
-          nullable: true
-        default:
-          type: number
-          format: double
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - type
-    NumberParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'number'
-      properties:
-        type:
-          $ref: '#/components/schemas/numberEnum'
-        minimum:
-          type: number
-          format: double
-          nullable: true
-        maximum:
-          type: number
-          format: double
-          nullable: true
-        format:
-          type: string
-          nullable: true
-          minLength: 1
-        exclusive_minimum:
-          type: boolean
-          nullable: true
-        exclusive_maximum:
-          type: boolean
-          nullable: true
-        default:
-          type: number
-          format: double
-          nullable: true
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - type
     NumberVariableValue:
       type: object
       properties:
@@ -6353,143 +6022,6 @@ components:
       required:
       - type
       - value
-    ObjectParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'object'
-      properties:
-        type:
-          $ref: '#/components/schemas/objectEnum'
-        properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        required:
-          type: array
-          items:
-            type: string
-          nullable: true
-        min_properties:
-          type: integer
-          nullable: true
-        max_properties:
-          type: integer
-          nullable: true
-        property_names:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        additional_properties:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        pattern_properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ParameterConfig'
-          nullable: true
-        default:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - type
-    ObjectParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'object'
-      properties:
-        type:
-          $ref: '#/components/schemas/objectEnum'
-        properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        required:
-          type: array
-          items:
-            type: string
-            minLength: 1
-          nullable: true
-        min_properties:
-          type: integer
-          nullable: true
-        max_properties:
-          type: integer
-          nullable: true
-        property_names:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        additional_properties:
-          allOf:
-          - $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        pattern_properties:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ParameterConfigRequest'
-          nullable: true
-        default:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - type
-    OneOfParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'oneOf'
-      properties:
-        type:
-          $ref: '#/components/schemas/oneofEnum'
-        oneOf:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterConfig'
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - oneOf
-      - type
-    OneOfParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'oneOf'
-      properties:
-        type:
-          $ref: '#/components/schemas/oneofEnum'
-        oneOf:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterConfigRequest'
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - oneOf
-      - type
     OpenAIVectorizerConfig:
       type: object
       description: Configuration for using an OpenAI vectorizer.
@@ -6572,6 +6104,546 @@ components:
       required:
       - config
       - model_name
+    OpenAPIArrayProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'array'
+      properties:
+        type:
+          $ref: '#/components/schemas/arrayEnum'
+        min_items:
+          type: integer
+          nullable: true
+        max_items:
+          type: integer
+          nullable: true
+        unique_items:
+          type: boolean
+          nullable: true
+        items:
+          $ref: '#/components/schemas/OpenAPIProperty'
+        prefix_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        contains:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        min_contains:
+          type: integer
+          nullable: true
+        max_contains:
+          type: integer
+          nullable: true
+        default:
+          type: array
+          items: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - items
+      - type
+    OpenAPIArrayPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'array'
+      properties:
+        type:
+          $ref: '#/components/schemas/arrayEnum'
+        min_items:
+          type: integer
+          nullable: true
+        max_items:
+          type: integer
+          nullable: true
+        unique_items:
+          type: boolean
+          nullable: true
+        items:
+          $ref: '#/components/schemas/OpenAPIPropertyRequest'
+        prefix_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        contains:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        min_contains:
+          type: integer
+          nullable: true
+        max_contains:
+          type: integer
+          nullable: true
+        default:
+          type: array
+          items: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - items
+      - type
+    OpenAPIBooleanProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'boolean'
+      properties:
+        type:
+          $ref: '#/components/schemas/booleanEnum'
+        default:
+          type: boolean
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    OpenAPIBooleanPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'boolean'
+      properties:
+        type:
+          $ref: '#/components/schemas/booleanEnum'
+        default:
+          type: boolean
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
+    OpenAPIConstProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'const'
+      properties:
+        type:
+          $ref: '#/components/schemas/constEnum'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        const:
+          type: string
+      required:
+      - const
+      - type
+    OpenAPIConstPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'const'
+      properties:
+        type:
+          $ref: '#/components/schemas/constEnum'
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+        const:
+          type: string
+          minLength: 1
+      required:
+      - const
+      - type
+    OpenAPIIntegerProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'integer'
+      properties:
+        type:
+          $ref: '#/components/schemas/integerEnum'
+        minimum:
+          type: integer
+          nullable: true
+        maximum:
+          type: integer
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    OpenAPIIntegerPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'integer'
+      properties:
+        type:
+          $ref: '#/components/schemas/integerEnum'
+        minimum:
+          type: integer
+          nullable: true
+        maximum:
+          type: integer
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
+    OpenAPINumberProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'number'
+      properties:
+        type:
+          $ref: '#/components/schemas/numberEnum'
+        minimum:
+          type: number
+          format: double
+          nullable: true
+        maximum:
+          type: number
+          format: double
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: number
+          format: double
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    OpenAPINumberPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'number'
+      properties:
+        type:
+          $ref: '#/components/schemas/numberEnum'
+        minimum:
+          type: number
+          format: double
+          nullable: true
+        maximum:
+          type: number
+          format: double
+          nullable: true
+        format:
+          type: string
+          nullable: true
+          minLength: 1
+        exclusive_minimum:
+          type: boolean
+          nullable: true
+        exclusive_maximum:
+          type: boolean
+          nullable: true
+        default:
+          type: number
+          format: double
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
+    OpenAPIObjectProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'object'
+      properties:
+        type:
+          $ref: '#/components/schemas/objectEnum'
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        required:
+          type: array
+          items:
+            type: string
+          nullable: true
+        min_properties:
+          type: integer
+          nullable: true
+        max_properties:
+          type: integer
+          nullable: true
+        property_names:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        additional_properties:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        pattern_properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/OpenAPIProperty'
+          nullable: true
+        default:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    OpenAPIObjectPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'object'
+      properties:
+        type:
+          $ref: '#/components/schemas/objectEnum'
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        required:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          nullable: true
+        min_properties:
+          type: integer
+          nullable: true
+        max_properties:
+          type: integer
+          nullable: true
+        property_names:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        additional_properties:
+          allOf:
+          - $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        pattern_properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/OpenAPIPropertyRequest'
+          nullable: true
+        default:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
+    OpenAPIOneOfProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'oneOf'
+      properties:
+        type:
+          $ref: '#/components/schemas/oneofEnum'
+        oneOf:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAPIProperty'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - oneOf
+      - type
+    OpenAPIOneOfPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'oneOf'
+      properties:
+        type:
+          $ref: '#/components/schemas/oneofEnum'
+        oneOf:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenAPIPropertyRequest'
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - oneOf
+      - type
+    OpenAPIProperty:
+      oneOf:
+      - $ref: '#/components/schemas/OpenAPIArrayProperty'
+      - $ref: '#/components/schemas/OpenAPIObjectProperty'
+      - $ref: '#/components/schemas/OpenAPIIntegerProperty'
+      - $ref: '#/components/schemas/OpenAPINumberProperty'
+      - $ref: '#/components/schemas/OpenAPIStringProperty'
+      - $ref: '#/components/schemas/OpenAPIBooleanProperty'
+      - $ref: '#/components/schemas/OpenAPIOneOfProperty'
+      - $ref: '#/components/schemas/OpenAPIConstProperty'
+      discriminator:
+        propertyName: type
+        mapping:
+          array: '#/components/schemas/OpenAPIArrayProperty'
+          object: '#/components/schemas/OpenAPIObjectProperty'
+          integer: '#/components/schemas/OpenAPIIntegerProperty'
+          number: '#/components/schemas/OpenAPINumberProperty'
+          string: '#/components/schemas/OpenAPIStringProperty'
+          boolean: '#/components/schemas/OpenAPIBooleanProperty'
+          oneOf: '#/components/schemas/OpenAPIOneOfProperty'
+          const: '#/components/schemas/OpenAPIConstProperty'
+    OpenAPIPropertyRequest:
+      oneOf:
+      - $ref: '#/components/schemas/OpenAPIArrayPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIObjectPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIIntegerPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPINumberPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIStringPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIBooleanPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIOneOfPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIConstPropertyRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          array: '#/components/schemas/OpenAPIArrayPropertyRequest'
+          object: '#/components/schemas/OpenAPIObjectPropertyRequest'
+          integer: '#/components/schemas/OpenAPIIntegerPropertyRequest'
+          number: '#/components/schemas/OpenAPINumberPropertyRequest'
+          string: '#/components/schemas/OpenAPIStringPropertyRequest'
+          boolean: '#/components/schemas/OpenAPIBooleanPropertyRequest'
+          oneOf: '#/components/schemas/OpenAPIOneOfPropertyRequest'
+          const: '#/components/schemas/OpenAPIConstPropertyRequest'
+    OpenAPIStringProperty:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'string'
+      properties:
+        type:
+          $ref: '#/components/schemas/stringEnum'
+        min_length:
+          type: integer
+          nullable: true
+        max_length:
+          type: integer
+          nullable: true
+        pattern:
+          type: string
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        default:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+      - type
+    OpenAPIStringPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a parameter with type 'string'
+      properties:
+        type:
+          $ref: '#/components/schemas/stringEnum'
+        min_length:
+          type: integer
+          nullable: true
+        max_length:
+          type: integer
+          nullable: true
+        pattern:
+          type: string
+          nullable: true
+          minLength: 1
+        format:
+          type: string
+          nullable: true
+          minLength: 1
+        default:
+          type: string
+          nullable: true
+          minLength: 1
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - type
     PaginatedDocumentIndexReadList:
       type: object
       properties:
@@ -6722,48 +6794,6 @@ components:
       - next
       - previous
       - results
-    ParameterConfig:
-      oneOf:
-      - $ref: '#/components/schemas/ArrayParameterConfig'
-      - $ref: '#/components/schemas/ObjectParameterConfig'
-      - $ref: '#/components/schemas/IntegerParameterConfig'
-      - $ref: '#/components/schemas/NumberParameterConfig'
-      - $ref: '#/components/schemas/StringParameterConfig'
-      - $ref: '#/components/schemas/BooleanParameterConfig'
-      - $ref: '#/components/schemas/OneOfParameterConfig'
-      - $ref: '#/components/schemas/ConstParameterConfig'
-      discriminator:
-        propertyName: type
-        mapping:
-          array: '#/components/schemas/ArrayParameterConfig'
-          object: '#/components/schemas/ObjectParameterConfig'
-          integer: '#/components/schemas/IntegerParameterConfig'
-          number: '#/components/schemas/NumberParameterConfig'
-          string: '#/components/schemas/StringParameterConfig'
-          boolean: '#/components/schemas/BooleanParameterConfig'
-          oneOf: '#/components/schemas/OneOfParameterConfig'
-          const: '#/components/schemas/ConstParameterConfig'
-    ParameterConfigRequest:
-      oneOf:
-      - $ref: '#/components/schemas/ArrayParameterConfigRequest'
-      - $ref: '#/components/schemas/ObjectParameterConfigRequest'
-      - $ref: '#/components/schemas/IntegerParameterConfigRequest'
-      - $ref: '#/components/schemas/NumberParameterConfigRequest'
-      - $ref: '#/components/schemas/StringParameterConfigRequest'
-      - $ref: '#/components/schemas/BooleanParameterConfigRequest'
-      - $ref: '#/components/schemas/OneOfParameterConfigRequest'
-      - $ref: '#/components/schemas/ConstParameterConfigRequest'
-      discriminator:
-        propertyName: type
-        mapping:
-          array: '#/components/schemas/ArrayParameterConfigRequest'
-          object: '#/components/schemas/ObjectParameterConfigRequest'
-          integer: '#/components/schemas/IntegerParameterConfigRequest'
-          number: '#/components/schemas/NumberParameterConfigRequest'
-          string: '#/components/schemas/StringParameterConfigRequest'
-          boolean: '#/components/schemas/BooleanParameterConfigRequest'
-          oneOf: '#/components/schemas/OneOfParameterConfigRequest'
-          const: '#/components/schemas/ConstParameterConfigRequest'
     PatchedDeploymentReleaseTagUpdateRequest:
       type: object
       properties:
@@ -7957,69 +7987,6 @@ components:
       - name
       - type
       - value
-    StringParameterConfig:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'string'
-      properties:
-        type:
-          $ref: '#/components/schemas/stringEnum'
-        min_length:
-          type: integer
-          nullable: true
-        max_length:
-          type: integer
-          nullable: true
-        pattern:
-          type: string
-          nullable: true
-        format:
-          type: string
-          nullable: true
-        default:
-          type: string
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-      - type
-    StringParameterConfigRequest:
-      type: object
-      description: An OpenAPI specification of a parameter with type 'string'
-      properties:
-        type:
-          $ref: '#/components/schemas/stringEnum'
-        min_length:
-          type: integer
-          nullable: true
-        max_length:
-          type: integer
-          nullable: true
-        pattern:
-          type: string
-          nullable: true
-          minLength: 1
-        format:
-          type: string
-          nullable: true
-          minLength: 1
-        default:
-          type: string
-          nullable: true
-          minLength: 1
-        title:
-          type: string
-          nullable: true
-          minLength: 1
-        description:
-          type: string
-          nullable: true
-          minLength: 1
-      required:
-      - type
     StringVariableValue:
       type: object
       properties:
