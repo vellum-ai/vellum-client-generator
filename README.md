@@ -111,3 +111,24 @@ If you run into errors, you can add the ` --log-level debug` flag to get more in
 
 If you get a 403 error, you may need to first run `fern login`. You might also need to be added
 to the Vellum org in Fern, which requires contacting the fern team in #fern-x-vellum in Slack.
+
+
+## Terraform CDKTF Local Testing
+To test changes to the Vellum terraform provider you need to create a file at `~/dev.tfrc` with these contents:
+
+```
+provider_installation {
+  dev_overrides {
+    "vellum-ai/vellum" = "[PATH TO YOUR terraform-provider-vellum REPO HERE]"
+  }
+  filesystem_mirror {
+    path    = "~/go/bin"
+    include = ["local/vellum"]
+  }
+  direct {
+    exclude = ["local/vellum"]
+  }
+}
+```
+
+Once you have that in place you can run `npm run cdktf:local` and it will use your local repo instead of the terraform registry for generating the SDK files locally.
