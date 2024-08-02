@@ -6,7 +6,7 @@ groups:
       - deprecated
     generators:
       - name: fernapi/fern-python-sdk
-        version: 1.4.0-rc4
+        version: 2.16.0
         github:
           repository: vellum-ai/vellum-client-python-staging
           mode: pull-request
@@ -21,6 +21,7 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
+          inline_request_params: false
           extra_dependencies:
             cdktf: '^0.20.5'
             publication: '0.0.3'
