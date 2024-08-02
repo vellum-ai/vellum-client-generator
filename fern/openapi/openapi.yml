@@ -4570,6 +4570,21 @@ components:
       - name
       - type
       - value
+    Json:
+      oneOf:
+      - type: boolean
+      - type: integer
+      - type: number
+        format: double
+      - type: string
+        minLength: 1
+      - type: array
+        items:
+          $ref: '#/components/schemas/Json'
+      - type: object
+        additionalProperties:
+          $ref: '#/components/schemas/Json'
+      nullable: true
     JsonEnum:
       type: string
       enum:
@@ -7037,7 +7052,8 @@ components:
       properties:
         body:
           type: object
-          additionalProperties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/Json'
           nullable: true
         headers:
           type: object
