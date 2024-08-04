@@ -1082,8 +1082,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
@@ -1109,8 +1108,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
@@ -1141,8 +1139,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
@@ -5283,14 +5280,31 @@ components:
       - name
       - type
       - value
+    NamedScenarioInputJsonVariableValueRequest:
+      type: object
+      description: Named Prompt Sandbox Scenario input value that is of type JSON
+      properties:
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
+          nullable: true
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - type
+      - value
     NamedScenarioInputRequest:
       oneOf:
       - $ref: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+      - $ref: '#/components/schemas/NamedScenarioInputJsonVariableValueRequest'
       - $ref: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/NamedScenarioInputStringVariableValueRequest'
+          JSON: '#/components/schemas/NamedScenarioInputJsonVariableValueRequest'
           CHAT_HISTORY: '#/components/schemas/NamedScenarioInputChatHistoryVariableValueRequest'
     NamedScenarioInputStringVariableValueRequest:
       type: object
@@ -7302,11 +7316,13 @@ components:
     ScenarioInput:
       oneOf:
       - $ref: '#/components/schemas/ScenarioInputStringVariableValue'
+      - $ref: '#/components/schemas/ScenarioInputJsonVariableValue'
       - $ref: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/ScenarioInputStringVariableValue'
+          JSON: '#/components/schemas/ScenarioInputJsonVariableValue'
           CHAT_HISTORY: '#/components/schemas/ScenarioInputChatHistoryVariableValue'
     ScenarioInputChatHistoryVariableValue:
       type: object
@@ -7318,6 +7334,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChatMessage'
+          nullable: true
+        input_variable_id:
+          type: string
+      required:
+      - input_variable_id
+      - type
+      - value
+    ScenarioInputJsonVariableValue:
+      type: object
+      description: Prompt Sandbox Scenario input value that is of type JSON
+      properties:
+        type:
+          $ref: '#/components/schemas/JsonEnum'
+        value:
           nullable: true
         input_variable_id:
           type: string
