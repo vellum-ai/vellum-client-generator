@@ -1082,8 +1082,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
@@ -1109,8 +1108,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
@@ -1141,8 +1139,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this ml model.
+        description: Either the ML Model's ID or its unique name
         required: true
       tags:
       - ml-models
