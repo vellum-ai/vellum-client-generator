@@ -4585,8 +4585,10 @@ components:
             * `PRIVATE` - PRIVATE
             * `DISABLED` - DISABLED
       required:
+      - developed_by
       - exec_config
       - family
+      - hosted_by
       - name
     MLModelDeveloper:
       enum:
@@ -4715,8 +4717,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelFeature'
-        force_system_credentials:
-          type: boolean
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfig'
@@ -4750,8 +4750,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelFeature'
-        force_system_credentials:
-          type: boolean
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfigRequest'
