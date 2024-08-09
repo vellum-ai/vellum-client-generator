@@ -1,0 +1,34 @@
+---
+title: Prompting Tips and Examples
+description: Learn prompting techniques for common use-cases.
+image: https://storage.googleapis.com/vellum-public/help-docs/prompt_history.png
+---
+
+## Producing JSON
+
+You can efficiently specify the shape of JSON objects you'd like your LLM to produce with the following recipe:
+
+> Provide a JSON response for the following transcript information and use the formatting
+> below:
+>
+> ```
+> {
+>   "meeting_type": "board meeting" || "special meeting" || "work session" // if none, return "general",
+>   "speakers": string[], // list of speaker names
+>   "meeting_location": "virtual" || "in_person",
+>   "date": "datetime", // ISO 8601 format with date and time and default to "null" if datetime is unknown
+>   "summary": "string" // concise description of key topics
+> }
+> ```
+>
+> Transcript:
+>
+> """
+>
+> [transcript contents go here]
+>
+> """
+
+Note the code fencing used here to add descriptions for the key-value pairs so the model knows what to extract.
+
+We also provide a default value so we can handle that downstream in our system rather than getting inconsistent values from the LLM when the data is not found.
