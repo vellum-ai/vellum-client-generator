@@ -205,3 +205,35 @@ Given the powerful and dynamic nature of Vellum’s prompt syntax, you may want 
 You can view how much token, character or compute time usage your prompts are costing you by enabling the "Track Usage" toggle in your Prompt Sandbox's settings.
 
 ![Usage Tracking Sandbox](https://storage.googleapis.com/vellum-public/help-docs/usage-tracking-sandbox.png)
+
+# Prompting Tips & Examples
+
+## Producing JSON
+
+You can efficiently specify the shape of JSON objects you'd like your LLM to produce with the following recipe:
+
+<blockquote>
+
+Provide a JSON response for the following transcript information and use the formatting
+below.
+
+```json
+{
+  "meeting_type": "board meeting" || "special meeting" || "work session" // if none, return "general",
+  "speakers": string[], // list of speaker names
+  "meeting_location": "virtual" || "in_person",
+  "date": "datetime", // ISO 8601 format with date and time and default to "null" if datetime is unknown
+  "summary": "string" // concise description of key topics
+}
+
+Transcript:
+"""
+<transcript contents go here>
+"""
+```
+
+</blockquote>
+
+Note the code fencing used here to add descriptions for the key-value pairs so the model knows what to extract.
+
+We also provide a default value so we can handle that downstream in our system rather than getting inconsistent values from the LLM when the data is not found.
