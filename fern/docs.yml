@@ -127,6 +127,9 @@ navigation:
           - page: Working with Images in Vellum
             path: ./docs/content/help/prompts/working-with-images-in-vellum.mdx
             slug: images
+          - page: Prompting Tips and Examples
+            path: ./docs/content/help/prompts/prompting-tips-and-examples.mdx
+            slug: prompting-tips-and-examples
       - section: Evaluation
         contents:
           - page: Quantitatively Evaluating Outputs
