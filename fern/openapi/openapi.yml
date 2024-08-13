@@ -4652,6 +4652,11 @@ components:
           items:
             $ref: '#/components/schemas/MLModelDisplayTagEnumValueLabel'
           readOnly: true
+        default_display_priority:
+          type: number
+          format: double
+          default: 0.0
+          description: Can only be set when using an internal service token.
       required:
       - description
       - label
@@ -4669,6 +4674,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelDisplayTag'
+        default_display_priority:
+          type: number
+          format: double
+          default: 0.0
+          description: Can only be set when using an internal service token.
       required:
       - description
       - label
@@ -4717,6 +4727,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelFeature'
+        force_system_credentials:
+          type: boolean
+          default: false
+          description: Can only be set when using an internal service token.
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfig'
@@ -4750,6 +4764,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MLModelFeature'
+        force_system_credentials:
+          type: boolean
+          default: false
+          description: Can only be set when using an internal service token.
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfigRequest'
@@ -5104,6 +5122,14 @@ components:
       type: object
       description: Information about an existing ML Model that you'd like to update.
       properties:
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelExecConfigRequest'
+          description: Configuration for how to execute the ML Model.
+        parameter_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelParameterConfigRequest'
+          description: Configuration for the ML Model's parameters.
         display_config:
           allOf:
           - $ref: '#/components/schemas/MLModelDisplayConfigRequest'
@@ -6118,7 +6144,7 @@ components:
       - model_name
     OpenAPIArrayProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'array'
+      description: An OpenAPI specification of a property with type 'array'
       properties:
         type:
           $ref: '#/components/schemas/arrayEnum'
@@ -6163,7 +6189,7 @@ components:
       - type
     OpenAPIArrayPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'array'
+      description: An OpenAPI specification of a property with type 'array'
       properties:
         type:
           $ref: '#/components/schemas/arrayEnum'
@@ -6210,7 +6236,7 @@ components:
       - type
     OpenAPIBooleanProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'boolean'
+      description: An OpenAPI specification of a property with type 'boolean'
       properties:
         type:
           $ref: '#/components/schemas/booleanEnum'
@@ -6227,7 +6253,7 @@ components:
       - type
     OpenAPIBooleanPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'boolean'
+      description: An OpenAPI specification of a property with type 'boolean'
       properties:
         type:
           $ref: '#/components/schemas/booleanEnum'
@@ -6246,7 +6272,7 @@ components:
       - type
     OpenAPIConstProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'const'
+      description: An OpenAPI specification of a property with type 'const'
       properties:
         type:
           $ref: '#/components/schemas/constEnum'
@@ -6263,7 +6289,7 @@ components:
       - type
     OpenAPIConstPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'const'
+      description: An OpenAPI specification of a property with type 'const'
       properties:
         type:
           $ref: '#/components/schemas/constEnum'
@@ -6283,7 +6309,7 @@ components:
       - type
     OpenAPIIntegerProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'integer'
+      description: An OpenAPI specification of a property with type 'integer'
       properties:
         type:
           $ref: '#/components/schemas/integerEnum'
@@ -6312,7 +6338,7 @@ components:
       - type
     OpenAPIIntegerPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'integer'
+      description: An OpenAPI specification of a property with type 'integer'
       properties:
         type:
           $ref: '#/components/schemas/integerEnum'
@@ -6343,7 +6369,7 @@ components:
       - type
     OpenAPINumberProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'number'
+      description: An OpenAPI specification of a property with type 'number'
       properties:
         type:
           $ref: '#/components/schemas/numberEnum'
@@ -6378,7 +6404,7 @@ components:
       - type
     OpenAPINumberPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'number'
+      description: An OpenAPI specification of a property with type 'number'
       properties:
         type:
           $ref: '#/components/schemas/numberEnum'
@@ -6416,7 +6442,7 @@ components:
       - type
     OpenAPIObjectProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'object'
+      description: An OpenAPI specification of a property with type 'object'
       properties:
         type:
           $ref: '#/components/schemas/objectEnum'
@@ -6463,7 +6489,7 @@ components:
       - type
     OpenAPIObjectPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'object'
+      description: An OpenAPI specification of a property with type 'object'
       properties:
         type:
           $ref: '#/components/schemas/objectEnum'
@@ -6513,7 +6539,7 @@ components:
       - type
     OpenAPIOneOfProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'oneOf'
+      description: An OpenAPI specification of a property with type 'oneOf'
       properties:
         type:
           $ref: '#/components/schemas/oneofEnum'
@@ -6532,7 +6558,7 @@ components:
       - type
     OpenAPIOneOfPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'oneOf'
+      description: An OpenAPI specification of a property with type 'oneOf'
       properties:
         type:
           $ref: '#/components/schemas/oneofEnum'
@@ -6561,6 +6587,7 @@ components:
       - $ref: '#/components/schemas/OpenAPIBooleanProperty'
       - $ref: '#/components/schemas/OpenAPIOneOfProperty'
       - $ref: '#/components/schemas/OpenAPIConstProperty'
+      - $ref: '#/components/schemas/OpenAPIRefProperty'
       discriminator:
         propertyName: type
         mapping:
@@ -6572,6 +6599,7 @@ components:
           boolean: '#/components/schemas/OpenAPIBooleanProperty'
           oneOf: '#/components/schemas/OpenAPIOneOfProperty'
           const: '#/components/schemas/OpenAPIConstProperty'
+          ref: '#/components/schemas/OpenAPIRefProperty'
     OpenAPIPropertyRequest:
       oneOf:
       - $ref: '#/components/schemas/OpenAPIArrayPropertyRequest'
@@ -6582,6 +6610,7 @@ components:
       - $ref: '#/components/schemas/OpenAPIBooleanPropertyRequest'
       - $ref: '#/components/schemas/OpenAPIOneOfPropertyRequest'
       - $ref: '#/components/schemas/OpenAPIConstPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIRefPropertyRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -6593,9 +6622,49 @@ components:
           boolean: '#/components/schemas/OpenAPIBooleanPropertyRequest'
           oneOf: '#/components/schemas/OpenAPIOneOfPropertyRequest'
           const: '#/components/schemas/OpenAPIConstPropertyRequest'
+          ref: '#/components/schemas/OpenAPIRefPropertyRequest'
+    OpenAPIRefProperty:
+      type: object
+      description: An OpenAPI specification of a property that is a URI-reference
+        to another schema
+      properties:
+        type:
+          $ref: '#/components/schemas/refEnum'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ref:
+          type: string
+      required:
+      - ref
+      - type
+    OpenAPIRefPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a property that is a URI-reference
+        to another schema
+      properties:
+        type:
+          $ref: '#/components/schemas/refEnum'
+        title:
+          type: string
+          nullable: true
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+        ref:
+          type: string
+          minLength: 1
+      required:
+      - ref
+      - type
     OpenAPIStringProperty:
       type: object
-      description: An OpenAPI specification of a parameter with type 'string'
+      description: An OpenAPI specification of a property with type 'string'
       properties:
         type:
           $ref: '#/components/schemas/stringEnum'
@@ -6624,7 +6693,7 @@ components:
       - type
     OpenAPIStringPropertyRequest:
       type: object
-      description: An OpenAPI specification of a parameter with type 'string'
+      description: An OpenAPI specification of a property with type 'string'
       properties:
         type:
           $ref: '#/components/schemas/stringEnum'
@@ -6864,6 +6933,14 @@ components:
       type: object
       description: Information about an existing ML Model that you'd like to update.
       properties:
+        exec_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelExecConfigRequest'
+          description: Configuration for how to execute the ML Model.
+        parameter_config:
+          allOf:
+          - $ref: '#/components/schemas/MLModelParameterConfigRequest'
+          description: Configuration for the ML Model's parameters.
         display_config:
           allOf:
           - $ref: '#/components/schemas/MLModelDisplayConfigRequest'
@@ -10897,6 +10974,10 @@ components:
       type: string
       enum:
       - reducto-chunker
+    refEnum:
+      type: string
+      enum:
+      - ref
     sentence-chunkerEnum:
       type: string
       enum:
