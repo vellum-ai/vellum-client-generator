@@ -2,6 +2,17 @@
 title: Changelog | August, 2024
 ---
 
+## Workflow Deployment Executions Filtered to Just API Executions
+
+_August 12th, 2024_
+
+Our Workflow Deployment Executions page used to list all executions of a Workflow Deployment, no matter where they were invoked from. However, this
+would often get confusing because you'd see a mix of results from both eval runs and production traffic in the same view.
+
+Our Workflow Deployment Executions page now filters down to just those executions that were invoked via the API. Executions from evaluations are still accessible from within the Evaluations UI by hovering over a row and clicking the "View Workflow Details" button:
+
+![View Workflow Details](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/view-workflow-details.png)
+
 ## Add Specific Releases to Evaluation Reports
 
 _August 12th, 2024_
