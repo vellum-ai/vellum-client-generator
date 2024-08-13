@@ -11,13 +11,7 @@ The list of architectures below is not exhaustive, we’re continuing to build i
 
 LLM applications often require specific context from a Vector DB which is added into the prompt. Forget signing up for multiple systems and being stuck on various micro decisions, with Vellum you can prototype a RAG system in minutes
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/090744e8-3ec0-4047-ba98-c1445068397f"
-  width="80%"
-  height="350px"
-  style="margin: 24px auto;"
-  experimental_enableRequestFullscreen={true}
-/>
+**Walkthrough**
 
 <Steps>
 
@@ -39,9 +33,38 @@ For example, if the Prompt Node result is a certain value branch execution based
 
 </Steps>
 
+**Workflow**
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/090744e8-3ec0-4047-ba98-c1445068397f"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
+  experimental_enableRequestFullscreen={true}
+/>
+
 ## Route messages to a Human
 
 If you’re building an agent that answers questions coming from users (e.g., a support chatbot), you may want to set up rules such that anytime the incoming message from a user is sensitive (e.g., the user is angry or in a dangerous situation) then the LLM automatically escalates it to a human. With Workflows you’d be able to build that out real quick.
+
+**Walkthrough**
+
+<Steps>
+
+### Add a classification prompt
+Use a Prompt Node to filter out incoming messages
+
+### Add a downstream prompt 
+Use another prompt node for the LLM to respond to messages that don’t need to be escalated
+
+### Add and connect two Final Output Nodes
+Connect the classification prompt outputs to two separate Final Output Nodes
+
+### Set up variables and hit Run!
+
+</Steps>
+
+**Workflow**
 
 <iframe
   src="https://app.vellum.ai/public/workflow-deployments/d213be0a-65f0-407b-bafc-76077bfa3692"
@@ -51,32 +74,11 @@ If you’re building an agent that answers questions coming from users (e.g., a 
   experimental_enableRequestFullscreen={true}
 />
 
-<Steps>
-
-### Create a classification prompt
-Use a Prompt Node to filter out incoming messages
-
-### Create a downstream prompt 
-Use another prompt node for the LLM to respond to messages that don’t need to be escalated
-
-### Create and connect two Final Output Nodes
-Connect the classification prompt outputs to two separate Final Output Nodes
-
-### Set up variables and hit Run!
-
-</Steps>
-
 ## Retrying a Prompt Node in case of non-deterministic failure
 
 Prompt nodes support two selectable outputs - one from the model in case of a valid output and one in case of a non deterministic error. Model hosts fail for all sorts of reasons that include timeouts, rate limits, or server overload. You could make your production-grade LLM features resilient to these features by adding retry logic into your Workflows!
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
-  width="80%"
-  height="350px"
-  style="margin: 24px auto;"
-  experimental_enableRequestFullscreen={true}
-/>
+**Walkthrough**
 
 <Steps>
 
@@ -93,6 +95,16 @@ Loop back to the Prompt Node if it's under the limit, or exit with some error me
 
 </Steps>
 
+**Workflow**
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
+  experimental_enableRequestFullscreen={true}
+/>
+
 ## Summarizing the contents of a PDF file
 
 Vellum Document Indexes are typically used to power RAG systems via Search Nodes. However, they can also be used to operate on the entirety of a single file's contents.
@@ -105,13 +117,7 @@ You need to have ....
 - Uploaded a PDF file to the Document Index and noted down its ID.
 - Generated a Vellum API Token and saved its value as a Workspace Secret.
 
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/94f60249-8729-4c10-bb54-941621abceaa"
-  width="80%"
-  height="350px"
-  style="margin: 24px auto;"
-  experimental_enableRequestFullscreen={true}
-/>
+**Walkthrough**
 
 <Steps>
 
@@ -138,3 +144,13 @@ This will retrieve the text contents of the Document.
 ### Pass those contents to a Prompt Node that summarizes the text.
 
 </Steps>
+
+**Workflow**
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/94f60249-8729-4c10-bb54-941621abceaa"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
+  experimental_enableRequestFullscreen={true}
+/>
