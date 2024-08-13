@@ -1037,6 +1037,7 @@ paths:
       - ml-model-to-workspaces
       security:
       - apiKeyAuth: []
+      - bearerTokenAuth: []
       responses:
         '200':
           content:
@@ -1062,6 +1063,7 @@ paths:
         required: true
       security:
       - apiKeyAuth: []
+      - bearerTokenAuth: []
       responses:
         '201':
           content:
@@ -1089,6 +1091,7 @@ paths:
       - ml-model-to-workspaces
       security:
       - apiKeyAuth: []
+      - bearerTokenAuth: []
       responses:
         '200':
           content:
@@ -1120,6 +1123,7 @@ paths:
               $ref: '#/components/schemas/MLModelUpdateRequest'
       security:
       - apiKeyAuth: []
+      - bearerTokenAuth: []
       responses:
         '200':
           content:
@@ -1151,6 +1155,7 @@ paths:
               $ref: '#/components/schemas/PatchedMLModelUpdateRequest'
       security:
       - apiKeyAuth: []
+      - bearerTokenAuth: []
       responses:
         '200':
           content:
@@ -10935,6 +10940,11 @@ components:
       in: header
       name: X_API_KEY
       description: API key based authentication
+    bearerTokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Bearer"
 servers:
 - url: https://api.vellum.ai
   description: Default Server
