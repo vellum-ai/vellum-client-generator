@@ -8815,6 +8815,8 @@ components:
       description: Execution configuration for running a Test Suite against a Prompt
         Deployment
       properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
         data:
           $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigData'
         test_case_ids:
@@ -8824,8 +8826,6 @@ components:
           nullable: true
           description: Optionally specify a subset of test case ids to run. If not
             provided, all test cases within the test suite will be run by default.
-        type:
-          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
       required:
       - data
     TestSuiteRunDeploymentReleaseTagExecConfigData:
@@ -8864,6 +8864,8 @@ components:
       description: Execution configuration for running a Test Suite against a Prompt
         Deployment
       properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
         data:
           $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigDataRequest'
         test_case_ids:
@@ -8874,8 +8876,6 @@ components:
           nullable: true
           description: Optionally specify a subset of test case ids to run. If not
             provided, all test cases within the test suite will be run by default.
-        type:
-          $ref: '#/components/schemas/TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum'
       required:
       - data
     TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum:
@@ -9341,6 +9341,8 @@ components:
       description: Execution configuration for running a Test Suite against a Workflow
         Deployment
       properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
         data:
           $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigData'
         test_case_ids:
@@ -9350,8 +9352,6 @@ components:
           nullable: true
           description: Optionally specify a subset of test case ids to run. If not
             provided, all test cases within the test suite will be run by default.
-        type:
-          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
       required:
       - data
     TestSuiteRunWorkflowReleaseTagExecConfigData:
@@ -9390,6 +9390,8 @@ components:
       description: Execution configuration for running a Test Suite against a Workflow
         Deployment
       properties:
+        type:
+          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
         data:
           $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigDataRequest'
         test_case_ids:
@@ -9400,8 +9402,6 @@ components:
           nullable: true
           description: Optionally specify a subset of test case ids to run. If not
             provided, all test cases within the test suite will be run by default.
-        type:
-          $ref: '#/components/schemas/TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum'
       required:
       - data
     TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum:
