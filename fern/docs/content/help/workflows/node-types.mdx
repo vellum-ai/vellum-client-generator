@@ -2,9 +2,22 @@
 
 The names of nodes can be edited in-line once the node has been added to the UI. You can add as many nodes as you want to your Workflow. Since there is extreme flexibility in how Workflows can be created, you can modify your architecture to your desire by starting from these building blocks. Common architectures are shared in a separate help center doc ([Common Workflow Architectures](/help-center/documents/uploading-documents)) and will be updated over time.
 
-![Workflow Nodes](https://storage.googleapis.com/vellum-public/help-docs/workflow_nodes.png)
+## Quick Reference
 
-Drag and drop a node from the side panel into the UI and start building
+|Node Type|Description|
+|-----------|-----------|
+| [Prompt Node](/help-center/workflows/node-types#prompt-nodes) | Invoke LLMs with your prompts, optionally using variables from other nodes |
+| [Templating Node](/help-center/workflows/node-types#templating-nodes) | Apply Jinja templating to perform lightweight data transformations |
+| [Search Node](/help-center/workflows/node-types#search-node) | Search against a Document Index, great for RAG |
+| [API Node](/help-center/workflows/node-types#api-node) | Make an HTTP request to an API endpoint | 
+| [Code Execution Node](/help-center/workflows/node-types#code-execution-nodes) | Run custom Python or Typescript code |
+| [Subworkflow Node](/help-center/workflows/node-types#subworkflow-nodes) | Makes Workflows reusable and more maintanable as they get more complex | 
+| [Map Node](/help-center/workflows/node-types#map-nodes) | Iterate over an array, executing a sub-workflow for each item |
+| [Guardrail Node](/help-center/workflows/node-types#guardrail-nodes) | Run an inline evaluation using a pre-defined Metric |
+| [Conditional Node](/help-center/workflows/node-types#conditional-node) | Branch your workflow based on a condition, also useful for error handling |
+| [Merge Node](/help-center/workflows/node-types#merge-node) | Wait for one or multiple branches to complete before continuing |
+| [Final Output Node](/help-center/workflows/node-types#final-output-node) | Exposes values you can use in your application, you may have more than one! |
+| [Error Node](/help-center/workflows/node-types#error-node) | Stop workflow execution and raise an error |
 
 ### Prompt Nodes
 
