@@ -2,6 +2,22 @@
 title: Changelog | August, 2024
 ---
 
+## Native JSON Input Variable Support for Prompts
+
+_August 14th, 2024_
+
+Vellum Prompts have historically been able to accept strings and chat histories as dynamic inputs to their template.
+If you wanted to operate on JSON, you'd have to pass it as a string and then parse it within the Prompt itself
+(i.e. perform `json.loads()` within a Jinja Block).
+
+Vellum Prompts now support native JSON as inputs! When you add an input variable to a Prompt, you can now select the new "JSON" type.
+
+![JSON Variables Dropdown](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/json-variable-dropdown.png)
+
+JSON input values will render as prettified JSON objects when referenced in Rich Text Blocks and can be operated on directly
+without the need for `json.loads()` when referenced in Jinja Blocks.
+
+
 ## Workflow Deployment Executions Filtered to Just API Executions
 
 _August 12th, 2024_
