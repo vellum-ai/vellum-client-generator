@@ -7,88 +7,109 @@ With a large number of supported node types (full details here: [Experimenting w
 
 The list of architectures below is not exhaustive, we’re continuing to build it out. If you come up with an interesting architecture that you think the community might benefit from, please reach out so we can add it to the list here.
 
-## 1. Create a Retrieval Augmented Generation (RAG) system
+## Create a Retrieval Augmented Generation (RAG) system
 
 LLM applications often require specific context from a Vector DB which is added into the prompt. Forget signing up for multiple systems and being stuck on various micro decisions, with Vellum you can prototype a RAG system in minutes
 
-- Step 1: Create a Document Index and upload your documents (follow this article for tips: [Uploading Documents](/help-center/documents/uploading-documents))
-- Step 2: Add a Search Node in your Workflow
-- Step 3: Add a Prompt Node that takes the results of your Search Node as an input variable
-- Step 4: Link to a Final Output or other downstream node (e.g., if the Prompt Node result is a certain value branch execution based on a Conditional Node)
-- Step 5: Set up variables and hit Run!
+**Walkthrough**
+
+<Steps>
+
+### Create a Document Index and upload your documents
+Follow this article for tips: [Uploading Documents](/help-center/documents/uploading-documents))
+
+### Add a Search Node in your Workflow
+
+Place this anywhere and connect it to the "entrypoint"
+
+### Add a Prompt Node 
+
+The prompt node should take the results of your Search Node as an input variable
+
+### Link to a Final Output or other downstream node
+For example, if the Prompt Node result is a certain value branch execution based on a Conditional Node)
+
+### Set up input variables and hit Run!
+
+</Steps>
+
+**Workflow**
 
 <iframe
   src="https://app.vellum.ai/public/workflow-deployments/090744e8-3ec0-4047-ba98-c1445068397f"
-  width="100%"
-  height="450px"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
   experimental_enableRequestFullscreen={true}
 />
 
-## 2. Route relevant messages dynamically to a Human
+## Route messages to a Human
 
 If you’re building an agent that answers questions coming from users (e.g., a support chatbot), you may want to set up rules such that anytime the incoming message from a user is sensitive (e.g., the user is angry or in a dangerous situation) then the LLM automatically escalates it to a human. With Workflows you’d be able to build that out real quick.
 
-- Step 1: Create a classification prompt (Prompt Node) to filter out incoming messages
-- Step 2: Create a downstream prompt (Prompt Node) for the LLM to respond to messages that don’t need to be escalated
-- Step 3: Link outputs of the classification prompt to two separate Final Output Nodes
-- Step 4: Set up variables and hit Run!
+**Walkthrough**
+
+<Steps>
+
+### Add a classification prompt
+Use a Prompt Node to filter out incoming messages
+
+### Add a downstream prompt 
+Use another prompt node for the LLM to respond to messages that don’t need to be escalated
+
+### Add and connect two Final Output Nodes
+Connect the classification prompt outputs to two separate Final Output Nodes
+
+### Set up variables and hit Run!
+
+</Steps>
+
+**Workflow**
 
 <iframe
   src="https://app.vellum.ai/public/workflow-deployments/d213be0a-65f0-407b-bafc-76077bfa3692"
-  width="100%"
-  height="450px"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
   experimental_enableRequestFullscreen={true}
 />
 
-## 3. Calling a Prompt for each item in an array
-
-Workflows support looping - you simply need to draw an edge from a later node back to a node that preceeded it. We recommend to always include a Conditional Node when introducing a loop to specify when that loop will exit. Here's an example of a loop that calls a prompt node for each item in an array, then exits with all of the outputs.
-
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/535a8c80-99d8-4f17-aa2b-62c56ba591a2"
-  width="100%"
-  height="450px"
-  experimental_enableRequestFullscreen={true}
-/>
-
-Here are the steps involved in this example:
-- Step 1: We define a `items` JSON input that has our list of items that we want to iterate over.
-- Step 2: We define a Templating Node with an empty array of outputs. This is the variable that we will be adding each prompt output to.
-- Step 3: We add a Code Execution Node that will output the current `item` and `counter` for each iteration of the loop. The Templating Node `Counter` extracts the counter.
-- Step 4: We use a Conditional Node to dictate when to exit the loop.
-- Step 5: We feed the `"item"` key from the `iterator` into the Prompt Node we care about executing on each iteration.
-- Step 6: We use a Code Execution node to append an output on each iteration.
-- Step 7: Finally, the Templating Node will return the output data returned by the previous step's Code Execution node.
-
-## 4. Retrying a Prompt Node in case of non-deterministic failure
+## Retrying a Prompt Node in case of non-deterministic failure
 
 Prompt nodes support two selectable outputs - one from the model in case of a valid output and one in case of a non deterministic error. Model hosts fail for all sorts of reasons that include timeouts, rate limits, or server overload. You could make your production-grade LLM features resilient to these features by adding retry logic into your Workflows!
 
+**Walkthrough**
+
+<Steps>
+
+### Add a standard Prompt Node
+
+### Add a Conditional Node (`Error Check`)
+This node will read from the new Error output from the Prompt Node and check to see if it's _not null_.
+
+### Define another Conditional Node (`Count Check`)
+This node will read from the Prompt Node's Execution Counter, and check if it's been invoked more than your desired limit (`3`).
+
+### Loop back to the Prompt Node
+Loop back to the Prompt Node if it's under the limit, or exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
+
+</Steps>
+
+**Workflow**
+
 <iframe
   src="https://app.vellum.ai/public/workflow-deployments/8c3fac0e-b991-43f5-846a-40a754234feb"
-  width="100%"
-  height="450px"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
   experimental_enableRequestFullscreen={true}
 />
 
-Here are the steps involved in this example:
-- Step 1: Define a standard Prompt Node
-- Step 2: Define a Conditional Node (`Error Check`) that reads from the new Error output from the Prompt Node and checks to see if it's not null.
-- Step 3: Define another Conditional Node (`Count Check`) that reads from the Prompt Node's Execution Counter and checks to see if it's been invoked more than your desired limit (`3`).
-- Step 4: Loop back to the Prompt Node if it's under the limit, exit with some error message if it's over the limit. In the case that the error is null, exit with the Prompt Node's response.
-
-## 5. Summarizing the contents of a PDF file
+## Summarizing the contents of a PDF file
 
 Vellum Document Indexes are typically used to power RAG systems via Search Nodes. However, they can also be used to operate on the entirety of a single file's contents.
 In this example, we make use of Vellum Document Indexes not for the purpose of search, instead, to leverage the OCR that's performed and operate on the raw text that's extracted
 from a PDF file.
-
-<iframe
-  src="https://app.vellum.ai/public/workflow-deployments/94f60249-8729-4c10-bb54-941621abceaa"
-  width="100%"
-  height="450px"
-  experimental_enableRequestFullscreen={true}
-/>
 
 Prerequisites:
 You need to have ....
@@ -96,10 +117,40 @@ You need to have ....
 - Uploaded a PDF file to the Document Index and noted down its ID.
 - Generated a Vellum API Token and saved its value as a Workspace Secret.
 
-Here are the steps involved in this example:
-- Step 1: The input to the workflow is the ID of a Document that was previously uploaded to a Document INdex
-- Step 2: Use a Templating Node (`Document API URL`) to construct the url of a Vellum API we want to hit.
-- Step 3: Use an API Node (`Document API`) that hits the Vellum API to retrieve metadata about the Document.
-- Step 4: Use a Templating Node (`Processed Document URL`) to extract the url of the processed document from the API response.
-- Step 5: Use an API Node (`Processed Document Contents`) to retrieve the text contents of the Document.
-- Step 6: Pass those contents to a Prompt Node that summarizes the text.
+**Walkthrough**
+
+<Steps>
+
+### Set the input to the workflow
+
+This will be the ID of a Document that was previously uploaded to a Document Index
+
+### Add a Templating Node (`Document API URL`)
+
+This will construct the url of a Vellum API we want to hit.
+
+### Add an API Node (`Document API`) 
+
+This will ping the Vellum API and retrieve metadata about the Document.
+
+### Add a Templating Node (`Processed Document URL`)
+
+This will extract the url of the processed document from the API response.
+
+### Add an API Node (`Processed Document Contents`)
+
+This will retrieve the text contents of the Document.
+
+### Pass those contents to a Prompt Node that summarizes the text.
+
+</Steps>
+
+**Workflow**
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/94f60249-8729-4c10-bb54-941621abceaa"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
+  experimental_enableRequestFullscreen={true}
+/>
