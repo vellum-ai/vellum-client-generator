@@ -101,6 +101,8 @@ redirects:
     destination: /api-reference/workflows/deployments/update-release-tag
   - source: /api-reference/api-reference/workflow-sandboxes/deploy-workflow
     destination: /api-reference/workflows/sandboxes/deploy
+  - source: /help-center/workflows/experimentation#supported-node-types
+    destination: /help-center/workflows/node-types
 
 navigation:
   - tab: help
@@ -130,6 +132,32 @@ navigation:
           - page: Prompting Tips and Examples
             path: ./docs/content/help/prompts/prompting-tips-and-examples.mdx
             slug: prompting-tips-and-examples
+      - section: Workflows
+        contents:
+          - page: Introduction to Workflows
+            path: ./docs/content/help/workflows/intro.mdx
+            slug: introduction
+          - page: Experimenting with Workflows
+            path: ./docs/content/help/workflows/experimenting.mdx
+            slug: experimentation
+          - page: Node Types
+            path: ./docs/content/help/workflows/node-types.mdx
+            slug: node-types
+          - page: Common Architectures
+            path: ./docs/content/help/workflows/common-architectures.mdx
+            slug: common-architectures
+          - page: Common Data Transformation Templates
+            path: ./docs/content/help/workflows/common-data-transforms.mdx
+            slug: common-data-transforms
+          - page: Code Execution Node Examples
+            path: ./docs/content/help/workflows/code-execution-node-examples.mdx
+            slug: code-execution-node-examples
+          - page: Integrating w/ APIs
+            path: ./docs/content/help/workflows/integrating.mdx
+            slug: api-integration
+          - page: Function Calling with Chat Models
+            path: ./docs/content/help/workflows/function-calling.mdx
+            slug: function-calling-with-chat-models
       - section: Evaluation
         contents:
           - page: Quantitatively Evaluating Outputs
@@ -172,29 +200,6 @@ navigation:
           - page: Metadata Filtering
             path: ./docs/content/help/documents/metadata-filtering.mdx
             slug: metadata-filtering
-      - section: Workflows
-        contents:
-          - page: Introduction to Workflows
-            path: ./docs/content/help/workflows/intro.mdx
-            slug: introduction
-          - page: Experimenting with Workflows
-            path: ./docs/content/help/workflows/experimenting.mdx
-            slug: experimentation
-          - page: Common Architectures
-            path: ./docs/content/help/workflows/common-architectures.mdx
-            slug: common-architectures
-          - page: Common Data Transformation Templates
-            path: ./docs/content/help/workflows/common-data-transforms.mdx
-            slug: common-data-transforms
-          - page: Code Execution Node Examples
-            path: ./docs/content/help/workflows/code-execution-node-examples.mdx
-            slug: code-execution-node-examples
-          - page: Integrating w/ APIs
-            path: ./docs/content/help/workflows/integrating.mdx
-            slug: api-integration
-          - page: Function Calling with Chat Models
-            path: ./docs/content/help/workflows/function-calling.mdx
-            slug: function-calling-with-chat-models
       - section: Security
         contents:
           - page: HMAC Authentication
