@@ -43,7 +43,7 @@ Here, we'll begin by creating a Test Suite from a Prompt Sandbox.
 10. Next, select "Target" and then "Add New" in the dropdown to create a new expected output variable that's mapped to this input
 11. Press "Next" in the bottom right
 
-Well done! You've now created a Test Suite with the Exact Match evaluator to check for whether the output is desirable.
+Well done! You've now created a Test Suite with the Exact Match Metric to check for whether the output is desirable.
 
 ![Test Suite Creation - Metric Configuration](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-metrics.png)
 
@@ -53,7 +53,7 @@ Test Cases are analogous to Scenarios. A Test Case by default will have a column
 as well as columns for any expected output variables required by your selected Metric.
 When a Test Suite is run, Vellum will iterate over every Test Case it contains.
 For each Test Case, it will feed the provided inputs into the Prompt, Workflow, or entity being tested.
-The output will be passed to the Metric based on your mapping in the previous step, and a score will be provided based on the evaluator being used.
+The output will be passed to the Metric based on your mapping in the previous step, and a score will be provided based on the Metric being used.
 
 With your first Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
 
@@ -96,15 +96,15 @@ We also support viewing your Test Suite Run results via the API. Check out our d
 
 # Advanced Usage
 
-## Multiple Evaluators
+## Multiple Metrics
 
-It's possible for a Test Suite to have multiple evaluators run simultaneously.
+It's possible for a Test Suite to have multiple Metrics run simultaneously.
 This is often desirable when the output is complex and must meet multiple criterion.
 For example, you may want to validate that an output semantically means "I'm very happy",
 but must contain the word "ecstatic".
 
-Additional evaluators can be configured on an existing Test Suite under the "Metric Setup" section
-of the "Test Suite Details" page. Any additional columns needed by that evaluator will be editable
+Additional Metrics can be configured on an existing Test Suite under the "Metric Setup" section
+of the "Test Suite Details" page. Any additional columns needed by that Metric will be editable
 under the "Test Cases" tab.
 
 When running the Test Suite, you'll see columns displaying the results for each metric that's been added to the Test Suite.
