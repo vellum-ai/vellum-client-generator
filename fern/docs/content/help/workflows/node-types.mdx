@@ -43,6 +43,15 @@ Check out our [common data transformation templates](https://docs.vellum.ai/help
 
 ![Templating Node](https://storage.googleapis.com/vellum-public/help-docs/templating-node.png)
 
+<Accordion title="Tip - JSON Sensitivity in Templating Nodes">
+You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or when you run your workflow:
+
+<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="60%"/>
+
+<Tip>Templating nodes are sensitive, and require double quotes instead of single quotes whenever working with JSON.</Tip>
+
+</Accordion>
+
 ### Search Node
 
 The Search Node returns results from a Document Index stored inside Vellum Search. Once your documents are uploaded in an index (details on how to do that here: [Uploading Documents](/help-center/documents/uploading-documents)), you can start using them in a Workflow.
