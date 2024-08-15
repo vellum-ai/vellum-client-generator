@@ -66,7 +66,7 @@ It's better to use API Nodes over Code Execution Nodes for API calls. Code Execu
 </Tip>
 
 <iframe
-  src="https://app.vellum.ai/public/workflow-deployments/c8c90f6b-1fae-4cd0-a20b-45bd1ca1d8f9"
+  src="https://app.vellum.ai/public/workflow-deployments/8354c6f2-301b-4f94-b791-824f1b9d152f"
   width="100%"
   height="450px"
 ></iframe>
@@ -133,6 +133,21 @@ The output of every Subworkflow is then combined into a single array as a Node o
   width="100%"
   height="450px"
 ></iframe>
+
+<Accordion title="Tip - Quirks with Map Node Input Types">
+
+Two tips here:
+1. At the time of writing, you'll need to cast items into strings at the beginning of your Map Node Subworkflow. Expand the Map Node in the Subworkflow below for more: 
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/758f46dd-6fe6-4e92-9b0c-3a68025f6287"
+  width="100%"
+  height="450px"
+></iframe>
+
+2. Make sure you're using the JSON type as output, even if it's an array, from whichever Node output you're passing to the Map Node. Array types won't be recognized. 
+
+</Accordion>
 
 ### Guardrail Nodes
 
