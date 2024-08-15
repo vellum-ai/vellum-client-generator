@@ -2,6 +2,26 @@
 title: Changelog | August, 2024
 ---
 
+## OpenAI Structured Outputs Support
+
+_August 15th, 2024_
+
+OpenAI released some API changes that allow their newest models to support [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/). This powerful new feature
+enables developers to strictly define the expected JSON object schemas from the model as part of the response through a model parameter, or through a function call. This new functionality is now natively integrated within Vellum!
+
+To use within the context of Function Calling, simply toggle on the `Strict` checkbox for any given Function Call:
+
+![Function Call Strict](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/function-call-strict.png)
+
+To enable Structured Outputs as part of a general OpenAI response, configure the `JSON Schema` setting as part of model parameters:
+
+![JSON Schema Strict](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/json-schema-strict.png)
+
+Both places come with upload/download functionality built into the form. Note that for function calling, this means we've reduced the scope of the upload/download to be _just_ the `Parameters`
+JSON schema field. This allows schemas to be cross-compatible between either location since we are working with an [open specification](https://json-schema.org/understanding-json-schema).
+
+![JSON Schema Strict](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/upload-download-schema.png)
+
 ## Native JSON Input Variable Support for Prompts
 
 _August 14th, 2024_
