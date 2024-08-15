@@ -158,11 +158,14 @@ navigation:
           - page: Function Calling with Chat Models
             path: ./docs/content/help/workflows/function-calling.mdx
             slug: function-calling-with-chat-models
-      - section: Evaluation
+      - section: Evaluation & Test Suites
         contents:
           - page: Quantitative Evaluation
             path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
+          - page: Evaluating RAG Pipelines
+            path: ./docs/content/help/evaluation/evaluating-rag-pipelines.mdx
+            slug: evaluating-rag-pipelines
       - section: Metrics
         contents:
           - page: Out of the Box Metrics
@@ -171,9 +174,6 @@ navigation:
           - page: Custom Metrics
             path: ./docs/content/help/metrics/custom-metrics.mdx
             slug: custom-metrics
-          - page: Evaluating RAG Pipelines
-            path: ./docs/content/help/evaluation/evaluating-rag-pipelines.mdx
-            slug: evaluating-rag-pipelines
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
