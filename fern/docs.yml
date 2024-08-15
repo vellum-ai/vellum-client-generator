@@ -163,10 +163,10 @@ navigation:
           - page: Quantitatively Evaluating Outputs
             path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
-          - page: Workflow Evaluation Metric
+          - page: Workflow Metric
             path: ./docs/content/help/evaluation/workflow-evaluation-metric.mdx
             slug: workflow-evaluation-metric
-          - page: Code Execution Evaluation Metric
+          - page: Code Execution Metric
             path: ./docs/content/help/evaluation/code-execution-evaluation-metric.mdx
             slug: code-execution-evaluation-metric
           - page: Evaluating RAG Pipelines

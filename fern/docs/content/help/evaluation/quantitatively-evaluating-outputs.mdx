@@ -8,9 +8,9 @@ consistently over a wide range of potential inputs.
 When modifying a Prompt, adjusting parameters, or switching models, the likelihood of regression is high.
 This is where [quantitative evaluation](https://www.vellum.ai/blog/how-to-evaluate-the-quality-of-large-language-models-for-production-use-cases) comes in.
 
-Vellum's answer to quantitative evaluation are Test Suites and Evaluation Metrics. Unlike Comparison Mode and Chat Mode,
+Vellum's answer to quantitative evaluation are Test Suites and Metrics. Unlike Comparison Mode and Chat Mode,
 where the output of each Scenario is qualitatively evaluated by visual inspection,
-Test Suites use Evaluation Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
+Test Suites use Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
 This is especially important when your prompt's coverage needs scale and visual inspection is no longer feasible,
 which typically happens when you have 10+ scenarios.
 
@@ -35,9 +35,9 @@ Here, we'll begin by creating a Test Suite from a Prompt Sandbox.
 2. Click "Create New Test Suite" if you haven't set up a Test Suite for this Prompt Sandbox yet or click the gray "Add Test Suite" button on the right of the page
 3. The "label" and "name" fields are autopopulated with the name of your Sandbox
 4. Open the "Interface Configuration" to see the expected inputs/outputs for this Test Suite. This is also autopopulated from your Sandbox.
-5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Evaluation Metrics.
-6. Click the "Add Metric" button to select one or more Evaluation Metrics to evaluate your output against
-7. Select "Exact Match" from the list of available Evaluation Metrics. To learn how to create custom metrics that appear in this list, see Vellum's [Evaluation Metrics](#evaluation-metrics)
+5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Metrics.
+6. Click the "Add Metric" button to select one or more Metrics to evaluate your output against
+7. Select "Exact Match" from the list of available Metrics. To learn how to create custom metrics that appear in this list, see Vellum's [Metrics](#evaluation-metrics)
 8. Press "Confirm" to start mapping the metric to this Test Suite
 9. First, select "Completion" to map the input to the output of your Prompt
 10. Next, select "Target" and then "Add New" in the dropdown to create a new expected output variable that's mapped to this input
@@ -50,10 +50,10 @@ Well done! You've now created a Test Suite with the Exact Match evaluator to che
 ## Create your first Test Case
 
 Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input and output variable expected by your Test Suite,
-as well as columns for any expected output variables required by your selected Evaluation Metric.
+as well as columns for any expected output variables required by your selected Metric.
 When a Test Suite is run, Vellum will iterate over every Test Case it contains.
 For each Test Case, it will feed the provided inputs into the Prompt, Workflow, or entity being tested.
-The output will be passed to the Evaluation Metric based on your mapping in the previous step, and a score will be provided based on the evaluator being used.
+The output will be passed to the Metric based on your mapping in the previous step, and a score will be provided based on the evaluator being used.
 
 With your first Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
 
