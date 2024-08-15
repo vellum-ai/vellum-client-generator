@@ -7,14 +7,13 @@ title: Changelog | August, 2024
 _August 15th, 2024_
 
 OpenAI released some API changes that allow their newest models to support [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/). This powerful new feature
-enables developers to strictly define the expected JSON object schemas from the model as part of the response through a model parameter, or through a function call. We have integrated this new
-capability natively to Vellum!
+enables developers to strictly define the expected JSON object schemas from the model as part of the response through a model parameter, or through a function call. This new functionality is now natively integrated within Vellum!
 
-To use within the context of Function Calling, simply enable the `Strict` check box on any given Function Call:
+To use within the context of Function Calling, simply toggle on the `Strict` checkbox for any given Function Call:
 
 ![Function Call Strict](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/function-call-strict.png)
 
-To enable Structured Outputs as part of the OpenAI response, configure the `JSON Schema` setting as part of the model parameters:
+To enable Structured Outputs as part of a general OpenAI response, configure the `JSON Schema` setting as part of model parameters:
 
 ![JSON Schema Strict](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/json-schema-strict.png)
 
