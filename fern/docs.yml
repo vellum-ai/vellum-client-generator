@@ -172,6 +172,14 @@ navigation:
           - page: Evaluating RAG Pipelines
             path: ./docs/content/help/evaluation/evaluating-rag-pipelines.mdx
             slug: evaluating-rag-pipelines
+      - section: Metrics
+        contents:
+          - page: Out of the Box Metrics
+            path: ./docs/content/help/metrics/out-of-the-box-metrics.mdx
+            slug: out-of-the-box-metrics
+          - page: Custom Metrics
+            path: ./docs/content/help/metrics/custom-metrics.mdx
+            slug: custom-metrics
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
