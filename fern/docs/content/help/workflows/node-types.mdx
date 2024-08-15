@@ -66,6 +66,22 @@ The Code Execution Node empowers you to include custom logic defined directly in
 
 ![Code Execution Node](https://storage.googleapis.com/vellum-public/help-docs/code-exec-node.png)
 
+<AccordionGroup>
+<Accordion title="Tip - Outputting Arrays (Strings)">
+
+Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type: Expected 'ARRAY' but received 'list'`
+
+</Accordion>
+
+<Accordion title="Tip - Outputting Arrays (Function Calls)">
+
+The main scenario in which you'd use Array as your Code Execution Node output type is when you're processing Prompt Execution Node outputs with Function Calls. 
+
+For more on that, see [Quirks and Tips for Handling Functions](http://localhost:3000#quirks-and-tips-for-handling-functions)
+
+</Accordion>
+</AccordionGroup>
+
 ### Subworkflow Nodes
 
 Subworkflow Nodes are essential for managing giant, complex workflows. Define reusable groups of nodes in one Workflow Sandbox and have them directly accessible upon deployment from any other workflow in your workspace. Subworkflow nodes also support release tag specification, allowing you the option to always invoke the latest workflow, or pinning to a specific release tag defined by you.
