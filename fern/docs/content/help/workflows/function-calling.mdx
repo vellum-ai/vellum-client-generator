@@ -301,3 +301,20 @@ The model successfully runs the `call_agent` function and outputs the arbitrary 
 
 Hopefully, through this guide, you've learned how to effectively set up and utilize function calling with Chat Models in Vellum Workflows.
 By following the steps outlined, you can define functions or tools, enable models to auto-select or enforce function execution, pass function call outputs to your code, and run functions with the provided arguments. This powerful feature allows you to create sophisticated, AI-powered workflows that can handle complex user interactions and seamlessly integrate with your existing systems.
+
+# Quirks and Tips for Handling Functions
+
+See below for a quick overview of some common scenarios for handling functions and passing them between nodes. 
+
+In all three examples, the Prompt Node returns text beyond just the function call. We show how to filter that away and pass the Function Call as part of an Array or on its own.
+- Extracting an Array of multiple Function Calls with a Code Execution Node
+- Extracting a single Function Call with a Code Execution Node
+- Extracting a single Function Call with a Templating Node
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/f0eda95f-6538-4abb-ad3d-ee785d770ee1"
+  width="80%"
+  height="350px"
+  style="margin: 24px auto;"
+  experimental_enableRequestFullscreen={true}
+/>

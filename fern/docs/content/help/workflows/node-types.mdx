@@ -43,6 +43,15 @@ Check out our [common data transformation templates](https://docs.vellum.ai/help
 
 ![Templating Node](https://storage.googleapis.com/vellum-public/help-docs/templating-node.png)
 
+<Accordion title="Tip - JSON Syntax">
+You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
+
+<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
+
+<Tip>Use double quotes when working with JSON</Tip>
+
+</Accordion>
+
 ### Search Node
 
 The Search Node returns results from a Document Index stored inside Vellum Search. Once your documents are uploaded in an index (details on how to do that here: [Uploading Documents](/help-center/documents/uploading-documents)), you can start using them in a Workflow.
@@ -57,6 +66,22 @@ The API Node invokes an API endpoint and returns back the status code, raw outpu
 
 ![API Node](https://storage.googleapis.com/vellum-public/help-docs/api-node.png)
 
+<Accordion title="Tip - Creating Dynamic URLs">
+
+You can use a Templating Node and the "Dynamic" field of an API Node to quickly and flexibly make API calls in your Workflows. See the example below for more details. Notice how we do string concatenation in the Templating Node using Jinja2's `~` syntax. 
+
+<Tip>
+It's better to use API Nodes over Code Execution Nodes for API calls. Code Execution Nodes add more latency to your Workflow. Reserve them for more complex tasks.
+</Tip>
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/d5a345db-2676-4de1-9908-7e61e5089c81"
+  width="100%"
+  height="450px"
+></iframe>
+
+</Accordion>
+
 ### Code Execution Nodes
 
 The Code Execution Node empowers you to include custom logic defined directly in the workflow. You can even import custom public packages within the node's logic. We support the following languages:
@@ -65,6 +90,24 @@ The Code Execution Node empowers you to include custom logic defined directly in
 - TypeScript
 
 ![Code Execution Node](https://storage.googleapis.com/vellum-public/help-docs/code-exec-node.png)
+
+<AccordionGroup>
+<Accordion title="Tip - Outputting Arrays (Strings)">
+
+Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type. Output[0]: Expected to deserialize a 'dict', got 'str'`
+
+<img src="https://storage.googleapis.com/vellum-public/help-docs/code_node_array_string_output.png" alt="Code Node Array of Strings Output Error" width="400px"/>
+
+</Accordion>
+
+<Accordion title="Tip - Outputting Arrays (Function Calls)">
+
+The main scenario in which you'd use Array as your Code Execution Node output type is when you're processing Prompt Execution Node outputs with Function Calls. 
+
+For more on that, see [Quirks and Tips for Handling Functions](/help-center/workflows/function-calling-with-chat-models#quirks-and-tips-for-handling-functions)
+
+</Accordion>
+</AccordionGroup>
 
 ### Subworkflow Nodes
 
@@ -101,6 +144,21 @@ The output of every Subworkflow is then combined into a single array as a Node o
   width="100%"
   height="450px"
 ></iframe>
+
+<Accordion title="Tip - Quirks with Map Node Input Types">
+
+Two tips here:
+1. At the time of writing, you'll need to cast items into strings at the beginning of your Map Node Subworkflow. Expand the Map Node in the Subworkflow below for more: 
+
+<iframe
+  src="https://app.vellum.ai/public/workflow-deployments/c9109193-ebf7-4eee-93e4-a374ea7afa51"
+  width="100%"
+  height="450px"
+></iframe>
+
+2. Make sure you're using the JSON type as output, even if it's an array, from whichever Node output you're passing to the Map Node. `ARRAY` types won't be recognized. 
+
+</Accordion>
 
 ### Guardrail Nodes
 
