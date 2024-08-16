@@ -3,19 +3,19 @@ title: Create Custom Reusable Metrics for LLM Evaluation in Vellum
 description: Learn how to create custom Metrics to evaluate your LLM Workflows with ease. Catch edge-cases, prevent regressions, and ship AI features faster with more confidence!
 ---
 
-In addition to the default metrics, Vellum makes it easy to define custom Reusable Metrics tailored to your specific business logic and use-case.
+In addition to the default Metrics, Vellum makes it easy to define custom Reusable Metrics tailored to your specific business logic and use-case.
 This saves you time and ensures standardized evaluation criteria for your Prompts, Workflows, or external entities you'd like to test.
 
 Let's create your first Reusable Metric
 
 1. Visit the [Evaluations tab](https://app.vellum.ai/evaluations) in Vellum and open the Metrics page
 2. Click the blue Create Metric button at the top-right of the page to open the Create Metric modal
-3. From the metric type dropdown, select JSON Schema Match. To learn about metric types other than JSON Schema Match, see Vellum's [Available Metric Types](#available-metric-types).
-4. In the "Label" field at the top left, enter "My First Metric". The "Name" field should autopopulate. This is a unique name that you can use to programmatically identify this metric.
-5. In the "Description" field, type in "My first metric description"
-6. Click next to configure your metric and define what the expected output should match
+3. From the Metric type dropdown, select JSON Schema Match. To learn about Metric types other than JSON Schema Match, see Vellum's [Available Metric Types](#available-metric-types).
+4. In the "Label" field at the top left, enter "My First Metric". The "Name" field should autopopulate. This is a unique name that you can use to programmatically identify this Metric.
+5. In the "Description" field, type in "My first Metric description"
+6. Click next to configure your Metric and define what the expected output should match
 7. Add "name" and "email" properties to the JSON schema
-8. Click Finish to exit the modal and see your newly added metric card on the Metrics page
+8. Click Finish to exit the modal and see your newly added Metric card on the Metrics page
 
 Congrats! You've now created a Reusable Metric that will be visible when selecting and configuring Metrics within any Test suite.
 
@@ -39,7 +39,7 @@ See [Workflow Metric](/help-center/evaluation/workflow-evaluation-metric) for mo
 
 Run custom Python code to evaluate the output.
 
-The code must include a function named `main` that takes the function arguments specified when creating the metric and returns a dictionary with keys `score` and optionally `normalized_score`.
+The code must include a function named `main` that takes the function arguments specified when creating the Metric and returns a dictionary with keys `score` and optionally `normalized_score`.
 
 <CodeBlock title="Example">
 ```python
@@ -53,11 +53,11 @@ def main(input_1, input_2, target, completion):
 
 # Code Execution Metric
 
-The Code Execution metric allows arbitrary Python code execution to be used to produce scores for LLM outputs.
+The Code Execution Metric allows arbitrary Python code execution to be used to produce scores for LLM outputs.
 
 It is intended as a quick and powerful way to format outputs and write conditionals without the restrictions of Jinja or Regex.
 
-After selecting the "Code Execution" metric in the UI, a code editor will be provided.
+After selecting the "Code Execution" Metric in the UI, a code editor will be provided.
 There will be a template with the bare minimum for the Metric to run: A `main()` function that returns a `score`.
 
 ## Examples
@@ -130,7 +130,7 @@ The Workflow Metric allows you to use a Workflow to evaluate outputs, allowing L
 
 1. Create a new [Workflow Sandbox](https://app.vellum.ai/workflow-sandboxes).
 2. Add one input variable for each Test Suite variable you want to pass to the Workflow.
-You'll map these to the Test Suite variables when setting up the metric later, so you can name them anything you want.
+You'll map these to the Test Suite variables when setting up the Metric later, so you can name them anything you want.
 Examples of variables you may want to include: the output to be evaluated,  the desired output, the inputs to the evaluated prompt.
 3. Create a Final Output, set the name to `score`, and set the output type to Number.
 4. [Optional] Create a Final Output, set the name to `normalized_score`, and set the output type to Number. If included, `normalized_score` must be in the interval [0, 1]. This value is used for display purposes such as color coding outputs.

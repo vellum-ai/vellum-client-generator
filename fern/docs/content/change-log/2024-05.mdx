@@ -119,7 +119,7 @@ curl -X POST https://predict.vellum.ai/v1/submit-workflow-execution-actuals \
 
 _May 23rd, 2024_
 
-You can now use Metrics inside of Workflows with the new Guardrail Node! Guardrail Nodes let you run pre-defined evaluation criteria at runtime as part of a Workflow execution so that you can drive downstream behavior based on that metric's score.
+You can now use Metrics inside of Workflows with the new Guardrail Node! Guardrail Nodes let you run pre-defined evaluation criteria at runtime as part of a Workflow execution so that you can drive downstream behavior based on that Metric's score.
 
 For example, if building a RAG application, you might determine whether the generated response passes some threshold for [Ragas Faithfulness](https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html) and if not, loop around to try again.
 
@@ -231,11 +231,11 @@ _May 7th, 2024_
 
 Test-driven development for your RAG-based LLM pipelines is now easier than ever within Vellum!
 
-Three new [Ragas metrics](https://docs.ragas.io/en/latest/index.html) – [Context Revelancy](https://docs.ragas.io/en/v0.1.5/concepts/metrics/context_relevancy.html), [Answer Relevance](https://docs.ragas.io/en/latest/concepts/metrics/answer_relevance.html) and [Faithfulness](https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html) – are now available out-of-box in Vellum. These can be used within Workflow Evaluations to measure the quality of a RAG system.
+Three new [Ragas Metrics](https://docs.ragas.io/en/latest/index.html) – [Context Revelancy](https://docs.ragas.io/en/v0.1.5/concepts/metrics/context_relevancy.html), [Answer Relevance](https://docs.ragas.io/en/latest/concepts/metrics/answer_relevance.html) and [Faithfulness](https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html) – are now available out-of-box in Vellum. These can be used within Workflow Evaluations to measure the quality of a RAG system.
 
 For more info, check out our new help center article on [Evaluating RAG Pipelines](/help-center/evaluation/evaluating-rag-pipelines).
 
-![Ragas metrics](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/ragas-metrics.png)
+![Ragas Metrics](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-05/ragas-metrics.png)
 
 ## Subworkflow Node Streaming
 
