@@ -8,9 +8,9 @@ consistently over a wide range of potential inputs.
 When modifying a Prompt, adjusting parameters, or switching models, the likelihood of regression is high.
 This is where [quantitative evaluation](https://www.vellum.ai/blog/how-to-evaluate-the-quality-of-large-language-models-for-production-use-cases) comes in.
 
-Vellum's answer to quantitative evaluation are Test Suites and Evaluation Metrics. Unlike Comparison Mode and Chat Mode,
+Vellum's answer to quantitative evaluation are Test Suites and Metrics. Unlike Comparison Mode and Chat Mode,
 where the output of each Scenario is qualitatively evaluated by visual inspection,
-Test Suites use Evaluation Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
+Test Suites use Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
 This is especially important when your prompt's coverage needs scale and visual inspection is no longer feasible,
 which typically happens when you have 10+ scenarios.
 
@@ -25,7 +25,7 @@ If you're looking to improve the velocity or quality of your LLM development, Te
 
 # Getting Started
 
-## Create your first Test Suite
+## Create a Test Suite
 
 You can create standalone Test Suites through the Test Suites page in the [Evaluations tab](https://app.vellum.ai/evaluations).
 You can also create Test Suites starting from a Prompt or Workflow Sandbox.
@@ -35,27 +35,27 @@ Here, we'll begin by creating a Test Suite from a Prompt Sandbox.
 2. Click "Create New Test Suite" if you haven't set up a Test Suite for this Prompt Sandbox yet or click the gray "Add Test Suite" button on the right of the page
 3. The "label" and "name" fields are autopopulated with the name of your Sandbox
 4. Open the "Interface Configuration" to see the expected inputs/outputs for this Test Suite. This is also autopopulated from your Sandbox.
-5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Evaluation Metrics.
-6. Click the "Add Metric" button to select one or more Evaluation Metrics to evaluate your output against
-7. Select "Exact Match" from the list of available Evaluation Metrics. To learn how to create custom metrics that appear in this list, see Vellum's [Evaluation Metrics](#evaluation-metrics)
-8. Press "Confirm" to start mapping the metric to this Test Suite
+5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Metrics.
+6. Click the "Add Metric" button to select one or more Metrics to evaluate your output against
+7. Select "Exact Match" from the list of available Metrics. To learn how to create Custom Metrics that appear in this list, see Vellum's [Metrics](#evaluation-metrics)
+8. Press "Confirm" to start mapping the Metric to this Test Suite
 9. First, select "Completion" to map the input to the output of your Prompt
 10. Next, select "Target" and then "Add New" in the dropdown to create a new expected output variable that's mapped to this input
 11. Press "Next" in the bottom right
 
-Well done! You've now created a Test Suite with the Exact Match evaluator to check for whether the output is desirable.
+Well done! You've now created a Test Suite with the Exact Match Metric to check for whether the output is desirable.
 
 ![Test Suite Creation - Metric Configuration](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-metrics.png)
 
-## Create your first Test Case
+## Create a Test Case
 
 Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input and output variable expected by your Test Suite,
-as well as columns for any expected output variables required by your selected Evaluation Metric.
+as well as columns for any expected output variables required by your selected Metric.
 When a Test Suite is run, Vellum will iterate over every Test Case it contains.
 For each Test Case, it will feed the provided inputs into the Prompt, Workflow, or entity being tested.
-The output will be passed to the Evaluation Metric based on your mapping in the previous step, and a score will be provided based on the evaluator being used.
+The output will be passed to the Metric based on your mapping in the previous step, and a score will be provided based on the Metric being used.
 
-With your first Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
+With this Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
 
 Select "Start from Scenarios" which will autopopulate test cases for you from Scenarios in your Sandbox.
 
@@ -72,7 +72,7 @@ Almost there! Now that you have your Test Cases added, you're ready to run it ag
 
 ![Test Suite Creation - Test Cases](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-test-cases.png)
 
-## Run your first Test Suite
+## Run a Test Suite
 
 This Test Suite is automatically added to the current Prompt Sandbox you are in.
 To evaluate your Prompt, simply click the blue Run button.
@@ -94,130 +94,22 @@ We also support viewing your Test Suite Run results via the API. Check out our d
 
 ![Test Suite Runs via API](https://storage.googleapis.com/vellum-public/help-docs/tsr-via-api.png)
 
-# Evaluation Metrics
-
-Vellum comes with a set of evaluators that you can use right away within your Test Suites. We are continually adding new Evaluation Metrics based on the needs of Vellum users.
-
-Here are the default Evaluation Metrics currently available within Vellum:
-
-## Exact Match
-
-Check that the output is exactly equal to the target.
-
-Returns a score of 1 if the output is an exact match, and 0 otherwise.
-
-## Regex Match
-
-Check that the specified regular expression can be found in the output.
-
-Returns a score of 1 if the regular expression matches, and 0 otherwise.
-
-Note that unless the regular expression is explicitly anchored, it can match anywhere in the output.
-
-## Semantic Similarity
-
-Check that the output is semantically similar to the target.
-
-Returns a score between 0 and 1, where 1 is a perfect match.
-
-Uses a [cross encoder](https://huggingface.co/cross-encoder/stsb-roberta-large) to compute the similarity.
-
-## JSON Validity
-
-Check that the output is valid JSON.
-
-Returns a score of 1 if the output is valid JSON, and 0 otherwise.
-
-<Callout intent="info">
-  The metrics below are [Ragas
-  metrics](https://docs.ragas.io/en/latest/index.html) designed to evaluate your
-  Retrieval Augmented Generation (RAG) systems. For tips on evaluating your RAG
-  pipeline in Vellum, check out [this help center
-  article](/help-center/evaluation/evaluating-rag-pipelines)
-</Callout>
-
-## Ragas - Faithfulness
-
-Faithfulness measures the factual consistency of the generated answer against the given context. It is calculated from answer and retrieved context. The answer is scaled to (0,1) range. Higher the better.
-
-For details, see: https://docs.ragas.io/en/latest/concepts/metrics/faithfulness.html
-
-## Ragas - Answer Relevance
-
-The evaluation metric, Answer Relevancy, focuses on assessing how pertinent the generated answer is to the given prompt. A lower score is assigned to answers that are incomplete or contain redundant information and higher scores indicate better relevancy.
-
-For details, see: https://docs.ragas.io/en/latest/concepts/metrics/answer_relevance.html
-
-## Ragas – Context Relevancy
-
-This metric gauges the relevancy of the retrieved context, calculated based on both the question and contexts. The values fall within the range of (0, 1), with higher values indicating better relevancy.
-
-For details, see: https://docs.ragas.io/en/v0.1.5/concepts/metrics/context_relevancy.html
-
 # Advanced Usage
 
-## Create Custom Reusable Evaluation Metric
+## Multiple Metrics
 
-In addition to the default metrics, Vellum makes it easy to define custom Reusable Evaluation Metrics tailored to your specific business logic and use-case.
-This saves you time and ensures standardized evaluation criteria for your Prompts, Workflows, or external entities you'd like to test.
-
-Let's create your first Reusable Evaluation Metric
-
-1. Visit the [Evaluations tab](https://app.vellum.ai/evaluations) in Vellum and open the Metrics page
-2. Click the blue Create Metric button at the top-right of the page to open the Create Metric modal
-3. From the metric type dropdown, select JSON Schema Match. To learn about metric types other than JSON Schema Match, see Vellum's [Available Metric Types](#available-metric-types).
-4. In the "Label" field at the top left, enter "My First Metric". The "Name" field should autopopulate. This is a unique name that you can use to programmatically identify this metric.
-5. In the "Description" field, type in "My first metric description"
-6. Click next to configure your metric and define what the expected output should match
-7. Add "name" and "email" properties to the JSON schema
-8. Click Finish to exit the modal and see your newly added metric card on the Metrics page
-
-Congrats! You've now created a Reusable Evaluation Metric that will be visible when selecting and configuring Evaluation Metrics within any Test suite.
-
-![Create New Reusable Evaluation Metric](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/metric-creation.png)
-
-## Available Metric Types
-
-### JSON Schema Match
-
-Check that the output matches a specified JSON schema.
-
-Returns a score of 1 if the output matches the schema, and 0 otherwise.
-
-### Workflow
-
-Run a Workflow to evaluate the output.
-
-See [Workflow Evaluation Metric](/help-center/evaluation/workflow-evaluation-metric) for more details.
-
-### Code
-
-Run custom Python code to evaluate the output.
-
-The code must include a function named `main` that takes the function arguments specified when creating the metric and returns a dictionary with keys `score` and optionally `normalized_score`.
-
-<CodeBlock title="Example">
-```python
-def main(input_1, input_2, target, completion):
-    return {
-        "score": 10,
-        "normalized_score": 0.5,  // Optional, must be in the interval [0, 1] if provided
-    }
-```
-</CodeBlock>
-
-## Multiple Evaluators
-
-It's possible for a Test Suite to have multiple evaluators run simultaneously.
+It's possible for a Test Suite to have multiple Metrics run simultaneously.
 This is often desirable when the output is complex and must meet multiple criterion.
 For example, you may want to validate that an output semantically means "I'm very happy",
 but must contain the word "ecstatic".
 
-Additional evaluators can be configured on an existing Test Suite under the "Metric Setup" section
-of the "Test Suite Details" page. Any additional columns needed by that evaluator will be editable
+Additional Metrics can be configured on an existing Test Suite under the "Metric Setup" section
+of the "Test Suite Details" page. Any additional columns needed by that Metric will be editable
 under the "Test Cases" tab.
 
-When running the Test Suite, you'll see columns displaying the results for each metric that's been added to the Test Suite.
+When running the Test Suite, you'll see columns displaying the results for each Metric that's been added to the Test Suite.
+
+<Note>For more on premade Vellum Metrics, see [Out of the Box Metrics](/metrics/out-of-the-box-metrics). To learn how to create your own, see [Custom Metrics](/metrics/custom-metrics)</Note>
 
 ## Uploading Test Cases
 
@@ -244,7 +136,7 @@ Next, define the Expected Output type to be of type "Function Call" too:
 
 ![Expected Function Type](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/expected-function-type.png)
 
-You can then use any metric to help ensure that your prompt is outputting function calls that perform well across your test cases! Here's an example of a test suite using Exact Match as the metric:
+You can then use any Metric to help ensure that your prompt is outputting function calls that perform well across your test cases! Here's an example of a test suite using Exact Match as the Metric:
 
 ![Function Call Tests](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/function-call-tests.png)
 

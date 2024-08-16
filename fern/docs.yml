@@ -158,20 +158,22 @@ navigation:
           - page: Function Calling with Chat Models
             path: ./docs/content/help/workflows/function-calling.mdx
             slug: function-calling-with-chat-models
-      - section: Evaluation
+      - section: Evaluation & Test Suites
         contents:
-          - page: Quantitatively Evaluating Outputs
+          - page: Quantitative Evaluation
             path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
             slug: quantitative-evaluation
-          - page: Workflow Evaluation Metric
-            path: ./docs/content/help/evaluation/workflow-evaluation-metric.mdx
-            slug: workflow-evaluation-metric
-          - page: Code Execution Evaluation Metric
-            path: ./docs/content/help/evaluation/code-execution-evaluation-metric.mdx
-            slug: code-execution-evaluation-metric
           - page: Evaluating RAG Pipelines
             path: ./docs/content/help/evaluation/evaluating-rag-pipelines.mdx
             slug: evaluating-rag-pipelines
+      - section: Metrics
+        contents:
+          - page: Out of the Box Metrics
+            path: ./docs/content/help/metrics/out-of-the-box-metrics.mdx
+            slug: out-of-the-box-metrics
+          - page: Custom Metrics
+            path: ./docs/content/help/metrics/custom-metrics.mdx
+            slug: custom-metrics
       - section: Deployments
         contents:
           - page: Prompt Lifecycle Management
