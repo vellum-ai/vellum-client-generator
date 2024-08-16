@@ -46,7 +46,7 @@ Check out our [common data transformation templates](https://docs.vellum.ai/help
 <Accordion title="Tip - JSON Syntax">
 You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
 
-<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="60%"/>
+<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
 
 <Tip>Use double quotes when working with JSON</Tip>
 
@@ -94,7 +94,9 @@ The Code Execution Node empowers you to include custom logic defined directly in
 <AccordionGroup>
 <Accordion title="Tip - Outputting Arrays (Strings)">
 
-Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type: Expected 'ARRAY' but received 'list'`
+Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type. Output[0]: Expected to deserialize a 'dict', got 'str'`
+
+<img src="https://storage.googleapis.com/vellum-public/help-docs/code_node_array_string_output.png" alt="Code Node Array of Strings Output Error" width="400px"/>
 
 </Accordion>
 
