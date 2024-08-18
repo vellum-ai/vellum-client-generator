@@ -223,6 +223,7 @@ navigation:
         snippets:
           python: vellum-ai
           typescript: "vellum-ai"
+          go: https://github.com/vellum-ai/vellum-client-go
         layout:
           - section: Prompts
             slug: prompts
