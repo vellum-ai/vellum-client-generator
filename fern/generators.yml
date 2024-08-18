@@ -1,3 +1,8 @@
+api:
+  path: openapi/openapi.yml
+  settings:
+    unions: v1
+    use-title: false
 groups:
   branch-python:
     audiences:
@@ -15,7 +20,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           improved_imports: false
@@ -23,9 +28,9 @@ groups:
           timeout_in_seconds: infinity
           inline_request_params: false
           extra_dependencies:
-            cdktf: '^0.20.5'
-            publication: '0.0.3'
-            # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
+            cdktf: "^0.20.5"
+            publication: "0.0.3"
+            # Blocked on Fern - https://app.shortcut.com/vellum/fstory/2709
             # pytest-httpx: '^0.30.0'
   branch-node:
     audiences:
@@ -43,14 +48,14 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: package.json
         config:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
           extraDependencies:
-            cdktf: '^0.20.5'
-            constructs: '^10.3.0'
+            cdktf: "^0.20.5"
+            constructs: "^10.3.0"
   branch-go:
     audiences:
       - customers
@@ -69,7 +74,7 @@ groups:
         # keywords: ["vellum", "ai", "llm"]
         # description: "A Go Library to interact with the Vellum API"
         # authors: ["devops@vellum.ai", "fern[bot]"]
-        # location: 
+        # location:
         #   output: go.mod
   # Add back once we have a ruby customer
   # branch-ruby:
@@ -97,8 +102,8 @@ groups:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
           extraDependencies:
-            cdktf: '^0.20.5'
-            constructs: '^10.3.0'
+            cdktf: "^0.20.5"
+            constructs: "^10.3.0"
         github:
           repository: vellum-ai/vellum-client-node-staging
           license: MIT
@@ -106,7 +111,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Typescript Node Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: package.json
       - name: fernapi/fern-python-sdk
         version: 2.16.0
@@ -117,15 +122,15 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
           extra_dependencies:
-            cdktf: '^0.20.5'
-            publication: '0.0.3'
+            cdktf: "^0.20.5"
+            publication: "0.0.3"
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
       - name: fernapi/fern-go-sdk
@@ -139,7 +144,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: go.mod
       # Add back once we have a ruby customer
       # - name: fernapi/fern-ruby-sdk
@@ -168,12 +173,12 @@ groups:
           namespaceExport: Vellum
           timeoutInSeconds: infinity
           extraDependencies:
-            cdktf: '^0.20.5'
-            constructs: '^10.3.0'
+            cdktf: "^0.20.5"
+            constructs: "^10.3.0"
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
-          # location: 
+          # location:
           #   output: package.json
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
@@ -192,15 +197,15 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Python Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: pypi
         config:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
           extra_dependencies:
-            cdktf: '^0.20.5'
-            publication: '0.0.3'
+            cdktf: "^0.20.5"
+            publication: "0.0.3"
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
       - name: fernapi/fern-go-sdk
@@ -214,7 +219,7 @@ groups:
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
           # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location: 
+          # location:
           #   output: go.mod
       # Add back once we have a ruby customer
       # - name: fernapi/fern-ruby-sdk
