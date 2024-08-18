@@ -70,7 +70,7 @@ groups:
           license: MIT
         config:
           alwaysSendRequiredProperties: true
-          unions: v1
+          union: v1
         # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
         # keywords: ["vellum", "ai", "llm"]
         # description: "A Go Library to interact with the Vellum API"
@@ -141,7 +141,7 @@ groups:
           license: MIT
         config:
           alwaysSendRequiredProperties: true
-          unions: v1
+          union: v1
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
@@ -217,7 +217,7 @@ groups:
           license: MIT
         config:
           alwaysSendRequiredProperties: true
-          unions: v1
+          union: v1
           # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
           # keywords: ["vellum", "ai", "llm"]
           # description: "A Go Library to interact with the Vellum API"
