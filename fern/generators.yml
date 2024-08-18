@@ -30,7 +30,7 @@ groups:
           extra_dependencies:
             cdktf: "^0.20.5"
             publication: "0.0.3"
-            # Blocked on Fern - https://app.shortcut.com/vellum/fstory/2709
+            # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
   branch-node:
     audiences:
