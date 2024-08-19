@@ -18,15 +18,55 @@ Concepts: Routing, Classification, Chatbot, Statefulness, State Management, Func
   />
 </Accordion>
 
-#### Customer Support Bot with Multiple Document Indexes
+#### Slack Support Bot, Cites Sources using Multiple Indexes
 
-Concepts: Document Indexes, Metadata, Zapier Integration, Citing Sources, Combining Sources 
+Concepts: Document Indexes, Metadata, Zapier, Slack, Citing Sources, Combining Sources 
 
-<Accordion title="Example Workflow">
-  <iframe
-    src="https://app.vellum.ai/public/workflow-deployments/788489db-7020-4167-b010-96499f7dd102"
-    width="100%"
-    height="450px"
-    experimental_enableRequestFullscreen={true}
-  />
-</Accordion>
+<AccordionGroup>
+  <Accordion title="Example Workflow">
+    <iframe
+      src="https://app.vellum.ai/public/workflow-deployments/788489db-7020-4167-b010-96499f7dd102"
+      width="100%"
+      height="450px"
+      experimental_enableRequestFullscreen={true}
+    />
+  </Accordion>
+  <Accordion title="Tip: Zapier API Calls">
+    Passing JSON Arrays in Zapier can be tricky. Instead, you can use Code Blocks to make it easier. 
+    
+    You can use the follow code snippet as inspiration for your own API calls with Zapier Code Blocks and Python.
+    ```python
+      import requests
+
+      # Replace with your actual Vellum API key
+      VELLUM_API_KEY = "..."
+
+      url = "https://predict.vellum.ai/v1/execute-workflow"
+
+      headers = {
+          "Content-Type": "application/json",
+          "X_API_KEY": VELLUM_API_KEY
+      }
+
+      data = {
+          "workflow_deployment_name": "<your-deployment-name>",
+          "release_tag": "LATEST",
+          "inputs": [
+              {
+                  "type": "STRING",
+                  "name": "<field_name>",
+                  "value": input_data["user_question"] # whatever Zapier values you want to use here
+              }
+          ]
+      }
+
+      response = requests.post(url, headers=headers, json=data)
+
+      # Print the response from the server
+      print(response.status_code)
+      print(response.json())
+
+      return response.json()
+    ```
+  </Accordion>
+</AccordionGroup>
