@@ -1,38 +1,9 @@
 api:
   path: openapi/openapi.yml
   settings:
-    unions: v1
     use-title: false
 groups:
-  branch-python:
-    audiences:
-      - customers
-      - internal
-      - deprecated
-    generators:
-      - name: fernapi/fern-python-sdk
-        version: 3.10.5
-        github:
-          repository: vellum-ai/vellum-client-python-staging
-          mode: pull-request
-          license: MIT
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Python Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: pypi
-        config:
-          improved_imports: false
-          client_class_name: Vellum
-          timeout_in_seconds: infinity
-          inline_request_params: false
-          extra_dependencies:
-            cdktf: "^0.20.5"
-            publication: "0.0.3"
-            # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
-            # pytest-httpx: '^0.30.0'
-  branch-node:
+  production-node:
     audiences:
       - customers
       - internal
@@ -40,133 +11,9 @@ groups:
     generators:
       - name: fernapi/fern-typescript-node-sdk
         version: 0.39.3
-        github:
-          repository: vellum-ai/vellum-client-node-staging
-          mode: pull-request
-          license: MIT
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Typescript Node Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: package.json
-        config:
-          namespaceExport: Vellum
-          timeoutInSeconds: infinity
-          extraDependencies:
-            cdktf: "^0.20.5"
-            constructs: "^10.3.0"
-  branch-go:
-    audiences:
-      - customers
-      - internal
-      - deprecated
-    generators:
-      - name: fernapi/fern-go-sdk
-        version: 0.23.0
-        github:
-          repository: vellum-ai/vellum-client-go-staging
-          mode: pull-request
-          license: MIT
-        config:
-          alwaysSendRequiredProperties: true
-          union: v1
-        # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-        # keywords: ["vellum", "ai", "llm"]
-        # description: "A Go Library to interact with the Vellum API"
-        # authors: ["devops@vellum.ai", "fern[bot]"]
-        # location:
-        #   output: go.mod
-  # Add back once we have a ruby customer
-  # branch-ruby:
-  #   generators:
-  #     - name: fernapi/fern-ruby-sdk
-  #       version: 0.0.4-1-2059079
-  #       output:
-  #         location: rubygems
-  #         package-name: vellum_ai
-  #       github:
-  #         repository: vellum-ai/vellum-client-ruby-staging
-  #         license: MIT
-  #         mode: pull-request
-  #       config:
-  #         clientClassName: Vellum
-  staging:
-    audiences:
-      - customers
-      - internal
-      - deprecated
-    generators:
-      - name: fernapi/fern-typescript-node-sdk
-        version: 0.39.3
-        config:
-          namespaceExport: Vellum
-          timeoutInSeconds: infinity
-          extraDependencies:
-            cdktf: "^0.20.5"
-            constructs: "^10.3.0"
-        github:
-          repository: vellum-ai/vellum-client-node-staging
-          license: MIT
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Typescript Node Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: package.json
-      - name: fernapi/fern-python-sdk
-        version: 3.10.5
-        github:
-          repository: vellum-ai/vellum-client-python-staging
-          license: MIT
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Python Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: pypi
-        config:
-          improved_imports: false
-          client_class_name: Vellum
-          timeout_in_seconds: infinity
-          extra_dependencies:
-            cdktf: "^0.20.5"
-            publication: "0.0.3"
-            # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
-            # pytest-httpx: '^0.30.0'
-      - name: fernapi/fern-go-sdk
-        version: 0.23.0
-        github:
-          repository: vellum-ai/vellum-client-go-staging
-          license: MIT
-        config:
-          alwaysSendRequiredProperties: true
-          union: v1
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Go Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: go.mod
-      # Add back once we have a ruby customer
-      # - name: fernapi/fern-ruby-sdk
-      #   version: 0.0.4-1-2059079
-      #   output:
-      #     location: rubygems
-      #     package-name: vellum_ai
-      #   github:
-      #     repository: vellum-ai/vellum-client-ruby-staging
-      #     license: MIT
-      #   config:
-      #     clientClassName: Vellum
-  production:
-    audiences:
-      - customers
-      - internal
-      - deprecated
-    generators:
-      - name: fernapi/fern-typescript-node-sdk
-        version: 0.39.3
+        api: 
+          settings: 
+            unions: v1  
         output:
           location: npm
           package-name: vellum-ai
@@ -180,14 +27,18 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
-          # location:
-          #   output: package.json
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Typescript Node Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
+    
+  production-python:
+    audiences:
+      - customers
+      - internal
+      - deprecated          
+    generators: 
       - name: fernapi/fern-python-sdk
         version: 3.10.5
+        api: 
+          settings: 
+            unions: v1  
         output:
           location: pypi
           package-name: vellum-ai
@@ -195,12 +46,6 @@ groups:
         github:
           repository: vellum-ai/vellum-client-python
           license: MIT
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Python Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: pypi
         config:
           improved_imports: false
           client_class_name: Vellum
@@ -210,6 +55,13 @@ groups:
             publication: "0.0.3"
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
+    
+  production-go:
+    audiences:
+      - customers
+      - internal
+      - deprecated          
+    generators:               
       - name: fernapi/fern-go-sdk
         version: 0.23.0
         github:
@@ -218,21 +70,3 @@ groups:
         config:
           alwaysSendRequiredProperties: true
           union: v1
-          # Blocked on Fern - https://app.shortcut.com/vellum/story/1865
-          # keywords: ["vellum", "ai", "llm"]
-          # description: "A Go Library to interact with the Vellum API"
-          # authors: ["devops@vellum.ai", "fern[bot]"]
-          # location:
-          #   output: go.mod
-      # Add back once we have a ruby customer
-      # - name: fernapi/fern-ruby-sdk
-      #   version: 0.0.4-1-2059079
-      #   output:
-      #     location: rubygems
-      #     package-name: vellum_ai
-      #     api-key: ${RUBYGEM_API_KEY}
-      #   github:
-      #     repository: vellum-ai/vellum-client-ruby
-      #     license: MIT
-      #   config:
-      #     clientClassName: Vellum

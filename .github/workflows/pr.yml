@@ -19,7 +19,7 @@ jobs:
       - name: Check Fern API is valid
         run: fern check
 
-  fern-generate-branch:
+  preview-node:
     needs: fern-check
     runs-on: ubuntu-latest
     steps:
@@ -40,6 +40,50 @@ jobs:
           RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
         # fern generate --group branch-ruby --log-level debug
         run: |
-          fern generate --group branch-node --log-level debug
-          fern generate --group branch-python --log-level debug
-          fern generate --group branch-go --log-level debug
+          fern generate --group production-node --mode pull-request --log-level debug
+
+  preview-python:
+    needs: fern-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Download Fern
+        run: npm install -g fern-api
+
+      - name: Release Branch SDKs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+        # fern generate --group branch-ruby --log-level debug
+        run: |
+          fern generate --group production-python --mode pull-request --log-level debug
+
+  preview-go:
+    needs: fern-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Download Fern
+        run: npm install -g fern-api
+
+      - name: Release Branch SDKs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+        # fern generate --group branch-ruby --log-level debug
+        run: |
+          fern generate --group production-go --mode pull-request --log-level debug
