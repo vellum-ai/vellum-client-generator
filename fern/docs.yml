@@ -158,6 +158,9 @@ navigation:
           - page: Function Calling with Chat Models
             path: ./docs/content/help/workflows/function-calling.mdx
             slug: function-calling-with-chat-models
+          - page: Examples & Walkthroughs
+            path: ./docs/content/help/workflows/examples-and-walkthroughs.mdx
+            slug: examples-and-walkthroughs
       - section: Evaluation & Test Suites
         contents:
           - page: Quantitative Evaluation
