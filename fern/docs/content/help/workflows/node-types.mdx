@@ -39,18 +39,38 @@ Upon creating a Prompt Node you’ll be asked to import a prompt from an existin
 
 The Templating Node allows you to perform custom data transformations on a set of defined inputs to create a new output. You can use this to define constants, manipulate data before feeding into a prompt, or massage a response to a format of your liking.
 
-Check out our [common data transformation templates](https://docs.vellum.ai/help-center/workflows/common-data-transforms) for some common examples.
+Check out our [Common Data Transformation Templates](/help-center/workflows/common-data-transforms) for some common examples.
 
 ![Templating Node](https://storage.googleapis.com/vellum-public/help-docs/templating-node.png)
 
+<AccordionGroup>
 <Accordion title="Tip - JSON Syntax">
-You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
+  You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
 
-<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
+  <img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
 
-<Tip>Use double quotes when working with JSON</Tip>
-
+  <Tip>Use double quotes when working with JSON</Tip>
 </Accordion>
+<Accordion title="Tip - Unexpected Whitespace">
+    Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
+
+    ```jinja
+    {# this example will have invisible whitespace #} 
+    {% if some_condition %}
+        {{ result A }}
+    {% else %}
+        {{ result B }}
+    {% endif %}
+
+    {# this will give the result you expect #} 
+    {%- if some_condition -%}
+        {{- result A -}}
+    {%- else -%}
+        {{- result B -}}
+    {%- endif -%}
+    ```
+  </Accordion>
+</AccordionGroup>
 
 ### Search Node
 
