@@ -64,6 +64,9 @@ groups:
     generators:               
       - name: fernapi/fern-go-sdk
         version: 0.23.0
+        api: 
+          settings: 
+            unions: v1          
         github:
           repository: vellum-ai/vellum-client-go
           license: MIT
