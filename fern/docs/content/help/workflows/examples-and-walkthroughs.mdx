@@ -1,0 +1,72 @@
+---
+title: Examples and Walkthroughs
+description: See interactive Vellum architectures and watch video walkthroughs of them! Use these as a great starting point for your own applications.
+---
+
+Below you'll find many example architectures for common use-cases, alongside video walkthroughs that explain the architecture of each. You're free to use these as a starting point for your own applications!
+
+#### Customer Support Bot with Escalation To Human
+
+Concepts: Routing, Classification, Chatbot, Statefulness, State Management, Function Calling, Dynamic API URLs
+
+<Accordion title="Example Workflow">
+  <iframe
+    src="https://app.vellum.ai/public/workflow-deployments/aeb28969-e4c0-45fe-88a9-bf3fb7e79b76"
+    width="100%"
+    height="450px"
+    experimental_enableRequestFullscreen={true}
+  />
+</Accordion>
+
+#### Slack Support Bot, Cites Sources using Multiple Indexes
+
+Concepts: Document Indexes, Metadata, Zapier, Slack, Citing Sources, Combining Sources 
+
+<AccordionGroup>
+  <Accordion title="Example Workflow">
+    <iframe
+      src="https://app.vellum.ai/public/workflow-deployments/788489db-7020-4167-b010-96499f7dd102"
+      width="100%"
+      height="450px"
+      experimental_enableRequestFullscreen={true}
+    />
+  </Accordion>
+  <Accordion title="Tip: Zapier API Calls">
+    Passing JSON Arrays in Zapier can be tricky. Instead, you can use Code Blocks to make it easier. 
+    
+    You can use the follow code snippet as inspiration for your own API calls with Zapier Code Blocks and Python.
+    ```python
+      import requests
+
+      # Replace with your actual Vellum API key
+      VELLUM_API_KEY = "..."
+
+      url = "https://predict.vellum.ai/v1/execute-workflow"
+
+      headers = {
+          "Content-Type": "application/json",
+          "X_API_KEY": VELLUM_API_KEY
+      }
+
+      data = {
+          "workflow_deployment_name": "vellum-customer-support-q-a-demos",
+          "release_tag": "LATEST",
+          "inputs": [
+              {
+                  "type": "STRING",
+                  "name": "question",
+                  "value": input_data["user_question"] # whatever Zapier values you want to use here
+              }
+          ]
+      }
+
+      response = requests.post(url, headers=headers, json=data)
+
+      # Print the response from the server
+      print(response.status_code)
+      print(response.json())
+
+      return response.json()
+    ```
+  </Accordion>
+</AccordionGroup>
