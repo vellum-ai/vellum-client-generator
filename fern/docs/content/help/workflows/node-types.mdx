@@ -39,18 +39,40 @@ Upon creating a Prompt Node you’ll be asked to import a prompt from an existin
 
 The Templating Node allows you to perform custom data transformations on a set of defined inputs to create a new output. You can use this to define constants, manipulate data before feeding into a prompt, or massage a response to a format of your liking.
 
-Check out our [common data transformation templates](https://docs.vellum.ai/help-center/workflows/common-data-transforms) for some common examples.
+Check out our [Common Data Transformation Templates](/help-center/workflows/common-data-transforms) for some common examples.
 
 ![Templating Node](https://storage.googleapis.com/vellum-public/help-docs/templating-node.png)
 
-<Accordion title="Tip - JSON Syntax">
-You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
+<AccordionGroup>
+<Accordion title="Tip: JSON Syntax">
+  You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
+#### Tips - Using Jinja
+Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
 
-<img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
+  <img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
 
-<Tip>Use double quotes when working with JSON</Tip>
-
+  <Tip>Use double quotes when working with JSON</Tip>
 </Accordion>
+<Accordion title="Tip: Unexpected Whitespace">
+    Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
+
+    ```jinja
+    {# this example will have invisible whitespace #} 
+    {% if some_condition %}
+        {{ result A }}
+    {% else %}
+        {{ result B }}
+    {% endif %}
+
+    {# this will give the result you expect #} 
+    {%- if some_condition -%}
+        {{- result A -}}
+    {%- else -%}
+        {{- result B -}}
+    {%- endif -%}
+    ```
+  </Accordion>
+</AccordionGroup>
 
 ### Search Node
 
@@ -66,7 +88,7 @@ The API Node invokes an API endpoint and returns back the status code, raw outpu
 
 ![API Node](https://storage.googleapis.com/vellum-public/help-docs/api-node.png)
 
-<Accordion title="Tip - Creating Dynamic URLs">
+<Accordion title="Tip: Creating Dynamic URLs">
 
 You can use a Templating Node and the "Dynamic" field of an API Node to quickly and flexibly make API calls in your Workflows. See the example below for more details. Notice how we do string concatenation in the Templating Node using Jinja2's `~` syntax. 
 
@@ -92,7 +114,7 @@ The Code Execution Node empowers you to include custom logic defined directly in
 ![Code Execution Node](https://storage.googleapis.com/vellum-public/help-docs/code-exec-node.png)
 
 <AccordionGroup>
-<Accordion title="Tip - Outputting Arrays (Strings)">
+<Accordion title="Tip: Outputting Arrays (Strings)">
 
 Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type. Output[0]: Expected to deserialize a 'dict', got 'str'`
 
@@ -100,7 +122,7 @@ Set your output type to `JSON` when returning string arrays from Code Execution 
 
 </Accordion>
 
-<Accordion title="Tip - Outputting Arrays (Function Calls)">
+<Accordion title="Tip: Outputting Arrays (Function Calls)">
 
 The main scenario in which you'd use Array as your Code Execution Node output type is when you're processing Prompt Execution Node outputs with Function Calls. 
 
@@ -145,7 +167,7 @@ The output of every Subworkflow is then combined into a single array as a Node o
   height="450px"
 ></iframe>
 
-<Accordion title="Tip - Quirks with Map Node Input Types">
+<Accordion title="Tip: Quirks with Map Node Input Types">
 
 Two tips here:
 1. At the time of writing, you'll need to cast items into strings at the beginning of your Map Node Subworkflow. Expand the Map Node in the Subworkflow below for more: 
@@ -175,6 +197,19 @@ Conditional Nodes are extremely powerful because they can help you diverge the e
 The number of exit options from a conditional node equal the number of if-else-if conditions created on the node
 
 ![Conditional Node](https://storage.googleapis.com/vellum-public/help-docs/conditional_node.png)
+
+#### Tip - Equality Checking Templating Nodes
+
+See our [tips about invisible whitespace in Jinja](http://localhost:3000/help-center/workflows/node-types#tips---using-jinja)
+
+![Wrong Way To Check Equality From Templating Nodes](https://storage.googleapis.com/vellum-public/help-docs/conditionals_jinja_gotchas_wrong_way.png)
+
+The issue in the above check is that we're not using the Jinja2 syntax to remove unintentional whitespace: `{%-` and `{{-` rather than `{%` or `{{`
+
+![Right Way To Check Equality From Templating Nodes](https://storage.googleapis.com/vellum-public/help-docs/conditionals_jinja_gotchas_right_way.png)
+
+You can see here that adding the `-` character fixes the issue and gets the correct branch to execute after the conditional. 
+
 
 ### Merge Node
 
