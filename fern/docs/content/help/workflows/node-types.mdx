@@ -46,6 +46,8 @@ Check out our [Common Data Transformation Templates](/help-center/workflows/comm
 <AccordionGroup>
 <Accordion title="Tip - JSON Syntax">
   You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
+#### Tips - Using Jinja
+Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
 
   <img src="https://storage.googleapis.com/vellum-public/help-docs/templating_node_json_sensitivity.png" alt="Templating Node JSON Error" width="400px"/>
 
@@ -195,6 +197,19 @@ Conditional Nodes are extremely powerful because they can help you diverge the e
 The number of exit options from a conditional node equal the number of if-else-if conditions created on the node
 
 ![Conditional Node](https://storage.googleapis.com/vellum-public/help-docs/conditional_node.png)
+
+#### Tip - Equality Checking Templating Nodes
+
+See our [tips about invisible whitespace in Jinja](http://localhost:3000/help-center/workflows/node-types#tips---using-jinja)
+
+![Wrong Way To Check Equality From Templating Nodes](https://storage.googleapis.com/vellum-public/help-docs/conditionals_jinja_gotchas_wrong_way.png)
+
+The issue in the above check is that we're not using the Jinja2 syntax to remove unintentional whitespace: `{%-` and `{{-` rather than `{%` or `{{`
+
+![Right Way To Check Equality From Templating Nodes](https://storage.googleapis.com/vellum-public/help-docs/conditionals_jinja_gotchas_right_way.png)
+
+You can see here that adding the `-` character fixes the issue and gets the correct branch to execute after the conditional. 
+
 
 ### Merge Node
 
