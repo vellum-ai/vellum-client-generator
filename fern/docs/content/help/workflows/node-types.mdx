@@ -44,7 +44,7 @@ Check out our [Common Data Transformation Templates](/help-center/workflows/comm
 ![Templating Node](https://storage.googleapis.com/vellum-public/help-docs/templating-node.png)
 
 <AccordionGroup>
-<Accordion title="Tip - JSON Syntax">
+<Accordion title="Tip: JSON Syntax">
   You may have a templating node that outputs JSON which seems valid, but yields the following error when you click “Test” or run your workflow:
 #### Tips - Using Jinja
 Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
@@ -53,7 +53,7 @@ Jinja has a tendency to leave hard-to-see whitespace which can cause issues when
 
   <Tip>Use double quotes when working with JSON</Tip>
 </Accordion>
-<Accordion title="Tip - Unexpected Whitespace">
+<Accordion title="Tip: Unexpected Whitespace">
     Jinja has a tendency to leave hard-to-see whitespace which can cause issues when doing equality checks in places like Metrics or Conditional Nodes.
 
     ```jinja
@@ -88,7 +88,7 @@ The API Node invokes an API endpoint and returns back the status code, raw outpu
 
 ![API Node](https://storage.googleapis.com/vellum-public/help-docs/api-node.png)
 
-<Accordion title="Tip - Creating Dynamic URLs">
+<Accordion title="Tip: Creating Dynamic URLs">
 
 You can use a Templating Node and the "Dynamic" field of an API Node to quickly and flexibly make API calls in your Workflows. See the example below for more details. Notice how we do string concatenation in the Templating Node using Jinja2's `~` syntax. 
 
@@ -114,7 +114,7 @@ The Code Execution Node empowers you to include custom logic defined directly in
 ![Code Execution Node](https://storage.googleapis.com/vellum-public/help-docs/code-exec-node.png)
 
 <AccordionGroup>
-<Accordion title="Tip - Outputting Arrays (Strings)">
+<Accordion title="Tip: Outputting Arrays (Strings)">
 
 Set your output type to `JSON` when returning string arrays from Code Execution Nodes, or you'll get the following error: `Failed to execute node Code Execution Node: Mismatched output type. Output[0]: Expected to deserialize a 'dict', got 'str'`
 
@@ -122,7 +122,7 @@ Set your output type to `JSON` when returning string arrays from Code Execution 
 
 </Accordion>
 
-<Accordion title="Tip - Outputting Arrays (Function Calls)">
+<Accordion title="Tip: Outputting Arrays (Function Calls)">
 
 The main scenario in which you'd use Array as your Code Execution Node output type is when you're processing Prompt Execution Node outputs with Function Calls. 
 
@@ -167,7 +167,7 @@ The output of every Subworkflow is then combined into a single array as a Node o
   height="450px"
 ></iframe>
 
-<Accordion title="Tip - Quirks with Map Node Input Types">
+<Accordion title="Tip: Quirks with Map Node Input Types">
 
 Two tips here:
 1. At the time of writing, you'll need to cast items into strings at the beginning of your Map Node Subworkflow. Expand the Map Node in the Subworkflow below for more: 
