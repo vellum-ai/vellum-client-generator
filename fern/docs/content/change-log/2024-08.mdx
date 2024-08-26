@@ -2,6 +2,45 @@
 title: Changelog | August, 2024
 ---
 
+## JSON Schema Editor with $ref Support
+
+_August 26th, 2024_
+
+Vellum let's you define JSON Schemas in a few different places throughout the app to do things like define [Structured Outputs](changelog/2024/2024-08#openai-structured-outputs-support) and [Function Calls](/help-center/prompts/prompt-engineering#function-calling). Previously this UI was just a simple form that allowed you to define basic JSON schemas. This UI has been improved to support direct edits via a raw JSON editor.
+
+![Raw Schema Button](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/raw_schema_button.png)
+
+From here, you can edit your JSON schema directly. This raw editor allows you to make use of all features supported by the [JSON Schema spec](https://json-schema.org/overview/what-is-jsonschema), even if they may not yet be supported by our basic form UI. For example, you can now defined references (i.e. `$ref`) like this:
+as references:
+
+![Raw Editor References](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/raw_editor_references.png)
+
+## Prompt Caching Support for Anthropic
+
+_August 22nd, 2024_
+
+Anthropic recently released some exciting API changes that allow for [Prompt Caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching#how-prompt-caching-works).
+This new feature allows for caching of frequently used portions of your Prompt for up to 5 minutes; which reduces the latency and cost of subsequent executions that include the same Prompt context.
+
+This powerful feature is now natively supported within Vellum! In order to use it, simply toggle the new cache options on a given Prompt Block for the supported
+Claude Sonnet 3.5 and Claude Haiku 3.0 models.
+
+![Vellum Prompt Caching](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt_sandbox_cache.png)
+
+## Prompt Execution Pages
+
+_August 22nd, 2024_
+
+If you wanted to drill into a single Prompt Execution, previously you’d have to navigate to the Prompt Deployment's Executions table and try to filter for the specific Execution ID
+you're looking for. Now each row has a navigable link accessible from the table: 
+
+![Prompt Execution Link](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-execution-link.png)
+
+This will navigate you to a dedicated page representing that specific Prompt Execution. From here, you can see details about the Execution like the raw HTTP data sent to and from the provider,
+any actuals recorded, the Vellum inputs and outputs to the prompt, and more!
+
+![Prompt Execution Page](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-execution-page.png)
+
 ## Historical Versions of Entities in Evaluation Reports
 
 _August 22st, 2024_
