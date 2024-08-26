@@ -1,1 +1,2 @@
 **/*.mdx
+!fern/docs/content/change-log/**/*.mdx

@@ -2,6 +2,16 @@
 title: Changelog | August, 2024
 ---
 
+## Asynchronous Exports of Evaluation Reports
+
+_August 26st, 2024_
+
+Exports of evaluation reports are now asynchronous. You can export your evaluation report along with its results in CSV or JSON format, and an email will be sent to you once the export is done.
+
+This change is especially useful for large evaluation reports, where the export process and download can take some time.
+
+![Evaluation Report Export](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/evaluation-report-export.png)
+
 ## JSON Schema Editor with $ref Support
 
 _August 26th, 2024_
@@ -32,7 +42,7 @@ Claude Sonnet 3.5 and Claude Haiku 3.0 models.
 _August 22nd, 2024_
 
 If you wanted to drill into a single Prompt Execution, previously you’d have to navigate to the Prompt Deployment's Executions table and try to filter for the specific Execution ID
-you're looking for. Now each row has a navigable link accessible from the table: 
+you're looking for. Now each row has a navigable link accessible from the table:
 
 ![Prompt Execution Link](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-execution-link.png)
 
@@ -53,8 +63,7 @@ Earlier this month, we introduced [Evaluation Report History](https://docs.vellu
 
 _August 19th, 2024_
 
-OpenAI's newest GPT-4o models `gpt-4o-2024-08-06` and `gpt-4o-mini-2024-07-18` are now available as base models to add as OpenAI finetuned models. 
-
+OpenAI's newest GPT-4o models `gpt-4o-2024-08-06` and `gpt-4o-mini-2024-07-18` are now available as base models to add as OpenAI finetuned models.
 
 ## Workflow Execution Replay & Scrubbing
 
@@ -65,7 +74,6 @@ This feature is particularly useful for debugging and understanding the flow of 
 contains loops where a single node might be run more than once.
 
 ![Workflow Execution Replay & Scrubbing](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/workflow-execution-replay-and-scrubbing.gif)
-
 
 ## OpenAI Structured Outputs Support
 
@@ -101,7 +109,6 @@ Vellum Prompts now support native JSON as inputs! When you add an input variable
 
 JSON input values will render as prettified JSON objects when referenced in Rich Text Blocks and can be operated on directly
 without the need for `json.loads()` when referenced in Jinja Blocks.
-
 
 ## Workflow Deployment Executions Filtered to Just API Executions
 
