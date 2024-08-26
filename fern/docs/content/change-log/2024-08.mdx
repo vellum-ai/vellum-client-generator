@@ -1,6 +1,20 @@
 ---
 title: Changelog | August, 2024
 ---
+
+## JSON Schema Editor with $ref Support
+
+_August 26th, 2024_
+
+Vellum let's you define JSON Schemas in a few different places throughout the app to do things like define [Structured Outputs](changelog/2024/2024-08#openai-structured-outputs-support) and [Function Calls](/help-center/prompts/prompt-engineering#function-calling). Previously this UI was just a simple form that allowed you to define basic JSON schemas. This UI has been improved to support direct edits via a raw JSON editor.
+
+![Raw Schema Button](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/raw_schema_button.png)
+
+From here, you can edit your JSON schema directly. This raw editor allows you to make use of all features supported by the [JSON Schema spec](https://json-schema.org/overview/what-is-jsonschema), even if they may not yet be supported by our basic form UI. For example, you can now defined references (i.e. `$ref`) like this:
+as references:
+
+![Raw Editor References](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/raw_editor_references.png)
+
 ## Prompt Caching Support for Anthropic
 
 _August 22nd, 2024_
