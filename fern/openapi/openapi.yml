@@ -5494,6 +5494,12 @@ components:
         compute_nanos:
           type: integer
           nullable: true
+        cache_creation_input_tokens:
+          type: integer
+          nullable: true
+        cache_read_input_tokens:
+          type: integer
+          nullable: true
     MapEnum:
       type: string
       enum:
