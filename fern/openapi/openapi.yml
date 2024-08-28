@@ -4986,7 +4986,7 @@ components:
           type: number
           format: double
           default: 0.0
-          description: Can only be set when using an internal service token.
+          description: For internal use only.
       required:
       - description
       - label
@@ -5008,7 +5008,7 @@ components:
           type: number
           format: double
           default: 0.0
-          description: Can only be set when using an internal service token.
+          description: For internal use only.
       required:
       - description
       - label
@@ -5060,7 +5060,7 @@ components:
         force_system_credentials:
           type: boolean
           default: false
-          description: Can only be set when using an internal service token.
+          description: For internal use only.
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfig'
@@ -5097,7 +5097,7 @@ components:
         force_system_credentials:
           type: boolean
           default: false
-          description: Can only be set when using an internal service token.
+          description: For internal use only.
         tokenizer_config:
           allOf:
           - $ref: '#/components/schemas/MLModelTokenizerConfigRequest'
@@ -5180,6 +5180,7 @@ components:
       - CHAT_MESSAGE_IMAGE
       - FUNCTION_DEFINITION
       - STREAMING_SUPPORT
+      - PROMPT_CACHING_SUPPORT
       type: string
       description: |-
         * `TEXT` - Text
@@ -5191,6 +5192,7 @@ components:
         * `CHAT_MESSAGE_IMAGE` - Chat Message Image
         * `FUNCTION_DEFINITION` - Function Definition
         * `STREAMING_SUPPORT` - Streaming Support
+        * `PROMPT_CACHING_SUPPORT` - Prompt Caching Support
     MLModelParameterConfig:
       type: object
       properties:
@@ -5490,6 +5492,12 @@ components:
           type: integer
           nullable: true
         compute_nanos:
+          type: integer
+          nullable: true
+        cache_creation_input_tokens:
+          type: integer
+          nullable: true
+        cache_read_input_tokens:
           type: integer
           nullable: true
     MapEnum:
@@ -6556,11 +6564,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - items
       - type
@@ -6593,11 +6599,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - type
     OpenAPIConstProperty:
@@ -6626,16 +6630,70 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
         const:
           type: string
           minLength: 1
       required:
       - const
+      - type
+    OpenAPIEnumProperty:
+      type: object
+      description: An OpenAPI specification of a property with type 'enum'
+      properties:
+        type:
+          $ref: '#/components/schemas/enumEnum'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        enum:
+          type: array
+          items:
+            oneOf:
+            - type: string
+            - type: integer
+            nullable: true
+        default:
+          oneOf:
+          - type: string
+          - type: integer
+          nullable: true
+      required:
+      - enum
+      - type
+    OpenAPIEnumPropertyRequest:
+      type: object
+      description: An OpenAPI specification of a property with type 'enum'
+      properties:
+        type:
+          $ref: '#/components/schemas/enumEnum'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        enum:
+          type: array
+          items:
+            oneOf:
+            - type: string
+              minLength: 1
+            - type: integer
+            nullable: true
+        default:
+          oneOf:
+          - type: string
+            minLength: 1
+          - type: integer
+          nullable: true
+      required:
+      - enum
       - type
     OpenAPIIntegerProperty:
       type: object
@@ -6690,11 +6748,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - type
     OpenAPINumberProperty:
@@ -6763,11 +6819,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - type
     OpenAPIObjectProperty:
@@ -6860,11 +6914,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - type
     OpenAPIOneOfProperty:
@@ -6899,11 +6951,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - oneOf
       - type
@@ -6918,6 +6968,7 @@ components:
       - $ref: '#/components/schemas/OpenAPIOneOfProperty'
       - $ref: '#/components/schemas/OpenAPIConstProperty'
       - $ref: '#/components/schemas/OpenAPIRefProperty'
+      - $ref: '#/components/schemas/OpenAPIEnumProperty'
       discriminator:
         propertyName: type
         mapping:
@@ -6930,6 +6981,7 @@ components:
           oneOf: '#/components/schemas/OpenAPIOneOfProperty'
           const: '#/components/schemas/OpenAPIConstProperty'
           ref: '#/components/schemas/OpenAPIRefProperty'
+          enum: '#/components/schemas/OpenAPIEnumProperty'
     OpenAPIPropertyRequest:
       oneOf:
       - $ref: '#/components/schemas/OpenAPIArrayPropertyRequest'
@@ -6941,6 +6993,7 @@ components:
       - $ref: '#/components/schemas/OpenAPIOneOfPropertyRequest'
       - $ref: '#/components/schemas/OpenAPIConstPropertyRequest'
       - $ref: '#/components/schemas/OpenAPIRefPropertyRequest'
+      - $ref: '#/components/schemas/OpenAPIEnumPropertyRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -6953,6 +7006,7 @@ components:
           oneOf: '#/components/schemas/OpenAPIOneOfPropertyRequest'
           const: '#/components/schemas/OpenAPIConstPropertyRequest'
           ref: '#/components/schemas/OpenAPIRefPropertyRequest'
+          enum: '#/components/schemas/OpenAPIEnumPropertyRequest'
     OpenAPIRefProperty:
       type: object
       description: An OpenAPI specification of a property that is a URI-reference
@@ -6981,11 +7035,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
         ref:
           type: string
           minLength: 1
@@ -7048,11 +7100,9 @@ components:
         title:
           type: string
           nullable: true
-          minLength: 1
         description:
           type: string
           nullable: true
-          minLength: 1
       required:
       - type
     PaginatedDocumentIndexReadList:
@@ -11541,6 +11591,10 @@ components:
       type: string
       enum:
       - const
+    enumEnum:
+      type: string
+      enum:
+      - enum
     hkunlp-instructor-xlEnum:
       type: string
       enum:
