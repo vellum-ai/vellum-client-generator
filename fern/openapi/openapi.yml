@@ -37,6 +37,48 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 paths:
+  /v1/ad-hoc/execute-prompt-stream:
+    post:
+      operationId: adhoc_execute_prompt_stream
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      tags:
+      - ad-hoc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdHocExecutePromptStreamRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/AdHocExecutePromptEvent'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePromptApiErrorResponse'
+          description: ''
+      x-fern-streaming: true
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/deployments:
     get:
       operationId: deployments_list
@@ -1225,7 +1267,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpsertSandboxScenarioRequestRequest'
+              $ref: '#/components/schemas/UpsertSandboxScenarioRequest'
             examples:
               Example1:
                 value:
@@ -1350,6 +1392,7 @@ paths:
         completions.
       tags:
       - submit-completion-actuals
+      - prompt-executions
       requestBody:
         content:
           application/json:
@@ -1903,6 +1946,117 @@ paths:
       - customers
 components:
   schemas:
+    AdHocExecutePromptEvent:
+      oneOf:
+      - $ref: '#/components/schemas/InitiatedAdHocExecutePromptEvent'
+      - $ref: '#/components/schemas/StreamingAdHocExecutePromptEvent'
+      - $ref: '#/components/schemas/FulfilledAdHocExecutePromptEvent'
+      - $ref: '#/components/schemas/RejectedAdHocExecutePromptEvent'
+      discriminator:
+        propertyName: state
+        mapping:
+          INITIATED: '#/components/schemas/InitiatedAdHocExecutePromptEvent'
+          STREAMING: '#/components/schemas/StreamingAdHocExecutePromptEvent'
+          FULFILLED: '#/components/schemas/FulfilledAdHocExecutePromptEvent'
+          REJECTED: '#/components/schemas/RejectedAdHocExecutePromptEvent'
+    AdHocExecutePromptStreamRequest:
+      type: object
+      properties:
+        ml_model:
+          type: string
+          minLength: 1
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptRequestInputRequest'
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariableRequest'
+        parameters:
+          $ref: '#/components/schemas/PromptParametersRequest'
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptBlockRequest'
+        expand_meta:
+          allOf:
+          - $ref: '#/components/schemas/AdHocExpandMetaRequest'
+          nullable: true
+      required:
+      - blocks
+      - input_values
+      - input_variables
+      - ml_model
+      - parameters
+    AdHocExpandMetaRequest:
+      type: object
+      properties:
+        cost:
+          type: boolean
+          nullable: true
+        model_name:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the model identifier
+            representing the ML Model invoked by the Prompt.
+        usage:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include model host usage tracking.
+            This may increase latency for some model hosts.
+        finish_reason:
+          type: boolean
+          nullable: true
+          description: If enabled, the response will include the reason provided by
+            the model for why the execution finished.
+    AdHocFulfilledPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
+        finish_reason:
+          allOf:
+          - $ref: '#/components/schemas/FinishReasonEnum'
+          nullable: true
+        usage:
+          allOf:
+          - $ref: '#/components/schemas/MLModelUsage'
+          nullable: true
+    AdHocInitiatedPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        model_name:
+          type: string
+          nullable: true
+        latency:
+          type: integer
+          nullable: true
+    AdHocRejectedPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
+        finish_reason:
+          allOf:
+          - $ref: '#/components/schemas/FinishReasonEnum'
+          nullable: true
+    AdHocStreamingPromptExecutionMeta:
+      type: object
+      description: The subset of the metadata tracked by Vellum during prompt execution
+        that the request opted into with `expand_meta`.
+      properties:
+        latency:
+          type: integer
+          nullable: true
     AddEntityToFolderRequest:
       type: object
       properties:
@@ -2192,6 +2346,52 @@ components:
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
           ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
           IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+    ChatMessageEnum:
+      type: string
+      enum:
+      - CHAT_MESSAGE
+    ChatMessagePromptBlockPropertiesRequest:
+      type: object
+      description: The properties of a ChatMessagePromptTemplateBlock
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptBlockRequest'
+        chat_role:
+          allOf:
+          - $ref: '#/components/schemas/ChatMessageRole'
+          nullable: true
+        chat_source:
+          type: string
+          nullable: true
+          minLength: 1
+        chat_message_unterminated:
+          type: boolean
+          default: false
+      required:
+      - blocks
+    ChatMessagePromptBlockRequest:
+      type: object
+      description: A block that represents a chat message in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptBlockPropertiesRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+      required:
+      - block_type
+      - id
+      - properties
     ChatMessageRequest:
       type: object
       properties:
@@ -3027,6 +3227,16 @@ components:
         * `DEVELOPMENT` - Development
         * `STAGING` - Staging
         * `PRODUCTION` - Production
+    EphemeralPromptCacheConfigRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/EphemeralPromptCacheConfigTypeEnum'
+    EphemeralPromptCacheConfigTypeEnum:
+      enum:
+      - EPHEMERAL
+      type: string
+      description: '* `EPHEMERAL` - EPHEMERAL'
     ErrorEnum:
       type: string
       enum:
@@ -3125,7 +3335,7 @@ components:
             Must be unique within a given Prompt Deployment.
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequest'
           nullable: true
           description: An optionally specified configuration used to opt in to including
             additional metadata about this prompt execution in the API response. Corresponding
@@ -3198,7 +3408,7 @@ components:
             Must be unique within a given Prompt Deployment.
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequest'
           nullable: true
           description: An optionally specified configuration used to opt in to including
             additional metadata about this prompt execution in the API response. Corresponding
@@ -3584,6 +3794,25 @@ components:
         * `LENGTH` - LENGTH
         * `STOP` - STOP
         * `UNKNOWN` - UNKNOWN
+    FulfilledAdHocExecutePromptEvent:
+      type: object
+      description: The final data event returned indicating that the stream has ended
+        and all final resolved values from the model can be found.
+      properties:
+        state:
+          $ref: '#/components/schemas/FulfilledEnum'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptOutput'
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/AdHocFulfilledPromptExecutionMeta'
+      required:
+      - execution_id
+      - outputs
+      - state
     FulfilledEnum:
       type: string
       enum:
@@ -3837,6 +4066,58 @@ components:
       required:
       - type
       - value
+    FunctionDefinitionEnum:
+      type: string
+      enum:
+      - FUNCTION_DEFINITION
+    FunctionDefinitionPromptBlockPropertiesRequest:
+      type: object
+      properties:
+        function_name:
+          type: string
+          nullable: true
+          minLength: 1
+          description: The name identifying the function.
+        function_description:
+          type: string
+          nullable: true
+          description: A description to help guide the model when to invoke this function.
+        function_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: An OpenAPI specification of parameters that are supported by
+            this function.
+        function_forced:
+          type: boolean
+          nullable: true
+          description: Set this option to true to force the model to return a function
+            call of this function.
+        function_strict:
+          type: boolean
+          nullable: true
+          description: Set this option to use strict schema decoding when available.
+    FunctionDefinitionPromptBlockRequest:
+      type: object
+      description: A block that represents a function definition in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptBlockPropertiesRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+      required:
+      - block_type
+      - id
+      - properties
     GenerateBodyRequest:
       type: object
       properties:
@@ -4218,6 +4499,20 @@ components:
         * `INDEXING` - Indexing
         * `INDEXED` - Indexed
         * `FAILED` - Failed
+    InitiatedAdHocExecutePromptEvent:
+      type: object
+      description: The initial data returned indicating that the response from the
+        model has returned and begun streaming.
+      properties:
+        state:
+          $ref: '#/components/schemas/InitiatedEnum'
+        meta:
+          $ref: '#/components/schemas/AdHocInitiatedPromptExecutionMeta'
+        execution_id:
+          type: string
+      required:
+      - execution_id
+      - state
     InitiatedEnum:
       type: string
       enum:
@@ -4342,6 +4637,41 @@ components:
       - name
       - type
       - value
+    JinjaEnum:
+      type: string
+      enum:
+      - JINJA
+    JinjaPromptBlockPropertiesRequest:
+      type: object
+      properties:
+        template:
+          type: string
+          nullable: true
+        template_type:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableType'
+          nullable: true
+    JinjaPromptBlockRequest:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptBlockPropertiesRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+      required:
+      - block_type
+      - id
+      - properties
     JsonEnum:
       type: string
       enum:
@@ -7006,6 +7336,31 @@ components:
       - document_type
       - end_page_num
       - start_page_num
+    PlainTextEnum:
+      type: string
+      enum:
+      - PLAIN_TEXT
+    PlainTextPromptBlockRequest:
+      type: object
+      description: A block that holds a plain text string value.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/PlainTextEnum'
+        text:
+          type: string
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+      required:
+      - block_type
+      - id
+      - text
     ProcessingFailureReasonEnum:
       enum:
       - EXCEEDED_CHARACTER_LIMIT
@@ -7026,7 +7381,30 @@ components:
         * `PROCESSING` - Processing
         * `PROCESSED` - Processed
         * `FAILED` - Failed
-    PromptDeploymentExpandMetaRequestRequest:
+    PromptBlockRequest:
+      oneOf:
+      - $ref: '#/components/schemas/JinjaPromptBlockRequest'
+      - $ref: '#/components/schemas/ChatMessagePromptBlockRequest'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptBlockRequest'
+      - $ref: '#/components/schemas/VariablePromptBlockRequest'
+      - $ref: '#/components/schemas/RichTextPromptBlockRequest'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          JINJA: '#/components/schemas/JinjaPromptBlockRequest'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptBlockRequest'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptBlockRequest'
+          VARIABLE: '#/components/schemas/VariablePromptBlockRequest'
+          RICH_TEXT: '#/components/schemas/RichTextPromptBlockRequest'
+    PromptBlockState:
+      enum:
+      - ENABLED
+      - DISABLED
+      type: string
+      description: |-
+        * `ENABLED` - ENABLED
+        * `DISABLED` - DISABLED
+    PromptDeploymentExpandMetaRequest:
       type: object
       properties:
         model_name:
@@ -7151,6 +7529,105 @@ components:
           JSON: '#/components/schemas/JsonVellumValue'
           ERROR: '#/components/schemas/ErrorVellumValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
+    PromptParametersRequest:
+      type: object
+      properties:
+        stop:
+          type: array
+          items:
+            type: string
+          nullable: true
+        temperature:
+          type: number
+          format: double
+          nullable: true
+        max_tokens:
+          type: integer
+          nullable: true
+        top_p:
+          type: number
+          format: double
+          nullable: true
+        top_k:
+          type: integer
+          nullable: true
+        frequency_penalty:
+          type: number
+          format: double
+          nullable: true
+        presence_penalty:
+          type: number
+          format: double
+          nullable: true
+        logit_bias:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
+        custom_parameters:
+          type: object
+          additionalProperties: {}
+          nullable: true
+    PromptRequestChatHistoryInputRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Prompt.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageRequest'
+      required:
+      - key
+      - type
+      - value
+    PromptRequestInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/PromptRequestStringInputRequest'
+      - $ref: '#/components/schemas/PromptRequestJSONInputRequest'
+      - $ref: '#/components/schemas/PromptRequestChatHistoryInputRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/PromptRequestStringInputRequest'
+          JSON: '#/components/schemas/PromptRequestJSONInputRequest'
+          CHAT_HISTORY: '#/components/schemas/PromptRequestChatHistoryInputRequest'
+    PromptRequestJSONInputRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Prompt.
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties: {}
+      required:
+      - key
+      - type
+      - value
+    PromptRequestStringInputRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the Prompt.
+        type:
+          type: string
+        value:
+          type: string
+      required:
+      - key
+      - type
+      - value
     RawPromptExecutionOverridesRequest:
       type: object
       properties:
@@ -7212,6 +7689,23 @@ components:
             character_limit: 1000
       required:
       - chunker_name
+    RejectedAdHocExecutePromptEvent:
+      type: object
+      description: The final data returned indicating an error occurred during the
+        stream.
+      properties:
+        state:
+          $ref: '#/components/schemas/RejectedEnum'
+        error:
+          $ref: '#/components/schemas/VellumError'
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/AdHocRejectedPromptExecutionMeta'
+      required:
+      - error
+      - execution_id
+      - state
     RejectedEnum:
       type: string
       enum:
@@ -7370,6 +7864,43 @@ components:
       type: string
       enum:
       - REPLACED
+    RichTextChildBlockRequest:
+      oneOf:
+      - $ref: '#/components/schemas/VariablePromptBlockRequest'
+      - $ref: '#/components/schemas/PlainTextPromptBlockRequest'
+      discriminator:
+        propertyName: block_type
+        mapping:
+          VARIABLE: '#/components/schemas/VariablePromptBlockRequest'
+          PLAIN_TEXT: '#/components/schemas/PlainTextPromptBlockRequest'
+    RichTextEnum:
+      type: string
+      enum:
+      - RICH_TEXT
+    RichTextPromptBlockRequest:
+      type: object
+      description: A block that includes a combination of plain text and variable
+        blocks.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/RichTextEnum'
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RichTextChildBlockRequest'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+      required:
+      - block_type
+      - blocks
+      - id
     SandboxScenario:
       type: object
       description: Sandbox Scenario
@@ -7978,6 +8509,30 @@ components:
       - last_deployed_on
       - name
       - output_variables
+    StreamingAdHocExecutePromptEvent:
+      type: object
+      description: The data returned for each delta during the prompt execution stream.
+      properties:
+        state:
+          $ref: '#/components/schemas/StreamingEnum'
+        output:
+          $ref: '#/components/schemas/PromptOutput'
+        output_index:
+          type: integer
+        execution_id:
+          type: string
+        meta:
+          $ref: '#/components/schemas/AdHocStreamingPromptExecutionMeta'
+        raw:
+          type: object
+          additionalProperties: {}
+          description: The subset of the raw response from the model that the request
+            opted into with `expand_raw`.
+      required:
+      - execution_id
+      - output
+      - output_index
+      - state
     StreamingEnum:
       type: string
       enum:
@@ -9776,7 +10331,7 @@ components:
       type: string
       enum:
       - UPSERT
-    UpsertSandboxScenarioRequestRequest:
+    UpsertSandboxScenarioRequest:
       type: object
       properties:
         label:
@@ -9829,6 +10384,32 @@ components:
       required:
       - evaluation_values
       - input_values
+    VariableEnum:
+      type: string
+      enum:
+      - VARIABLE
+    VariablePromptBlockRequest:
+      type: object
+      description: A block that represents a variable in a prompt template.
+      properties:
+        block_type:
+          $ref: '#/components/schemas/VariableEnum'
+        id:
+          type: string
+          minLength: 1
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          nullable: true
+        input_variable_id:
+          type: string
+          format: uuid
+      required:
+      - block_type
+      - id
+      - input_variable_id
     VellumError:
       type: object
       properties:
@@ -9890,6 +10471,20 @@ components:
       properties:
         id:
           type: string
+        key:
+          type: string
+        type:
+          $ref: '#/components/schemas/VellumVariableType'
+      required:
+      - id
+      - key
+      - type
+    VellumVariableRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
         key:
           type: string
         type:
