@@ -3334,6 +3334,13 @@ components:
           minLength: 1
           description: Optionally include a unique identifier for tracking purposes.
             Must be unique for a given workflow deployment.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Arbitrary JSON metadata associated with this request. Can be
+            used to capture additional monitoring data such as user id, session id,
+            etc. for future analysis.
       required:
       - inputs
     ExecuteWorkflowResponse:
@@ -3410,6 +3417,13 @@ components:
           description: Optionally specify which events you want to receive. Defaults
             to only WORKFLOW events. Note that the schema of non-WORKFLOW events is
             unstable and should be used with caution.
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Arbitrary JSON metadata associated with this request. Can be
+            used to capture additional monitoring data such as user id, session id,
+            etc. for future analysis.
       required:
       - inputs
     ExecuteWorkflowWorkflowResultEvent:
