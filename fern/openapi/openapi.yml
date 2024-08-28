@@ -1267,7 +1267,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpsertSandboxScenarioRequestRequest'
+              $ref: '#/components/schemas/UpsertSandboxScenarioRequest'
             examples:
               Example1:
                 value:
@@ -1981,7 +1981,7 @@ components:
             $ref: '#/components/schemas/PromptBlockRequest'
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/AdHocExpandMetaRequestRequest'
+          - $ref: '#/components/schemas/AdHocExpandMetaRequest'
           nullable: true
       required:
       - blocks
@@ -1989,7 +1989,7 @@ components:
       - input_variables
       - ml_model
       - parameters
-    AdHocExpandMetaRequestRequest:
+    AdHocExpandMetaRequest:
       type: object
       properties:
         cost:
@@ -3335,7 +3335,7 @@ components:
             Must be unique within a given Prompt Deployment.
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequest'
           nullable: true
           description: An optionally specified configuration used to opt in to including
             additional metadata about this prompt execution in the API response. Corresponding
@@ -3408,7 +3408,7 @@ components:
             Must be unique within a given Prompt Deployment.
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequestRequest'
+          - $ref: '#/components/schemas/PromptDeploymentExpandMetaRequest'
           nullable: true
           description: An optionally specified configuration used to opt in to including
             additional metadata about this prompt execution in the API response. Corresponding
@@ -7454,7 +7454,7 @@ components:
       description: |-
         * `ENABLED` - ENABLED
         * `DISABLED` - DISABLED
-    PromptDeploymentExpandMetaRequestRequest:
+    PromptDeploymentExpandMetaRequest:
       type: object
       properties:
         model_name:
@@ -10381,7 +10381,7 @@ components:
       type: string
       enum:
       - UPSERT
-    UpsertSandboxScenarioRequestRequest:
+    UpsertSandboxScenarioRequest:
       type: object
       properties:
         label:
