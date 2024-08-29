@@ -2,7 +2,18 @@
 title: Changelog | August, 2024
 ---
 
-# Tool Choice Parameter support for OpenAI
+## Workflow Executed By Filterable Column
+
+_August 29th, 2024_
+
+Earlier this month, we restricted the Workflow Deployment Executions table to only show executions invoked via API requests. This helped to filter out all of the noise
+from other contexts in which a Workflow Deployment could be invoked, bringing focus to only data from production traffic. However, we've found that are still other contexts in which it's useful to see Workflow Executions.
+
+You'll now find a new `Executed By` column that shows what the immediate "parent" context was in which the Workflow was executed. This table is filtered down to just `API Request` by default, but you can opt in to include additional contexts, such invocation as a  Subworkflow via a parent Workflow:
+
+![Executed By Workflow Filter](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/executed_by_workflow_filter.png)
+
+## Tool Choice Parameter Support for OpenAI
 
 _August 28th, 2024_
 
