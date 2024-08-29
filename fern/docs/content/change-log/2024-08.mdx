@@ -6,12 +6,10 @@ title: Changelog | August, 2024
 
 _August 29th, 2024_
 
-Earlier this month, we restricted the Workflow Deployment Executions table to only show executions invoked via an API Request. This allowed users to filter out all of the noise
-of all the other contexts in which a Workflow Deployment can be invoked and focus on only production data. However, there are still other contexts in which it's useful to still
-see Workflow Executions.
+Earlier this month, we restricted the Workflow Deployment Executions table to only show executions invoked via API requests. This helped to filter out all of the noise
+from other contexts in which a Workflow Deployment could be invoked, bringing focus to only data from production traffic. However, we've found that are still other contexts in which it's useful to see Workflow Executions.
 
-You can now see a new `Executed By` column that shows what was the immediate "parent" context by which a Workflow was executed. By default, this table will be filtered on `API Request`.
-However we also support all the other contexts for users interested in seeing more contexts in which a Workflow was executed, such as via another Workflow Deployment:
+You'll now find a new `Executed By` column that shows what the immediate "parent" context was in which the Workflow was executed. This table is filtered down to just `API Request` by default, but you can opt in to include additional contexts, such invocation as a  Subworkflow via a parent Workflow:
 
 ![Executed By Workflow Filter](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/executed_by_workflow_filter.png)
 
