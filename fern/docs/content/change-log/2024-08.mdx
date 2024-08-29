@@ -12,6 +12,15 @@ We have reworked the relationship of how Prompt Node's interact with Deployments
 
 Today we are releasing this new setup modal that appears when you create a Prompt Node:
 
+![New Prompt Node Setup](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-node-setup.png)
+
+The setup modal contains a new `Link to Deployment` option. This is a Prompt Node that references a Prompt Deployment _directly_ with a Release Tag. This
+allows for Workflows both in the Sandbox and as a Deployment to automatically pick up changes to the underlying Prompt without needing to update the Workflow 
+by pointing to `LATEST`. To maintain a specific version of a Prompt Deployment, you can specify a user-defined Release Tag to keep the Prompt Node pinned to
+a specific version. In this way, they now work exactly as Subworkflow Nodes when you select `Link to Deployment` there:
+
+![Prompt Node Linked Deployments](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-node-linked-deployments.png)
+
 
 ## Workflow Executed By Filterable Column
 
