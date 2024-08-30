@@ -2,6 +2,19 @@
 title: Changelog | August, 2024
 ---
 
+## Anthropic Google Vertex AI Support
+
+_August 30th, 2024_
+
+We now support using Anthropic's Claude 3.5 Sonnet, Claude 3 Opus and Claude 3 Haiku Models using [Google Vertex AI](https://cloud.google.com/vertex-ai). You can add them to your workspace from the [models page](https://app.vellum.ai/models).
+
+
+## Anthropic Tool Use API for Function Calling
+
+_August 30th, 2024_
+
+We now support using Anthropic's Tool Use API for function calling. Previously Anthropic function calling had been supported by shimming function call XML into the prompt.
+
 ## Prompt Node Linked Deployments
 
 _August 29th, 2024_
@@ -15,7 +28,7 @@ Today we are releasing this new setup modal that appears when you create a Promp
 ![New Prompt Node Setup](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-node-setup.png)
 
 The setup modal contains a new `Link to Deployment` option. This is a Prompt Node that references a Prompt Deployment _directly_ with a Release Tag. This
-allows for Workflows both in the Sandbox and as a Deployment to automatically pick up changes to the underlying Prompt without needing to update the Workflow 
+allows for Workflows both in the Sandbox and as a Deployment to automatically pick up changes to the underlying Prompt without needing to update the Workflow
 by pointing to `LATEST`. To maintain a specific version of a Prompt Deployment, you can specify a user-defined Release Tag to keep the Prompt Node pinned to
 a specific version. In this way, they now work exactly as Subworkflow Nodes when you select `Link to Deployment` there:
 
