@@ -2,10 +2,25 @@
 title: Changelog | September, 2024
 ---
 
+## New and Improved Code Editor
+
+_September 3rd, 2024_
+
+We now use [Monaco Editor](https://microsoft.github.io/monaco-editor/) for our code editor that is used by Workflow Code Nodes and custom Code Evaluation Metrics.
+Monaco is the same editor that Visual Studio Code uses under the hood.
+
+This offers a number of improvements including IntelliSense, semantic validation and syntax validation. Additionally we now inject Vellum Value types into the editor,
+so you can now have fully typed input values for things such as Chat History. Some of these improvements are currently only available for TypeScript and not Python.
+
+<iframe
+  src='https://www.loom.com/embed/5b72b48a8e1643b69199e220f46e6bed?sid=11157905-c1f1-4b5d-974f-55229207663f'
+  width='100%'
+  height='450px'
+></iframe>
+
 ## Download Original Document from UI
 
 _September 2nd, 2024_
 
 You can now download a file that was originally uploaded as a Document to a Document Index from the UI.
 You'll find a new "Download Original" option in a Document's ••• More Menu.
-
