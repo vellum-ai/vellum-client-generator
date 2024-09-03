@@ -162,6 +162,7 @@ navigation:
             path: ./docs/content/help/workflows/examples-and-walkthroughs.mdx
             slug: examples-and-walkthroughs
       - section: Evaluation & Test Suites
+        slug: evaluation
         contents:
           - page: Quantitative Evaluation
             path: ./docs/content/help/evaluation/quantitatively-evaluating-outputs.mdx
