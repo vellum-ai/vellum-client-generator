@@ -8,7 +8,6 @@ _August 30th, 2024_
 
 We now support using Anthropic's Claude 3.5 Sonnet, Claude 3 Opus and Claude 3 Haiku Models with [Google Vertex AI](https://cloud.google.com/vertex-ai). You can add them to your workspace from the [models page](https://app.vellum.ai/models).
 
-
 ## Anthropic Tool Use API for Function Calling
 
 _August 30th, 2024_
@@ -20,6 +19,7 @@ We now support using Anthropic's [Tool Use API](https://docs.anthropic.com/en/do
 _August 29th, 2024_
 
 We have reworked the relationship of how Prompt Node's interact with Deployments. Previously, there was:
+
 - No way to update a Prompt in one spot and have it update in multiple Workflows
 - Confusing UX around what it meant to import a Prompt
 
@@ -34,7 +34,6 @@ a specific version. In this way, they now work exactly as Subworkflow Nodes when
 
 ![Prompt Node Linked Deployments](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/prompt-node-linked-deployments.png)
 
-
 ## Workflow Executed By Filterable Column
 
 _August 29th, 2024_
@@ -42,7 +41,7 @@ _August 29th, 2024_
 Earlier this month, we restricted the Workflow Deployment Executions table to only show executions invoked via API requests. This helped to filter out all of the noise
 from other contexts in which a Workflow Deployment could be invoked, bringing focus to only data from production traffic. However, we've found that are still other contexts in which it's useful to see Workflow Executions.
 
-You'll now find a new `Executed By` column that shows what the immediate "parent" context was in which the Workflow was executed. This table is filtered down to just `API Request` by default, but you can opt in to include additional contexts, such invocation as a  Subworkflow via a parent Workflow:
+You'll now find a new `Executed By` column that shows what the immediate "parent" context was in which the Workflow was executed. This table is filtered down to just `API Request` by default, but you can opt in to include additional contexts, such invocation as a Subworkflow via a parent Workflow:
 
 ![Executed By Workflow Filter](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/executed_by_workflow_filter.png)
 
@@ -69,6 +68,27 @@ This metadata is visible in the Workflow Execution Details page in the Vellum UI
 
 You can view more information at the [API documentation](https://docs.vellum.ai/api-reference/workflows/execute-workflow#request.body.metadata).
 ![Workflow Execution Details Metadata](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/workflow-executions-metadata.png)
+
+## New Workflow Editor Beta Release
+
+_August 26th, 2024_
+
+Our new Workflow Editor is now available as an opt-in beta release. Next time you open the Workflow Editor, you'll see an announcement with the option to turn on the new Editor experience.
+
+We've made a ton of improvements to the Editor UI, and more improvements are in the works. You should find that your Workflows are easier to navigate and edit, and more performant.
+
+The beta can also be toggled on or off in the workflow builder settings at any time.
+
+We'd love to get your feedback about the new experience, so please let us know what you think!
+
+<div style="display: grid; grid-template-areas: 'a b'; gap: 12px">
+  <div style='grid-area: a'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/workflow-editor-ui-opt-in.png' />
+  </div>
+  <div style='grid-area: b'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-08/workflow-editor-ui-beta.png' />
+  </div>
+</div>
 
 ## View the Provider Payload on a Workflow's Prompt Node
 
