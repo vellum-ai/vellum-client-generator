@@ -2,6 +2,29 @@
 title: Changelog | September, 2024
 ---
 
+## New Expandable Meta: Cost ##
+
+You can now request your cost data to be returned via API or when using our SDK,
+allowing for clear insight on your prompts economics and usage.
+This works similar to requesting usage data for your requests like so:
+
+```
+"expand_meta" : {
+    "cost": true
+}
+```
+You can expect a new value to be passed in the meta fields on a response.
+```
+"meta": {
+    "cost" : {
+        "value" : 0.000450003
+        "unit" : "USD"
+    }
+}
+```
+
+
+
 ## New and Improved Code Editor
 
 _September 3rd, 2024_
