@@ -1844,6 +1844,8 @@ components:
         cost:
           type: boolean
           nullable: true
+          description: If enabled, the response will include model host cost tracking.
+            This may increase latency for some model hosts.
         model_name:
           type: boolean
           nullable: true
@@ -5934,6 +5936,8 @@ components:
         cost:
           type: boolean
           nullable: true
+          description: If enabled, the response will include model host cost tracking.
+            This may increase latency for some model hosts.
         finish_reason:
           type: boolean
           nullable: true
