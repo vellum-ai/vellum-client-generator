@@ -4,6 +4,8 @@ title: Changelog | September, 2024
 
 ## New Expandable Meta: Cost ##
 
+_September 4th, 2024_
+
 You can now request your cost data to be returned via API or when using our SDK,
 allowing for better insight on your prompt's economics.
 This works similar to requesting usage data for your requests like so:
@@ -27,7 +29,15 @@ You can expect a corresponding value to be passed in the meta fields on a respon
 }
 ```
 
+## Default Block Type Preference
 
+_September 4th, 2024_
+
+You can now set a default Block type to use when defining Prompts in Vellum. Whenever you see the "Add Block" or "Add Message" options in a Prompt Editor, your preferred Block type will be used.
+
+By default, the Block type is set to "Rich Text," the newer option that supports Variable Chips. You can still switch between Block types for individual Blocks within the Prompt Editor.
+
+![default block type toggle](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-09/default-block-type-toggle.png)
 
 ## New and Improved Code Editor
 
@@ -44,7 +54,6 @@ so you can now have fully typed input values for things such as Chat History. So
   width='100%'
   height='450px'
 ></iframe>
-
 
 ## VPC Disable gVisor Option for Code Execution
 
