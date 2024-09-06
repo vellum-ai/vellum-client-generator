@@ -11,9 +11,9 @@ groups:
     generators:
       - name: fernapi/fern-typescript-node-sdk
         version: 0.39.3
-        api: 
-          settings: 
-            unions: v1  
+        api:
+          settings:
+            unions: v1
         output:
           location: npm
           package-name: vellum-ai
@@ -27,18 +27,18 @@ groups:
         github:
           repository: vellum-ai/vellum-client-node
           license: MIT
-    
+
   production-python:
     audiences:
       - customers
       - internal
-      - deprecated          
-    generators: 
+      - deprecated
+    generators:
       - name: fernapi/fern-python-sdk
-        version: 3.10.5
-        api: 
-          settings: 
-            unions: v1  
+        version: 4.0.0-rc2
+        api:
+          settings:
+            unions: v1
         output:
           location: pypi
           package-name: vellum-ai
@@ -50,23 +50,25 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
+          pydantic_config:
+            use_pydantic_field_aliases: true
           extra_dependencies:
             cdktf: "^0.20.5"
             publication: "0.0.3"
             # Blocked on Fern - https://app.shortcut.com/vellum/story/2709
             # pytest-httpx: '^0.30.0'
-    
+
   production-go:
     audiences:
       - customers
       - internal
-      - deprecated          
-    generators:               
+      - deprecated
+    generators:
       - name: fernapi/fern-go-sdk
         version: 0.23.1
-        api: 
-          settings: 
-            unions: v1          
+        api:
+          settings:
+            unions: v1
         github:
           repository: vellum-ai/vellum-client-go
           license: MIT
