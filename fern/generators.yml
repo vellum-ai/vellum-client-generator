@@ -35,7 +35,7 @@ groups:
       - deprecated
     generators:
       - name: fernapi/fern-python-sdk
-        version: 4.0.0-rc5
+        version: 4.0.0-rc6
         api:
           settings:
             unions: v1
