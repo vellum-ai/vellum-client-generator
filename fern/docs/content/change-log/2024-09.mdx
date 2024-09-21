@@ -2,6 +2,14 @@
 title: Changelog | September, 2024
 ---
 
+## Resizable Node Editor Panel
+
+_September 20th 2024_
+
+For those of you using the new Workflow Builder, you'll now be able to resize the Node Editor Panel. This update makes it much easier to edit complex Conditional Node rules, Chat History Messages, JSON values, and more.
+
+![Resizable editor panel](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-09/ResizableSidePanel.gif)
+
 ## Evaluations Performance Improvements
 
 _September 17th 2024_
@@ -34,7 +42,6 @@ when working with Prompt Deployment Executions.
 This optimization sets the stage for exciting new features we have in the works. Stay tuned for more updates that
 will enhance your ability to analyze, and optimize your prompt executions.
 
-
 ## External ID Filtering for Workflow Deployment Executions
 
 _September 13th, 2024_
@@ -65,7 +72,7 @@ _September 12th, 2024_
 
 OpenAI's newest [Strawberry (o1) models](https://openai.com/o1/) `o1-preview`, `o1-mini`, `o1-preview-2024-09-12`, & `o1-mini-2024-09-12` are now available in Vellum and have been added to all workspaces!
 
-## Interactive Pages in Single Editor Mode ##
+## Interactive Pages in Single Editor Mode
 
 _September 7th, 2024_
 
@@ -75,7 +82,7 @@ If you were a Viewer, you were unable to interact with the page at all and were 
 Now, the page overlay is gone and Viewers can interact with the page in a read-only mode and perform actions that
 don't affect the state of the page. This includes things like scrolling, opening modals, copying text, etc.
 
-## Expand Cost in Execute Prompt APIs ##
+## Expand Cost in Execute Prompt APIs
 
 _September 4th, 2024_
 
@@ -86,6 +93,7 @@ This is helpful if you want to capture the cost of executing a Prompt in your ow
 transparency to your end users.
 
 To opt in, you can pass the `expand_meta` field in the request body with the `cost` key set to `true`.
+
 ```json
 {
   ...,
@@ -96,6 +104,7 @@ To opt in, you can pass the `expand_meta` field in the request body with the `co
 ```
 
 You can expect a corresponding value to be included in the meta field on the response:
+
 ```json
 {
   ...,
