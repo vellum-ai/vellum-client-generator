@@ -65,7 +65,7 @@ groups:
       - deprecated
     generators:
       - name: fernapi/fern-go-sdk
-        version: 0.23.1
+        version: 0.25.0
         api:
           settings:
             unions: v1
