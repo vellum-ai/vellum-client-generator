@@ -103,6 +103,10 @@ redirects:
     destination: /api-reference/workflows/sandboxes/deploy
   - source: /help-center/workflows/experimentation#supported-node-types
     destination: /help-center/workflows/node-types
+  - source: /help-center/evaluation/workflow-evaluation-metric
+    destination: /help-center/metrics/custom-metrics#workflow-metric-using-llms-to-evaluate-llms
+  - source: /help-center/evaluation/code-execution-evaluation-metric
+    destination: /help-center/metrics/custom-metrics#code-execution-metric
 
 navigation:
   - tab: help
