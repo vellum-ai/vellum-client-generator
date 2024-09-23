@@ -6,15 +6,15 @@ title: Changelog | September, 2024
 
 _September 23rd, 2024_
 
-When Map Nodes fail, we now retain the pagination state which allows you to view previous iterations of the Map Node.
+It used to be difficult to debug problematic iterations when a Map Node failed. We now keep track of each iteration's execution and make it easy to view them. You can page through a Map Node's iterations one-by-one.
 
 ![Map Node Rejected Pagination](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-09/map-node-rejected-pagination.png)
 
-Each of these iterations, included the rejected one, is now also viewable when you expand the Map Node to the full screen editor.
+Each of these iterations, included the any that failed, are now also show in a Map Node's full screen editor.
 
 ![Map Node Rejected Editor](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-09/map-node-rejected-editor.png)
 
-The full screen editor now also features the pagination state on the top right to cycle through different iterations of the Map Node while it's already expanded.
+The full screen editor now also allows you to cycle through each of an executed Map Node's iterations, making it easy to debug problematic iterations and iterate on the subworkflow used to produce that iteration's execution.
 
 ## Resizable Node Editor Panel
 
