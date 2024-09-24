@@ -35,7 +35,7 @@ groups:
       - deprecated
     generators:
       - name: fernapi/fern-python-sdk
-        version: 4.2.3
+        version: 4.2.6
         api:
           settings:
             unions: v1
@@ -50,8 +50,6 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          pydantic_config:
-            use_pydantic_field_aliases: true
           extra_dependencies:
             cdktf: "^0.20.5"
             publication: "0.0.3"
