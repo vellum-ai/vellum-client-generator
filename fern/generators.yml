@@ -50,8 +50,6 @@ groups:
           improved_imports: false
           client_class_name: Vellum
           timeout_in_seconds: infinity
-          pydantic_config:
-            use_pydantic_field_aliases: true
           extra_dependencies:
             cdktf: "^0.20.5"
             publication: "0.0.3"
