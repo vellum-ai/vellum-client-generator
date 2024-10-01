@@ -377,6 +377,8 @@ navigation:
     layout:
       - section: "2024"
         contents:
+          - page: October
+          - path: ./docs/content/change-log/2024-10.mdx
           - page: September
             path: ./docs/content/change-log/2024-09.mdx
             slug: 2024-09
