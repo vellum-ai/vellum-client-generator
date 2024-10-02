@@ -1,0 +1,12 @@
+---
+title: Changelog | October, 2024
+---
+
+## Prompt Caching Support for OpenAI
+
+Today OpenAI introduced [Prompt Caching](https://openai.com/index/api-prompt-caching/) for GPT-4o and o1 models. Subsequent invocations of the same prompt will produce outputs with lower latency and up to 50% reduced costs.
+
+To follow this, we've begun capturing cache tokens in Vellum's monitoring layer. With this update, you'll now see the number of Prompt Cache Tokens used by a Prompt Deployment's executions if it's backed by an OpenAI model.
+This new monitoring data can be used to help analyze your cache hit rate with OpenAI and optimize your LLM spend.
+
+
