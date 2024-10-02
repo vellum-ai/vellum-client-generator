@@ -1,175 +1,70 @@
 ---
-title: Maximize LLM Development Quality with Vellum's Evaluations
-description: Discover how Vellum's Evaluations feature quantitatively evaluates LLM outputs, ensuring model quality across numerous scenarios.
+title: Leveraging Online Evaluations for LLM Development with Vellum
+description: Learn how Vellum's Online Evaluations feature continuously assesses LLM outputs, ensuring model quality across diverse deployment scenarios.
 ---
 
-Ensuring model quality is challenging, because prompts need to work effectively and
-consistently over a wide range of potential inputs.
-When modifying a Prompt, adjusting parameters, or switching models, the likelihood of regression is high.
-This is where [quantitative evaluation](https://www.vellum.ai/blog/how-to-evaluate-the-quality-of-large-language-models-for-production-use-cases) comes in.
+Online Evaluations in Vellum provide a powerful way to continuously assess the quality of your deployed LLM applications. 
+This feature allows you to monitor and evaluate the performance of your prompts or workflows in real-time as they're being used in production.
 
-Vellum's answer to quantitative evaluation are Test Suites and Metrics. Unlike Comparison Mode and Chat Mode,
-where the output of each Scenario is qualitatively evaluated by visual inspection,
-Test Suites use Metrics that return scores between 0 and 1 to provide a more objective measure of quality over a wider range of scenarios.
-This is especially important when your prompt's coverage needs scale and visual inspection is no longer feasible,
-which typically happens when you have 10+ scenarios.
+# Getting Started with Online Evaluations
 
-Test Suites cover common use cases in LLM development:
+## Step 1: Create and Deploy Your LLM Application
 
-1. Test Driven Development of Prompts/Workflows in a Sandbox
-2. Performance testing on large numbers of Scenarios
-3. Regression testing before deploying a change to a Prompt or Workflow
-4. Evaluating [external entities](#testing-functions-external-to-vellum)
+1. Start by creating either a workflow in the Workflow Sandbox or a prompt in the Prompt Sandbox.
+2. Once you're satisfied with your creation, deploy your workflow or prompt.
 
-If you're looking to improve the velocity or quality of your LLM development, Test Suites could be your answer.
+## Step 2: Configure Metrics
 
-# Getting Started
+After deployment, you can configure metrics to evaluate your LLM application's performance:
 
-## Create a Test Suite
+1. Navigate to your deployed prompt or workflow.
+2. Locate the "Metrics" tab, which is conveniently positioned between the "Releases" and "Monitoring" tabs.
+3. In the Metrics tab, configure your metrics according to your specific needs.
 
-You can create standalone Test Suites through the Test Suites page in the [Evaluations tab](https://app.vellum.ai/evaluations).
-You can also create Test Suites starting from a Prompt or Workflow Sandbox.
-Here, we'll begin by creating a Test Suite from a Prompt Sandbox.
+Once your metrics are configured, you can view how your executions are evaluated:
 
-1. From your Prompt Sandbox, click on Evaluations sub-tab
-2. Click "Create New Test Suite" if you haven't set up a Test Suite for this Prompt Sandbox yet or click the gray "Add Test Suite" button on the right of the page
-3. The "label" and "name" fields are autopopulated with the name of your Sandbox
-4. Open the "Interface Configuration" to see the expected inputs/outputs for this Test Suite. This is also autopopulated from your Sandbox.
-5. If you are creating a Test Suite from scratch, you can customize the inputs/outputs to meet your needs. For now, leave this as it is and click next to start setting up your Metrics.
-6. Click the "Add Metric" button to select one or more Metrics to evaluate your output against
-7. Select "Exact Match" from the list of available Metrics. To learn how to create Custom Metrics that appear in this list, see Vellum's [Metrics](#evaluation-metrics)
-8. Press "Confirm" to start mapping the Metric to this Test Suite
-9. First, select "Completion" to map the input to the output of your Prompt
-10. Next, select "Target" and then "Add New" in the dropdown to create a new expected output variable that's mapped to this input
-11. Press "Next" in the bottom right
+1. Go to the "Executions" tab of your deployment.
+2. Click on an individual execution ID to view its details.
+3. In the execution details, you'll find the evaluation results based on your configured metrics.
 
-Well done! You've now created a Test Suite with the Exact Match Metric to check for whether the output is desirable.
+<Note>For detailed information on configuring metrics, refer to the Evaluations and Metrics sections in our documentation.</Note>
 
-![Test Suite Creation - Metric Configuration](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-metrics.png)
+## Step 3: Save and Activate
 
-## Create a Test Case
+Once you've configured your metrics, save your changes. 
+From this point forward, every execution of your deployment will be automatically evaluated against these metrics, providing you with ongoing, real-time performance insights.
 
-Test Cases are analogous to Scenarios. A Test Case by default will have a column for each input and output variable expected by your Test Suite,
-as well as columns for any expected output variables required by your selected Metric.
-When a Test Suite is run, Vellum will iterate over every Test Case it contains.
-For each Test Case, it will feed the provided inputs into the Prompt, Workflow, or entity being tested.
-The output will be passed to the Metric based on your mapping in the previous step, and a score will be provided based on the Metric being used.
+# Understanding Online Evaluations
 
-With this Test Suite created, you should be on a step that asks you how you want to initialize your Test Cases.
+Online Evaluations offer several key benefits for LLM development:
 
-Select "Start from Scenarios" which will autopopulate test cases for you from Scenarios in your Sandbox.
+1. **Real-time Performance Monitoring**: Continuously assess your model's performance as it handles live requests.
+2. **Quality Assurance**: Ensure your LLM maintains high standards even as input patterns may shift over time.
+3. **Regression Detection**: Quickly identify any degradation in performance, allowing for swift corrective action.
+4. **Insight-Driven Improvement**: Use the gathered data to inform future iterations and improvements of your LLM application.
 
-To create additional Test Cases, follow these steps:
+# Viewing Evaluation Results
 
-1. Click the blue "+ Add Test Case" button just below the tab to add a new Test Case row
-2. You can leave the "Label" field alone for now - it's used to help you visually identify your Test Cases
-3. Enter a value for each of your input variables. For example, if you have an input variable `user_age`, you may enter "28".
-4. Enter a value for each of your expected output variables
-5. Click outside of your Test Case row to save. You should get a notification that it was successful.
-6. Click "Finish" to exit the Test Suite creation wizard
+To access your Online Evaluation results:
 
-Almost there! Now that you have your Test Cases added, you're ready to run it against your Prompt.
+1. Go to your deployment's details page.
+2. Navigate to the "Metrics" tab.
+3. Here, you'll find a comprehensive view of your deployment's performance based on the metrics you've configured.
 
-![Test Suite Creation - Test Cases](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/test-suite-test-cases.png)
-
-## Run a Test Suite
-
-This Test Suite is automatically added to the current Prompt Sandbox you are in.
-To evaluate your Prompt, simply click the blue Run button.
-
-The Test Suite can also be run by any Prompt or Workflow that uses the same input variables you configured earlier. Let's try it.
-
-1. Navigate to any Prompt Sandbox in the "Prompts" tab
-2. Click the gray "Add Test Suite" at the top right of the page
-3. Attach a Test Suite by clicking on "Use Existing Test Suite" and selecting your Test Suite from the dropdown
-4. Press the blue "Run" to execute the Test Suite
-
-![Link Test Suite to Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/link-test-suite.png)
-
-![Run Test Suite on Prompt](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/run-prompt-test-suite.png)
-
-## Download via API
-
-We also support viewing your Test Suite Run results via the API. Check out our docs on [Test Suite Runs](/api-reference/api-reference/test-suite-runs/retrieve) to learn how to view existing runs. We also embed ready-to-use code snippets within the app itself for each executable column on the evaluations table.
-
-![Test Suite Runs via API](https://storage.googleapis.com/vellum-public/help-docs/tsr-via-api.png)
+You can analyze these results to gain insights into your LLM's strengths and areas for improvement.
 
 # Advanced Usage
 
 ## Multiple Metrics
 
-It's possible for a Test Suite to have multiple Metrics run simultaneously.
-This is often desirable when the output is complex and must meet multiple criterion.
-For example, you may want to validate that an output semantically means "I'm very happy",
-but must contain the word "ecstatic".
+You can configure multiple metrics for a single deployment to evaluate different aspects of your LLM's performance. This allows for a more comprehensive assessment of your model's capabilities.
 
-Additional Metrics can be configured on an existing Test Suite under the "Metric Setup" section
-of the "Test Suite Details" page. Any additional columns needed by that Metric will be editable
-under the "Test Cases" tab.
+## API Access
 
-When running the Test Suite, you'll see columns displaying the results for each Metric that's been added to the Test Suite.
+For those who prefer programmatic access, Vellum provides API endpoints to retrieve Online Evaluation results. This enables easy integration with your existing monitoring and analytics systems.
 
-<Note>For more on premade Vellum Metrics, see [Out of the Box Metrics](/metrics/out-of-the-box-metrics). To learn how to create your own, see [Custom Metrics](/metrics/custom-metrics)</Note>
+# Conclusion
 
-## Uploading Test Cases
+Online Evaluations in Vellum offer a robust, automated way to ensure the ongoing quality and performance of your LLM applications. By providing continuous, metric-based assessments, this feature empowers you to maintain high standards and make data-driven improvements to your prompts and workflows.
 
-To help you migrate your Test Cases into Vellum, we provide two methods for bulk Test Case uploads.
-
-### Via CSV
-
-Under the "Test Cases" tab on the "Test Suite Details" page, there is a blue "Upload Test Cases" button.
-Clicking that button will open a modal that allows you to bulk upload test cases via a CSV file.
-
-### Via API
-
-To upload test cases via API, check out the [Test Cases API](/api-reference/test-suites/test-cases/upsert) documentation.
-
-## Function Calling
-
-Prompts can output different modalities, which at Vellum we call input and output types. One increasingly popular output type for models if function/tool calling. You can use Vellum Test Suites to ensure that your model is producing the correct function call based on any given combination of inputs.
-
-First, you will want to edit the Output Variable type of the test suite to the "Function Call" type:
-
-![Output Function Type](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/output-function-type.png)
-
-Next, define the Expected Output type to be of type "Function Call" too:
-
-![Expected Function Type](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/expected-function-type.png)
-
-You can then use any Metric to help ensure that your prompt is outputting function calls that perform well across your test cases! Here's an example of a test suite using Exact Match as the Metric:
-
-![Function Call Tests](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/function-call-tests.png)
-
-## Testing Workflows
-
-Just like Prompts, Workflows can be tested too.
-The key difference Workflow Test Suites have is that Workflows may have multiple outputs.
-You may choose to test some of them, or all of them.
-
-Workflow Test Suites can be run from the "Evaluations" tab in the [Workflow Builder](https://app.vellum.ai/workflow-sandboxes).
-It works very similarly as testing prompts, but you can create new test cases inline.
-
-One common pitfall is trying to attach a Test Suite where the output variable is named `completion`
-to a Workflow where the output variable is something else. You will receive a warning when this happens.
-
-![Interface Mismatch](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/interface-mismatch.png)
-
-![Interface Match](https://storage.googleapis.com/vellum-public/help-docs/quantitatively-evaluating-outputs/interface-match.png)
-
-### Viewing Workflow Test Case Entity's Execution Details
-
-To help you diagnose issues with workflows you can click on the "View Workflow Details" button located within a test case's value cell to view the details.
-
-![Workflow Executions2](https://storage.googleapis.com/vellum-public/help-docs/workflow-evaluation-details2.png)
-
-## Testing Functions External to Vellum
-
-Not only can Vellum's evaluation framework be used to test Prompts & Workflows hosted in Vellum, it can also be used
-to evaluate the outputs of arbitrary functions hosted externally to Vellum.
-
-For example, you might test a prompt chain that lives in your codebase and that's defined using another third party
-library. This can be particularly useful if you want to incrementally migrate to Vellum Prompts/Workflows, but ensure
-that the outputs remain consistent.
-
-For a detailed example of how to use Vellum's evaluation framework to test external functions, see the
-[python example here](https://github.com/vellum-ai/vellum-client-python/blob/main/examples/Running%20a%20Test%20Suite%20on%20an%20External%20Function.ipynb)
+Remember, the key to leveraging Online Evaluations effectively is in thoughtfully configuring your metrics to align with your specific use case and quality standards. Regularly reviewing and adjusting these metrics will help you get the most out of this powerful feature.
