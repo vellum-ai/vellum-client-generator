@@ -2,7 +2,29 @@
 title: Changelog | October, 2024
 ---
 
+## Online Evaluations for Workflow and Prompt Deployments
+
+__October 3rd, 2024__
+
+We're excited to announce the launch of [Online Evaluations for Workflow and Prompt Deployments](/help-center/evaluation/online-evaluations)! This new feature allows you to configure Metrics for your Deployments to be evaluated in real-time as they're executed. Key highlights include:
+
+- **Continuous Assessment**: Automatically evaluate the quality of your deployed LLM applications as they handle live requests.
+- **Flexible Configuration**: Set up multiple Metrics to assess different aspects of your Deployment's performance.
+- **Easy Access to Results**: View evaluation results directly in the execution details of your Deployments.
+
+It works by configuring Metrics for your Workflow or Prompt Deployment in the new "Metrics" tab.
+
+![Configure Metrics for use in Online Evals](https://storage.googleapis.com/vellum-public/help-docs/online-evals/online-evals-metric-config.png)
+
+Once configured, every execution of your Deployment will be evaluated against these Metrics. You can then view the results alongside the execution details.
+
+![See results of Metrics alongside Execution details](https://storage.googleapis.com/vellum-public/help-docs/online-evals/online-evals-execution-details.png)
+
+For more details on how to get started with Online Evaluations, check out our [help documentation](/help-center/evaluation/online-evaluations).
+
 ## Prompt Caching Support for OpenAI
+
+__October 2nd, 2024__
 
 Today OpenAI introduced [Prompt Caching](https://openai.com/index/api-prompt-caching/) for GPT-4o and o1 models. Subsequent invocations of the same prompt will produce outputs with lower latency and up to 50% reduced costs.
 
