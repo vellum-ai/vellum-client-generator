@@ -721,37 +721,6 @@ paths:
       servers:
       - url: https://documents.vellum.ai
         x-name: Documents
-  /v1/execute-code:
-    post:
-      operationId: execute_code
-      description: An internal-only endpoint that's subject to breaking changes without
-        notice. Not intended for public use.
-      tags:
-      - execute-code
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CodeExecutorRequest'
-        required: true
-      security:
-      - apiKeyAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CodeExecutorResponse'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CodeExecutorErrorResponse'
-          description: ''
-      x-fern-availability: beta
-      x-fern-audiences:
-      - internal
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
