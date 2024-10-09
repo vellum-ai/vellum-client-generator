@@ -412,7 +412,10 @@ navigation:
             slug: 2024-01
 title: Vellum | Documentation
 colors:
-  accentPrimary: "#C7D2FE"
+  accentPrimary: 
+    dark: "#4e54fc"
+  background: 
+    dark: "#000000"
 logo:
   dark: ./docs/assets/logo.png
   href: https://www.vellum.ai/
@@ -425,6 +428,18 @@ navbar-links:
   - type: secondary
     text: Log In
     url: https://app.vellum.ai/
-  - type: primary
+  - type: filled
+    rounded: true
     text: Request Demo
     url: https://www.vellum.ai/landing-pages/request-demo
+layout: 
+  tabs-placement: header
+  searchbar-placement: header
+typography: 
+  bodyFont:
+    name: HarmonyOS
+    path: ./assets/Montreal-Regular.woff2
+    weight: 400
+  headingsFont:
+    name: HarmonyOS
+    path: ./assets/Montreal-Bold.woff2
