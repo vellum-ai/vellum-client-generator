@@ -2,18 +2,53 @@
 title: Changelog | October, 2024
 ---
 
+## Workflow Edge Type Improvements
+
+**October 10th, 2024**
+
+It could be quite difficult to achieve a perfectly straight line with the "smooth-step" edge type, but those days are behind us, friends.
+
+You'll now see that your edges will automagically snap into straight-line connectors whenever they're close-to-horizontal.
+
+![Edge Snap Magic](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/EdgeSnap.gif)
+
+## AutoLayout and AutoConnect for Workflows
+
+**October 10th, 2024**
+
+Two exciting new features have been added to Workflows — AutoLayout and AutoConnect.
+
+AutoLayout allows you to instantly organize your workflow via algorithm, making it easier than ever to tame even the most-unruly of Workflows.
+
+AutoConnect will automatically connect any unconnected Nodes in your Workflow.
+
+Both of these features are accessible via new buttons in the bottom left toolbar in your Workflow Sandboxes.
+
+In the event that you only want to use AutoConnect or AutoLayout on a specific subset of Nodes, simply drag to select and you'll see a new temporary toolbar that allows you to do just that.
+
+<div style="display: grid; grid-template-areas: 'a a / b c'; gap: 12px">
+  <div style='grid-area: a'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/AutoConnectLayoutAll.gif' />
+  </div>
+  <div style='grid-area: b'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/AutoLayoutSelection.gif' />
+  </div>
+  <div style='grid-area: c'>
+    <img src='https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/AutoConnectSelection.gif' />
+  </div>
+</div>
+
 ## Reorder Entities in Evaluation Reports
 
-__October 9th, 2024__
+**October 9th, 2024**
 
 You can now reorder entities in the Evaluation Report table. Simply select the "Reorder" option in the entity column's menu to adjust the order to your preference.
 
 ![Evaluation Report Entity Reorder](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/evaluation-report-entity-reorder.png)
 
-
 ## Online Evaluations for Workflow and Prompt Deployments
 
-__October 3rd, 2024__
+**October 3rd, 2024**
 
 We're excited to announce the launch of [Online Evaluations for Workflow and Prompt Deployments](/help-center/evaluation/online-evaluations)! This new feature allows you to configure Metrics for your Deployments to be evaluated in real-time as they're executed. Key highlights include:
 
@@ -31,10 +66,9 @@ Once configured, every execution of your Deployment will be evaluated against th
 
 For more details on how to get started with Online Evaluations, check out our [help documentation](/help-center/evaluation/online-evaluations).
 
-
 ## OpenRouter Model Hosting + WizardLM-2 8x22B
 
-__October 2nd, 2024__
+**October 2nd, 2024**
 
 We've added OpenRouter as a new model host in Vellum! OpenRouter provides access to a wide range of AI models through a single API, expanding the options of models available to our users.
 
@@ -42,14 +76,11 @@ As part of our new OpenRouter integration, we're pleased to introduce the [Wizar
 
 ![OpenRouter Model Host](https://storage.googleapis.com/vellum-public/help-docs/changelogs/2024-10/open-router-model-host.png)
 
-
 ## Prompt Caching Support for OpenAI
 
-__October 2nd, 2024__
+**October 2nd, 2024**
 
 Today OpenAI introduced [Prompt Caching](https://openai.com/index/api-prompt-caching/) for GPT-4o and o1 models. Subsequent invocations of the same prompt will produce outputs with lower latency and up to 50% reduced costs.
 
 To follow this, we've begun capturing cache tokens in Vellum's monitoring layer. With this update, you'll now see the number of Prompt Cache Tokens used by a Prompt Deployment's executions if it's backed by an OpenAI model.
 This new monitoring data can be used to help analyze your cache hit rate with OpenAI and optimize your LLM spend.
-
-
