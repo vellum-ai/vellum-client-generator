@@ -13,6 +13,9 @@ tabs:
   change-log:
     display-name: Changelog
     icon: "fa-solid fa-bolt"
+    
+layout: 
+  tabs-placement: header
 
 redirects:
   - source: /api-reference/introduction/getting-started
