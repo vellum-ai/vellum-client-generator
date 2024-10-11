@@ -13,6 +13,20 @@ tabs:
   change-log:
     display-name: Changelog
     icon: "fa-solid fa-bolt"
+    
+layout: 
+  tabs-placement: header
+  searchbar-placement: header
+  
+typography:
+  bodyFont:
+    name: NeueMontreal
+    paths: 
+      - path: ./docs/assets/NeueMontreal-Regular.woff2
+        weight: 400
+  headingsFont:
+    name: Inter-Bold
+    path: ./docs/assets/TiemposHeadline.woff2   
 
 redirects:
   - source: /api-reference/introduction/getting-started
@@ -412,12 +426,14 @@ navigation:
             slug: 2024-01
 title: Vellum | Documentation
 colors:
-  accentPrimary: "#C7D2FE"
+  accent-primary: 
+    light: "#4e54fc"
+  background: 
+    light: "#eef"
 logo:
-  dark: ./docs/assets/logo.png
+  light: ./docs/assets/logo.svg
   href: https://www.vellum.ai/
-favicon: ./docs/assets/favicon.ico
-background-image: ./docs/assets/background.svg
+favicon: ./docs/assets/favicon.png
 navbar-links:
   - type: secondary
     text: Blog
@@ -425,6 +441,7 @@ navbar-links:
   - type: secondary
     text: Log In
     url: https://app.vellum.ai/
-  - type: primary
+  - type: filled
+    rounded: true
     text: Request Demo
     url: https://www.vellum.ai/landing-pages/request-demo
