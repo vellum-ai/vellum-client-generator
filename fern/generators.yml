@@ -10,7 +10,7 @@ groups:
       - deprecated
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.39.3
+        version: 0.40.8
         api:
           settings:
             unions: v1
