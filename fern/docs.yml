@@ -433,8 +433,8 @@ colors:
     light: "#eef"
     dark: "#000"
 logo:
-  light: ./docs/assets/logo.svg
-  dark: ./docs/assets/logo.png
+  light: ./docs/assets/logo-light.svg
+  dark: ./docs/assets/logo-dark.svg
   href: https://www.vellum.ai/
 favicon: ./docs/assets/favicon.png
 navbar-links:
