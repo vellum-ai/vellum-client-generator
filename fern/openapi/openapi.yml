@@ -8390,7 +8390,13 @@ components:
         test_suite_id:
           type: string
           format: uuid
-          description: The ID of the Test Suite to run
+          description: The ID of the Test Suite to run. Must provide either this or
+            test_suite_id.
+        test_suite_name:
+          type: string
+          minLength: 1
+          description: The name of the Test Suite to run. Must provide either this
+            or test_suite_id.
         exec_config:
           allOf:
           - $ref: '#/components/schemas/TestSuiteRunExecConfigRequest'
