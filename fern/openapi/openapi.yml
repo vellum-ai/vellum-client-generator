@@ -992,7 +992,11 @@ paths:
           Filter down to only those entities whose parent folder has the specified ID.
 
           To filter by an entity's parent folder, provide the ID of the parent folder. To filter by the root directory, provide
-          a string representing the entity type of the root directory (e.g. "PROMPT_SANDBOX" or "TEST_SUITE").
+          a string representing the entity type of the root directory. Supported root directories include:
+          - PROMPT_SANDBOX
+          - WORKFLOW_SANDBOX
+          - DOCUMENT_INDEX
+          - TEST_SUITE
         required: true
       tags:
       - folder-entities
@@ -1018,8 +1022,13 @@ paths:
         name: folder_id
         schema:
           type: string
-        description: The ID of the folder to which the entity should be added. This
-          can be a UUID of a folder, or the name of a root directory (e.g. "PROMPT_SANDBOX").
+        description: |-
+          The ID of the folder to which the entity should be added. This can be a UUID of a folder, or the name of a root
+          directory. Supported root directories include:
+          - PROMPT_SANDBOX
+          - WORKFLOW_SANDBOX
+          - DOCUMENT_INDEX
+          - TEST_SUITE
         required: true
       tags:
       - folder-entities
