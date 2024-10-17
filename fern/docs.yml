@@ -389,7 +389,14 @@ navigation:
                       title: Retrieve Test Suite Run
                     - endpoint: GET https://api.vellum.ai/v1/test-suite-runs/{id}/executions
                       title: List Test Suite Executions
-          - folderEntities
+          - section: Folders
+            contents:
+              - endpoint: POST https://api.vellum.ai/v1/folders/{folder_id}/add-entity
+                title: Add Entity to Folder
+                slug: add-entity-to-folder
+              - endpoint: GET https://api.vellum.ai/v1/folder-entities
+                title: List Folder Entities
+                slug: list-folder-entities
   - tab: change-log
     layout:
       - section: "2024"
