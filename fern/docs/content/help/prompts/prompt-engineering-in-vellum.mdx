@@ -86,7 +86,7 @@ Hello, world!
 
 ### JSON Inputs
 
-All Prompt Variables as treated as strings. However, if you want to supply json, you can use this trick to access specific key/value pairs.
+Vellum supports JSON input variables. When you supply a JSON variable, you can use this trick to access specific key/value pairs.
 
 For example, say you have a variable called `traits` whose value in a Scenario looked like:
 
@@ -97,10 +97,10 @@ For example, say you have a variable called `traits` whose value in a Scenario l
 }
 ```
 
-Then you can access "happy go lucky" with the following:
+Then you can access "happy go lucky" by using a Jinja template block and referencing the JSON variable like so:
 
 ```
-You are a {{ json.loads(traits)["personality"] }} AI assistant.
+You are a {{ traits.personality }} AI assistant.
 
 ```
 
